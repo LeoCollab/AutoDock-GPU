@@ -58,6 +58,7 @@ gpu_gen_and_eval_newpops_kernel(
                                 int *parents,
                                 int *covr_point,
                                 float *randnums,
+								float *randnums_extra,
                                 float *sBestEnergy,
                                 int *sBestID,
                                 sycl::float3 *calc_coords,
@@ -344,17 +345,30 @@ gpu_gen_and_eval_newpops_kernel(
 				sycl::vec<float, 16> tmp_randnums_2 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
 				sycl::vec<float, 16> tmp_randnums_3 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
 				sycl::multi_ptr<float, sycl::access::address_space::local_space> multi_ptr_randnums_0 (randnums);
+
+				// Complying with original implementation
+				// Different random numbers should be used within each mutation iteration
+				sycl::vec<float, 16> tmp_randnums_extra_0 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
+				sycl::vec<float, 16> tmp_randnums_extra_1 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
+				sycl::vec<float, 16> tmp_randnums_extra_2 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
+				sycl::vec<float, 16> tmp_randnums_extra_3 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
+				sycl::multi_ptr<float, sycl::access::address_space::local_space> multi_ptr_randnums_extra_0 (randnums_extra);
+
                 for (uint32_t gene_counter = item_ct1.get_local_id(2);
                      		  gene_counter < cData.dockpars.num_of_genes;
 		                      gene_counter += item_ct1.get_local_range().get(2)) {
 					if (gene_counter < 16) {
 						tmp_randnums_0.store(gene_counter, multi_ptr_randnums_0);
+						tmp_randnums_extra_0.store(gene_counter, multi_ptr_randnums_extra_0);
 					} else if (gene_counter < 32) {
 						tmp_randnums_1.store(gene_counter, multi_ptr_randnums_0);
+						tmp_randnums_extra_1.store(gene_counter, multi_ptr_randnums_extra_0);
 					} else if (gene_counter < 48) {
 						tmp_randnums_2.store(gene_counter, multi_ptr_randnums_0);
+						tmp_randnums_extra_2.store(gene_counter, multi_ptr_randnums_extra_0);
 					} else {
 						tmp_randnums_3.store(gene_counter, multi_ptr_randnums_0);
+						tmp_randnums_extra_3.store(gene_counter, multi_ptr_randnums_extra_0);
 					}
 				}
 
@@ -369,11 +383,11 @@ gpu_gen_and_eval_newpops_kernel(
 					if (randnums[gene_counter] < cData.dockpars.mutation_rate) {
 						// Translation genes
 						if (gene_counter < 3) {
-							offspring_genotype[gene_counter] += cData.dockpars.abs_max_dmov * (2.0f * randnums[gene_counter] - 1.0f);
+							offspring_genotype[gene_counter] += cData.dockpars.abs_max_dmov * (2.0f * randnums_extra[gene_counter] - 1.0f);
 						}
 						// Orientation and torsion genes
 						else {
-							offspring_genotype[gene_counter] += cData.dockpars.abs_max_dang * (2.0f * randnums[gene_counter] - 1.0f);
+							offspring_genotype[gene_counter] += cData.dockpars.abs_max_dang * (2.0f * randnums_extra[gene_counter] - 1.0f);
 							map_angle(offspring_genotype[gene_counter]);
 						}
 				}
@@ -464,6 +478,9 @@ void gpu_gen_and_eval_newpops(
                     randnums_acc_ct1(sycl::range<1>(64/*10*/), cgh);
                 sycl::accessor<float, 1, sycl::access::mode::read_write,
                                sycl::access::target::local>
+                    randnums_acc_ct2(sycl::range<1>(64/*10*/), cgh);
+                sycl::accessor<float, 1, sycl::access::mode::read_write,
+                               sycl::access::target::local>
                     sBestEnergy_acc_ct1(sycl::range<1>(32), cgh);
                 sycl::accessor<int, 1, sycl::access::mode::read_write,
                                sycl::access::target::local>
@@ -501,6 +518,7 @@ void gpu_gen_and_eval_newpops(
                                 parents_acc_ct1.get_pointer(),
                                 covr_point_acc_ct1.get_pointer(),
                                 randnums_acc_ct1.get_pointer(),
+								randnums_acc_ct2.get_pointer(),
                                 sBestEnergy_acc_ct1.get_pointer(),
                                 sBestID_acc_ct1.get_pointer(),
                                 calc_coords_acc_ct1.get_pointer(),
