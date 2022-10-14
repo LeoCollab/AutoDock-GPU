@@ -467,7 +467,7 @@ void gpu_gen_and_eval_newpops(
                     covr_point_acc_ct1(sycl::range<1>(2), cgh);
                 sycl::accessor<float, 1, sycl::access::mode::read_write,
                                sycl::access::target::local>
-                    randnums_acc_ct1(sycl::range<1>(10), cgh);
+                    randnums_acc_ct1(sycl::range<1>(64/*10*/), cgh);
                 sycl::accessor<float, 1, sycl::access::mode::read_write,
                                sycl::access::target::local>
                     sBestEnergy_acc_ct1(sycl::range<1>(32), cgh);
