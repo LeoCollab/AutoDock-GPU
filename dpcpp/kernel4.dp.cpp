@@ -169,7 +169,6 @@ gpu_gen_and_eval_newpops_kernel(
 		// [0..3] for parent candidates,
 		// [4..5] for binary tournaments, [6] for deciding crossover,
 		// [7..8] for crossover points, [9] for local search
-
 		sycl::vec<float, 16> tmp_randnums = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
 		sycl::multi_ptr<float, sycl::access::address_space::local_space> multi_ptr_randnums (randnums);
 		tmp_randnums.store(item_ct1.get_local_id(2), multi_ptr_randnums);
@@ -184,7 +183,7 @@ gpu_gen_and_eval_newpops_kernel(
                 }
 */
 
-#if 0
+#ifdef DOCK_TRACE
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 		if ( (item_ct1.get_group(2) == 1) && (item_ct1.get_local_id(2) == 0) ) {
 			PRINTF("\nLocal work-item id: %d\n", item_ct1.get_local_id(2));
