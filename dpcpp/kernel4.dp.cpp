@@ -171,8 +171,10 @@ gpu_gen_and_eval_newpops_kernel(
 		// [7..8] for crossover points, [9] for local search
 		sycl::vec<float, 16> tmp_randnums = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
 		sycl::multi_ptr<float, sycl::access::address_space::local_space> multi_ptr_randnums (randnums);
-		if (item_ct1.get_local_id(2) < 10) {
-			tmp_randnums.store(item_ct1.get_local_id(2), multi_ptr_randnums);
+		for (uint32_t gene_counter = item_ct1.get_local_id(2);
+					  gene_counter < 10;
+					  gene_counter += item_ct1.get_local_range().get(2)) {
+			tmp_randnums.store(gene_counter, multi_ptr_randnums);
 		}
 
 /*
