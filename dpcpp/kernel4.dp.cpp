@@ -171,7 +171,9 @@ gpu_gen_and_eval_newpops_kernel(
 		// [7..8] for crossover points, [9] for local search
 		sycl::vec<float, 16> tmp_randnums = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
 		sycl::multi_ptr<float, sycl::access::address_space::local_space> multi_ptr_randnums (randnums);
-		tmp_randnums.store(item_ct1.get_local_id(2), multi_ptr_randnums);
+		if (item_ct1.get_local_id(2) < 10) {
+			tmp_randnums.store(item_ct1.get_local_id(2), multi_ptr_randnums);
+		}
 
 /*
                 for (uint32_t gene_counter = item_ct1.get_local_id(2);
@@ -344,6 +346,15 @@ gpu_gen_and_eval_newpops_kernel(
                 */
                 __threadfence();
                 item_ct1.barrier(SYCL_MEMORY_SPACE);
+
+/*
+				sycl::vec<float, 16> tmp_randnums_0 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
+				sycl::vec<float, 16> tmp_randnums_1 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
+				sycl::vec<float, 16> tmp_randnums_2 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
+				sycl::vec<float, 16> tmp_randnums_3 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
+				sycl::multi_ptr<float, sycl::access::address_space::local_space> multi_ptr_randnums_0 (randnums);
+				tmp_randnums_0.store(item_ct1.get_local_id(2), multi_ptr_randnums_0);
+*/
 
                 // Performing mutation
                 for (uint32_t gene_counter = item_ct1.get_local_id(2);
