@@ -177,16 +177,6 @@ gpu_gen_and_eval_newpops_kernel(
 			tmp_randnums.store(gene_counter, multi_ptr_randnums);
 		}
 
-/*
-                for (uint32_t gene_counter = item_ct1.get_local_id(2);
-                     gene_counter < 10;
-                     gene_counter += item_ct1.get_local_range().get(2))
-                {
-                        //randnums[gene_counter] = gpu_randf(cData.pMem_prng_states, item_ct1);
-						randnums[gene_counter] = oneapi::mkl::rng::device::generate_single(*rng_continuous_distr, *rng_engine);
-                }
-*/
-
 #ifdef DOCK_TRACE
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 		if ( (item_ct1.get_group(2) == 1) && (item_ct1.get_local_id(2) == 0) ) {
@@ -349,42 +339,44 @@ gpu_gen_and_eval_newpops_kernel(
                 __threadfence();
                 item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-/*
 				sycl::vec<float, 16> tmp_randnums_0 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
 				sycl::vec<float, 16> tmp_randnums_1 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
 				sycl::vec<float, 16> tmp_randnums_2 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
 				sycl::vec<float, 16> tmp_randnums_3 = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
 				sycl::multi_ptr<float, sycl::access::address_space::local_space> multi_ptr_randnums_0 (randnums);
-				tmp_randnums_0.store(item_ct1.get_local_id(2), multi_ptr_randnums_0);
-*/
-
-                // Performing mutation
                 for (uint32_t gene_counter = item_ct1.get_local_id(2);
-                     gene_counter < cData.dockpars.num_of_genes;
-                     gene_counter += item_ct1.get_local_range().get(2))
-                {
-			// Notice: dockpars_mutation_rate was scaled down to [0,1] in host
-			// to reduce number of operations in device
-//                        if (/*100.0f**/ gpu_randf(cData.pMem_prng_states, item_ct1) < cData.dockpars.mutation_rate)
-						if (oneapi::mkl::rng::device::generate_single(*rng_continuous_distr, *rng_engine) < cData.dockpars.mutation_rate)
-                        {
-				// Translation genes
-				if (gene_counter < 3) {
-                                        offspring_genotype[gene_counter] +=
-                                            cData.dockpars.abs_max_dmov *
-//                                            (2.0f * gpu_randf(cData.pMem_prng_states, item_ct1) - 1.0f);
-											(2.0f * oneapi::mkl::rng::device::generate_single(*rng_continuous_distr, *rng_engine) - 1.0f);
-                                }
-				// Orientation and torsion genes
-				else {
-                                        offspring_genotype[gene_counter] +=
-                                            cData.dockpars.abs_max_dang *
-//                                            (2.0f * gpu_randf(cData.pMem_prng_states, item_ct1) - 1.0f);
-											(2.0f * oneapi::mkl::rng::device::generate_single(*rng_continuous_distr, *rng_engine) - 1.0f);
-                                        map_angle(offspring_genotype[gene_counter]);
+                     		  gene_counter < cData.dockpars.num_of_genes;
+		                      gene_counter += item_ct1.get_local_range().get(2)) {
+					if (gene_counter < 16) {
+						tmp_randnums_0.store(gene_counter, multi_ptr_randnums_0);
+					} else if (gene_counter < 32) {
+						tmp_randnums_1.store(gene_counter, multi_ptr_randnums_0);
+					} else if (gene_counter < 48) {
+						tmp_randnums_2.store(gene_counter, multi_ptr_randnums_0);
+					} else {
+						tmp_randnums_3.store(gene_counter, multi_ptr_randnums_0);
+					}
 				}
 
-			}
+				item_ct1.barrier(SYCL_MEMORY_SPACE);
+
+				// Performing mutation
+                for (uint32_t gene_counter = item_ct1.get_local_id(2);
+							  gene_counter < cData.dockpars.num_of_genes;
+							  gene_counter += item_ct1.get_local_range().get(2)) {
+					// Notice: dockpars_mutation_rate was scaled down to [0,1] in host
+					// to reduce number of operations in device
+					if (randnums[gene_counter] < cData.dockpars.mutation_rate) {
+						// Translation genes
+						if (gene_counter < 3) {
+							offspring_genotype[gene_counter] += cData.dockpars.abs_max_dmov * (2.0f * randnums[gene_counter] - 1.0f);
+						}
+						// Orientation and torsion genes
+						else {
+							offspring_genotype[gene_counter] += cData.dockpars.abs_max_dang * (2.0f * randnums[gene_counter] - 1.0f);
+							map_angle(offspring_genotype[gene_counter]);
+						}
+				}
 		} // End of mutation
 
 		// Calculating energy of new offspring
