@@ -169,6 +169,12 @@ gpu_gen_and_eval_newpops_kernel(
 		// [0..3] for parent candidates,
 		// [4..5] for binary tournaments, [6] for deciding crossover,
 		// [7..8] for crossover points, [9] for local search
+
+		sycl::vec<float, 16> tmp_randnums = oneapi::mkl::rng::device::generate(*rng_continuous_distr, *rng_engine);
+		sycl::multi_ptr<float, sycl::access::address_space::local_space> multi_ptr_randnums (randnums);
+		tmp_randnums.store(item_ct1.get_local_id(2), multi_ptr_randnums);
+
+/*
                 for (uint32_t gene_counter = item_ct1.get_local_id(2);
                      gene_counter < 10;
                      gene_counter += item_ct1.get_local_range().get(2))
@@ -176,6 +182,7 @@ gpu_gen_and_eval_newpops_kernel(
                         //randnums[gene_counter] = gpu_randf(cData.pMem_prng_states, item_ct1);
 						randnums[gene_counter] = oneapi::mkl::rng::device::generate_single(*rng_continuous_distr, *rng_engine);
                 }
+*/
 
 #if 0
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
