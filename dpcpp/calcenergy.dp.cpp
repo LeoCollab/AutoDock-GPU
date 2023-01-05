@@ -276,12 +276,15 @@ SYCL_EXTERNAL void gpu_calc_energy(float *pGenotype, float &energy, int &run_id,
 	// ================================================
 	// CALCULATING INTERMOLECULAR ENERGY
 	// ================================================
-	float weights[8];
-	float cube[8];
+	//float weights[8];
+	//float cube[8];
         for (uint atom_id = item_ct1.get_local_id(2);
              atom_id < cData.dockpars.num_of_atoms;
              atom_id += item_ct1.get_local_range().get(2))
         {
+	        float weights_0, weights_1, weights_2, weights_3, weights_4, weights_5, weights_6, weights_7;
+		float cube_0, cube_1, cube_2, cube_3, cube_4, cube_5, cube_6, cube_7;
+
 		if (cData.pKerconst_interintra->ignore_inter_const[atom_id]>0) // first two atoms of a flex res are to be ignored here
 			continue;
                 float x = calc_coords[atom_id].x();
@@ -311,66 +314,105 @@ SYCL_EXTERNAL void gpu_calc_energy(float *pGenotype, float &energy, int &run_id,
 		float omdz = 1.0f - dz;
 
 		// Calculating interpolation weights
-		weights [idx_000] = omdx*omdy*omdz;
-		weights [idx_010] = omdx*dy*omdz;
-		weights [idx_001] = omdx*omdy*dz;
-		weights [idx_011] = omdx*dy*dz;
-		weights [idx_100] = dx*omdy*omdz;
-		weights [idx_110] = dx*dy*omdz;
-		weights [idx_101] = dx*omdy*dz;
-		weights [idx_111] = dx*dy*dz;
+		//weights [idx_000] = omdx*omdy*omdz;
+		//weights [idx_010] = omdx*dy*omdz;
+		//weights [idx_001] = omdx*omdy*dz;
+		//weights [idx_011] = omdx*dy*dz;
+		//weights [idx_100] = dx*omdy*omdz;
+		//weights [idx_110] = dx*dy*omdz;
+		//weights [idx_101] = dx*omdy*dz;
+		//weights [idx_111] = dx*dy*dz;
+		weights_0 = omdx*omdy*omdz;
+		weights_1 = omdx*dy*omdz;
+		weights_2 = omdx*omdy*dz;
+		weights_3 = omdx*dy*dz;
+		weights_4 = dx*omdy*omdz;
+		weights_5 = dx*dy*omdz;
+		weights_6 = dx*omdy*dz;
+		weights_7 = dx*dy*dz;
 
 		ulong mul_tmp = atom_typeid*g3<<2;
-		cube[0] = *(grid_value_000+mul_tmp+0);
-		cube[1] = *(grid_value_000+mul_tmp+1);
-		cube[2] = *(grid_value_000+mul_tmp+2);
-		cube[3] = *(grid_value_000+mul_tmp+3);
-		cube[4] = *(grid_value_000+mul_tmp+4);
-		cube[5] = *(grid_value_000+mul_tmp+5);
-		cube[6] = *(grid_value_000+mul_tmp+6);
-		cube[7] = *(grid_value_000+mul_tmp+7);
+		//cube[0] = *(grid_value_000+mul_tmp+0);
+		//cube[1] = *(grid_value_000+mul_tmp+1);
+		//cube[2] = *(grid_value_000+mul_tmp+2);
+		//cube[3] = *(grid_value_000+mul_tmp+3);
+		//cube[4] = *(grid_value_000+mul_tmp+4);
+		//cube[5] = *(grid_value_000+mul_tmp+5);
+		//cube[6] = *(grid_value_000+mul_tmp+6);
+		//cube[7] = *(grid_value_000+mul_tmp+7);
+		cube_0 = *(grid_value_000+mul_tmp+0);
+		cube_1 = *(grid_value_000+mul_tmp+1);
+		cube_2 = *(grid_value_000+mul_tmp+2);
+		cube_3 = *(grid_value_000+mul_tmp+3);
+		cube_4 = *(grid_value_000+mul_tmp+4);
+		cube_5 = *(grid_value_000+mul_tmp+5);
+		cube_6 = *(grid_value_000+mul_tmp+6);
+		cube_7 = *(grid_value_000+mul_tmp+7);
+
 		// Calculating affinity energy
-		energy += cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] + cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7];
+		//energy += cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] + cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7];
+		energy += cube_0*weights_0 + cube_1*weights_1 + cube_2*weights_2 + cube_3*weights_3 + cube_4*weights_4 + cube_5*weights_5 + cube_6*weights_6 + cube_7*weights_7;
 		#if defined (DEBUG_ENERGY_KERNEL)
-		interE += cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] + cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7];
+		//interE += cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] + cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7];
+		interE += cube_0*weights_0 + cube_1*weights_1 + cube_2*weights_2 + cube_3*weights_3 + cube_4*weights_4 + cube_5*weights_5 + cube_6*weights_6 + cube_7*weights_7;
 		#endif
 
 		// Capturing electrostatic values
 		atom_typeid = cData.dockpars.num_of_map_atypes;
 
 		mul_tmp = atom_typeid*g3<<2; // different atom type id to get charge IA
-		cube[0] = *(grid_value_000+mul_tmp+0);
-		cube[1] = *(grid_value_000+mul_tmp+1);
-		cube[2] = *(grid_value_000+mul_tmp+2);
-		cube[3] = *(grid_value_000+mul_tmp+3);
-		cube[4] = *(grid_value_000+mul_tmp+4);
-		cube[5] = *(grid_value_000+mul_tmp+5);
-		cube[6] = *(grid_value_000+mul_tmp+6);
-		cube[7] = *(grid_value_000+mul_tmp+7);
+		//cube[0] = *(grid_value_000+mul_tmp+0);
+		//cube[1] = *(grid_value_000+mul_tmp+1);
+		//cube[2] = *(grid_value_000+mul_tmp+2);
+		//cube[3] = *(grid_value_000+mul_tmp+3);
+		//cube[4] = *(grid_value_000+mul_tmp+4);
+		//cube[5] = *(grid_value_000+mul_tmp+5);
+		//cube[6] = *(grid_value_000+mul_tmp+6);
+		//cube[7] = *(grid_value_000+mul_tmp+7);
+		cube_0 = *(grid_value_000+mul_tmp+0);
+		cube_1 = *(grid_value_000+mul_tmp+1);
+		cube_2 = *(grid_value_000+mul_tmp+2);
+		cube_3 = *(grid_value_000+mul_tmp+3);
+		cube_4 = *(grid_value_000+mul_tmp+4);
+		cube_5 = *(grid_value_000+mul_tmp+5);
+		cube_6 = *(grid_value_000+mul_tmp+6);
+		cube_7 = *(grid_value_000+mul_tmp+7);
 
 		// Calculating affinity energy
-		energy += q * (cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] + cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
+		//energy += q * (cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] + cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
+		energy += q * (cube_0*weights_0 + cube_1*weights_1 + cube_2*weights_2 + cube_3*weights_3 + cube_4*weights_4 + cube_5*weights_5 + cube_6*weights_6 + cube_7*weights_7);
 		#if defined (DEBUG_ENERGY_KERNEL)
-		interE += q *(cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] + cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
+		//interE += q *(cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] + cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
+		interE += q * (cube_0*weights_0 + cube_1*weights_1 + cube_2*weights_2 + cube_3*weights_3 + cube_4*weights_4 + cube_5*weights_5 + cube_6*weights_6 + cube_7*weights_7);
 		#endif
 
 		// Need only magnitude of charge from here on down
                 q = sycl::fabs(q);
                 // Capturing desolvation values (atom_typeid+1 compared to above => mul_tmp + g3*4)
 		mul_tmp += g3<<2;
-		cube[0] = *(grid_value_000+mul_tmp+0);
-		cube[1] = *(grid_value_000+mul_tmp+1);
-		cube[2] = *(grid_value_000+mul_tmp+2);
-		cube[3] = *(grid_value_000+mul_tmp+3);
-		cube[4] = *(grid_value_000+mul_tmp+4);
-		cube[5] = *(grid_value_000+mul_tmp+5);
-		cube[6] = *(grid_value_000+mul_tmp+6);
-		cube[7] = *(grid_value_000+mul_tmp+7);
+		//cube[0] = *(grid_value_000+mul_tmp+0);
+		//cube[1] = *(grid_value_000+mul_tmp+1);
+		//cube[2] = *(grid_value_000+mul_tmp+2);
+		//cube[3] = *(grid_value_000+mul_tmp+3);
+		//cube[4] = *(grid_value_000+mul_tmp+4);
+		//cube[5] = *(grid_value_000+mul_tmp+5);
+		//cube[6] = *(grid_value_000+mul_tmp+6);
+		//cube[7] = *(grid_value_000+mul_tmp+7);
+		cube_0 = *(grid_value_000+mul_tmp+0);
+		cube_1 = *(grid_value_000+mul_tmp+1);
+		cube_2 = *(grid_value_000+mul_tmp+2);
+		cube_3 = *(grid_value_000+mul_tmp+3);
+		cube_4 = *(grid_value_000+mul_tmp+4);
+		cube_5 = *(grid_value_000+mul_tmp+5);
+		cube_6 = *(grid_value_000+mul_tmp+6);
+		cube_7 = *(grid_value_000+mul_tmp+7);
 
 		// Calculating affinity energy
-		energy += q * (cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] + cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
+		//energy += q * (cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] + cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
+		energy += q * (cube_0*weights_0 + cube_1*weights_1 + cube_2*weights_2 + cube_3*weights_3 + cube_4*weights_4 + cube_5*weights_5 + cube_6*weights_6 + cube_7*weights_7);
 		#if defined (DEBUG_ENERGY_KERNEL)
-		interE += q *(cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] + cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
+		//interE += q *(cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] + cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
+		interE += q * (cube_0*weights_0 + cube_1*weights_1 + cube_2*weights_2 + cube_3*weights_3 + cube_4*weights_4 + cube_5*weights_5 + cube_6*weights_6 + cube_7*weights_7);
 		#endif
 	} // End atom_id for-loop (INTERMOLECULAR ENERGY)
 
