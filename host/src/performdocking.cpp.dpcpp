@@ -256,6 +256,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
                       sycl::malloc_device<kernelconstant_interintra>(
                           1, dpct::get_default_queue()),
                   0);
+        size_t memory_consumption = sizeof(kernelconstant_interintra);
         /*
         DPCT1001:88: The statement could not be removed.
         */
@@ -269,6 +270,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
                       sycl::malloc_device<kernelconstant_intracontrib>(
                           1, dpct::get_default_queue()),
                   0);
+        memory_consumption += sizeof(kernelconstant_intracontrib);
         /*
         DPCT1001:89: The statement could not be removed.
         */
@@ -283,6 +285,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
             (cData.pKerconst_intra = sycl::malloc_device<kernelconstant_intra>(
                  1, dpct::get_default_queue()),
              0);
+        memory_consumption += sizeof(kernelconstant_intra);
         /*
         DPCT1001:90: The statement could not be removed.
         */
@@ -295,6 +298,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
                       sycl::malloc_device<kernelconstant_rotlist>(
                           1, dpct::get_default_queue()),
                   0);
+        memory_consumption += sizeof(kernelconstant_rotlist);
         /*
         DPCT1001:91: The statement could not be removed.
         */
@@ -307,6 +311,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
                       sycl::malloc_device<kernelconstant_conform>(
                           1, dpct::get_default_queue()),
                   0);
+        memory_consumption += sizeof(kernelconstant_conform);
         /*
         DPCT1001:92: The statement could not be removed.
         */
@@ -320,6 +325,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
         status = (cData.pMem_angle_const = sycl::malloc_device<float>(
                       1000, dpct::get_default_queue()),
                   0);
+        memory_consumption += sizeof(float) * 1000;
         /*
         DPCT1001:93: The statement could not be removed.
         */
@@ -332,6 +338,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
         (cData.pMem_dependence_on_theta_const =
                  sycl::malloc_device<float>(1000, dpct::get_default_queue()
              ), 0);
+        memory_consumption += sizeof(float) * 1000;
         /*
         DPCT1001:94: The statement could not be removed.
         */
@@ -345,6 +352,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
         (cData.pMem_dependence_on_rotangle_const =
                  sycl::malloc_device<float>(1000, dpct::get_default_queue()
              ), 0);
+        memory_consumption += sizeof(float) * 1000;
         /*
         DPCT1001:95: The statement could not be removed.
         */
@@ -358,6 +366,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
         (cData.pMem_rotbonds_const = sycl::malloc_device<int>(
                       2 * MAX_NUM_OF_ROTBONDS, dpct::get_default_queue()
                   ), 0);
+        memory_consumption += sizeof(int) * 2 * MAX_NUM_OF_ROTBONDS;
         /*
         DPCT1001:96: The statement could not be removed.
         */
@@ -371,6 +380,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
                       MAX_NUM_OF_ATOMS * MAX_NUM_OF_ROTBONDS,
                       dpct::get_default_queue()
                   ), 0);
+        memory_consumption += sizeof(int) * MAX_NUM_OF_ATOMS * MAX_NUM_OF_ROTBONDS;
         /*
         DPCT1001:97: The statement could not be removed.
         */
@@ -385,6 +395,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
                       sycl::malloc_device<int>(MAX_NUM_OF_ROTBONDS,
                                                dpct::get_default_queue()
                   ), 0);
+        memory_consumption += sizeof(int) * MAX_NUM_OF_ROTBONDS;
         /*
         DPCT1001:98: The statement could not be removed.
         */
@@ -428,6 +439,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
                               cData.preallocated_gridsize,
                               dpct::get_default_queue()),
                           0);
+                memory_consumption += sizeof(float) * cData.preallocated_gridsize;
                 /*
                 DPCT1001:124: The statement could not be removed.
                 */
@@ -442,6 +454,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
         (((tData.pMem_conformations1) = (float *)sycl::malloc_device(
                       size_populations, dpct::get_default_queue())
                   ), 0);
+        memory_consumption +=  sizeof(float) * size_populations;
         /*
         DPCT1001:102: The statement could not be removed.
         */
@@ -454,6 +467,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
         (((tData.pMem_conformations2) = (float *)sycl::malloc_device(
                       size_populations, dpct::get_default_queue())
                   ), 0);
+        memory_consumption += sizeof(float) * size_populations;
         /*
         DPCT1001:103: The statement could not be removed.
         */
@@ -467,6 +481,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
         (((tData.pMem_energies1) = (float *)sycl::malloc_device(
                       size_energies, dpct::get_default_queue())
                   ), 0);
+        memory_consumption += sizeof(float) * size_energies;
         /*
         DPCT1001:104: The statement could not be removed.
         */
@@ -479,6 +494,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
         (((tData.pMem_energies2) = (float *)sycl::malloc_device(
                       size_energies, dpct::get_default_queue())
                   ), 0);
+        memory_consumption += sizeof(float) * size_energies;
         /*
         DPCT1001:105: The statement could not be removed.
         */
@@ -491,6 +507,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
         (((tData.pMem_evals_of_new_entities) = sycl::malloc_device<int>(
                       MAX_POPSIZE * MAX_NUM_OF_RUNS, dpct::get_default_queue())
                   ), 0);
+        memory_consumption += sizeof(int) * MAX_POPSIZE * MAX_NUM_OF_RUNS;
         /*
         DPCT1001:106: The statement could not be removed.
         */
@@ -505,6 +522,7 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
         (((tData.pMem_gpu_evals_of_runs) = (int *)sycl::malloc_shared(
                       size_evals_of_runs, dpct::get_default_queue())
                   ), 0);
+        memory_consumption += sizeof(int) * size_evals_of_runs;
         /*
         DPCT1001:107: The statement could not be removed.
         */
@@ -519,6 +537,16 @@ void setup_gpu_for_docking(GpuData &cData, GpuTempData &tData) try {
         (((tData.pMem_prng_states) = (uint32_t *)sycl::malloc_device(
                       size_prng_seeds, dpct::get_default_queue())
                   ), 0);
+        memory_consumption += sizeof(uint32_t) * size_prng_seeds;
+        size_t mem_consump_B = memory_consumption;
+        float mem_consump_kB = mem_consump_B / 1000;
+        float mem_consump_MB = mem_consump_kB / 1000;
+        float mem_consump_GB = mem_consump_MB / 1000;
+        std::cout << "\tAllocated with sycl::malloc in setup_gpu_for_docking() = "
+                << mem_consump_B << " B / "
+                << mem_consump_kB << " kB / "
+                << mem_consump_MB << " MB / "
+                << mem_consump_GB << " GB " << std::endl;
         /*
         DPCT1001:108: The statement could not be removed.
         */
@@ -954,6 +982,16 @@ int docking_with_gpu(const Gridinfo *mygrid, Dockpars *mypars,
                 status = (tData.pMem_fgrids = sycl::malloc_device<float>(
                               mygrid->grids.size(), dpct::get_default_queue()),
                           0);
+                size_t memory_consumption = sizeof(float) * mygrid->grids.size();
+                size_t mem_consump_B = memory_consumption;
+                float mem_consump_kB = mem_consump_B / 1000;
+                float mem_consump_MB = mem_consump_kB / 1000;
+                float mem_consump_GB = mem_consump_MB / 1000;
+                std::cout << "\tAllocated with sycl::malloc in docking_with_gpu() = "
+                        << mem_consump_B << " B / "
+                        << mem_consump_kB << " kB / "
+                        << mem_consump_MB << " MB / "
+                        << mem_consump_GB << " GB " << std::endl;
                 /*
                 DPCT1001:189: The statement could not be removed.
                 */
