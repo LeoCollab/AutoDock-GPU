@@ -77,39 +77,61 @@ BIN := $(wildcard $(TARGET)*)
 # Valid values: 32, 64, 128, 256
 NUMWI=
 
+# From clinfo: " Sub-group sizes (Intel) 4, 8, 16, 32, 64"
+SGSIZE=
+DIVISOR=2
+
 ifeq ($(NUMWI), 8)
 	NWI=-DN8WI
+	SGSIZE=$(shell echo $$(( $(NUMWI) / $(DIVISOR) )))
 	TARGET:=$(TARGET)_8wi
 else ifeq ($(NUMWI), 16)
 	NWI=-DN16WI
+	SGSIZE=$(shell echo $$(( $(NUMWI) / $(DIVISOR) )))
 	TARGET:=$(TARGET)_16wi
 else ifeq ($(NUMWI), 32)
 	NWI=-DN32WI
+	SGSIZE=$(shell echo $$(( $(NUMWI) / $(DIVISOR) )))
 	TARGET:=$(TARGET)_32wi
 else ifeq ($(NUMWI), 64)
 	NWI=-DN64WI
+	SGSIZE=$(shell echo $$(( $(NUMWI) / $(DIVISOR) )))
 	TARGET:=$(TARGET)_64wi
 else ifeq ($(NUMWI), 128)
 	NWI=-DN128WI
+	SGSIZE=$(shell echo $$(( $(NUMWI) / $(DIVISOR) )))
 	TARGET:=$(TARGET)_128wi
 else ifeq ($(NUMWI), 256)
-		NWI=-DN256WI
-		TARGET:=$(TARGET)_256wi
+	NWI=-DN256WI
+	SGSIZE=$(shell echo $$(( $(NUMWI) / $(DIVISOR) )))
+	TARGET:=$(TARGET)_256wi
 else ifeq ($(NUMWI), 512)
-		NWI=-DN512WI
-		TARGET:=$(TARGET)_512wi
+	NWI=-DN512WI
+	SGSIZE=$(shell echo $$(( $(NUMWI) / $(DIVISOR) )))
+	TARGET:=$(TARGET)_512wi
 else ifeq ($(NUMWI), 1024)
-		NWI=-DN1024WI
-		TARGET:=$(TARGET)_1024wi
+	NWI=-DN1024WI
+	SGSIZE=$(shell echo $$(( $(NUMWI) / $(DIVISOR) )))
+	TARGET:=$(TARGET)_1024wi
 else
 	ifeq ($(DEVICE), CPU)
 		NWI=-DN16WI
+		SGSIZE=$(shell echo $$(( $(NUMWI) / $(DIVISOR) )))
 		TARGET:=$(TARGET)_16wi
 	else ifeq ($(DEVICE), GPU)
 		NWI=-DN64WI
+		SGSIZE=32
 		TARGET:=$(TARGET)_64wi
 	endif
 endif
+
+
+
+#ifeq (, $(filter $(NUMWI), 8, 16, 32, 64, 128))
+#else
+#endif
+
+NWI+= -DSG$(SGSIZE)
 
 # ------------------------------------------------------
 # Configuration
