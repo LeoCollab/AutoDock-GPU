@@ -70,7 +70,9 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
 #endif
                                      float *fgradient_genotype,
                                      float *pFloatAccumulator,
-                                     sycl::nd_item<3> item_ct1, GpuData cData)
+                                     sycl::nd_item<3> item_ct1, GpuData cData,
+                                     unsigned short int *vwpars_exp_acc_cache
+                                     )
 {
 	float energy = 0.0f;
 #ifdef DOCK_TRACE
@@ -81,6 +83,14 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
 	interE = 0.0f;
 	intraE = 0.0f;
 #endif
+
+	// Caching vwpars_exp_acc_cache
+	for (uint32_t coeff_cnt = item_ct1.get_local_id(2);
+				  coeff_cnt < MAX_NUM_OF_ATYPES*MAX_NUM_OF_ATYPES;
+				  coeff_cnt += item_ct1.get_local_range().get(2)) {
+		vwpars_exp_acc_cache[coeff_cnt] = cData.pKerconst_intra->VWpars_exp_const[coeff_cnt];
+	}
+	
 
 	// Initializing gradients (forces)
 	// Derived from autodockdev/maps.py
@@ -533,7 +543,8 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
 		if (atomic_distance < 8.0f)
 		{
 			uint32_t idx = atom1_typeid * cData.dockpars.num_of_atypes + atom2_typeid;
-			ushort exps = cData.pKerconst_intra->VWpars_exp_const[idx];
+//			ushort exps = cData.pKerconst_intra->VWpars_exp_const[idx];
+			ushort exps = vwpars_exp_acc_cache[idx];
 			char m=(exps & 0xFF00)>>8;
 			char n=(exps & 0xFF);
 			// Getting optimum pair distance (opt_distance)

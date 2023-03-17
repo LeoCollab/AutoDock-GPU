@@ -75,7 +75,9 @@ gpu_gradient_minAD_kernel(
                           float *sFloatAccumulator,
                           float *rho,
                           int *cons_succ,
-                          int *cons_fail)
+                          int *cons_fail,
+						  unsigned short int *vwpars_exp_acc_cache
+                          )
 // The GPU global function performs gradient-based minimization on (some) entities of conformations_next.
 // The number of OpenCL compute units (CU) which should be started equals to num_of_minEntities*num_of_runs.
 // This way the first num_of_lsentities entity of each population will be subjected to local search
@@ -261,7 +263,11 @@ gpu_gradient_minAD_kernel(
                     // Calculate gradients (forces) for intermolecular energy
                     // Derived from autodockdev/maps.py
                     cartesian_gradient, gradient, sFloatAccumulator, item_ct1,
-                    cData);
+                    cData,
+                    
+                    // Caching VWpars_exp
+                    vwpars_exp_acc_cache
+                    );
 
 		// =============================================================
 		// =============================================================
@@ -473,6 +479,8 @@ void gpu_gradient_minAD(
                 sycl::local_accessor<float, 0> rho_acc_ct1(cgh);
                 sycl::local_accessor<int, 0> cons_succ_acc_ct1(cgh);
                 sycl::local_accessor<int, 0> cons_fail_acc_ct1(cgh);
+                
+                sycl::local_accessor<unsigned short int, 1> vwpars_exp_acc_ct1(sycl::range<1>(MAX_NUM_OF_ATYPES*MAX_NUM_OF_ATYPES), cgh);
 
                 cgh.parallel_for(
                     sycl::nd_range<3>(sycl::range<3>(1, 1, blocks) *
@@ -487,7 +495,9 @@ void gpu_gradient_minAD(
                                 sFloatAccumulator_acc_ct1.get_pointer(),
                                 rho_acc_ct1.get_pointer(),
                                 cons_succ_acc_ct1.get_pointer(),
-                                cons_fail_acc_ct1.get_pointer());
+                                cons_fail_acc_ct1.get_pointer(),
+                                vwpars_exp_acc_ct1.get_pointer()
+                                );
                     });
         });
         /*
