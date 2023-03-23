@@ -151,16 +151,20 @@ SYCL_EXTERNAL void gpu_calc_energy(float *pGenotype, float &energy, int &run_id,
                     cData.pKerconst_conform->ref_coords_const[3 * atom_id + 2];
         }
 
-	// General rotation moving vector
+		// General rotation moving vector
+/*		
         sycl::float4 genrot_movingvec;
         genrot_movingvec.x() = pGenotype[0];
         genrot_movingvec.y() = pGenotype[1];
         genrot_movingvec.z() = pGenotype[2];
         genrot_movingvec.w() = 0.0f;
+*/        
+        sycl::float4 genrot_movingvec = {pGenotype[0], pGenotype[1], pGenotype[2], 0.0f};
+        
         // Convert orientation genes from sex. to radians
-	float phi         = pGenotype[3] * DEG_TO_RAD;
-	float theta       = pGenotype[4] * DEG_TO_RAD;
-	float genrotangle = pGenotype[5] * DEG_TO_RAD;
+		float phi         = pGenotype[3] * DEG_TO_RAD;
+		float theta       = pGenotype[4] * DEG_TO_RAD;
+		float genrotangle = pGenotype[5] * DEG_TO_RAD;
 
         sycl::float4 genrot_unitvec;
         float sin_angle = SYCL_SIN(theta);
@@ -170,9 +174,9 @@ SYCL_EXTERNAL void gpu_calc_energy(float *pGenotype, float &energy, int &run_id,
         genrot_unitvec.z() = s2 * SYCL_COS(theta);
         genrot_unitvec.w() = SYCL_COS(genrotangle * 0.5f);
 
-        uint g1 = cData.dockpars.gridsize_x;
-	uint g2 = cData.dockpars.gridsize_x_times_y;
-	uint g3 = cData.dockpars.gridsize_x_times_y_times_z;
+		uint g1 = cData.dockpars.gridsize_x;
+		uint g2 = cData.dockpars.gridsize_x_times_y;
+		uint g3 = cData.dockpars.gridsize_x_times_y_times_z;
 
         /*
         DPCT1007:8: Migration of this CUDA API is not supported by the Intel(R)
