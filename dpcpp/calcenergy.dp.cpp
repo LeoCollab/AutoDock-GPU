@@ -152,7 +152,7 @@ SYCL_EXTERNAL void gpu_calc_energy(float *pGenotype, float &energy, int &run_id,
         }
 
 		// General rotation moving vector
-/*		
+/*
         sycl::float4 genrot_movingvec;
         genrot_movingvec.x() = pGenotype[0];
         genrot_movingvec.y() = pGenotype[1];
@@ -162,6 +162,7 @@ SYCL_EXTERNAL void gpu_calc_energy(float *pGenotype, float &energy, int &run_id,
         sycl::float4 genrot_movingvec = {pGenotype[0], pGenotype[1], pGenotype[2], 0.0f};
         
         // Convert orientation genes from sex. to radians
+/*
 		float phi         = pGenotype[3] * DEG_TO_RAD;
 		float theta       = pGenotype[4] * DEG_TO_RAD;
 		float genrotangle = pGenotype[5] * DEG_TO_RAD;
@@ -173,6 +174,22 @@ SYCL_EXTERNAL void gpu_calc_energy(float *pGenotype, float &energy, int &run_id,
         genrot_unitvec.y() = s2 * sin_angle * SYCL_SIN(phi);
         genrot_unitvec.z() = s2 * SYCL_COS(theta);
         genrot_unitvec.w() = SYCL_COS(genrotangle * 0.5f);
+*/
+		sycl::float3 angles = {pGenotype[3], pGenotype[4], pGenotype[5]};
+		angles = angles * DEG_TO_RAD;
+        float phi = angles.x();
+        float theta = angles.y();
+        float genrotangle = angles.z();
+
+        sycl::float3 const_tmp = {1.0f, 1.0f, 0.5f};
+        sycl::float3 angles_genrot = angles * const_tmp;
+        sycl::float3 angles_sin = SYCL_SIN(angles_genrot);
+        sycl::float3 angles_cos = SYCL_COS(angles_genrot);
+        float sin_angle = angles_sin.y();
+        float s2 = angles_sin.z();
+        sycl::float4 tmp1 = {s2*sin_angle, s2*sin_angle, s2, 1.0f};
+        sycl::float4 tmp2 = {angles_cos.x(), angles_sin.x(), angles_cos.y(), angles_cos.z()};
+        sycl::float4 genrot_unitvec = tmp1 * tmp2;
 
 		uint g1 = cData.dockpars.gridsize_x;
 		uint g2 = cData.dockpars.gridsize_x_times_y;
