@@ -7,18 +7,15 @@ input_path=input/${pdb}/derived
 input_protein=${input_path}/${pdb}_protein.maps.fld
 input_ligand=${input_path}/${pdb}_ligand.pdbqt
 
-warning_message() {
-	printf "\nMake sure that:"
-	printf "\n AutoDock-GPU was compiled for profiling on PVC:"
-	printf "\n make DEVICE=XeGPU PLATFORM=PVC CONFIG=LDEBUG_VTUNE"
-	printf "\n"
-	sleep 1
-}
-
 init_tool() {
 	# Initializing oneAPI tools
 	printf "\n"
 	source "/opt/intel/oneapi/setvars.sh"
+}
+
+compile_for_profiling() {
+	printf "\nmake DEVICE=XeGPU PLATFORM=PVC CONFIG=LDEBUG_VTUNE"
+	make DEVICE=XeGPU PLATFORM=PVC CONFIG=LDEBUG_VTUNE
 }
 
 choose_codeversion() {
@@ -157,8 +154,8 @@ run_gpu_hotspots() {
 	run_sourceanalysis
 }
 
-warning_message
 init_tool
+compile_for_profiling
 choose_codeversion
 define_executable
 run_gpu_offload
