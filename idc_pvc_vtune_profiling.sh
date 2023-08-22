@@ -162,4 +162,3 @@ define_executable
 run_gpu_offload
 run_gpu_hotspots
 
-

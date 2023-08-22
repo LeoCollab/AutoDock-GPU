@@ -98,11 +98,9 @@ run_gpu_roofline() {
 	fi
 }
 
-
 init_tool
 compile_for_roofline
 choose_codeversion
 define_executable
 run_gpu_roofline
-
 
