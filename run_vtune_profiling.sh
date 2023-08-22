@@ -2,10 +2,10 @@
 
 #set -o xtrace
 
-pdb=1mzc
-input_path=ad-gpu_miniset_20/data/${pdb}
-input_protein=${input_path}/protein.maps.fld
-input_ligand=${input_path}/rand-0.pdbqt
+pdb=7cpa
+input_path=input/${pdb}/derived
+input_protein=${input_path}/${pdb}_protein.maps.fld
+input_ligand=${input_path}/${pdb}_ligand.pdbqt
 
 warning_message() {
 	printf "\nMake sure that:"
