@@ -144,7 +144,7 @@ run_sourceanalysis_memlatency() {
 
 run_characterization() {
 	run_characterization_globallocalacceses
-#	run_characterization_instructioncount
+	run_characterization_instructioncount
 }
 
 run_sourceanalysis() {
