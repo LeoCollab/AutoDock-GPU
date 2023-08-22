@@ -9,8 +9,8 @@ input_ligand=${input_path}/${pdb}_ligand.pdbqt
 
 warning_message() {
 	printf "\nMake sure that:"
-	printf "\n - AutoDock-GPU was compiled for profiling on PVC"
-	printf "\n - make DEVICE=XeGPU PLATFORM=PVC CONFIG=LDEBUG_VTUNE"
+	printf "\n AutoDock-GPU was compiled for profiling on PVC:"
+	printf "\n make DEVICE=XeGPU PLATFORM=PVC CONFIG=LDEBUG_VTUNE"
 	printf "\n"
 	sleep 1
 }
