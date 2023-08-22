@@ -15,6 +15,7 @@ init_tool() {
 
 compile_for_profiling() {
 	printf "\nmake DEVICE=XeGPU PLATFORM=PVC CONFIG=LDEBUG_VTUNE"
+	printf "\n"
 	make DEVICE=XeGPU PLATFORM=PVC CONFIG=LDEBUG_VTUNE
 }
 
