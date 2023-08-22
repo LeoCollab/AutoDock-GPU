@@ -78,7 +78,7 @@ run_gpu_offload() {
 	printf "run_gpu_offload() ..."
 	printf "\n------------------------------------------------\n"
 	cmd_offload="vtune -collect gpu-offload"
-	output_folder=${output_mainfolder}/r_gpu-offload_${pdb}
+	output_folder=r_gpu-offload_${pdb}
 
 	local cmd_local_sw="${cmd_offload} -r ${output_folder}_sw -- ${adgpu_cmd_sw}"
 	local cmd_local_ad="${cmd_offload} -r ${output_folder}_ad -- ${adgpu_cmd_ad}"
@@ -92,7 +92,7 @@ run_characterization_globallocalacceses() {
 	printf "run_characterization_globallocalacceses() ... "
 	printf "\n------------------------------------------------\n"
 	cmd_characterization_globallocalacceses="vtune -collect gpu-hotspots -knob profiling-mode=characterization -knob characterization-mode=global-local-accesses"
-	output_folder=${output_mainfolder}/r_gpu-hotspots_characterization_globallocalaccesses_${pdb}
+	output_folder=r_gpu-hotspots_characterization_globallocalaccesses_${pdb}
 
 	local cmd_local_sw="${cmd_characterization_globallocalacceses} -r ${output_folder}_sw -- ${adgpu_cmd_sw}"
 	local cmd_local_ad="${cmd_characterization_globallocalacceses} -r ${output_folder}_ad -- ${adgpu_cmd_ad}"
@@ -106,7 +106,7 @@ run_characterization_instructioncount() {
 	printf "run_characterization_instructioncount() ..."
 	printf "\n------------------------------------------------\n"
 	cmd_characterization_instructioncount="vtune -collect gpu-hotspots -knob profiling-mode=characterization -knob characterization-mode=instruction-count"
-	output_folder=${output_mainfolder}/r_gpu-hotspots_characterization_instructioncount_${pdb}
+	output_folder=r_gpu-hotspots_characterization_instructioncount_${pdb}
 
 	local cmd_local_sw="${cmd_characterization_instructioncount} -r ${output_folder}_sw -- ${adgpu_cmd_sw}"
 	local cmd_local_ad="${cmd_characterization_instructioncount} -r ${output_folder}_ad -- ${adgpu_cmd_ad}"
@@ -120,7 +120,7 @@ run_sourceanalysis_bblatency() {
 	printf "run_sourceanalysis_bblatency() ..."
 	printf "\n------------------------------------------------\n"
 	cmd_sourceanalysis_bblatency="vtune -collect gpu-hotspots -knob profiling-mode=source-analysis -knob source-analysis=bb-latency"
-	output_folder=${output_mainfolder}/r_gpu-hotspots_sourceanalysis_bblatency_${pdb}
+	output_folder=r_gpu-hotspots_sourceanalysis_bblatency_${pdb}
 
 	local cmd_local_sw="${cmd_sourceanalysis_bblatency} -r ${output_folder}_sw -- ${adgpu_cmd_sw}"
 	local cmd_local_ad="${cmd_sourceanalysis_bblatency} -r ${output_folder}_ad -- ${adgpu_cmd_ad}"
@@ -134,7 +134,7 @@ run_sourceanalysis_memlatency() {
 	printf "run_sourceanalysis_memlatency() ..."
 	printf "\n------------------------------------------------\n"
 	cmd_sourceanalysis_memlatency="vtune -collect gpu-hotspots -knob profiling-mode=source-analysis -knob source-analysis=mem-latency"
-	output_folder=${output_mainfolder}/r_gpu-hotspots_sourceanalysis_memlatency_${pdb}
+	output_folder=r_gpu-hotspots_sourceanalysis_memlatency_${pdb}
 
 	local cmd_local_sw="${cmd_sourceanalysis_memlatency} -r ${output_folder}_sw -- ${adgpu_cmd_sw}"
 	local cmd_local_ad="${cmd_sourceanalysis_memlatency} -r ${output_folder}_ad -- ${adgpu_cmd_ad}"
