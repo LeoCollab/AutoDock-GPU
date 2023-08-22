@@ -38,7 +38,7 @@ choose_codeversion() {
 }
 
 define_executable() {
-	adgpu_binary=bin/autodock_gpu_64wi
+	adgpu_binary=bin/autodock_xegpu_64wi
 
 	if [ -f "${adgpu_binary}" ]; then
 		printf "${adgpu_binary} exists!\n"
