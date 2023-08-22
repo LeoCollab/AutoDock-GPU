@@ -9,10 +9,8 @@ input_ligand=${input_path}/rand-0.pdbqt
 
 warning_message() {
 	printf "\nMake sure that:"
-	printf "\n - the AutoDock-GPU executables are copied into this folder"
-	printf "\n - these code versions were compiled for __debug__"
-	printf "\n   -- DPCPP : make DEVICE=XeGPU NUMWI=64 CONFIG=FDEBUG_VTUNE"
-	printf "\n   -- OpenCL: make DEVICE=OCLGPU NUMWI=64 CONFIG=FDEBUG"
+	printf "\n - AutoDock-GPU was compiled for profiling on PVC"
+	printf "\n - make DEVICE=XeGPU PLATFORM=PVC CONFIG=LDEBUG_VTUNE"
 	printf "\n"
 	sleep 1
 }
