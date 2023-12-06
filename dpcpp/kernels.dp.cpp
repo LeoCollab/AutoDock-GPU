@@ -162,7 +162,7 @@ void reduce_via_matrix_units(sycl::half *data_to_be_reduced, sycl::nd_item<3> it
         joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_C;
 
         joint_matrix_fill(sg, sub_P, HALF_ONE); // P: only ones
-        joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialiye to zeros
+        joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
         joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
 }
 
