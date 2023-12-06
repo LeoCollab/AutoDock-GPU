@@ -151,6 +151,9 @@ void reduce_via_matrix_units(sycl::half *data_to_be_reduced) {
         joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::row_major> sub_P;
         joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_V;
 
+        joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::row_major> sub_Q;
+        joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::row_major> sub_W;
+        joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_C;
 }
 
 /* Reduction using matrix units */
