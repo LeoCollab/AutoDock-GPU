@@ -771,6 +771,15 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
         sycl::access::address_space::local_space>".
         */
         REDUCEFLOATSUM(energy, pFloatAccumulator);
+
+	/* Reduction using matrix units */
+
+	// 1. Convert data-to-be-reduced from float to half
+
+
+
+	/* Reduction using matrix units */
+
 #if defined (DEBUG_ENERGY_KERNEL)
 	REDUCEFLOATSUM(intraE, pFloatAccumulator);
 #endif
