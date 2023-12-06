@@ -132,6 +132,13 @@ Compatibility Tool.
         *pAccumulator = (float) value;\
         item_ct1.barrier(SYCL_MEMORY_SPACE);
 
+/* Reduction using matrix units */
+void reduce_via_matrix_units(sycl::half *data_to_be_reduced) {
+
+
+}
+
+/* Reduction using matrix units */
 
 static dpct::constant_memory<GpuData, 0> cData;
 static GpuData cpuData;
