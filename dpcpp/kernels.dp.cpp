@@ -133,8 +133,23 @@ Compatibility Tool.
         item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 /* Reduction using matrix units */
+using namespace sycl::ext::oneapi::experimental::matrix;
+
+// Number of rows/cols of a submatrix: M, N, K
+constexpr int rowscols_M = 16;
+constexpr int rowscols_N = 16;
+constexpr int rowscols_K = 16;
+
+// Implementation based on MSc thesis at KTH:
+// "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
+// https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
+//
+ // We consider that a CUDA fragment is equivalent to a SYCL submatrix
 void reduce_via_matrix_units(sycl::half *data_to_be_reduced) {
 
+        // Declaring and filling submatrices
+        joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::row_major> sub_P;
+        joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_V;
 
 }
 
