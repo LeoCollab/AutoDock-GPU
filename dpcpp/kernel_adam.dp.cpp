@@ -65,7 +65,11 @@ gpu_gradient_minAdam_kernel(
                             GpuData cData,
                             int *entity_id,
                             float *best_energy,
-                            float *sFloatAccumulator)
+                            float *sFloatAccumulator,
+							/* Reduction using matrix units */
+							sycl::half *data_to_be_reduced
+							/* Reduction using matrix units */
+							)
 // The GPU global function performs gradient-based minimization on (some) entities of conformations_next.
 // The number of OpenCL compute units (CU) which should be started equals to num_of_minEntities*num_of_runs.
 // This way the first num_of_lsentities entity of each population will be subjected to local search
@@ -249,7 +253,11 @@ gpu_gradient_minAdam_kernel(
 		                  #endif
                                   // Gradient-related arguments
                                   cartesian_gradient, gradient,
-                                  sFloatAccumulator, item_ct1, cData);
+                                  sFloatAccumulator, item_ct1, cData,
+								  /* Reduction using matrix units */
+								  data_to_be_reduced
+								  /* Reduction using matrix units */
+								  );
 
 		// =============================================================
 		// =============================================================
@@ -472,6 +480,10 @@ void gpu_gradient_minAdam(
                 sycl::local_accessor<float, 0> best_energy_acc_ct1(cgh);
                 sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
 
+				/* Reduction using matrix units */
+				sycl::local_accessor<sycl::half, 1> data_to_be_reduced(sycl::range<1>(4*threads), cgh);
+				/* Reduction using matrix units */
+
                 cgh.parallel_for(
                     sycl::nd_range<3>(sycl::range<3>(1, 1, blocks) *
                                           sycl::range<3>(1, 1, threads),
@@ -482,7 +494,11 @@ void gpu_gradient_minAdam(
                                 item_ct1, dpct_local_acc_ct1.get_pointer(),
                                 *cData_ptr_ct1, entity_id_acc_ct1.get_pointer(),
                                 best_energy_acc_ct1.get_pointer(),
-                                sFloatAccumulator_acc_ct1.get_pointer());
+                                sFloatAccumulator_acc_ct1.get_pointer(),
+								/* Reduction using matrix units */
+                                data_to_be_reduced.get_pointer()
+                                /* Reduction using matrix units */
+							);
                     });
         });
         /*

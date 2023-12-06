@@ -265,7 +265,11 @@ gpu_gradient_minAD_kernel(
                     // Calculate gradients (forces) for intermolecular energy
                     // Derived from autodockdev/maps.py
                     cartesian_gradient, gradient, sFloatAccumulator, item_ct1,
-                    cData);
+                    cData,
+                        /* Reduction using matrix units */
+                        data_to_be_reduced
+                        /* Reduction using matrix units */
+                    );
 
 		// =============================================================
 		// =============================================================
