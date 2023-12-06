@@ -145,7 +145,10 @@ constexpr int rowscols_K = 16;
 // https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
 //
  // We consider that a CUDA fragment is equivalent to a SYCL submatrix
-void reduce_via_matrix_units(sycl::half *data_to_be_reduced) {
+void reduce_via_matrix_units(sycl::half *data_to_be_reduced, sycl::nd_item<3> item) {
+
+        // Identifying sub-groups
+        sycl::sub_group sg = item.get_sub_group();
 
         // Declaring and filling submatrices
         joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::row_major> sub_P;
@@ -154,6 +157,8 @@ void reduce_via_matrix_units(sycl::half *data_to_be_reduced) {
         joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::row_major> sub_Q;
         joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::row_major> sub_W;
         joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_C;
+
+        //joint_matrix_fill<>
 }
 
 /* Reduction using matrix units */
