@@ -779,6 +779,8 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
 	/* Reduction using matrix units */
 
 	// 1. Convert data-to-be-reduced from float to half
+	// https://intel.github.io/llvm-docs/doxygen/namespacesycl_1_1__V1_1_1detail.html#a152ac8c5d9e97d6f3acb7b2ca36a1450
+	data_to_be_reduced[4*item_ct1.get_local_id(2)] = sycl::detail::float2Half(torque_rot.x());
 	
 
 
