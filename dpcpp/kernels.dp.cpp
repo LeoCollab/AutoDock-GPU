@@ -195,7 +195,9 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
         joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
         joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
 
-        //joint_matrix_load(sg, sub_Q, );
+        // TODO: check the entire data to processed will fit into the matrix registers
+        // TODO: check usage of sycl::multi_ptr
+        joint_matrix_load(sg, sub_Q, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(Q_data), 16);
 }
 
 /* Reduction using matrix units */
