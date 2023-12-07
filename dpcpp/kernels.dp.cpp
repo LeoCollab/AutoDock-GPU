@@ -158,6 +158,8 @@ TODO: replace naive implementation with a multi-threaded one
 void fill_Q(sycl::nd_item<3> item, sycl::half *Q_data) {
 
         // Naive implementation: a single work-item fills data
+        item.barrier(sycl::access::fence_space::global_space);
+
         if(item.get_global_id(2) == 0) {
                 for(uint i = 0; i < 4; i++) { // How many rows (of 4x4 blocks) are there in matrix A?
                         for(uint j = 0; j < 4; j++) { // How many cols (of 4x4 blocks) are there in matrix A?
@@ -169,6 +171,8 @@ void fill_Q(sycl::nd_item<3> item, sycl::half *Q_data) {
                         }
                 }
         }
+
+        item.barrier(sycl::access::fence_space::global_space);
 }
 
 // Implementation based on MSc thesis at KTH:
