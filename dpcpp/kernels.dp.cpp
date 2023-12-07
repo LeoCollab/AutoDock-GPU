@@ -218,6 +218,9 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
 
         // 2. Perform line sum: C <- QW + C (zero)
         sub_C = joint_matrix_mad(sg, sub_Q, sub_W, sub_C);
+
+        // 3. Store result in shared memory
+        joint_matrix_store(sg, sub_C, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(data_to_be_reduced), 16, layout::row_major);
 }
 
 /* Reduction using matrix units */
