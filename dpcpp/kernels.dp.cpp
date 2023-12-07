@@ -209,6 +209,7 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
                 const uint offset = i * 16;
                 joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::row_major> sub_A;
                 joint_matrix_load(sg, sub_A, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(data_to_be_reduced + offset), 16);
+                sub_V = joint_matrix_mad(sg, sub_A, sub_P, sub_V);
         }
 }
 
