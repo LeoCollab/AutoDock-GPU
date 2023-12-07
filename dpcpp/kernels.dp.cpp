@@ -156,7 +156,7 @@ constexpr sycl::half I4[16] =
 // https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
 //
  // We consider that a CUDA fragment is equivalent to a SYCL submatrix
-void reduce_via_matrix_units(sycl::half *data_to_be_reduced, sycl::nd_item<3> item) {
+void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduced) {
 
         // Identifying sub-groups
         sycl::sub_group sg = item.get_sub_group();
