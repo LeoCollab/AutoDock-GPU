@@ -207,8 +207,8 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
         // TODO: check NUM_OF_THREADS_PER_BLOCK and TILE_SIZE = 16
         for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK) / 16;  i++) {
                 const uint offset = i * 16;
-                joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::row_major> sub_A;;
-
+                joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::row_major> sub_A;
+                
         }
 }
 
