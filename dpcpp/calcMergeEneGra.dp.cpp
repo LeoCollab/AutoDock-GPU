@@ -73,7 +73,7 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
                                      sycl::nd_item<3> item_ct1, GpuData cData,
 									 /* Reduction using matrix units */
 									 sycl::half *data_to_be_reduced,
-									 sycl::half *Q_Data,
+									 sycl::half *Q_data,
 									 sycl::half *tmp
 									 /* Reduction using matrix units */
 									 )
@@ -789,7 +789,7 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = sycl::detail::float2Half(energy);
 
 	// 2. Perform reduction using matrix units
-	reduce_via_matrix_units(item_ct1, data_to_be_reduced);
+	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
 
 	// 3. Retrieve result from shared memory
 	torque_rot.x() = sycl::detail::half2Float(data_to_be_reduced[0]);
