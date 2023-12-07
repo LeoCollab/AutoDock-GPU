@@ -182,45 +182,53 @@ void fill_Q(sycl::nd_item<3> item, sycl::half *Q_data) {
  // We consider that a CUDA fragment is equivalent to a SYCL submatrix
 void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduced, sycl::half *Q_data, sycl::half *tmp) {
 
-        fill_Q(item, Q_data);
+        item.barrier(sycl::access::fence_space::global_space); // TODO: check if scope can be reduced
 
-        // Identifying sub-groups
-        sycl::sub_group sg = item.get_sub_group();
+        // TODO: check work-item upper limit is right
+        if(item.get_global_id(2) <= 31) { // Only one warp performs reduction
 
-        // Declaring and filling submatrices
-        joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::row_major> sub_P;
-        joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_V;
+                fill_Q(item, Q_data);
 
-        joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::row_major> sub_Q;
-        joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::row_major> sub_W;
-        joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_C;
+                // Identifying sub-groups
+                sycl::sub_group sg = item.get_sub_group();
 
-        joint_matrix_fill(sg, sub_P, HALF_ONE); // P: only ones
-        joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
-        joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
+                // Declaring and filling submatrices
+                joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::row_major> sub_P;
+                joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_V;
 
-        // TODO: check the entire data to processed will fit into the matrix registers
-        // TODO: check usage of sycl::multi_ptr, including address_space
-        joint_matrix_load(sg, sub_Q, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(Q_data), 16);
+                joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::row_major> sub_Q;
+                joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::row_major> sub_W;
+                joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_C;
 
-        // 1. Accumulate the values: V <- AP + V
-        // TODO: check NUM_OF_THREADS_PER_BLOCK and TILE_SIZE = 16
-        for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK) / 16;  i++) {
-                const uint offset = i * 16;
-                joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::row_major> sub_A;
-                joint_matrix_load(sg, sub_A, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(data_to_be_reduced + offset), 16);
-                sub_V = joint_matrix_mad(sg, sub_A, sub_P, sub_V);
+                joint_matrix_fill(sg, sub_P, HALF_ONE); // P: only ones
+                joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
+                joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
+
+                // TODO: check the entire data to processed will fit into the matrix registers
+                // TODO: check usage of sycl::multi_ptr, including address_space
+                joint_matrix_load(sg, sub_Q, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(Q_data), 16);
+
+                // 1. Accumulate the values: V <- AP + V
+                // TODO: check NUM_OF_THREADS_PER_BLOCK and TILE_SIZE = 16
+                for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK) / 16;  i++) {
+                        const uint offset = i * 16;
+                        joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::row_major> sub_A;
+                        joint_matrix_load(sg, sub_A, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(data_to_be_reduced + offset), 16);
+                        sub_V = joint_matrix_mad(sg, sub_A, sub_P, sub_V);
+                }
+
+                // W <- V (required since we need V as a "use::b")
+                joint_matrix_store(sg, sub_V, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(tmp), 16, layout::row_major);
+                joint_matrix_load(sg, sub_W, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(tmp), 16);
+
+                // 2. Perform line sum: C <- QW + C (zero)
+                sub_C = joint_matrix_mad(sg, sub_Q, sub_W, sub_C);
+
+                // 3. Store result in shared memory
+                joint_matrix_store(sg, sub_C, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(data_to_be_reduced), 16, layout::row_major);
         }
 
-        // W <- V (required since we need V as a "use::b")
-        joint_matrix_store(sg, sub_V, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(tmp), 16, layout::row_major);
-        joint_matrix_load(sg, sub_W, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(tmp), 16);
-
-        // 2. Perform line sum: C <- QW + C (zero)
-        sub_C = joint_matrix_mad(sg, sub_Q, sub_W, sub_C);
-
-        // 3. Store result in shared memory
-        joint_matrix_store(sg, sub_C, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(data_to_be_reduced), 16, layout::row_major);
+        item.barrier(sycl::access::fence_space::global_space); // TODO: check if scope can be reduced
 }
 
 /* Reduction using matrix units */
