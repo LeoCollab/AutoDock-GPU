@@ -746,7 +746,7 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
         "dpct::atomic_fetch_add<float,
         sycl::access::address_space::local_space>".
         */
-        REDUCEFLOATSUM(torque_rot.x(), pFloatAccumulator);
+//        REDUCEFLOATSUM(torque_rot.x(), pFloatAccumulator);
         /*
         DPCT1039:26: The generated code assumes that "pFloatAccumulator" points
         to the global memory address space. If it points to a local memory
@@ -754,7 +754,7 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
         "dpct::atomic_fetch_add<float,
         sycl::access::address_space::local_space>".
         */
-        REDUCEFLOATSUM(torque_rot.y(), pFloatAccumulator);
+//        REDUCEFLOATSUM(torque_rot.y(), pFloatAccumulator);
         /*
         DPCT1039:27: The generated code assumes that "pFloatAccumulator" points
         to the global memory address space. If it points to a local memory
@@ -762,7 +762,7 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
         "dpct::atomic_fetch_add<float,
         sycl::access::address_space::local_space>".
         */
-        REDUCEFLOATSUM(torque_rot.z(), pFloatAccumulator);
+//        REDUCEFLOATSUM(torque_rot.z(), pFloatAccumulator);
 
         // TODO
 	// -------------------------------------------------------
@@ -776,7 +776,7 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
         "dpct::atomic_fetch_add<float,
         sycl::access::address_space::local_space>".
         */
-        REDUCEFLOATSUM(energy, pFloatAccumulator);
+//        REDUCEFLOATSUM(energy, pFloatAccumulator);
 
 	/* Reduction using matrix units */
 
