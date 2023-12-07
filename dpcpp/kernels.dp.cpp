@@ -200,7 +200,7 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
         joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
 
         // TODO: check the entire data to processed will fit into the matrix registers
-        // TODO: check usage of sycl::multi_ptr
+        // TODO: check usage of sycl::multi_ptr, including address_space
         joint_matrix_load(sg, sub_Q, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(Q_data), 16);
 
         // 1. Accumulate the values: V <- AP + V
@@ -208,7 +208,7 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
         for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK) / 16;  i++) {
                 const uint offset = i * 16;
                 joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::row_major> sub_A;
-                
+                joint_matrix_load(sg, sub_A, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(data_to_be_reduced + offset), 16);
         }
 }
 
