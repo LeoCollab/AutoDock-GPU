@@ -151,12 +151,34 @@ constexpr sycl::half I4[16] =
         0, 0, 0, 1
 };
 
+/*
+TODO: check correctness of naive implementation
+TODO: replace naive implementation with a multi-threaded one
+*/
+void fill_Q(sycl::nd_item<3> item, sycl::half *Q_data) {
+
+        // Naive implementation: a single work-item fills data
+        if(item.get_global_id(2) == 0) {
+                for(uint i = 0; i < 4; i++) { // How many rows (of 4x4 blocks) are there in matrix A?
+                        for(uint j = 0; j < 4; j++) { // How many cols (of 4x4 blocks) are there in matrix A?
+                                for(uint ii = 0; ii < 4; ii++) {
+                                        for(uint jj = 0; jj < 4; jj++) {
+                                                Q_data[4*i + 16*j + 4*ii + jj] = I4[4*ii + jj];
+                                        }
+                                }
+                        }
+                }
+        }
+}
+
 // Implementation based on MSc thesis at KTH:
 // "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
 // https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
 //
  // We consider that a CUDA fragment is equivalent to a SYCL submatrix
 void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduced, sycl::half *Q_data, sycl::half *tmp) {
+
+        fill_Q(item, Q_data);
 
         // Identifying sub-groups
         sycl::sub_group sg = item.get_sub_group();
