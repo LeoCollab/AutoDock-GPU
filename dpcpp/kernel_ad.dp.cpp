@@ -77,7 +77,9 @@ gpu_gradient_minAD_kernel(
                           int *cons_succ,
                           int *cons_fail,
                           /* Reduction using matrix units */
-                          sycl::half *data_to_be_reduced
+                          sycl::half *data_to_be_reduced,
+                          sycl::half *Q_data,
+                          sycl::half *tmp
                           /* Reduction using matrix units */
                           )
 // The GPU global function performs gradient-based minimization on (some) entities of conformations_next.
@@ -267,7 +269,9 @@ gpu_gradient_minAD_kernel(
                     cartesian_gradient, gradient, sFloatAccumulator, item_ct1,
                     cData,
                         /* Reduction using matrix units */
-                        data_to_be_reduced
+                        data_to_be_reduced,
+                        Q_data,
+                        tmp
                         /* Reduction using matrix units */
                     );
 
@@ -484,6 +488,8 @@ void gpu_gradient_minAD(
 
                 /* Reduction using matrix units */
                 sycl::local_accessor<sycl::half, 1> data_to_be_reduced(sycl::range<1>(4*threads), cgh);
+                sycl::local_accessor<sycl::half, 1> Q_data(sycl::range<1>(16*16), cgh);
+                sycl::local_accessor<sycl::half, 1> tmp(sycl::range<1>(16*16), cgh);
                 /* Reduction using matrix units */
 
                 cgh.parallel_for(
@@ -501,7 +507,9 @@ void gpu_gradient_minAD(
                                 cons_succ_acc_ct1.get_pointer(),
                                 cons_fail_acc_ct1.get_pointer(),
                                 /* Reduction using matrix units */
-                                data_to_be_reduced.get_pointer()
+                                data_to_be_reduced.get_pointer(),
+                                Q_data.get_pointer(),
+                                tmp.get_pointer()
                                 /* Reduction using matrix units */
                             );
                     });

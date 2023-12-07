@@ -72,7 +72,9 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
                                      float *pFloatAccumulator,
                                      sycl::nd_item<3> item_ct1, GpuData cData,
 									 /* Reduction using matrix units */
-									 sycl::half *data_to_be_reduced
+									 sycl::half *data_to_be_reduced,
+									 sycl::half *Q_Data,
+									 sycl::half *tmp
 									 /* Reduction using matrix units */
 									 )
 {

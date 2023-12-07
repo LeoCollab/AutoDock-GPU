@@ -143,6 +143,14 @@ constexpr int rowscols_K = 16;
 constexpr sycl::half HALF_ONE = sycl::half(1.0f);
 constexpr sycl::half HALF_ZERO = sycl::half(0.0f);
 
+constexpr sycl::half I4[16] =
+{
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+};
+
 // Implementation based on MSc thesis at KTH:
 // "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
 // https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
@@ -164,6 +172,8 @@ void reduce_via_matrix_units(sycl::half *data_to_be_reduced, sycl::nd_item<3> it
         joint_matrix_fill(sg, sub_P, HALF_ONE); // P: only ones
         joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
         joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
+
+        //joint_matrix_load(sg, sub_Q, );
 }
 
 /* Reduction using matrix units */

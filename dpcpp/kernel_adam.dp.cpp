@@ -67,7 +67,9 @@ gpu_gradient_minAdam_kernel(
                             float *best_energy,
                             float *sFloatAccumulator,
 							/* Reduction using matrix units */
-							sycl::half *data_to_be_reduced
+							sycl::half *data_to_be_reduced,
+							sycl::half *Q_data,
+							sycl::half *tmp
 							/* Reduction using matrix units */
 							)
 // The GPU global function performs gradient-based minimization on (some) entities of conformations_next.
@@ -255,7 +257,9 @@ gpu_gradient_minAdam_kernel(
                                   cartesian_gradient, gradient,
                                   sFloatAccumulator, item_ct1, cData,
 								  /* Reduction using matrix units */
-								  data_to_be_reduced
+								  data_to_be_reduced,
+								  Q_data,
+								  tmp
 								  /* Reduction using matrix units */
 								  );
 
@@ -482,6 +486,8 @@ void gpu_gradient_minAdam(
 
 				/* Reduction using matrix units */
 				sycl::local_accessor<sycl::half, 1> data_to_be_reduced(sycl::range<1>(4*threads), cgh);
+				sycl::local_accessor<sycl::half, 1> Q_data(sycl::range<1>(16*16), cgh);
+				sycl::local_accessor<sycl::half, 1> tmp(sycl::range<1>(16*16), cgh);
 				/* Reduction using matrix units */
 
                 cgh.parallel_for(
@@ -496,7 +502,9 @@ void gpu_gradient_minAdam(
                                 best_energy_acc_ct1.get_pointer(),
                                 sFloatAccumulator_acc_ct1.get_pointer(),
 								/* Reduction using matrix units */
-                                data_to_be_reduced.get_pointer()
+                                data_to_be_reduced.get_pointer(),
+								Q_data.get_pointer(),
+								tmp.get_pointer()
                                 /* Reduction using matrix units */
 							);
                     });
