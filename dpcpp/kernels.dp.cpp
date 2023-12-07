@@ -215,6 +215,9 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
         // W <- V (required since we need V as a "use::b")
         joint_matrix_store(sg, sub_V, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(tmp), 16, layout::row_major);
         joint_matrix_load(sg, sub_W, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(tmp), 16);
+
+        // 2. Perform line sum: C <- QW + C (zero)
+        sub_C = joint_matrix_mad(sg, sub_Q, sub_W, sub_C);
 }
 
 /* Reduction using matrix units */
