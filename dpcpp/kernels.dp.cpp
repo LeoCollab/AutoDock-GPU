@@ -158,9 +158,7 @@ TODO: replace naive implementation with a multi-threaded one
 void fill_Q(sycl::nd_item<3> item, sycl::half *Q_data) {
 
         // Naive implementation: a single work-item fills data
-        item.barrier(sycl::access::fence_space::local_space);
-
-        if(item.get_global_id(2) == 0) {
+        if(item.get_local_id(2) == 0) {
                 for(uint i = 0; i < 4; i++) { // How many rows (of 4x4 blocks) are there in matrix A?
                         for(uint j = 0; j < 4; j++) { // How many cols (of 4x4 blocks) are there in matrix A?
                                 for(uint ii = 0; ii < 4; ii++) {
@@ -171,8 +169,6 @@ void fill_Q(sycl::nd_item<3> item, sycl::half *Q_data) {
                         }
                 }
         }
-
-        item.barrier(sycl::access::fence_space::local_space);
 }
 
 // Implementation based on MSc thesis at KTH:
@@ -185,7 +181,7 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
         item.barrier(sycl::access::fence_space::local_space);
 
         // TODO: check work-item upper limit is right
-        if(item.get_global_id(2) <= 31) { // Only one warp performs reduction
+        if(item.get_local_id(2) <= 31) { // Only one warp performs reduction
 
                 fill_Q(item, Q_data);
 
