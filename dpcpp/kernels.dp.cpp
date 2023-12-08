@@ -158,7 +158,7 @@ TODO: replace naive implementation with a multi-threaded one
 void fill_Q(sycl::nd_item<3> item, sycl::half *Q_data) {
 
         // Naive implementation: a single work-item fills data
-        item.barrier(sycl::access::fence_space::global_space); // TODO: check if scope can be reduced
+        item.barrier(sycl::access::fence_space::local_space);
 
         if(item.get_global_id(2) == 0) {
                 for(uint i = 0; i < 4; i++) { // How many rows (of 4x4 blocks) are there in matrix A?
@@ -172,7 +172,7 @@ void fill_Q(sycl::nd_item<3> item, sycl::half *Q_data) {
                 }
         }
 
-        item.barrier(sycl::access::fence_space::global_space); // TODO: check if scope can be reduced
+        item.barrier(sycl::access::fence_space::local_space);
 }
 
 // Implementation based on MSc thesis at KTH:
@@ -182,7 +182,7 @@ void fill_Q(sycl::nd_item<3> item, sycl::half *Q_data) {
  // We consider that a CUDA fragment is equivalent to a SYCL submatrix
 void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduced, sycl::half *Q_data, sycl::half *tmp) {
 
-        item.barrier(sycl::access::fence_space::global_space); // TODO: check if scope can be reduced
+        item.barrier(sycl::access::fence_space::local_space);
 
         // TODO: check work-item upper limit is right
         if(item.get_global_id(2) <= 31) { // Only one warp performs reduction
@@ -228,7 +228,7 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
                 joint_matrix_store(sg, sub_C, sycl::multi_ptr<sycl::half, sycl::access::address_space::global_space>(data_to_be_reduced), 16, layout::row_major);
         }
 
-        item.barrier(sycl::access::fence_space::global_space); // TODO: check if scope can be reduced
+        item.barrier(sycl::access::fence_space::local_space);
 }
 
 /* Reduction using matrix units */
