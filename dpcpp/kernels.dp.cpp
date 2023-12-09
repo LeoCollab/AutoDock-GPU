@@ -145,10 +145,10 @@ constexpr sycl::half HALF_ZERO = sycl::half(0.0f);
 
 constexpr sycl::half I4[16] =
 {
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1
+        HALF_ONE,  HALF_ZERO, HALF_ZERO, HALF_ZERO,
+        HALF_ZERO, HALF_ONE,  HALF_ZERO, HALF_ZERO,
+        HALF_ZERO, HALF_ZERO, HALF_ONE,  HALF_ZERO,
+        HALF_ZERO, HALF_ZERO, HALF_ZERO, HALF_ONE
 };
 
 /*
