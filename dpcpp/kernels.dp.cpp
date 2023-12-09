@@ -163,7 +163,7 @@ void fill_Q(sycl::nd_item<3> item, sycl::half *Q_data) {
                         for(uint j = 0; j < 4; j++) { // How many cols (of 4x4 blocks) are there in matrix A?
                                 for(uint ii = 0; ii < 4; ii++) {
                                         for(uint jj = 0; jj < 4; jj++) {
-                                                Q_data[4*i + 16*j + 4*ii + jj] = I4[4*ii + jj];
+                                                Q_data[4*i + 64*j + ii + 16*jj] = I4[4*ii + jj];
                                         }
                                 }
                         }
