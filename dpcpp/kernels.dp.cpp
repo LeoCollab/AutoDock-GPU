@@ -180,8 +180,7 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
 
         item.barrier(sycl::access::fence_space::local_space);
 
-        // TODO: check work-item upper limit is right
-        if(item.get_local_id(2) <= 31) { // Only one warp performs reduction
+        if(item.get_sub_group().get_local_id()[2] == 0) { // Only one sub-group (sgId == 0) performs reduction
 
                 fill_Q(item, Q_data);
 
