@@ -180,12 +180,12 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
 
         item.barrier(sycl::access::fence_space::local_space);
 
-        if(item.get_sub_group().get_local_id()[2] == 0) { // Only one sub-group (sgId == 0) performs reduction
+        // Identifying sub-groups
+        sycl::sub_group sg = item.get_sub_group();
+
+        if(sg.get_local_id()[2] == 0) { // Only one sub-group (sgId == 0) performs reduction
 
                 fill_Q(item, Q_data);
-
-                // Identifying sub-groups
-                sycl::sub_group sg = item.get_sub_group();
 
                 // Declaring and filling submatrices
                 joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::row_major> sub_P;
