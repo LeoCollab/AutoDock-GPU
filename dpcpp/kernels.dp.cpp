@@ -186,12 +186,13 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
 
         // Identifying sub-groups
         sycl::sub_group sg = item.get_sub_group();
-        int sgGroupId = sg.get_group_id().get(2);
-        int sgId = sg.get_local_id().get(2);
-        int sgSize = sg.get_local_range().get(2);
+        int sgGroupRange = sg.get_group_range().get(2); // Returns the number of subgroups within the parent work-group
+        int sgGroupId = sg.get_group_id().get(2); // Returns the index of the subgroup
+        int sgSize = sg.get_local_range().get(2); // Returns the size of the subgroup
+        int sgId = sg.get_local_id().get(2); // Returns the index of the work-item within its subgroup
 
-        printf("globalId = %i, groupId = %i, groupSize = %i, sgGroupId = %i, sgId = %i, sgSize = %i\n",
-                globalId, groupId, groupSize, sgGroupId, sgId, sgSize);
+        printf("globalId = %i, groupId = %i, groupSize = %i, sgGroupRange = %i, sgGroupId = %i, sgSize = %i, sgId = %i\n",
+                globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
 
         if(sgId == 0) { // Only one sub-group (sgId == 0) performs reduction
 
