@@ -487,7 +487,7 @@ void gpu_gradient_minAD(
                 sycl::local_accessor<int, 0> cons_fail_acc_ct1(cgh);
 
                 /* Reduction using matrix units */
-                sycl::local_accessor<sycl::half, 1> data_to_be_reduced(sycl::range<1>(4*threads), cgh);
+                sycl::local_accessor<sycl::half, 1> data_to_be_reduced(sycl::range<1>(4*NUM_OF_THREADS_PER_BLOCK), cgh);
                 sycl::local_accessor<sycl::half, 1> Q_data(sycl::range<1>(16*16), cgh);
                 sycl::local_accessor<sycl::half, 1> tmp(sycl::range<1>(16*16), cgh);
                 /* Reduction using matrix units */
