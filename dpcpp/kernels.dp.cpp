@@ -180,10 +180,18 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
 
         item.barrier(sycl::access::fence_space::local_space);
 
+        int groupId = item.get_group(2);
+        int globalId = item.get_global_linear_id();
+
         // Identifying sub-groups
         sycl::sub_group sg = item.get_sub_group();
+        int sgSize = sg.get_local_range()[2];
+        int sgGroupId = sg.get_group_id()[2];
+        int sgId = sg.get_local_id()[2];
 
-        if(sg.get_local_id()[2] == 0) { // Only one sub-group (sgId == 0) performs reduction
+        printf("globalId = %i, groupId = %i, sgGroupId = %i, sgId = %i, sgSize = %i\n", globalId, groupId, sgGroupId, sgId, sgSize);
+
+        if(sgId == 0) { // Only one sub-group (sgId == 0) performs reduction
 
                 fill_Q(item, Q_data);
 
