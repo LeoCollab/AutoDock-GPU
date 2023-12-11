@@ -200,27 +200,26 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
                 joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
 
                 // TODO: check the entire data to processed will fit into the matrix registers
-                // TODO: check usage of sycl::multi_ptr
-                joint_matrix_load(sg, sub_Q, sycl::multi_ptr<sycl::half, sycl::access::address_space::local_space>(Q_data), 16);
+                joint_matrix_load(sg, sub_Q, sycl::local_ptr<sycl::half>(Q_data), 16);
 
                 // 1. Accumulate the values: V <- AP + V
                 // TODO: check NUM_OF_THREADS_PER_BLOCK and TILE_SIZE = 16
                 for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK) / 16;  i++) {
                         const uint offset = i * 16;
                         joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::col_major> sub_A;
-                        joint_matrix_load(sg, sub_A, sycl::multi_ptr<sycl::half, sycl::access::address_space::local_space>(data_to_be_reduced + offset), 16);
+                        joint_matrix_load(sg, sub_A, sycl::local_ptr<sycl::half>(data_to_be_reduced + offset), 16);
                         sub_V = joint_matrix_mad(sg, sub_A, sub_P, sub_V);
                 }
 
                 // W <- V (required since we need V as a "use::b")
-                joint_matrix_store(sg, sub_V, sycl::multi_ptr<sycl::half, sycl::access::address_space::local_space>(tmp), 16, layout::col_major);
-                joint_matrix_load(sg, sub_W, sycl::multi_ptr<sycl::half, sycl::access::address_space::local_space>(tmp), 16);
+                joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+                joint_matrix_load(sg, sub_W, sycl::local_ptr<sycl::half>(tmp), 16);
 
                 // 2. Perform line sum: C <- QW + C (zero)
                 sub_C = joint_matrix_mad(sg, sub_Q, sub_W, sub_C);
 
                 // 3. Store result in shared memory
-                joint_matrix_store(sg, sub_C, sycl::multi_ptr<sycl::half, sycl::access::address_space::local_space>(data_to_be_reduced), 16, layout::col_major);
+                joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(data_to_be_reduced), 16, layout::col_major);
         }
 
         item.barrier(sycl::access::fence_space::local_space);
