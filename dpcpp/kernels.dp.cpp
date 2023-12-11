@@ -180,6 +180,7 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
 
         item.barrier(sycl::access::fence_space::local_space);
 
+        int localId = item.get_local_id(2);
         int globalId = item.get_global_linear_id();
         int groupId = item.get_group(2);
         int groupSize = item.get_local_range().get(2);
@@ -191,10 +192,14 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
         int sgSize = sg.get_local_range().get(2); // Returns the size of the subgroup
         int sgId = sg.get_local_id().get(2); // Returns the index of the work-item within its subgroup
 
-        printf("globalId = %i, groupId = %i, groupSize = %i, sgGroupRange = %i, sgGroupId = %i, sgSize = %i, sgId = %i\n",
-                globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
+//        printf("localId = %i, globalId = %i, groupId = %i, groupSize = %i, sgGroupRange = %i, sgGroupId = %i, sgSize = %i, sgId = %i\n",
+//                localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
 
-        if(sgId == 0) { // Only one sub-group (sgId == 0) performs reduction
+//        if(sgId == 0) { // Only one sub-group (sgId == 0) performs reduction
+        if(localId <= 31) { // Only one sub-group (sgId == 0) performs reduction
+
+//                printf("localId = %i, globalId = %i, groupId = %i, groupSize = %i, sgGroupRange = %i, sgGroupId = %i, sgSize = %i, sgId = %i\n",
+//                localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
 
                 fill_Q(item, Q_data);
 
