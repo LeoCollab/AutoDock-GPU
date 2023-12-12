@@ -100,6 +100,18 @@ __device__ inline int64_t ullitolli(uint64_t u)
  */
 #include <cuda_fp16.h>
 
+/*
+ * Tensor Cores
+ * https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/
+ *
+ * Don't forget to compile specifying the architecture, e.g., sm_86.
+ * For AutoDock-GPU, this can be done via the TARGETS option.
+ * make DEVICE=GPU TESTLS=ad NUMWI=64 TARGETS=86 test
+ * https://stackoverflow.com/a/53634598/1616865
+ */
+#include <mma.h>
+using namespace nvcuda;
+
 #define TILE_SIZE (16 * 16)
 
 constexpr int rowscols_M = 16;
@@ -157,6 +169,11 @@ __device__ void reduce_via_tensor_units(half *data_to_be_reduced) {
 		__shared__ __align__ (256) half Q_data[TILE_SIZE];
 
 		fill_Q(Q_data);
+
+		__shared__ __align__ (256) half tmp[TILE_SIZE];
+
+		// Declaring and filling fragments
+		wmma::fragment<wmma::matrix_b, rowscols_M, rowscols_N, rowscols_K, half, wmma::col_major> frag_P;
 
 
 
