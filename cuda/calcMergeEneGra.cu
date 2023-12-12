@@ -641,16 +641,16 @@ __device__ void gpu_calc_energrad(
 	}
 
 	// Do a reduction over the total gradient containing prepared "gradient_intra_*" values
-	REDUCEFLOATSUM(torque_rot.x, pFloatAccumulator);
-	REDUCEFLOATSUM(torque_rot.y, pFloatAccumulator);
-	REDUCEFLOATSUM(torque_rot.z, pFloatAccumulator);
+//	REDUCEFLOATSUM(torque_rot.x, pFloatAccumulator);
+//	REDUCEFLOATSUM(torque_rot.y, pFloatAccumulator);
+//	REDUCEFLOATSUM(torque_rot.z, pFloatAccumulator);
 
 	// TODO
 	// -------------------------------------------------------
 	// Obtaining energy and translation-related gradients
 	// -------------------------------------------------------
 	// reduction over partial energies and prepared "gradient_intra_*" values
-	REDUCEFLOATSUM(energy, pFloatAccumulator);
+//	REDUCEFLOATSUM(energy, pFloatAccumulator);
 
 	/* Reduction using tensor units */
 
