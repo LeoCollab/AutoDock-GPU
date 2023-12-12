@@ -186,14 +186,29 @@ __device__ void reduce_via_tensor_units(half *data_to_be_reduced) {
 		wmma::fill_fragment(frag_C, HALF_ZERO); // Final result
 		wmma::load_matrix_sync(frag_Q, Q_data, 16);
 
+		// 1. Accumulate the values: V <- AP + V
+		for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK)/TILE_SIZE; i++){
+			const unsigned int offset = i * TILE_SIZE;
+			wmma::fragment<wmma::matrix_a, rowscols_M, rowscols_N, rowscols_K, half, wmma::col_major> frag_A;
+			wmma::load_matrix_sync(frag_A, data_to_be_reduced + offset, 16);
+			wmma::mma_sync(frag_V, frag_A, frag_P, frag_V);
+		}
+
+		// W <- V (required since we need V as a "wmma::matrix_b")
+		wmma::store_matrix_sync(tmp, frag_V, 16, wmma::mem_col_major);
+		wmma::load_matrix_sync(frag_W, tmp, 16);
+
+		// 2. Perform line sum: C <- QW + C (zero)
+		wmma::mma_sync(frag_C, frag_Q, frag_W, frag_C);
+
+		// 3. Store result in shared memory
+		wmma::store_matrix_sync(data_to_be_reduced, frag_C, 16, wmma::mem_col_major);
 	}
 
 	__syncthreads();
 }
 
 /* Reduction using tensor units */
-
-
 
 #define REDUCEFLOATSUM(value, pAccumulator) \
 	if (threadIdx.x == 0) \
