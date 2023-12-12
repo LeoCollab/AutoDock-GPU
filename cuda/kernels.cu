@@ -150,7 +150,7 @@ __device__ void fill_Q(half *Q_data) {
 			}
 		}
 	}
-
+/*
 	if (blockIdx.x == 0 && threadIdx.x == 0) {
 		printf("\nQ_data");
 		for (uint i = 0; i < 16 * 16; i++) {
@@ -159,6 +159,7 @@ __device__ void fill_Q(half *Q_data) {
 		}
 		printf("\n");
     }
+*/
 }
 
 __device__ void reduce_via_tensor_units(half *data_to_be_reduced) {
@@ -174,8 +175,16 @@ __device__ void reduce_via_tensor_units(half *data_to_be_reduced) {
 
 		// Declaring and filling fragments
 		wmma::fragment<wmma::matrix_b, rowscols_M, rowscols_N, rowscols_K, half, wmma::col_major> frag_P;
+		wmma::fragment<wmma::accumulator, rowscols_M, rowscols_N, rowscols_K, half> frag_V;
 
+		wmma::fragment<wmma::matrix_a, rowscols_M, rowscols_N, rowscols_K, half, wmma::col_major> frag_Q;
+		wmma::fragment<wmma::matrix_b, rowscols_M, rowscols_N, rowscols_K, half, wmma::col_major> frag_W;
+		wmma::fragment<wmma::accumulator, rowscols_M, rowscols_N, rowscols_K, half> frag_C;
 
+		wmma::fill_fragment(frag_P, HALF_ONE); // P: only ones
+		wmma::fill_fragment(frag_V, HALF_ZERO); // Output: initialize to zeros
+		wmma::fill_fragment(frag_C, HALF_ZERO); // Final result
+		wmma::load_matrix_sync(frag_Q, Q_data, 16);
 
 	}
 
