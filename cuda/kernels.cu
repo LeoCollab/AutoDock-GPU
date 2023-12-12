@@ -162,6 +162,9 @@ __device__ void fill_Q(half *Q_data) {
 */
 }
 
+// Implementation based on MSc thesis at KTH:
+// "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
+// https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
 __device__ void reduce_via_tensor_units(half *data_to_be_reduced) {
 
 	__syncthreads();
