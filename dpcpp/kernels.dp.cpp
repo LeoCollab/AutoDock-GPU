@@ -140,8 +140,8 @@ constexpr int rowscols_M = 16;
 constexpr int rowscols_N = 16;
 constexpr int rowscols_K = 16;
 
-constexpr sycl::half HALF_ONE = sycl::half(1.0f);
-constexpr sycl::half HALF_ZERO = sycl::half(0.0f);
+constexpr sycl::half HALF_ONE = /*sycl::half(1.0f)*/(unsigned short)0x3C00U;
+constexpr sycl::half HALF_ZERO = /*sycl::half(0.0f)*/(unsigned short)0x0000U;
 
 constexpr sycl::half I4[16] =
 {
@@ -175,7 +175,9 @@ void fill_Q(sycl::nd_item<3> item, sycl::half *Q_data) {
 // "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
 // https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
 //
- // We consider that a CUDA fragment is equivalent to a SYCL submatrix
+// We consider that a CUDA fragment is equivalent to a SYCL submatrix
+//
+// Compilation: make DEVICE=XeGPU PLATFORM=NvGPU TESTLS=ad NUMWI=64 test
 void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduced, sycl::half *Q_data, sycl::half *tmp) {
 
         item.barrier(sycl::access::fence_space::local_space);
