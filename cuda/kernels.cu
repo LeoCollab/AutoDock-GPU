@@ -93,6 +93,82 @@ __device__ inline int64_t ullitolli(uint64_t u)
 #define ATOMICADDF32(pAccumulator, value) atomicAdd(pAccumulator, (value))
 #define ATOMICSUBF32(pAccumulator, value) atomicAdd(pAccumulator, -(value))
 
+/* Reduction using tensor units */
+/*
+ * Half-precision support
+ * https://docs.nvidia.com/cuda/cuda-math-api/group__CUDA__MATH____HALF__MISC.html
+ */
+#include <cuda_fp16.h>
+
+#define TILE_SIZE (16 * 16)
+
+constexpr int rowscols_M = 16;
+constexpr int rowscols_N = 16;
+constexpr int rowscols_K = 16;
+
+// Half constants
+// CUDART_ONE_FP16 was not recognized by the nvcc compiler
+// So its value is indicated explicitly
+// https://docs.nvidia.com/cuda/cuda-math-api/group__CUDA__MATH__INTRINSIC__HALF__CONSTANTS.html#group__CUDA__MATH__INTRINSIC__HALF__CONSTANTS
+#define HALF_ONE __ushort_as_half((unsigned short)0x3C00U)
+#define HALF_ZERO __ushort_as_half((unsigned short)0x0000U)
+
+/*
+	TODO: check correctness of naive implementation
+	TODO: replace naive implementation with a multi-threaded one
+*/
+__device__ void fill_Q(half *Q_data) {
+
+	half I4[16] = {
+		HALF_ONE, HALF_ZERO, HALF_ZERO, HALF_ZERO,
+		HALF_ZERO, HALF_ONE, HALF_ZERO, HALF_ZERO,
+		HALF_ZERO, HALF_ZERO, HALF_ONE, HALF_ZERO,
+		HALF_ZERO, HALF_ZERO, HALF_ZERO, HALF_ONE
+	};
+
+	// Naive implementation: a single thread fills data in
+	if (threadIdx.x == 0) {
+		for (uint i = 0; i < 4; i++) {	// How many rows (of 4x4 blocks) are there in matrix A?
+			for (uint j = 0; j < 4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
+				for (uint ii = 0; ii < 4; ii++) {
+					for (uint jj = 0; jj < 4; jj++) {
+						Q_data[4*i + 64*j + ii + 16*jj] = I4 [4*ii + jj];
+					}
+				}
+			}
+		}
+	}
+
+	if (blockIdx.x == 0 && threadIdx.x == 0) {
+		printf("\nQ_data");
+		for (uint i = 0; i < 16 * 16; i++) {
+			if ((i % 16) == 0) {printf("\n[Row %u]: ", i/16);}
+			printf(" %2.2f ", __half2float(Q_data[i]));
+		}
+		printf("\n");
+    }
+}
+
+__device__ void reduce_via_tensor_units(half *data_to_be_reduced) {
+
+	__syncthreads();
+
+	if (threadIdx.x <= 31) { // Only one warp performs reduction
+		__shared__ __align__ (256) half Q_data[TILE_SIZE];
+
+		fill_Q(Q_data);
+
+
+
+	}
+
+	__syncthreads();
+}
+
+/* Reduction using tensor units */
+
+
+
 #define REDUCEFLOATSUM(value, pAccumulator) \
 	if (threadIdx.x == 0) \
 	{ \
