@@ -139,6 +139,7 @@ __device__ void fill_Q(half *Q_data) {
 	};
 
 	// Naive implementation: a single thread fills data in
+/*
 	if (threadIdx.x == 0) {
 		for (uint i = 0; i < 4; i++) {	// How many rows (of 4x4 blocks) are there in matrix A?
 			for (uint j = 0; j < 4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
@@ -146,6 +147,17 @@ __device__ void fill_Q(half *Q_data) {
 					for (uint jj = 0; jj < 4; jj++) {
 						Q_data[4*i + 64*j + ii + 16*jj] = I4 [4*ii + jj];
 					}
+				}
+			}
+		}
+	}
+*/
+	// Slightly improved multi-threaded implementation
+	for (uint i = threadIdx.x; i < 4; i+=blockDim.x) {	// How many rows (of 4x4 blocks) are there in matrix A?
+		for (uint j = 0; j < 4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
+			for (uint ii = 0; ii < 4; ii++) {
+				for (uint jj = 0; jj < 4; jj++) {
+					Q_data[4*i + 64*j + ii + 16*jj] = I4 [4*ii + jj];
 				}
 			}
 		}
