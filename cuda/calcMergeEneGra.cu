@@ -676,9 +676,27 @@ __device__ void gpu_calc_energrad(
 #if defined (DEBUG_ENERGY_KERNEL)
 	REDUCEFLOATSUM(intraE, pFloatAccumulator);
 #endif
-	REDUCEFLOATSUM(gx, pFloatAccumulator);
-	REDUCEFLOATSUM(gy, pFloatAccumulator);
-	REDUCEFLOATSUM(gz, pFloatAccumulator);
+//	REDUCEFLOATSUM(gx, pFloatAccumulator);
+//	REDUCEFLOATSUM(gy, pFloatAccumulator);
+//	REDUCEFLOATSUM(gz, pFloatAccumulator);
+
+	/* Reduction using tensor units */
+
+	// 1. Convert data-to-be-reduced from float to half
+	// and place it in a shared memory array
+	data_to_be_reduced[4*threadIdx.x] = __float2half(gx);
+	data_to_be_reduced[4*threadIdx.x + 1] = __float2half(gy);
+	data_to_be_reduced[4*threadIdx.x + 2] = __float2half(gz);
+
+	// 2. Perform reduction via tensor units
+	reduce_via_tensor_units(data_to_be_reduced);
+
+	// 3. Retrieve results from shared memory
+	gx = __half2float(data_to_be_reduced[0]);
+	gy = __half2float(data_to_be_reduced[1]);
+	gz = __half2float(data_to_be_reduced[2]);
+
+	/* Reduction using tensor units */
 
 	global_energy = energy;
 #ifndef FLOAT_GRADIENTS
