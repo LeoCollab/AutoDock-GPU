@@ -134,7 +134,7 @@ __device__ void fill_Q(half *Q_data) {
 		HALF_ZERO, HALF_ZERO, HALF_ZERO, HALF_ONE
 	};
 
-/*
+	/*
 	// Naive implementation: a single thread fills data in
 	if (threadIdx.x == 0) {
 		for (uint i = 0; i < 4; i++) {	// How many rows (of 4x4 blocks) are there in matrix A?
@@ -147,7 +147,7 @@ __device__ void fill_Q(half *Q_data) {
 			}
 		}
 	}
-*/
+	*/
 
 	// Slightly improved multi-threaded implementation
 	for (uint i = threadIdx.x; i < 4; i+=blockDim.x) {	// How many rows (of 4x4 blocks) are there in matrix A?
@@ -160,8 +160,9 @@ __device__ void fill_Q(half *Q_data) {
 		}
 	}
 
-/*
+	/*
 	// Further improved multi-threaded implementation
+	// (It didn't provide significant performance improvements -> commented out)
 	// Fusing two outer loops into a single one
 	// To do that: coeffs = 4i + 64j
 	constexpr uint coeffs [16] = {0, 64, 128, 192, 4, 68, 132, 196, 8, 72, 136, 200, 12, 76, 140, 204};
@@ -172,8 +173,10 @@ __device__ void fill_Q(half *Q_data) {
 			}
 		}	
 	}
-*/
-/*
+	*/
+
+	/*
+	// Enable this block to print matrix values
 	if (blockIdx.x == 0 && threadIdx.x == 0) {
 		printf("\nQ_data");
 		for (uint i = 0; i < 16 * 16; i++) {
@@ -182,7 +185,7 @@ __device__ void fill_Q(half *Q_data) {
 		}
 		printf("\n");
     }
-*/
+	*/
 }
 
 // Implementation based on M.Sc. thesis by Gabin Schieffer at KTH:
