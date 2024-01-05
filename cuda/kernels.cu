@@ -114,9 +114,9 @@ using namespace nvcuda;
 
 #define TILE_SIZE (16 * 16)
 
-constexpr int rowscols_M = 16;
-constexpr int rowscols_N = 16;
-constexpr int rowscols_K = 16;
+constexpr int rowscols_M = 16;	// Number of rows (or cols) in the M dimension
+constexpr int rowscols_N = 16;	// Number of rows (or cols) in the N dimension
+constexpr int rowscols_K = 16;	// Number of rows (or cols) in the K dimension
 
 // Half constants
 // CUDART_ONE_FP16 was not recognized by the NVCC compiler
