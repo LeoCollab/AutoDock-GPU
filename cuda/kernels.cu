@@ -93,7 +93,7 @@ __device__ inline int64_t ullitolli(uint64_t u)
 #define ATOMICADDF32(pAccumulator, value) atomicAdd(pAccumulator, (value))
 #define ATOMICSUBF32(pAccumulator, value) atomicAdd(pAccumulator, -(value))
 
-/* Reduction using tensor units */
+/* Begin: Reduction using tensor units */
 /*
  * Half-precision support
  * https://docs.nvidia.com/cuda/cuda-math-api/group__CUDA__MATH____HALF__MISC.html
@@ -102,7 +102,7 @@ __device__ inline int64_t ullitolli(uint64_t u)
 
 /*
  * Tensor Cores
- * https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/
+ * https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9
  *
  * Don't forget to compile specifying the architecture, e.g., sm_86.
  * For AutoDock-GPU, this can be done via the TARGETS option.
@@ -119,7 +119,7 @@ constexpr int rowscols_N = 16;
 constexpr int rowscols_K = 16;
 
 // Half constants
-// CUDART_ONE_FP16 was not recognized by the nvcc compiler
+// CUDART_ONE_FP16 was not recognized by the NVCC compiler
 // So its value is indicated explicitly
 // https://docs.nvidia.com/cuda/cuda-math-api/group__CUDA__MATH__INTRINSIC__HALF__CONSTANTS.html#group__CUDA__MATH__INTRINSIC__HALF__CONSTANTS
 #define HALF_ONE __ushort_as_half((unsigned short)0x3C00U)
@@ -185,7 +185,7 @@ __device__ void fill_Q(half *Q_data) {
 */
 }
 
-// Implementation based on MSc thesis at KTH:
+// Implementation based on M.Sc. thesis by Gabin Schieffer at KTH:
 // "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
 // https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
 __device__ void reduce_via_tensor_units(half *data_to_be_reduced) {
@@ -199,7 +199,7 @@ __device__ void reduce_via_tensor_units(half *data_to_be_reduced) {
 
 		__shared__ __align__ (256) half tmp[TILE_SIZE];
 
-		// Declaring and filling fragments
+		// Declaring and filling fragments - Those are *not* shared
 		wmma::fragment<wmma::matrix_b, rowscols_M, rowscols_N, rowscols_K, half, wmma::col_major> frag_P;
 		wmma::fragment<wmma::accumulator, rowscols_M, rowscols_N, rowscols_K, half> frag_V;
 
@@ -234,7 +234,7 @@ __device__ void reduce_via_tensor_units(half *data_to_be_reduced) {
 	__syncthreads();
 }
 
-/* Reduction using tensor units */
+/* End: Reduction using tensor units */
 
 #define REDUCEFLOATSUM(value, pAccumulator) \
 	if (threadIdx.x == 0) \

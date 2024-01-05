@@ -652,7 +652,7 @@ __device__ void gpu_calc_energrad(
 	// reduction over partial energies and prepared "gradient_intra_*" values
 //	REDUCEFLOATSUM(energy, pFloatAccumulator);
 
-	/* Reduction using tensor units */
+	/* Begin: Reduction using tensor units */
 
 	// 1. Convert data-to-be-reduced from float to half
 	// and place it in a shared memory array
@@ -671,7 +671,7 @@ __device__ void gpu_calc_energrad(
 	torque_rot.z = __half2float(data_to_be_reduced[2]);
 	energy = __half2float(data_to_be_reduced[3]);
 
-	/* Reduction using tensor units */
+	/* End: Reduction using tensor units */
 
 #if defined (DEBUG_ENERGY_KERNEL)
 	REDUCEFLOATSUM(intraE, pFloatAccumulator);
@@ -680,7 +680,7 @@ __device__ void gpu_calc_energrad(
 //	REDUCEFLOATSUM(gy, pFloatAccumulator);
 //	REDUCEFLOATSUM(gz, pFloatAccumulator);
 
-	/* Reduction using tensor units */
+	/* Begin: Reduction using tensor units */
 
 	// 1. Convert data-to-be-reduced from float to half
 	// and place it in a shared memory array
@@ -696,7 +696,7 @@ __device__ void gpu_calc_energrad(
 	gy = __half2float(data_to_be_reduced[1]);
 	gz = __half2float(data_to_be_reduced[2]);
 
-	/* Reduction using tensor units */
+	/* End: Reduction using tensor units */
 
 	global_energy = energy;
 #ifndef FLOAT_GRADIENTS
