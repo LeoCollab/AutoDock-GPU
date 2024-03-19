@@ -791,6 +791,7 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
 	int localId = item_ct1.get_local_id(2);
 	int groupId = item_ct1.get_group(2);
 
+	/*
 	if (groupId == 0 && localId == 0) {
 		printf("\ndata_to_be_reduced");
 		for (uint i = 0; i < 16 * 16; i++) {
@@ -799,15 +800,16 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
 		}
 		printf("\n");
 	}
+	*/
 
 	// 2. Perform reduction using matrix units
 	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
 
 	// 3. Retrieve result from shared memory
-	torque_rot.x() = sycl::detail::half2Float(data_to_be_reduced[0]);
-	torque_rot.y() = sycl::detail::half2Float(data_to_be_reduced[1]);
-	torque_rot.z() = sycl::detail::half2Float(data_to_be_reduced[2]);
-	energy = sycl::detail::half2Float(data_to_be_reduced[3]);
+	torque_rot.x() = data_to_be_reduced[0];
+	torque_rot.y() = data_to_be_reduced[1];
+	torque_rot.z() = data_to_be_reduced[2];
+	energy = data_to_be_reduced[3];
 
 	/* Reduction using matrix units */
 
