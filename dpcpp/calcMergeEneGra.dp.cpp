@@ -816,32 +816,23 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
 #if defined (DEBUG_ENERGY_KERNEL)
 	REDUCEFLOATSUM(intraE, pFloatAccumulator);
 #endif
-        /*
-        DPCT1039:29: The generated code assumes that "pFloatAccumulator" points
-        to the global memory address space. If it points to a local memory
-        address space, replace "dpct::atomic_fetch_add" with
-        "dpct::atomic_fetch_add<float,
-        sycl::access::address_space::local_space>".
-        */
-        REDUCEFLOATSUM(gx, pFloatAccumulator);
-        /*
-        DPCT1039:30: The generated code assumes that "pFloatAccumulator" points
-        to the global memory address space. If it points to a local memory
-        address space, replace "dpct::atomic_fetch_add" with
-        "dpct::atomic_fetch_add<float,
-        sycl::access::address_space::local_space>".
-        */
-        REDUCEFLOATSUM(gy, pFloatAccumulator);
-        /*
-        DPCT1039:31: The generated code assumes that "pFloatAccumulator" points
-        to the global memory address space. If it points to a local memory
-        address space, replace "dpct::atomic_fetch_add" with
-        "dpct::atomic_fetch_add<float,
-        sycl::access::address_space::local_space>".
-        */
-        REDUCEFLOATSUM(gz, pFloatAccumulator);
 
-        global_energy = energy;
+	data_to_be_reduced[4*item_ct1.get_local_id(2)] = gx;
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = gy;
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = gz;
+
+	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
+
+	gx = data_to_be_reduced[0];
+	gy = data_to_be_reduced[1];
+	gz = data_to_be_reduced[2];
+
+    //REDUCEFLOATSUM(gx, pFloatAccumulator);
+    //REDUCEFLOATSUM(gy, pFloatAccumulator);
+    //REDUCEFLOATSUM(gz, pFloatAccumulator);
+
+    global_energy = energy;
+
 	int* gradient_genotype = (int*)fgradient_genotype;
 
         if (item_ct1.get_local_id(2) == 0) {
