@@ -783,10 +783,22 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
 	// 1. Convert data-to-be-reduced from float to half
 	// and place it in a shared-memory array
 	// Data-type conversion: https://intel.github.io/llvm-docs/doxygen/namespacesycl_1_1__V1_1_1detail.html#a152ac8c5d9e97d6f3acb7b2ca36a1450
-	data_to_be_reduced[4*item_ct1.get_local_id(2)] = sycl::detail::float2Half(torque_rot.x());
-	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = sycl::detail::float2Half(torque_rot.y());
-	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = sycl::detail::float2Half(torque_rot.z());
-	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = sycl::detail::float2Half(energy);
+	data_to_be_reduced[4*item_ct1.get_local_id(2)] = torque_rot.x();
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = torque_rot.y();
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = torque_rot.z();
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = energy;
+
+	int localId = item_ct1.get_local_id(2);
+	int groupId = item_ct1.get_group(2);
+
+	if (groupId == 0 && localId == 0) {
+		printf("\ndata_to_be_reduced");
+		for (uint i = 0; i < 16 * 16; i++) {
+			if ((i % 16) == 0) {printf("\n[Row %u]: ", i/16);}
+			printf(" %5.3f ", float(data_to_be_reduced[i]));
+		}
+		printf("\n");
+	}
 
 	// 2. Perform reduction using matrix units
 	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);

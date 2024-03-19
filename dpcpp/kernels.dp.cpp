@@ -204,7 +204,7 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
 //                localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
 
                 fill_Q(item, Q_data);
-
+                /*
                 if (groupId == 0 && localId == 0) {
                         printf("\nQ_data");
                         for (uint i = 0; i < 16 * 16; i++) {
@@ -213,6 +213,7 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
                         }
                         printf("\n");
                 }
+                */
 
                 // Declaring and filling submatrices
                 joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::col_major> sub_P;
