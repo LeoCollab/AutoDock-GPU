@@ -738,64 +738,45 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
                 torque_rot.z() += tr.z();
         }
 
-	// Do a reduction over the total gradient containing prepared "gradient_intra_*" values
-        /*
-        DPCT1039:25: The generated code assumes that "pFloatAccumulator" points
-        to the global memory address space. If it points to a local memory
-        address space, replace "dpct::atomic_fetch_add" with
-        "dpct::atomic_fetch_add<float,
-        sycl::access::address_space::local_space>".
-        */
-//        REDUCEFLOATSUM(torque_rot.x(), pFloatAccumulator);
-        /*
-        DPCT1039:26: The generated code assumes that "pFloatAccumulator" points
-        to the global memory address space. If it points to a local memory
-        address space, replace "dpct::atomic_fetch_add" with
-        "dpct::atomic_fetch_add<float,
-        sycl::access::address_space::local_space>".
-        */
-//        REDUCEFLOATSUM(torque_rot.y(), pFloatAccumulator);
-        /*
-        DPCT1039:27: The generated code assumes that "pFloatAccumulator" points
-        to the global memory address space. If it points to a local memory
-        address space, replace "dpct::atomic_fetch_add" with
-        "dpct::atomic_fetch_add<float,
-        sycl::access::address_space::local_space>".
-        */
-//        REDUCEFLOATSUM(torque_rot.z(), pFloatAccumulator);
-
-        // TODO
 	// -------------------------------------------------------
 	// Obtaining energy and translation-related gradients
 	// -------------------------------------------------------
+
+	// Do a reduction over the total gradient containing prepared "gradient_intra_*" values
 	// reduction over partial energies and prepared "gradient_intra_*" values
-        /*
-        DPCT1039:28: The generated code assumes that "pFloatAccumulator" points
-        to the global memory address space. If it points to a local memory
-        address space, replace "dpct::atomic_fetch_add" with
-        "dpct::atomic_fetch_add<float,
-        sycl::access::address_space::local_space>".
-        */
-//        REDUCEFLOATSUM(energy, pFloatAccumulator);
+
+	/*
+	REDUCEFLOATSUM(torque_rot.x(), pFloatAccumulator);
+	REDUCEFLOATSUM(torque_rot.y(), pFloatAccumulator);
+	REDUCEFLOATSUM(torque_rot.z(), pFloatAccumulator);
+	REDUCEFLOATSUM(energy, pFloatAccumulator);
+	*/
 
 	/* Reduction using matrix units */
 
 	// 1. Convert data-to-be-reduced from float to half
 	// and place it in a shared-memory array
 	// Data-type conversion: https://intel.github.io/llvm-docs/doxygen/namespacesycl_1_1__V1_1_1detail.html#a152ac8c5d9e97d6f3acb7b2ca36a1450
+
 	data_to_be_reduced[4*item_ct1.get_local_id(2)] = torque_rot.x();
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = torque_rot.y();
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = torque_rot.z();
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = energy;
-
+	/*
+	data_to_be_reduced[4*item_ct1.get_local_id(2)] = 22.04f;
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = 26.05f;
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = 19.02f;
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = 30.11f;
+	*/
+	/*
 	int localId = item_ct1.get_local_id(2);
 	int groupId = item_ct1.get_group(2);
-
+	*/
 	/*
 	if (groupId == 0 && localId == 0) {
-		printf("\ndata_to_be_reduced");
+		printf("\ndata_to_be_reduced (BEFORE 1st reduction)");
 		for (uint i = 0; i < 16 * 16; i++) {
-			if ((i % 16) == 0) {printf("\n[Row %u]: ", i/16);}
+			if ((i % 16) == 0) {printf("\n[Row %2u]: ", i/16);}
 			printf(" %5.3f ", float(data_to_be_reduced[i]));
 		}
 		printf("\n");
@@ -804,6 +785,17 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
 
 	// 2. Perform reduction using matrix units
 	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
+
+	/*
+	if (groupId == 0 && localId == 0) {
+		printf("\ndata_to_be_reduced (AFTER 1st reduction)");
+		for (uint i = 0; i < 16 * 16; i++) {
+			if ((i % 16) == 0) {printf("\n[Row %2u]: ", i/16);}
+			printf(" %5.3f ", float(data_to_be_reduced[i]));
+		}
+		printf("\n");
+	}
+	*/
 
 	// 3. Retrieve result from shared memory
 	torque_rot.x() = data_to_be_reduced[0];
@@ -820,16 +812,45 @@ SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
 	data_to_be_reduced[4*item_ct1.get_local_id(2)] = gx;
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = gy;
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = gz;
+	/*
+	data_to_be_reduced[4*item_ct1.get_local_id(2)] = 19.07f;
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = 19.07f;
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = 19.07f;
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = 19.07f;
+	*/
+	/*
+	if (groupId == 0 && localId == 0) {
+		printf("\ndata_to_be_reduced (BEFORE 2nd reduction)");
+		for (uint i = 0; i < 16 * 16; i++) {
+			if ((i % 16) == 0) {printf("\n[Row %2u]: ", i/16);}
+			printf(" %5.3f ", float(data_to_be_reduced[i]));
+		}
+		printf("\n");
+	}
+	*/
 
 	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
+
+	/*
+	if (groupId == 0 && localId == 0) {
+		printf("\ndata_to_be_reduced (AFTER 2nd reduction)");
+		for (uint i = 0; i < 16 * 16; i++) {
+			if ((i % 16) == 0) {printf("\n[Row %2u]: ", i/16);}
+			printf(" %5.3f ", float(data_to_be_reduced[i]));
+		}
+		printf("\n");
+	}
+	*/
 
 	gx = data_to_be_reduced[0];
 	gy = data_to_be_reduced[1];
 	gz = data_to_be_reduced[2];
 
-    //REDUCEFLOATSUM(gx, pFloatAccumulator);
-    //REDUCEFLOATSUM(gy, pFloatAccumulator);
-    //REDUCEFLOATSUM(gz, pFloatAccumulator);
+	/*
+	REDUCEFLOATSUM(gx, pFloatAccumulator);
+	REDUCEFLOATSUM(gy, pFloatAccumulator);
+	REDUCEFLOATSUM(gz, pFloatAccumulator);
+	*/
 
     global_energy = energy;
 

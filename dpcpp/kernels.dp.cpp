@@ -32,6 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "GpuData.h"
 #include "dpcpp_migration.h"
 
+#include <ext/oneapi/matrix/matrix.hpp>
+
 inline uint64_t llitoulli(int64_t l)
 {
 	uint64_t u;
@@ -205,16 +207,16 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
 
                 fill_Q(item, Q_data);
 
-                /*
+				/*
                 if (groupId == 0 && localId == 0) {
                         printf("\nQ_data");
                         for (uint i = 0; i < 16 * 16; i++) {
-                                if ((i % 16) == 0) {printf("\n[Row %u]: ", i/16);}
+                                if ((i % 16) == 0) {printf("\n[Row %2u]: ", i/16);}
                                 printf(" %5.3f ", float(Q_data[i]));
                         }
                         printf("\n");
                 }
-                */
+				*/
 
                 // Declaring and filling submatrices
                 joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::col_major> sub_P;
@@ -260,7 +262,26 @@ void reduce_via_matrix_units(sycl::nd_item<3> item, sycl::half *data_to_be_reduc
                 // 1. Accumulate the values: V <- AP + V
                 for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK) / (16 * 16);  i++) {
                         const uint offset = i * 16 * 16;
+
+                        /*
+						if (groupId == 0 && localId == 0) {
+							printf("\ni = %d, tripcount= %d, offset = %d ", i, (4 * NUM_OF_THREADS_PER_BLOCK) / (16 * 16), offset);
+						}
+                        */
+
                         joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::col_major> sub_A;
+
+                        /*
+                        if (groupId == 0 && localId == 0) {
+                                printf("\ndata_to_be_reduced (inside)");
+                                for (uint i = 0; i < 16 * 16; i++) {
+                                        if ((i % 16) == 0) {printf("\n[Row %2u]: ", i/16);}
+                                        printf(" %5.3f ", float(data_to_be_reduced[i]));
+                                }
+                                printf("\n");
+                        }
+                        */
+
                         joint_matrix_load(sg, sub_A, sycl::local_ptr<sycl::half>(data_to_be_reduced + offset), 16);
                         sub_V = joint_matrix_mad(sg, sub_A, sub_P, sub_V);
                 }
