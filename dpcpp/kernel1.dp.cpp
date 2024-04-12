@@ -80,15 +80,24 @@ void gpu_calc_initpop(
                 sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
 
                 cgh.parallel_for(
-                    sycl::nd_range<3>(sycl::range<3>(1, 1, blocks) *
-                                          sycl::range<3>(1, 1, threadsPerBlock),
-                                      sycl::range<3>(1, 1, threadsPerBlock)),
+                    sycl::nd_range<3>
+				(
+				sycl::range<3>(1, 1, blocks) * sycl::range<3>(1, 1, threadsPerBlock),
+				sycl::range<3>(1, 1, threadsPerBlock)
+				),
                     [=](sycl::nd_item<3> item_ct1) {
-                            gpu_calc_initpop_kernel(
-                                pConformations_current, pEnergies_current,
-                                item_ct1, *cData_ptr_ct1,
-                                calc_coords_acc_ct1.get_pointer(),
-                                sFloatAccumulator_acc_ct1.get_pointer());
+			gpu_calc_initpop_kernel(
+				pConformations_current,
+				pEnergies_current,
+				item_ct1,
+				*cData_ptr_ct1,
+				/*
+				calc_coords_acc_ct1.get_pointer(),
+				sFloatAccumulator_acc_ct1.get_pointer()
+				*/
+				calc_coords_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+				sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+			);
                     });
         });
         /*
