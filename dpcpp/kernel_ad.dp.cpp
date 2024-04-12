@@ -486,7 +486,9 @@ void gpu_gradient_minAD(
 			sycl::range<3>(1, 1, blocks) * sycl::range<3>(1, 1, threads),
 			sycl::range<3>(1, 1, threads)
 			),
-			[=](sycl::nd_item<3> item_ct1) {
+			[=](sycl::nd_item<3> item_ct1)
+			[[intel::redq_sub_group_size(32)]]
+			{
 				gpu_gradient_minAD_kernel(
 					pMem_conformations_next,
 					pMem_energies_next,
