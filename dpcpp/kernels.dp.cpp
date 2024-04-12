@@ -132,8 +132,31 @@ Compatibility Tool.
         *pAccumulator = (float) value;\
         item_ct1.barrier(SYCL_MEMORY_SPACE);
 
+/* Reduction using matrix units */
 #define TILE_SIZE (16 * 16)
 
+void printf_matrix(
+	sycl::nd_item<3> item_ct,
+	int groupId,
+	int localId,
+	const char *msg,
+	sycl::half *data_to_print
+) {
+	item_ct.barrier(sycl::access::fence_space::local_space);
+	if (groupId == 0 && localId == 0) {
+		sycl::ext::oneapi::experimental::printf("\n%s", msg);
+		for (uint i = 0; i < TILE_SIZE; i++) {
+			if ((i % 16) == 0) {
+				sycl::ext::oneapi::experimental::printf("\n[Row %2u]: ", i/16);
+			}
+			sycl::ext::oneapi::experimental::printf(" %5.3f ", float(data_to_print[i]));
+		}
+		sycl::ext::oneapi::experimental::printf("\n");
+	}
+	item_ct.barrier(sycl::access::fence_space::local_space);
+}
+
+/* Reduction using matrix units */
 
 static dpct::constant_memory<GpuData, 0> cData;
 static GpuData cpuData;
