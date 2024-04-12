@@ -132,6 +132,8 @@ Compatibility Tool.
         *pAccumulator = (float) value;\
         item_ct1.barrier(SYCL_MEMORY_SPACE);
 
+#define TILE_SIZE (16 * 16)
+
 
 static dpct::constant_memory<GpuData, 0> cData;
 static GpuData cpuData;

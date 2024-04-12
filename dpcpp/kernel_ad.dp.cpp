@@ -460,19 +460,25 @@ void gpu_gradient_minAD(
         Adjust the workgroup size if needed.
         */
         dpct::get_default_queue().submit([&](sycl::handler &cgh) {
-                extern dpct::constant_memory<GpuData, 0> cData;
+		extern dpct::constant_memory<GpuData, 0> cData;
 
-                cData.init();
+		cData.init();
 
-                auto cData_ptr_ct1 = cData.get_ptr();
+		auto cData_ptr_ct1 = cData.get_ptr();
 
-                sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(sycl::range<1>(sz_shared), cgh);
-                sycl::local_accessor<int, 0> entity_id_acc_ct1(cgh);
-                sycl::local_accessor<float, 0> best_energy_acc_ct1(cgh);
-                sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
-                sycl::local_accessor<float, 0> rho_acc_ct1(cgh);
-                sycl::local_accessor<int, 0> cons_succ_acc_ct1(cgh);
-                sycl::local_accessor<int, 0> cons_fail_acc_ct1(cgh);
+		sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(sycl::range<1>(sz_shared), cgh);
+		sycl::local_accessor<int, 0> entity_id_acc_ct1(cgh);
+		sycl::local_accessor<float, 0> best_energy_acc_ct1(cgh);
+		sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
+		sycl::local_accessor<float, 0> rho_acc_ct1(cgh);
+		sycl::local_accessor<int, 0> cons_succ_acc_ct1(cgh);
+		sycl::local_accessor<int, 0> cons_fail_acc_ct1(cgh);
+
+		/* Reduction using matrix units */
+		sycl::local_accessor<sycl::half, 1> data_to_be_reduced(sycl::range<1>(4 * NUM_OF_THREADS_PER_BLOCK), cgh);
+		sycl::local_accessor<sycl::half, 1> Q_data(sycl::range<1>(TILE_SIZE), cgh);
+		sycl::local_accessor<sycl::half, 1> tmp(sycl::range<1>(TILE_SIZE), cgh);
+		/* Reduction using matrix units */
 
 		cgh.parallel_for(
 			sycl::nd_range<3>
