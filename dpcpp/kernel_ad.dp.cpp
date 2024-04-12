@@ -62,20 +62,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 //#define DEBUG_ADADELTA_INITIAL_2BRT
 
 void
-
 gpu_gradient_minAD_kernel(
-                          float* pMem_conformations_next,
-                          float* pMem_energies_next
-                         ,
-                          sycl::nd_item<3> item_ct1,
-                          uint8_t *dpct_local,
-                          GpuData cData,
-                          int *entity_id,
-                          float *best_energy,
-                          float *sFloatAccumulator,
-                          float *rho,
-                          int *cons_succ,
-                          int *cons_fail)
+			float* pMem_conformations_next,
+			float* pMem_energies_next,
+			sycl::nd_item<3> item_ct1,
+			uint8_t *dpct_local,
+			GpuData cData,
+			int *entity_id,
+			float *best_energy,
+			float *sFloatAccumulator,
+			float *rho,
+			int *cons_succ,
+			int *cons_fail,
+			/* Reduction using matrix units */
+			sycl::half *data_to_be_reduced,
+			sycl::half *Q_data,
+			sycl::half *tmp
+			/* Reduction using matrix units */
+)
 // The GPU global function performs gradient-based minimization on (some) entities of conformations_next.
 // The number of OpenCL compute units (CU) which should be started equals to num_of_minEntities*num_of_runs.
 // This way the first num_of_lsentities entity of each population will be subjected to local search
@@ -487,7 +491,7 @@ void gpu_gradient_minAD(
 			sycl::range<3>(1, 1, threads)
 			),
 			[=](sycl::nd_item<3> item_ct1)
-			[[intel::redq_sub_group_size(32)]]
+			[[intel::reqd_sub_group_size(32)]]
 			{
 				gpu_gradient_minAD_kernel(
 					pMem_conformations_next,
@@ -500,7 +504,12 @@ void gpu_gradient_minAD(
 					sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					rho_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
  					cons_succ_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-					cons_fail_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+					cons_fail_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					/* Reduction using matrix units */
+					data_to_be_reduced.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					Q_data.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					tmp.template get_multi_ptr<sycl::access::decorated::no>().get()
+					/* Reduction using matrix units */
 				);
 			});
 		});
