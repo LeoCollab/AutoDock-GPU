@@ -271,7 +271,12 @@ gpu_gradient_minAD_kernel(
 			gradient,
 			sFloatAccumulator,
 			item_ct1,
-			cData
+			cData,
+			/* Reduction using matrix units */
+			data_to_be_reduced,
+			Q_data,
+			tmp
+			/* Reduction using matrix units */
 		);
 
 		// =============================================================

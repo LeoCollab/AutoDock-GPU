@@ -55,17 +55,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 //#define DEBUG_ADADELTA_INITIAL_2BRT
 
 void
-
 gpu_gradient_minAdam_kernel(
-                            float* pMem_conformations_next,
-                            float* pMem_energies_next
-                           ,
-                            sycl::nd_item<3> item_ct1,
-                            uint8_t *dpct_local,
-                            GpuData cData,
-                            int *entity_id,
-                            float *best_energy,
-                            float *sFloatAccumulator)
+			float* pMem_conformations_next,
+			float* pMem_energies_next,
+			sycl::nd_item<3> item_ct1,
+			uint8_t *dpct_local,
+			GpuData cData,
+			int *entity_id,
+			float *best_energy,
+			float *sFloatAccumulator,
+			/* Reduction using matrix units */
+			sycl::half *data_to_be_reduced,
+			sycl::half *Q_data,
+			sycl::half *tmp
+			/* Reduction using matrix units */
+			)
 // The GPU global function performs gradient-based minimization on (some) entities of conformations_next.
 // The number of OpenCL compute units (CU) which should be started equals to num_of_minEntities*num_of_runs.
 // This way the first num_of_lsentities entity of each population will be subjected to local search
@@ -243,13 +247,26 @@ gpu_gradient_minAdam_kernel(
                 __threadfence();
                 item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-                gpu_calc_energrad(genotype, energy, run_id, calc_coords,
-#if defined (DEBUG_ENERGY_KERNEL)
-                                  interE, intraE,
-		                  #endif
-                                  // Gradient-related arguments
-                                  cartesian_gradient, gradient,
-                                  sFloatAccumulator, item_ct1, cData);
+		gpu_calc_energrad(
+				genotype,
+				energy,
+				run_id,
+				calc_coords,
+				#if defined (DEBUG_ENERGY_KERNEL)
+				interE, intraE,
+				#endif
+				// Gradient-related arguments
+				cartesian_gradient,
+				gradient,
+				sFloatAccumulator,
+				item_ct1,
+				cData,
+				/* Reduction using matrix units */
+				data_to_be_reduced,
+				Q_data,
+				tmp
+				/* Reduction using matrix units */
+				);
 
 		// =============================================================
 		// =============================================================
@@ -460,19 +477,25 @@ void gpu_gradient_minAdam(
         limit. To get the device limit, query info::device::max_work_group_size.
         Adjust the workgroup size if needed.
         */
-        dpct::get_default_queue().submit([&](sycl::handler &cgh) {
-                extern dpct::constant_memory<GpuData, 0> cData;
+	dpct::get_default_queue().submit([&](sycl::handler &cgh) {
+		extern dpct::constant_memory<GpuData, 0> cData;
 
-                cData.init();
+		cData.init();
 
-                auto cData_ptr_ct1 = cData.get_ptr();
+		auto cData_ptr_ct1 = cData.get_ptr();
 
-                sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(sycl::range<1>(sz_shared), cgh);
-                sycl::local_accessor<int, 0> entity_id_acc_ct1(cgh);
-                sycl::local_accessor<float, 0> best_energy_acc_ct1(cgh);
-                sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
+		sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(sycl::range<1>(sz_shared), cgh);
+		sycl::local_accessor<int, 0> entity_id_acc_ct1(cgh);
+		sycl::local_accessor<float, 0> best_energy_acc_ct1(cgh);
+		sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
 
- 		cgh.parallel_for(
+		/* Reduction using matrix units */
+		sycl::local_accessor<sycl::half, 1> data_to_be_reduced(sycl::range<1>(4 * NUM_OF_THREADS_PER_BLOCK), cgh);
+		sycl::local_accessor<sycl::half, 1> Q_data(sycl::range<1>(TILE_SIZE), cgh);
+		sycl::local_accessor<sycl::half, 1> tmp(sycl::range<1>(TILE_SIZE), cgh);
+		/* Reduction using matrix units */
+
+		cgh.parallel_for(
 			sycl::nd_range<3>(
 				sycl::range<3>(1, 1, blocks) * sycl::range<3>(1, 1, threads),
 				sycl::range<3>(1, 1, threads)
@@ -486,7 +509,12 @@ void gpu_gradient_minAdam(
 					*cData_ptr_ct1,
 					entity_id_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					best_energy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-					sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+					sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					/* Reduction using matrix units */
+					data_to_be_reduced.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					Q_data.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					tmp.template get_multi_ptr<sycl::access::decorated::no>().get()
+					/* Reduction using matrix units */
 			);
  		});
 	});

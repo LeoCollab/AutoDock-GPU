@@ -58,19 +58,30 @@ static const CONSTANT char FMT1[] = "DOCK_TRACE: %s globalID: %6d %20s %10.6f %2
 // Currently, this is not a good idea
 // #define RESTORING_MAP_GRADIENT
 
-SYCL_EXTERNAL void gpu_calc_energrad(float *genotype, float &global_energy,
-                                     int &run_id, sycl::float3 *calc_coords,
-#if defined (DEBUG_ENERGY_KERNEL)
-                                     float &interE, float &intraE,
-#endif
-#ifdef FLOAT_GRADIENTS
-                                     float3 *gradient,
-#else
-                                     sycl::int3 *gradient,
-#endif
-                                     float *fgradient_genotype,
-                                     float *pFloatAccumulator,
-                                     sycl::nd_item<3> item_ct1, GpuData cData)
+SYCL_EXTERNAL
+void gpu_calc_energrad(
+			float *genotype,
+			float &global_energy,
+			int &run_id,
+			sycl::float3 *calc_coords,
+			#if defined (DEBUG_ENERGY_KERNEL)
+			float &interE, float &intraE,
+			#endif
+			#ifdef FLOAT_GRADIENTS
+			float3 *gradient,
+			#else
+			sycl::int3 *gradient,
+			#endif
+			float *fgradient_genotype,
+			float *pFloatAccumulator,
+			sycl::nd_item<3> item_ct1,
+			GpuData cData,
+			/* Reduction using matrix units */
+			sycl::half *data_to_be_reduced,
+			sycl::half *Q_data,
+			sycl::half *tmp
+			/* Reduction using matrix units */
+			)
 {
 	float energy = 0.0f;
 #ifdef DOCK_TRACE
