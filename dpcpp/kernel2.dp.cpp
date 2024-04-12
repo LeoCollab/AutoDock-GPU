@@ -83,9 +83,6 @@ void gpu_sum_evals(uint32_t blocks, uint32_t threadsPerBlock)
 				gpu_sum_evals_kernel(
 					item_ct1,
 					*cData_ptr_ct1,
-					/*
-					sSum_evals_acc_ct1.get_pointer()
-					*/
 					sSum_evals_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
 			);
 		});

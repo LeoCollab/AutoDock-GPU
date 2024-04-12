@@ -407,31 +407,16 @@ void gpu_perform_LS(
 					pMem_conformations_next,
 					pMem_energies_next,
 					item_ct1,
-					/*
-					dpct_local_acc_ct1.get_pointer(),
-					*/
 					dpct_local_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					*cData_ptr_ct1,
-					/*
-					rho_acc_ct1.get_pointer(),
-					*/
 					rho_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-					/*
-					cons_succ_acc_ct1.get_pointer(),
-					cons_fail_acc_ct1.get_pointer(),
-					iteration_cnt_acc_ct1.get_pointer(),
-					evaluation_cnt_acc_ct1.get_pointer(),
-					offspring_energy_acc_ct1.get_pointer(),
-					sFloatAccumulator_acc_ct1.get_pointer(),
-					entity_id_acc_ct1.get_pointer()
-					*/
 					cons_succ_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-                                        cons_fail_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-                                        iteration_cnt_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-                                        evaluation_cnt_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-                                        offspring_energy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-                                        sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-                                        entity_id_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+					cons_fail_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					iteration_cnt_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					evaluation_cnt_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					offspring_energy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					entity_id_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
 				);
 		});
         });

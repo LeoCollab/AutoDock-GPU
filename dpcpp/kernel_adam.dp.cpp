@@ -482,19 +482,11 @@ void gpu_gradient_minAdam(
 					pMem_conformations_next,
 					pMem_energies_next,
 					item_ct1,
-					/*
-					dpct_local_acc_ct1.get_pointer(),
-					*/
 					dpct_local_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					*cData_ptr_ct1,
-					/*
-					entity_id_acc_ct1.get_pointer(),
-					best_energy_acc_ct1.get_pointer(),
-					sFloatAccumulator_acc_ct1.get_pointer()
-					*/
 					entity_id_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-                                        best_energy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-                                        sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+					best_energy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
 			);
  		});
 	});
