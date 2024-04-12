@@ -472,19 +472,32 @@ void gpu_gradient_minAdam(
                 sycl::local_accessor<float, 0> best_energy_acc_ct1(cgh);
                 sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
 
-                cgh.parallel_for(
-                    sycl::nd_range<3>(sycl::range<3>(1, 1, blocks) *
-                                          sycl::range<3>(1, 1, threads),
-                                      sycl::range<3>(1, 1, threads)),
-                    [=](sycl::nd_item<3> item_ct1) {
-                            gpu_gradient_minAdam_kernel(
-                                pMem_conformations_next, pMem_energies_next,
-                                item_ct1, dpct_local_acc_ct1.get_pointer(),
-                                *cData_ptr_ct1, entity_id_acc_ct1.get_pointer(),
-                                best_energy_acc_ct1.get_pointer(),
-                                sFloatAccumulator_acc_ct1.get_pointer());
-                    });
-        });
+ 		cgh.parallel_for(
+			sycl::nd_range<3>(
+				sycl::range<3>(1, 1, blocks) * sycl::range<3>(1, 1, threads),
+				sycl::range<3>(1, 1, threads)
+			),
+			[=](sycl::nd_item<3> item_ct1) {
+				gpu_gradient_minAdam_kernel(
+					pMem_conformations_next,
+					pMem_energies_next,
+					item_ct1,
+					/*
+					dpct_local_acc_ct1.get_pointer(),
+					*/
+					dpct_local_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					*cData_ptr_ct1,
+					/*
+					entity_id_acc_ct1.get_pointer(),
+					best_energy_acc_ct1.get_pointer(),
+					sFloatAccumulator_acc_ct1.get_pointer()
+					*/
+					entity_id_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+                                        best_energy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+                                        sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+			);
+ 		});
+	});
         /*
         DPCT1001:82: The statement could not be removed.
         */
