@@ -252,20 +252,27 @@ gpu_gradient_minAD_kernel(
                 __threadfence();
                 item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-                gpu_calc_energrad(
-                    // Some OpenCL compilers don't allow declaring
-                    // local variables within non-kernel functions.
-                    // These local variables must be declared in a kernel,
-                    // and then passed to non-kernel functions.
-                    genotype, energy, run_id, calc_coords,
-#if defined (DEBUG_ENERGY_KERNEL)
-                    interE, intraE,
-		                  #endif
-                    // Gradient-related arguments
-                    // Calculate gradients (forces) for intermolecular energy
-                    // Derived from autodockdev/maps.py
-                    cartesian_gradient, gradient, sFloatAccumulator, item_ct1,
-                    cData);
+		gpu_calc_energrad(
+			// Some OpenCL compilers don't allow declaring
+			// local variables within non-kernel functions.
+			// These local variables must be declared in a kernel,
+			// and then passed to non-kernel functions.
+			genotype,
+			energy,
+			run_id,
+			calc_coords,
+			#if defined (DEBUG_ENERGY_KERNEL)
+			interE, intraE,
+			#endif
+			// Gradient-related arguments
+			// Calculate gradients (forces) for intermolecular energy
+			// Derived from autodockdev/maps.py
+			cartesian_gradient,
+			gradient,
+			sFloatAccumulator,
+			item_ct1,
+			cData
+		);
 
 		// =============================================================
 		// =============================================================
