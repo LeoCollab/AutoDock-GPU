@@ -763,12 +763,22 @@ void gpu_calc_energrad(
 	int groupId = item_ct1.get_group(2);
 	int localId = item_ct1.get_local_id(2);
 
+	// 1. Moving data into accessor
 	data_to_be_reduced[4 * localId] = 22.04f;
 	data_to_be_reduced[4 * localId + 1] = 26.05f;
 	data_to_be_reduced[4 * localId + 2] = 19.02f;
 	data_to_be_reduced[4 * localId + 3] = 30.11f;
 
 	printf_matrix(item_ct1, groupId, localId, "data_to_be_reduced (BEFORE 1st reduction)", data_to_be_reduced);
+
+	// 2. Perform reduction using matrix units
+	reduce_via_matrix_units(item_ct1, groupId, localId, data_to_be_reduced, Q_data, tmp);
+
+	// 3. Retrieve result from shared memory
+	torque_rot.x() = data_to_be_reduced[0];
+	torque_rot.y() = data_to_be_reduced[1];
+	torque_rot.z() = data_to_be_reduced[2];
+	energy = data_to_be_reduced[3];
 	/* Reduction using matrix units */
 
 

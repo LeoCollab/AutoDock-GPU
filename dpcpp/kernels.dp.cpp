@@ -156,6 +156,33 @@ void printf_matrix(
 	item_ct.barrier(sycl::access::fence_space::local_space);
 }
 
+// Implementation based on MSc thesis at KTH:
+// "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
+// https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
+//
+// We consider that a CUDA fragment is equivalent to a SYCL submatrix
+//
+// Compilation: make DEVICE=XeGPU PLATFORM=NvGPU TESTLS=ad NUMWI=64 test
+
+void reduce_via_matrix_units(
+			sycl::nd_item<3> item,
+			int groupId,
+			int localId,
+			sycl::half *data_to_be_reduced,
+			sycl::half *Q_data,
+			sycl::half *tmp
+) {
+	item.barrier(sycl::access::fence_space::local_space);
+
+	if (localId < 31) { // Only one sub-group (sgId == 0) performs reduction
+
+
+	}
+
+	item.barrier(sycl::access::fence_space::local_space);
+}
+
+
 /* Reduction using matrix units */
 
 static dpct::constant_memory<GpuData, 0> cData;
