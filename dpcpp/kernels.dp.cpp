@@ -133,7 +133,15 @@ Compatibility Tool.
         item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 /* Reduction using matrix units */
+#include <sycl/ext/oneapi/matrix/matrix.hpp>
+
+using namespace sycl::ext::oneapi::experimental::matrix;
+
 #define TILE_SIZE (16 * 16)
+
+#define NROWSCOLS_M 16
+#define NROWSCOLS_N 16
+#define NROWSCOLS_K 16
 
 void printf_matrix(
 	sycl::nd_item<3> item_ct,
@@ -206,6 +214,37 @@ void reduce_via_matrix_units(
 		fill_Q(localId, Q_data);
 
 		printf_matrix(item, groupId, localId, "Q_data", Q_data);
+
+		// Declaring submatrices
+		joint_matrix<sycl::sub_group,
+				sycl::half,
+				use::b,
+				NROWSCOLS_K, NROWSCOLS_N,
+				layout::col_major>
+				sub_P;
+		joint_matrix<sycl::sub_group,
+				sycl::half,
+				use::accumulator,
+				NROWSCOLS_M, NROWSCOLS_N>
+				sub_V;
+
+		joint_matrix<sycl::sub_group,
+				sycl::half,
+				use::a,
+				NROWSCOLS_M, NROWSCOLS_K,
+				layout::col_major>
+				sub_Q;
+		joint_matrix<sycl::sub_group,
+				sycl::half,
+				use::b,
+				NROWSCOLS_K, NROWSCOLS_N,
+				layout::col_major>
+				sub_W;
+		joint_matrix<sycl::sub_group,
+				sycl::half,
+				use::accumulator,
+				NROWSCOLS_M, NROWSCOLS_N>
+				sub_C;
 	}
 
 	item.barrier(sycl::access::fence_space::local_space);
