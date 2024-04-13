@@ -142,7 +142,7 @@ void printf_matrix(
 	const char *msg,
 	sycl::half *data_to_print
 ) {
-	item_ct.barrier(sycl::access::fence_space::local_space);
+//	item_ct.barrier(sycl::access::fence_space::local_space);
 	if (groupId == 0 && localId == 0) {
 		sycl::ext::oneapi::experimental::printf("\n%s", msg);
 		for (uint i = 0; i < TILE_SIZE; i++) {
@@ -153,7 +153,34 @@ void printf_matrix(
 		}
 		sycl::ext::oneapi::experimental::printf("\n");
 	}
-	item_ct.barrier(sycl::access::fence_space::local_space);
+//	item_ct.barrier(sycl::access::fence_space::local_space);
+}
+
+void fill_Q (
+	int localId,
+	sycl::half *data
+) {
+	sycl::half I4[16] = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+
+	// Naive implementation: a single work-item fills data
+	if(localId == 0) {
+		// How many rows (of 4x4 blocks) are there in matrix A?
+		for(uint i = 0; i < 4; i++) {
+			// How many cols (of 4x4 blocks) are there in matrix A?
+			for(uint j = 0; j < 4; j++) {
+				for(uint ii = 0; ii < 4; ii++) {
+					for(uint jj = 0; jj < 4; jj++) {
+						data[4*i + 64*j + ii + 16*jj] = I4[4*ii + jj];
+					}
+				}
+			}
+		}
+	}
 }
 
 // Implementation based on MSc thesis at KTH:
@@ -176,7 +203,9 @@ void reduce_via_matrix_units(
 
 	if (localId < 31) { // Only one sub-group (sgId == 0) performs reduction
 
+		fill_Q(localId, Q_data);
 
+		printf_matrix(item, groupId, localId, "Q_data", Q_data);
 	}
 
 	item.barrier(sycl::access::fence_space::local_space);
