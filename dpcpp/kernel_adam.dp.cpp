@@ -61,8 +61,8 @@ gpu_gradient_minAdam_kernel(
                             float* pMem_energies_next
                            ,
                             sycl::nd_item<3> item_ct1,
-                            uint8_t *dpct_local,
                             GpuData cData,
+                            uint8_t *dpct_local,
                             int *entity_id,
                             float *best_energy,
                             float *sFloatAccumulator)
@@ -480,8 +480,8 @@ void gpu_gradient_minAdam(
 					pMem_conformations_next,
 					pMem_energies_next,
 					item_ct1,
-					dpct_local_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					*cData_ptr_ct1,
+					dpct_local_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					entity_id_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					best_energy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
