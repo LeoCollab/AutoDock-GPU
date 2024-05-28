@@ -197,11 +197,6 @@ void gpu_calc_energy(
 	uint g2 = cData.dockpars.gridsize_x_times_y;
 	uint g3 = cData.dockpars.gridsize_x_times_y_times_z;
 
-	/*
-	DPCT1007:8: Migration of this CUDA API is not supported by the Intel(R)
-	DPC++ Compatibility Tool.
-	*/
-	__threadfence();
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	// ================================================
@@ -273,11 +268,6 @@ void gpu_calc_energy(
 			calc_coords[atom_id].z() = qt.z() + rotation_movingvec.z();
 		} // End if-statement not dummy rotation
 
-		/*
-		DPCT1007:10: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	} // End rotation_counter for-loop

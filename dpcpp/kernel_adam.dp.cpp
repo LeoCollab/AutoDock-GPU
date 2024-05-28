@@ -146,11 +146,7 @@ gpu_gradient_minAdam_kernel(
 		#endif
 	}
         item_ct1.barrier(SYCL_MEMORY_SPACE);
-        /*
-        DPCT1007:75: Migration of this CUDA API is not supported by the Intel(R)
-        DPC++ Compatibility Tool.
-        */
-        __threadfence();
+
         energy = pMem_energies_next[run_id * cData.dockpars.pop_size + *entity_id];
 
         int offset = (run_id * cData.dockpars.pop_size + *entity_id) *
@@ -180,12 +176,7 @@ gpu_gradient_minAdam_kernel(
 	// E.g. in steepest descent "delta" is -1.0 * stepsize * gradient
 
 	// Asynchronous copy should be finished by here
-        /*
-        DPCT1007:76: Migration of this CUDA API is not supported by the Intel(R)
-        DPC++ Compatibility Tool.
-        */
-        __threadfence();
-        item_ct1.barrier(SYCL_MEMORY_SPACE);
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
         // Enable this for debugging ADADELTA from a defined initial genotype
 
@@ -236,12 +227,7 @@ gpu_gradient_minAdam_kernel(
 		// =============================================================
 		// =============================================================
 		// Calculating energy & gradient
-                /*
-                DPCT1007:78: Migration of this CUDA API is not supported by the
-                Intel(R) DPC++ Compatibility Tool.
-                */
-                __threadfence();
-                item_ct1.barrier(SYCL_MEMORY_SPACE);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
                 gpu_calc_energrad(genotype, energy, run_id, calc_coords,
 #if defined (DEBUG_ENERGY_KERNEL)
@@ -285,7 +271,6 @@ gpu_gradient_minAdam_kernel(
 			printf("\n");
 			#endif
 		}
-		__threadfence();
 		__syncthreads();
 		#endif // DEBUG_ENERGY_ADADELTA
 
@@ -325,14 +310,9 @@ gpu_gradient_minAdam_kernel(
 			float vp = SYCL_DIVIDE(vt[i], beta2p);
 
 			// Applying update
-                        genotype[i] -= SYCL_DIVIDE(mp, (SYCL_SQRT(vp) + cData.dockpars.adam_epsilon));
+			genotype[i] -= SYCL_DIVIDE(mp, (SYCL_SQRT(vp) + cData.dockpars.adam_epsilon));
                 }
-                /*
-                DPCT1007:79: Migration of this CUDA API is not supported by the
-                Intel(R) DPC++ Compatibility Tool.
-                */
-                __threadfence();
-                item_ct1.barrier(SYCL_MEMORY_SPACE);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 #if defined (DEBUG_SQDELTA_ADADELTA)
 		if (/*(get_group_id(0) == 0) &&*/ (threadIdx.x == 0)) {
@@ -344,7 +324,6 @@ gpu_gradient_minAdam_kernel(
 				printf("%13u %20.6f %15.6f %15.6f %15.6f\n", i, square_gradient[i], delta[i], square_delta[i], genotype[i]);
 			}
 		}
-		__threadfence();
 		__syncthreads();
 		#endif
 
@@ -390,12 +369,8 @@ gpu_gradient_minAdam_kernel(
 			}
 #endif
 		}
-                /*
-                DPCT1007:80: Migration of this CUDA API is not supported by the
-                Intel(R) DPC++ Compatibility Tool.
-                */
-                __threadfence();
-                item_ct1.barrier(SYCL_MEMORY_SPACE); // making sure that iteration_cnt is up-to-date
+
+		item_ct1.barrier(SYCL_MEMORY_SPACE); // making sure that iteration_cnt is up-to-date
 #ifdef AD_RHO_CRITERION
 	} while ((iteration_cnt < cData.dockpars.max_num_of_iters)  && (rho > 0.01f));
 #else
@@ -414,12 +389,7 @@ gpu_gradient_minAdam_kernel(
 	}
 
 	// Updating old offspring in population
-        /*
-        DPCT1007:77: Migration of this CUDA API is not supported by the Intel(R)
-        DPC++ Compatibility Tool.
-        */
-        __threadfence();
-        item_ct1.barrier(SYCL_MEMORY_SPACE);
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
         offset = (run_id * cData.dockpars.pop_size + *entity_id) *
                  GENOTYPE_LENGTH_IN_GLOBMEM;

@@ -25,7 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef DPCPP_MIGRATION_H
 #define DPCPP_MIGRATION_H
 
-#define __threadfence()
 //#define XeDeviceSynchronize()  dpct::get_current_device().queues_wait_and_throw();
 #define XeDeviceSynchronize() dpct::get_default_queue().wait_and_throw();
 

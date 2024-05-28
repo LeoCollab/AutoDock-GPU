@@ -101,11 +101,6 @@ gpu_perform_LS_kernel(
 		*evaluation_cnt = 0;
 	}
 
-	/*
-	DPCT1007:44: Migration of this CUDA API is not supported by the Intel(R)
-	DPC++ Compatibility Tool.
-	*/
-	__threadfence();
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	size_t offset = (run_id * cData.dockpars.pop_size + *entity_id) * GENOTYPE_LENGTH_IN_GLOBMEM;
@@ -118,11 +113,6 @@ gpu_perform_LS_kernel(
 		genotype_bias[gene_counter] = 0.0f;
 	}
 
-	/*
-	DPCT1007:45: Migration of this CUDA API is not supported by the Intel(R)
-	DPC++ Compatibility Tool.
-	*/
-	__threadfence();
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 #ifdef SWAT3
@@ -179,11 +169,6 @@ gpu_perform_LS_kernel(
 		}
 
 		// Evaluating candidate
-		/*
-		DPCT1007:46: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 		// =================================================================
@@ -202,11 +187,6 @@ gpu_perform_LS_kernel(
 			(*evaluation_cnt)++;
 		}
 
-		/*
-		DPCT1007:47: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 		if (candidate_energy < *offspring_energy) // If candidate is better, success
@@ -224,11 +204,6 @@ gpu_perform_LS_kernel(
 			// Work-item 0 will overwrite the shared variables
 			// used in the previous if condition
 
-			/*
-			DPCT1007:49: Migration of this CUDA API is not supported
-			by the Intel(R) DPC++ Compatibility Tool.
-			*/
-			__threadfence();
 			item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 			if (item_ct1.get_local_id(2) == 0)
@@ -249,12 +224,6 @@ gpu_perform_LS_kernel(
 			}
 
 			// Evaluating candidate
-
-			/*
-			DPCT1007:50: Migration of this CUDA API is not supported
-			by the Intel(R) DPC++ Compatibility Tool.
-			*/
-			__threadfence();
 			item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 			// =================================================================
@@ -275,12 +244,7 @@ gpu_perform_LS_kernel(
 				printf("%-18s [%-5s]---{%-5s}   [%-10.8f]---{%-10.8f}\n", "-ENERGY-KERNEL3-", "GRIDS", "INTRA", partial_interE[0], partial_intraE[0]);
 				#endif
 			}
-                        
-			/*
-			DPCT1007:51: Migration of this CUDA API is not supported
-			by the Intel(R) DPC++ Compatibility Tool.
-			*/
-			__threadfence();
+
 			item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 			if (candidate_energy < *offspring_energy) // If candidate is better, success
@@ -298,13 +262,6 @@ gpu_perform_LS_kernel(
 
 				// Work-item 0 will overwrite the shared variables
 				// used in the previous if condition
-
-				/*
-				DPCT1007:52: Migration of this CUDA API is not
-				supported by the Intel(R) DPC++ Compatibility
-				Tool.
-				*/
-				__threadfence();
 				item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 				if (item_ct1.get_local_id(2) == 0)
@@ -348,11 +305,6 @@ gpu_perform_LS_kernel(
 			}
 		}
 
-		/*
-		DPCT1007:48: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 	}
 

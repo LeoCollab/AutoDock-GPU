@@ -106,11 +106,6 @@ gpu_gen_and_eval_newpops_kernel(
 			sBestEnergy[warpID] = sycl::fmin((float)MAXENERGY, energy);
 		}
 
-		/*
-		DPCT1007:55: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 		// Perform final reduction in warp 0
@@ -138,11 +133,6 @@ gpu_gen_and_eval_newpops_kernel(
 			}
 		}
 
-		/*
-		DPCT1007:56: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 		// Copy best genome to next generation
@@ -181,11 +171,6 @@ gpu_gen_and_eval_newpops_kernel(
 		// Determining run ID
 		run_id = item_ct1.get_group(2) / cData.dockpars.pop_size;
 
-		/*
-		DPCT1007:58: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 		if (item_ct1.get_local_id(2) < 4) // it is not ensured that the four candidates will be different...
@@ -194,11 +179,6 @@ gpu_gen_and_eval_newpops_kernel(
             candidate_energies[item_ct1.get_local_id(2)] = pMem_energies_current[run_id * cData.dockpars.pop_size + parent_candidates[item_ct1.get_local_id(2)]];
 		}
 
-		/*
-		DPCT1007:59: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 		if (item_ct1.get_local_id(2) < 2)
@@ -228,11 +208,6 @@ gpu_gen_and_eval_newpops_kernel(
 			}
 		}
 
-		/*
-		DPCT1007:60: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 		// Performing crossover
@@ -244,11 +219,6 @@ gpu_gen_and_eval_newpops_kernel(
 				covr_point[item_ct1.get_local_id(2)] = (int)((cData.dockpars.num_of_genes - 1) * randnums[7 + item_ct1.get_local_id(2)]);
 			}
 
-			/*
-			DPCT1007:63: Migration of this CUDA API is not supported
-			by the Intel(R) DPC++ Compatibility Tool.
-			*/
-			__threadfence();
 			item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 			// covr_point[0] should store the lower crossover-point
@@ -262,11 +232,6 @@ gpu_gen_and_eval_newpops_kernel(
 				}
 			}
 
-			/*
-			DPCT1007:64: Migration of this CUDA API is not supported
-			by the Intel(R) DPC++ Compatibility Tool.
-			*/
-			__threadfence();
 			item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 			for (uint32_t gene_counter = item_ct1.get_local_id(2);
@@ -301,11 +266,6 @@ gpu_gen_and_eval_newpops_kernel(
 			}
 		} // End of crossover
 
-		/*
-		DPCT1007:61: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 		// Performing mutation
@@ -332,12 +292,6 @@ gpu_gen_and_eval_newpops_kernel(
 		} // End of mutation
 
 		// Calculating energy of new offspring
-
-		/*
-		DPCT1007:62: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 		// =================================================================

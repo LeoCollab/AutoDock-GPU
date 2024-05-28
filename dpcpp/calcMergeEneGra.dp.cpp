@@ -139,11 +139,6 @@ void gpu_calc_energrad(
 	uint32_t  g2 = cData.dockpars.gridsize_x_times_y;
 	uint32_t  g3 = cData.dockpars.gridsize_x_times_y_times_z;
 
-	/*
-	DPCT1007:14: Migration of this CUDA API is not supported by the Intel(R)
-	DPC++ Compatibility Tool.
-	*/
-	__threadfence();
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	// ================================================
@@ -215,11 +210,6 @@ void gpu_calc_energrad(
 
 		} // End if-statement not dummy rotation
 
-		/*
-		DPCT1007:22: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 	} // End rotation_counter for-loop
 
@@ -460,11 +450,6 @@ void gpu_calc_energrad(
 #endif
 	} // End atom_id for-loop (INTERMOLECULAR ENERGY)
 
-	/*
-	DPCT1007:15: Migration of this CUDA API is not supported by the Intel(R)
-	DPC++ Compatibility Tool.
-	*/
-	__threadfence();
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	// Inter- and intra-molecular energy calculation
@@ -658,11 +643,6 @@ void gpu_calc_energrad(
 #endif
 	} // End contributor_counter for-loop (INTRAMOLECULAR ENERGY)
 
-	/*
-	DPCT1007:16: Migration of this CUDA API is not supported by the Intel(R)
-	DPC++ Compatibility Tool.
-	*/
-	__threadfence();
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	// Transform gradients_inter_{x|y|z} 
@@ -806,11 +786,6 @@ void gpu_calc_energrad(
 		#endif
 	}
 
-	/*
-	DPCT1007:17: Migration of this CUDA API is not supported by the Intel(R)
- 	DPC++ Compatibility Tool.
- 	*/
- 	__threadfence();
  	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
  	// ------------------------------------------
@@ -1021,11 +996,6 @@ void gpu_calc_energrad(
 		#endif
 	}
 
-	/*
-	DPCT1007:18: Migration of this CUDA API is not supported by the Intel(R)
-	DPC++ Compatibility Tool.
-	*/
-	__threadfence();
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	// ------------------------------------------
@@ -1113,11 +1083,6 @@ void gpu_calc_energrad(
 					   /*(M_PI / 180.0f)*/;
         }
 
-		/*
-		DPCT1007:19: Migration of this CUDA API is not supported by the Intel(R)
-		DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 		for (uint32_t gene_cnt = item_ct1.get_local_id(2);
@@ -1127,11 +1092,6 @@ void gpu_calc_energrad(
 			fgradient_genotype[gene_cnt] = ONEOVERTERMSCALE * (float)gradient_genotype[gene_cnt];
 		}
 
-		/*
-		DPCT1007:20: Migration of this CUDA API is not supported by the Intel(R)
-		DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 #if defined (CONVERT_INTO_ANGSTROM_RADIAN)
@@ -1142,11 +1102,6 @@ void gpu_calc_energrad(
 			fgradient_genotype[gene_cnt] *= cData.dockpars.grid_spacing * cData.dockpars.grid_spacing * SCFACTOR_ANGSTROM_RADIAN;
 		}
 
-		/*
-		DPCT1007:21: Migration of this CUDA API is not supported by the Intel(R)
-		DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 #endif
 }

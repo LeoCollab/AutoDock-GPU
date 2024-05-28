@@ -152,11 +152,6 @@ gpu_gradient_minAD_kernel(
 		#endif
 	}
 
-	/*
-	DPCT1007:67: Migration of this CUDA API is not supported by the Intel(R)
-	DPC++ Compatibility Tool.
-	*/
-	__threadfence();
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	energy = pMem_energies_next[run_id * cData.dockpars.pop_size + *entity_id];
@@ -185,12 +180,6 @@ gpu_gradient_minAD_kernel(
 	// E.g. in steepest descent "delta" is -1.0 * stepsize * gradient
 
 	// Asynchronous copy should be finished by here
-
-	/*
-	DPCT1007:68: Migration of this CUDA API is not supported by the Intel(R)
-	DPC++ Compatibility Tool.
-	*/
-	__threadfence();
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	// Initializing vectors
@@ -243,12 +232,6 @@ gpu_gradient_minAD_kernel(
 		// =============================================================
 		// =============================================================
 		// Calculating energy & gradient
-
-		/*
-		DPCT1007:70: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 		gpu_calc_energrad(
@@ -308,7 +291,6 @@ gpu_gradient_minAD_kernel(
 			printf("\n");
 			#endif
 		}
-		__threadfence();
 		__syncthreads();
 		#endif // DEBUG_ENERGY_ADADELTA
 
@@ -337,11 +319,6 @@ gpu_gradient_minAD_kernel(
 			genotype[i] += delta;
 		}
 
-		/*
-        DPCT1007:71: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 #if defined (DEBUG_SQDELTA_ADADELTA)
@@ -354,7 +331,6 @@ gpu_gradient_minAD_kernel(
 				printf("%13u %20.6f %15.6f %15.6f %15.6f\n", i, square_gradient[i], delta[i], square_delta[i], genotype[i]);
 			}
 		}
-		__threadfence();
 		__syncthreads();
 #endif
 
@@ -403,12 +379,7 @@ gpu_gradient_minAD_kernel(
 #endif
 		}
 
-		/*
-		DPCT1007:72: Migration of this CUDA API is not supported by the
-		Intel(R) DPC++ Compatibility Tool.
-		*/
-		__threadfence();
-          item_ct1.barrier(SYCL_MEMORY_SPACE); // making sure that iteration_cnt is up-to-date
+		item_ct1.barrier(SYCL_MEMORY_SPACE); // making sure that iteration_cnt is up-to-date
 
 #ifdef ADADELTA_AUTOSTOP
 	} while ((iteration_cnt < cData.dockpars.max_num_of_iters) && (*rho > 0.01f));
@@ -428,12 +399,6 @@ gpu_gradient_minAD_kernel(
 	}
 
 	// Updating old offspring in population
-
-	/*
-	DPCT1007:69: Migration of this CUDA API is not supported by the Intel(R)
-	DPC++ Compatibility Tool.
-	*/
-	__threadfence();
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	offset = (run_id * cData.dockpars.pop_size + *entity_id) * GENOTYPE_LENGTH_IN_GLOBMEM;
