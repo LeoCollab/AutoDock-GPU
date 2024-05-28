@@ -374,48 +374,51 @@ void gpu_perform_LS(
                    )
 {
 	size_t sz_shared = (sizeof(sycl::float3) * cpuData.dockpars.num_of_atoms) + (4 * cpuData.dockpars.num_of_genes * sizeof(float));
-        /*
-        DPCT1049:53: The workgroup size passed to the SYCL kernel may exceed the
-        limit. To get the device limit, query info::device::max_work_group_size.
-        Adjust the workgroup size if needed.
-        */
-        dpct::get_default_queue().submit([&](sycl::handler &cgh) {
-                extern dpct::constant_memory<GpuData, 0> cData;
+	/*
+	DPCT1049:53: The workgroup size passed to the SYCL kernel may exceed the
+	limit. To get the device limit, query info::device::max_work_group_size.
+	Adjust the workgroup size if needed.
+	*/
+	dpct::get_default_queue().submit([&](sycl::handler &cgh) {
+		extern dpct::constant_memory<GpuData, 0> cData;
+		cData.init();
+		auto cData_ptr_ct1 = cData.get_ptr();
 
-                cData.init();
+		sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(sycl::range<1>(sz_shared), cgh);
+		sycl::local_accessor<float, 0> rho_acc_ct1(cgh);
+		sycl::local_accessor<int, 0> cons_succ_acc_ct1(cgh);
+		sycl::local_accessor<int, 0> cons_fail_acc_ct1(cgh);
+		sycl::local_accessor<int, 0> iteration_cnt_acc_ct1(cgh);
+		sycl::local_accessor<int, 0> evaluation_cnt_acc_ct1(cgh);
+		sycl::local_accessor<float, 0> offspring_energy_acc_ct1(cgh);
+		sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
+		sycl::local_accessor<int, 0> entity_id_acc_ct1(cgh);
 
-                auto cData_ptr_ct1 = cData.get_ptr();
-
-                sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(sycl::range<1>(sz_shared), cgh);
-                sycl::local_accessor<float, 0> rho_acc_ct1(cgh);
-                sycl::local_accessor<int, 0> cons_succ_acc_ct1(cgh);
-                sycl::local_accessor<int, 0> cons_fail_acc_ct1(cgh);
-                sycl::local_accessor<int, 0> iteration_cnt_acc_ct1(cgh);
-                sycl::local_accessor<int, 0> evaluation_cnt_acc_ct1(cgh);
-                sycl::local_accessor<float, 0> offspring_energy_acc_ct1(cgh);
-                sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
-                sycl::local_accessor<int, 0> entity_id_acc_ct1(cgh);
-
-                cgh.parallel_for(
-                    sycl::nd_range<3>(sycl::range<3>(1, 1, blocks) *
-                                          sycl::range<3>(1, 1, threads),
-                                      sycl::range<3>(1, 1, threads)),
-                    [=](sycl::nd_item<3> item_ct1) {
-                            gpu_perform_LS_kernel(
-                                pMem_conformations_next, pMem_energies_next,
-                                item_ct1, dpct_local_acc_ct1.get_pointer(),
-                                *cData_ptr_ct1, rho_acc_ct1.get_pointer(),
-                                cons_succ_acc_ct1.get_pointer(),
-                                cons_fail_acc_ct1.get_pointer(),
-                                iteration_cnt_acc_ct1.get_pointer(),
-                                evaluation_cnt_acc_ct1.get_pointer(),
-                                offspring_energy_acc_ct1.get_pointer(),
-                                sFloatAccumulator_acc_ct1.get_pointer(),
-                                entity_id_acc_ct1.get_pointer());
-                    });
-        });
-        /*
-        DPCT1001:54: The statement could not be removed.
-        */
-        LAUNCHERROR("gpu_perform_LS_kernel");
+		cgh.parallel_for(
+			sycl::nd_range<3>(
+				sycl::range<3>(1, 1, blocks) * sycl::range<3>(1, 1, threads),
+				sycl::range<3>(1, 1, threads)
+			),
+			[=](sycl::nd_item<3> item_ct1) {
+				gpu_perform_LS_kernel(
+					pMem_conformations_next,
+					pMem_energies_next,
+					item_ct1,
+					dpct_local_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					*cData_ptr_ct1,
+					rho_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					cons_succ_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					cons_fail_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					iteration_cnt_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					evaluation_cnt_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					offspring_energy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					entity_id_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+				);
+		});
+	});
+	/*
+	DPCT1001:54: The statement could not be removed.
+	*/
+	LAUNCHERROR("gpu_perform_LS_kernel");
 }
