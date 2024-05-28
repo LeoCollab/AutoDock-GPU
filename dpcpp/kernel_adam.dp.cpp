@@ -425,11 +425,12 @@ void gpu_gradient_minAdam(
 )
 {
 	size_t sz_shared = (2 * cpuData.dockpars.num_of_atoms * sizeof(sycl::float3)) + (5 * cpuData.dockpars.num_of_genes * sizeof(float));
-	/*
-	DPCT1049:81: The workgroup size passed to the SYCL kernel may exceed the
-	limit. To get the device limit, query info::device::max_work_group_size.
-	Adjust the workgroup size if needed.
-	*/
+
+	// Verifying that the passed work-group size doesn't exceed device's limit
+	auto max_wg_size = dpct::get_default_queue().get_device().get_info<sycl::info::device::max_work_group_size>();
+	//printf("\tk_adam: max_wg_size = %lu, passed_wg_size = %u\n", max_wg_size, threads);
+	assert(max_wg_size >= threads);
+
 	dpct::get_default_queue().submit([&](sycl::handler &cgh) {
 		extern dpct::constant_memory<GpuData, 0> cData;
 		cData.init();
