@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 void
-
 gpu_sum_evals_kernel(
 	sycl::nd_item<3> item_ct1,
 	GpuData cData,

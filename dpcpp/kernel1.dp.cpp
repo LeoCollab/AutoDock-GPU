@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 void
-
 gpu_calc_initpop_kernel(
 	float* pMem_conformations_current,
 	float* pMem_energies_current
