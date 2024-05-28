@@ -62,20 +62,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 //#define DEBUG_ADADELTA_INITIAL_2BRT
 
 void
-
 gpu_gradient_minAD_kernel(
-                          float* pMem_conformations_next,
-                          float* pMem_energies_next
-                         ,
-                          sycl::nd_item<3> item_ct1,
-                          GpuData cData,
-                          uint8_t *dpct_local,
-                          int *entity_id,
-                          float *best_energy,
-                          float *sFloatAccumulator,
-                          float *rho,
-                          int *cons_succ,
-                          int *cons_fail)
+	float* pMem_conformations_next,
+	float* pMem_energies_next
+	,
+	sycl::nd_item<3> item_ct1,
+	GpuData cData,
+	uint8_t *dpct_local,
+	int *entity_id,
+	float *best_energy,
+	float *sFloatAccumulator,
+	float *rho,
+	int *cons_succ,
+	int *cons_fail)
 // The GPU global function performs gradient-based minimization on (some) entities of conformations_next.
 // The number of OpenCL compute units (CU) which should be started equals to num_of_minEntities*num_of_runs.
 // This way the first num_of_lsentities entity of each population will be subjected to local search
@@ -89,25 +88,25 @@ gpu_gradient_minAD_kernel(
 	// -----------------------------------------------------------------------------
 
 	// Determining entity, and its run, energy, and genotype
-        int run_id = item_ct1.get_group(2) / cData.dockpars.num_of_lsentities;
-        float energy;
+	int run_id = item_ct1.get_group(2) / cData.dockpars.num_of_lsentities;
+	float energy;
+
 	// Energy may go up, so we keep track of the best energy ever calculated.
-	// Then, we return the genotype corresponding 
+	// Then, we return the genotype corresponding
 	// to the best observed energy, i.e. "best_genotype"
+	auto sFloatBuff = (float *)dpct_local;
 
-        auto sFloatBuff = (float *)dpct_local;
+	// Ligand-atom position and partial energies
+	sycl::float3 *calc_coords = (sycl::float3 *)sFloatBuff;
 
-        // Ligand-atom position and partial energies
-        sycl::float3 *calc_coords = (sycl::float3 *)sFloatBuff;
-
-        // Gradient of the intermolecular energy per each ligand atom
+	// Gradient of the intermolecular energy per each ligand atom
 	// Also used to store the accummulated gradient per each ligand atom
 #ifdef FLOAT_GRADIENTS
 	float3* cartesian_gradient = (float3*)(calc_coords + cData.dockpars.num_of_atoms);
 #else
-        sycl::int3 *cartesian_gradient =
-            (sycl::int3 *)(calc_coords + cData.dockpars.num_of_atoms);
+	sycl::int3 *cartesian_gradient = (sycl::int3 *)(calc_coords + cData.dockpars.num_of_atoms);
 #endif
+
 	// Genotype pointers
 	float* genotype = (float*)(cartesian_gradient + cData.dockpars.num_of_atoms);
 	float* best_genotype = genotype + cData.dockpars.num_of_genes;
@@ -124,24 +123,22 @@ gpu_gradient_minAD_kernel(
 	// Iteration counter for the minimizer
 	uint32_t iteration_cnt = 0;
 
-        if (item_ct1.get_local_id(2) == 0)
-        {
+	if (item_ct1.get_local_id(2) == 0)
+	{
 		// Since entity 0 is the best one due to elitism,
 		// it should be subjected to random selection
-                *entity_id = item_ct1.get_group(2) % cData.dockpars.num_of_lsentities;
-                if (*entity_id == 0) {
-                        // If entity 0 is not selected according to LS-rate,
+		*entity_id = item_ct1.get_group(2) % cData.dockpars.num_of_lsentities;
+		if (*entity_id == 0)
+		{
+			// If entity 0 is not selected according to LS-rate,
 			// choosing another entity
-                        if (100.0f *
-                                gpu_randf(cData.pMem_prng_states, item_ct1) >
-                            cData.dockpars.lsearch_rate) {
-                                *entity_id =
-                                    cData.dockpars
-                                        .num_of_lsentities; // AT - Should this
-                                                            // be
-                                                            // (uint)(dockpars_pop_size
-                                                            // * gpu_randf(dockpars_prng_states))?
-                        }
+			if (100.0f * gpu_randf(cData.pMem_prng_states, item_ct1) > cData.dockpars.lsearch_rate)
+			{
+				*entity_id = cData.dockpars.num_of_lsentities;	// AT - Should this
+																// be
+																// (uint)(dockpars_pop_size
+																// * gpu_randf(dockpars_prng_states))?
+			}
 		}
 
 		#if defined (DEBUG_ADADELTA_MINIMIZER) || defined (PRINT_ADADELTA_MINIMIZER_ENERGY_EVOLUTION)
@@ -154,19 +151,22 @@ gpu_gradient_minAD_kernel(
 		printf("%20s %.6f\n", "initial energy: ", energy);
 		#endif
 	}
-        /*
-        DPCT1007:67: Migration of this CUDA API is not supported by the Intel(R)
-        DPC++ Compatibility Tool.
-        */
-        __threadfence();
-        item_ct1.barrier(SYCL_MEMORY_SPACE);
-        energy = pMem_energies_next[run_id * cData.dockpars.pop_size + *entity_id];
 
-        int offset = (run_id * cData.dockpars.pop_size + *entity_id) *
-                     GENOTYPE_LENGTH_IN_GLOBMEM;
-        for (int i = item_ct1.get_local_id(2); i < cData.dockpars.num_of_genes;
-             i += item_ct1.get_local_range().get(2))
-        {
+	/*
+	DPCT1007:67: Migration of this CUDA API is not supported by the Intel(R)
+	DPC++ Compatibility Tool.
+	*/
+	__threadfence();
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
+
+	energy = pMem_energies_next[run_id * cData.dockpars.pop_size + *entity_id];
+
+	int offset = (run_id * cData.dockpars.pop_size + *entity_id) * GENOTYPE_LENGTH_IN_GLOBMEM;
+
+	for (int i = item_ct1.get_local_id(2);
+			 i < cData.dockpars.num_of_genes;
+			 i += item_ct1.get_local_range().get(2))
+	{
 		genotype[i] = pMem_conformations_next[offset + i];
 	}
 
@@ -185,18 +185,19 @@ gpu_gradient_minAD_kernel(
 	// E.g. in steepest descent "delta" is -1.0 * stepsize * gradient
 
 	// Asynchronous copy should be finished by here
-        /*
-        DPCT1007:68: Migration of this CUDA API is not supported by the Intel(R)
-        DPC++ Compatibility Tool.
-        */
-        __threadfence();
-        item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-        // Initializing vectors
-        for (uint32_t i = item_ct1.get_local_id(2);
-             i < cData.dockpars.num_of_genes;
-             i += item_ct1.get_local_range().get(2))
-        {
+	/*
+	DPCT1007:68: Migration of this CUDA API is not supported by the Intel(R)
+	DPC++ Compatibility Tool.
+	*/
+	__threadfence();
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
+
+	// Initializing vectors
+	for (uint32_t i = item_ct1.get_local_id(2);
+				  i < cData.dockpars.num_of_genes;
+				  i += item_ct1.get_local_range().get(2))
+	{
 		gradient[i]        = 0.0f;
 		square_gradient[i] = 0.0f;
 		square_delta[i]    = 0.0f;
@@ -204,17 +205,18 @@ gpu_gradient_minAD_kernel(
 	}
 
 	// Initializing best energy
-        if (item_ct1.get_local_id(2) == 0) {
-                *best_energy = INFINITY;
-        }
+	if (item_ct1.get_local_id(2) == 0)
+	{
+		*best_energy = INFINITY;
+	}
 
 #ifdef ADADELTA_AUTOSTOP
-
-        if (item_ct1.get_local_id(2) == 0) {
-                *rho = 1.0f;
-                *cons_succ = 0;
-                *cons_fail = 0;
-        }
+	if (item_ct1.get_local_id(2) == 0)
+	{
+		*rho = 1.0f;
+		*cons_succ = 0;
+		*cons_fail = 0;
+	}
 #endif
 
 	// -----------------------------------------------------------------------------
@@ -241,31 +243,40 @@ gpu_gradient_minAD_kernel(
 		// =============================================================
 		// =============================================================
 		// Calculating energy & gradient
-                /*
-                DPCT1007:70: Migration of this CUDA API is not supported by the
-                Intel(R) DPC++ Compatibility Tool.
-                */
-                __threadfence();
-                item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-                gpu_calc_energrad(
-                    // Some OpenCL compilers don't allow declaring
-                    // local variables within non-kernel functions.
-                    // These local variables must be declared in a kernel,
-                    // and then passed to non-kernel functions.
-                    genotype, energy, run_id, calc_coords,
-#if defined (DEBUG_ENERGY_KERNEL)
-                    interE, intraE,
-		                  #endif
-                    // Gradient-related arguments
-                    // Calculate gradients (forces) for intermolecular energy
-                    // Derived from autodockdev/maps.py
-                    cartesian_gradient, gradient, sFloatAccumulator, item_ct1,
-                    cData);
+		/*
+		DPCT1007:70: Migration of this CUDA API is not supported by the
+		Intel(R) DPC++ Compatibility Tool.
+		*/
+		__threadfence();
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
+		gpu_calc_energrad(
+			// Some OpenCL compilers don't allow declaring
+			// local variables within non-kernel functions.
+			// These local variables must be declared in a kernel,
+			// and then passed to non-kernel functions.
+			genotype,
+			energy,
+			run_id,
+			calc_coords,
+			#if defined (DEBUG_ENERGY_KERNEL)
+			interE,
+			intraE,
+			#endif
+			// Gradient-related arguments
+			// Calculate gradients (forces) for intermolecular energy
+			// Derived from autodockdev/maps.py
+			cartesian_gradient,
+			gradient,
+			sFloatAccumulator,
+			item_ct1,
+			cData
+		);
 		// =============================================================
 		// =============================================================
 		// =============================================================
+
 		#if defined (DEBUG_ENERGY_ADADELTA)
 		if (threadIdx.x == 0) {
 			#if defined (PRINT_ADADELTA_ENERGIES)
@@ -301,38 +312,37 @@ gpu_gradient_minAD_kernel(
 		__syncthreads();
 		#endif // DEBUG_ENERGY_ADADELTA
 
-                for (int i = item_ct1.get_local_id(2);
-                     i < cData.dockpars.num_of_genes;
-                     i += item_ct1.get_local_range().get(2))
-                {
-                        if (energy <
-                            *best_energy) // we need to be careful not to change
-                                          // best_energy until we had a chance
-                                          // to update the whole array
-                                best_genotype[i] = genotype[i];
+		for (int i = item_ct1.get_local_id(2);
+				 i < cData.dockpars.num_of_genes;
+				 i += item_ct1.get_local_range().get(2))
+		{
+			if (energy < *best_energy) 	// we need to be careful not to change
+										// best_energy until we had a chance
+										// to update the whole array
+				best_genotype[i] = genotype[i];
 
 			// Accumulating gradient^2 (eq.8 in the paper)
 			// square_gradient corresponds to E[g^2]
 			square_gradient[i] = RHO * square_gradient[i] + (1.0f - RHO) * gradient[i] * gradient[i];
 
 			// Computing update (eq.9 in the paper)
-                        float delta =
-                            -1.0f * gradient[i] *
-								SYCL_SQRT(SYCL_DIVIDE((float)(square_delta[i] + EPSILON), (float)(square_gradient[i] + EPSILON)));
+			float delta = -1.0f * gradient[i] *
+						  SYCL_SQRT(SYCL_DIVIDE((float)(square_delta[i] + EPSILON), (float)(square_gradient[i] + EPSILON)));
 
-                        // Accumulating update^2
+			// Accumulating update^2
 			// square_delta corresponds to E[dx^2]
 			square_delta[i] = RHO * square_delta[i] + (1.0f - RHO) * delta * delta;
 
 			// Applying update
 			genotype[i] += delta;
 		}
-                /*
-                DPCT1007:71: Migration of this CUDA API is not supported by the
-                Intel(R) DPC++ Compatibility Tool.
-                */
-                __threadfence();
-                item_ct1.barrier(SYCL_MEMORY_SPACE);
+
+		/*
+        DPCT1007:71: Migration of this CUDA API is not supported by the
+		Intel(R) DPC++ Compatibility Tool.
+		*/
+		__threadfence();
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 #if defined (DEBUG_SQDELTA_ADADELTA)
 		if (/*(get_group_id(0) == 0) &&*/ (threadIdx.x == 0)) {
@@ -346,25 +356,26 @@ gpu_gradient_minAD_kernel(
 		}
 		__threadfence();
 		__syncthreads();
-		#endif
+#endif
 
 		// Updating number of ADADELTA iterations (energy evaluations)
 		iteration_cnt = iteration_cnt + 1;
-                if (item_ct1.get_local_id(2) == 0) {
-                        if (energy < *best_energy)
-                        {
-                                *best_energy = energy;
+		if (item_ct1.get_local_id(2) == 0)
+		{
+			if (energy < *best_energy)
+			{
+				*best_energy = energy;
 #ifdef ADADELTA_AUTOSTOP
-                                (*cons_succ)++;
-                                *cons_fail = 0;
+				(*cons_succ)++;
+				*cons_fail = 0;
 #endif
 			}
 #ifdef ADADELTA_AUTOSTOP
 			else
 			{
-                                *cons_succ = 0;
-                                (*cons_fail)++;
-                        }
+				*cons_succ = 0;
+				(*cons_fail)++;
+			}
 #endif
 
 			#if defined (DEBUG_ADADELTA_MINIMIZER) || defined (PRINT_ADADELTA_MINIMIZER_ENERGY_EVOLUTION)
@@ -374,77 +385,79 @@ gpu_gradient_minAD_kernel(
 			#if defined (DEBUG_ENERGY_ADADELTA)
 			printf("%-18s [%-5s]---{%-5s}   [%-10.7f]---{%-10.7f}\n", "-ENERGY-KERNEL7-", "GRIDS", "INTRA", partial_interE[0], partial_intraE[0]);
 			#endif
+
 #ifdef ADADELTA_AUTOSTOP
-                        if (*cons_succ >= 4)
-                        {
-                                *rho *= LS_EXP_FACTOR;
-                                *cons_succ = 0;
-                        }
+			if (*cons_succ >= 4)
+			{
+				*rho *= LS_EXP_FACTOR;
+				*cons_succ = 0;
+			}
 			else
 			{
-                                if (*cons_fail >= 4)
-                                {
-                                        *rho *= LS_CONT_FACTOR;
-                                        *cons_fail = 0;
-                                }
+				if (*cons_fail >= 4)
+				{
+					*rho *= LS_CONT_FACTOR;
+					*cons_fail = 0;
+				}
 			}
 #endif
 		}
-                /*
-                DPCT1007:72: Migration of this CUDA API is not supported by the
-                Intel(R) DPC++ Compatibility Tool.
-                */
-                __threadfence();
-                item_ct1.barrier(SYCL_MEMORY_SPACE); // making sure that iteration_cnt is up-to-date
+
+		/*
+		DPCT1007:72: Migration of this CUDA API is not supported by the
+		Intel(R) DPC++ Compatibility Tool.
+		*/
+		__threadfence();
+          item_ct1.barrier(SYCL_MEMORY_SPACE); // making sure that iteration_cnt is up-to-date
+
 #ifdef ADADELTA_AUTOSTOP
-        } while ((iteration_cnt < cData.dockpars.max_num_of_iters) && (*rho > 0.01f));
+	} while ((iteration_cnt < cData.dockpars.max_num_of_iters) && (*rho > 0.01f));
 #else
 	} while (iteration_cnt < cData.dockpars.max_num_of_iters);
 #endif
 	// -----------------------------------------------------------------------------
 	// -----------------------------------------------------------------------------
 	// -----------------------------------------------------------------------------
+
 	// Mapping torsion angles
-        for (uint32_t gene_counter = item_ct1.get_local_id(2) + 3;
-             gene_counter < cData.dockpars.num_of_genes;
-             gene_counter += item_ct1.get_local_range().get(2))
-        {
+	for (uint32_t gene_counter = item_ct1.get_local_id(2) + 3;
+				  gene_counter < cData.dockpars.num_of_genes;
+				  gene_counter += item_ct1.get_local_range().get(2))
+	{
 		map_angle(best_genotype[gene_counter]);
 	}
 
 	// Updating old offspring in population
-        /*
-        DPCT1007:69: Migration of this CUDA API is not supported by the Intel(R)
-        DPC++ Compatibility Tool.
-        */
-        __threadfence();
-        item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-        offset = (run_id * cData.dockpars.pop_size + *entity_id) *
-                 GENOTYPE_LENGTH_IN_GLOBMEM;
-        for (uint gene_counter = item_ct1.get_local_id(2);
-             gene_counter < cData.dockpars.num_of_genes;
-             gene_counter += item_ct1.get_local_range().get(2))
-        {
+	/*
+	DPCT1007:69: Migration of this CUDA API is not supported by the Intel(R)
+	DPC++ Compatibility Tool.
+	*/
+	__threadfence();
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
+
+	offset = (run_id * cData.dockpars.pop_size + *entity_id) * GENOTYPE_LENGTH_IN_GLOBMEM;
+
+	for (uint gene_counter = item_ct1.get_local_id(2);
+			  gene_counter < cData.dockpars.num_of_genes;
+			  gene_counter += item_ct1.get_local_range().get(2))
+	{
 		pMem_conformations_next[gene_counter + offset] = best_genotype[gene_counter];
 	}
 
 	// Updating eval counter and energy
-        if (item_ct1.get_local_id(2) == 0) {
-                cData.pMem_evals_of_new_entities[run_id *
-                                                     cData.dockpars.pop_size +
-                                                 *entity_id] += iteration_cnt;
-                pMem_energies_next[run_id * cData.dockpars.pop_size +
-                                   *entity_id] = *best_energy;
+	if (item_ct1.get_local_id(2) == 0)
+	{
+		cData.pMem_evals_of_new_entities[run_id * cData.dockpars.pop_size + *entity_id] += iteration_cnt;
+		pMem_energies_next[run_id * cData.dockpars.pop_size + *entity_id] = *best_energy;
 
 #if defined (DEBUG_ADADELTA_MINIMIZER) || defined (PRINT_ADADELTA_MINIMIZER_ENERGY_EVOLUTION)
 		printf("\n");
 		printf("Termination criteria: ( #adadelta-iters >= %-3u )\n", dockpars_max_num_of_iters);
 		printf("-------> End of ADADELTA minimization cycle, num of energy evals: %u, final energy: %.6f\n", iteration_cnt, best_energy);
-		#endif
+#endif
 	}
 }
-
 
 void gpu_gradient_minAD(
                         uint32_t blocks,
