@@ -1015,15 +1015,6 @@ void gpu_calc_energrad(
 
 		// Assignment of gene-based gradient
 		// - this works because a * (a_1 + a_2 + ... + a_n) = a*a_1 + a*a_2 + ... + a*a_n
-
-		/*
-		DPCT1039:33: The generated code assumes that
-		"&gradient_genotype[rotbond_id+6]" points to the global memory
-		address space. If it points to a local memory address space,
-		replace "dpct::atomic_fetch_add" with
-		"dpct::atomic_fetch_add<int,
-		sycl::access::address_space::local_space>".
-		*/
 		ATOMICADDI32(
 			&gradient_genotype[rotbond_id + 6],
 			sycl::rint(sycl::fmin((float)MAXTERM,
