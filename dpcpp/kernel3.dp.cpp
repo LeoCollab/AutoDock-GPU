@@ -38,20 +38,20 @@ __launch_bounds__(NUM_OF_THREADS_PER_BLOCK, 1024 / NUM_OF_THREADS_PER_BLOCK)
 
 #endif
 gpu_perform_LS_kernel(
-                      float* pMem_conformations_next,
-                      float* pMem_energies_next
-                     ,
-                      sycl::nd_item<3> item_ct1,
-                      GpuData cData,
-                      uint8_t *dpct_local,
-                      float *rho,
-                      int *cons_succ,
-                      int *cons_fail,
-                      int *iteration_cnt,
-                      int *evaluation_cnt,
-                      float *offspring_energy,
-                      float *sFloatAccumulator,
-                      int *entity_id)
+	float* pMem_conformations_next,
+	float* pMem_energies_next
+	,
+	sycl::nd_item<3> item_ct1,
+	GpuData cData,
+	uint8_t *dpct_local,
+	float *rho,
+	int *cons_succ,
+	int *cons_fail,
+	int *iteration_cnt,
+ 	int *evaluation_cnt,
+	float *offspring_energy,
+ 	float *sFloatAccumulator,
+	int *entity_id)
 // The GPU global function performs local search on the pre-defined entities of conformations_next.
 // The number of blocks which should be started equals to num_of_lsentities*num_of_runs.
 // This way the first num_of_lsentities entity of each population will be subjected to local search
@@ -60,14 +60,14 @@ gpu_perform_LS_kernel(
 // it is always tested according to the ls probability, and if it not to be
 // subjected to local search, the entity with ID num_of_lsentities is selected instead of the first one (with ID 0).
 {
-
-        auto sFloatBuff = (float *)dpct_local;
-        float candidate_energy;
+	auto sFloatBuff = (float *)dpct_local;
+	float candidate_energy;
 	int run_id;
-	// Ligand-atom position and partial energies
-        sycl::float3 *calc_coords = (sycl::float3 *)sFloatBuff;
 
-        // Genotype pointers
+	// Ligand-atom position and partial energies
+	sycl::float3 *calc_coords = (sycl::float3 *)sFloatBuff;
+
+	// Genotype pointers
 	float* genotype_candidate = (float*)(calc_coords + cData.dockpars.num_of_atoms);
 	float* genotype_deviate = (float*)(genotype_candidate + cData.dockpars.num_of_genes);
 	float* genotype_bias = (float*)(genotype_deviate + cData.dockpars.num_of_genes);
@@ -75,79 +75,77 @@ gpu_perform_LS_kernel(
 
 	// Determining run ID and entity ID
 	// Initializing offspring genotype
-        run_id = item_ct1.get_group(2) / cData.dockpars.num_of_lsentities;
-        if (item_ct1.get_local_id(2) == 0)
-        {
-                *entity_id = item_ct1.get_group(2) % cData.dockpars.num_of_lsentities;
-                // Since entity 0 is the best one due to elitism,
+	run_id = item_ct1.get_group(2) / cData.dockpars.num_of_lsentities;
+	if (item_ct1.get_local_id(2) == 0)
+	{
+		*entity_id = item_ct1.get_group(2) % cData.dockpars.num_of_lsentities;
+
+		// Since entity 0 is the best one due to elitism,
 		// it should be subjected to random selection
-                if (*entity_id == 0) {
-                        // If entity 0 is not selected according to LS-rate,
+		if (*entity_id == 0)
+		{
+			// If entity 0 is not selected according to LS-rate,
 			// choosing an other entity
-                        if (100.0f *
-                                gpu_randf(cData.pMem_prng_states, item_ct1) >
-                            cData.dockpars.lsearch_rate) {
-                                *entity_id = cData.dockpars.num_of_lsentities;
-                        }
+			if (100.0f * gpu_randf(cData.pMem_prng_states, item_ct1) > cData.dockpars.lsearch_rate)
+			{
+				*entity_id = cData.dockpars.num_of_lsentities;
+			}
 		}
 
-                *offspring_energy =
-                    pMem_energies_next[run_id * cData.dockpars.pop_size +
-                                       *entity_id];
-                *rho = 1.0f;
-                *cons_succ = 0;
-                *cons_fail = 0;
-                *iteration_cnt = 0;
-                *evaluation_cnt = 0;
-        }
-        /*
-        DPCT1007:44: Migration of this CUDA API is not supported by the Intel(R)
-        DPC++ Compatibility Tool.
-        */
-        __threadfence();
-        item_ct1.barrier(SYCL_MEMORY_SPACE);
+		*offspring_energy =
+		pMem_energies_next[run_id * cData.dockpars.pop_size + *entity_id];
+		*rho = 1.0f;
+		*cons_succ = 0;
+		*cons_fail = 0;
+		*iteration_cnt = 0;
+		*evaluation_cnt = 0;
+	}
 
-        size_t offset = (run_id * cData.dockpars.pop_size + *entity_id) *
-                        GENOTYPE_LENGTH_IN_GLOBMEM;
-        for (uint32_t gene_counter = item_ct1.get_local_id(2);
-             gene_counter < cData.dockpars.num_of_genes;
-             gene_counter += item_ct1.get_local_range().get(2))
-        {
+	/*
+	DPCT1007:44: Migration of this CUDA API is not supported by the Intel(R)
+	DPC++ Compatibility Tool.
+	*/
+	__threadfence();
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
+
+	size_t offset = (run_id * cData.dockpars.pop_size + *entity_id) * GENOTYPE_LENGTH_IN_GLOBMEM;
+
+	for (uint32_t gene_counter = item_ct1.get_local_id(2);
+				  gene_counter < cData.dockpars.num_of_genes;
+				  gene_counter += item_ct1.get_local_range().get(2))
+	{
 		offspring_genotype[gene_counter] = pMem_conformations_next[offset + gene_counter];
 		genotype_bias[gene_counter] = 0.0f;
 	}
-        /*
-        DPCT1007:45: Migration of this CUDA API is not supported by the Intel(R)
-        DPC++ Compatibility Tool.
-        */
-        __threadfence();
-        item_ct1.barrier(SYCL_MEMORY_SPACE);
+
+	/*
+	DPCT1007:45: Migration of this CUDA API is not supported by the Intel(R)
+	DPC++ Compatibility Tool.
+	*/
+	__threadfence();
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 #ifdef SWAT3
-		float lig_scale = SYCL_RSQRT((float)cData.dockpars.num_of_atoms);
-		float gene_scale = SYCL_RSQRT((float)cData.dockpars.num_of_genes);
+	float lig_scale = SYCL_RSQRT((float)cData.dockpars.num_of_atoms);
+	float gene_scale = SYCL_RSQRT((float)cData.dockpars.num_of_genes);
 #endif
-        while ((*iteration_cnt < cData.dockpars.max_num_of_iters) &&
-               (*rho > cData.dockpars.rho_lower_bound))
-        {
+	while ((*iteration_cnt < cData.dockpars.max_num_of_iters) && (*rho > cData.dockpars.rho_lower_bound))
+	{
 		// New random deviate
-                for (uint32_t gene_counter = item_ct1.get_local_id(2);
-                     gene_counter < cData.dockpars.num_of_genes;
-                     gene_counter += item_ct1.get_local_range().get(2))
-                {
+		for (uint32_t gene_counter = item_ct1.get_local_id(2);
+					  gene_counter < cData.dockpars.num_of_genes;
+					  gene_counter += item_ct1.get_local_range().get(2))
+		{
 #ifdef SWAT3
-                        genotype_deviate[gene_counter] =
-                            *rho *
-                            (2.0f *
-                                 gpu_randf(cData.pMem_prng_states, item_ct1) -
-                             1.0f) *
-                            (gpu_randf(cData.pMem_prng_states, item_ct1) <
-                             gene_scale);
+			genotype_deviate[gene_counter] = *rho *
+                            (2.0f * gpu_randf(cData.pMem_prng_states, item_ct1) - 1.0f) *
+                            (gpu_randf(cData.pMem_prng_states, item_ct1) < gene_scale);
 
-                        // Translation genes
+			// Translation genes
 			if (gene_counter < 3) {
 				genotype_deviate[gene_counter] *= cData.dockpars.base_dmov_mul_sqrt3;
 			}
+
 			// Orientation and torsion genes
 			else {
 				if (gene_counter < 6) {
@@ -157,7 +155,9 @@ gpu_perform_LS_kernel(
 				}
 			}
 #else
-			genotype_deviate[gene_counter] = rho*(2.0f*gpu_randf(cData.pMem_prng_states)-1.0f)*(gpu_randf(cData.pMem_prng_states)<0.3f);
+			genotype_deviate[gene_counter] = rho * 
+							(2.0f * gpu_randf(cData.pMem_prng_states) - 1.0f) * 
+							(gpu_randf(cData.pMem_prng_states) < 0.3f);
 
 			// Translation genes
 			if (gene_counter < 3) {
@@ -171,200 +171,211 @@ gpu_perform_LS_kernel(
 		}
 
 		// Generating new genotype candidate
-                for (uint32_t gene_counter = item_ct1.get_local_id(2);
-                     gene_counter < cData.dockpars.num_of_genes;
-                     gene_counter += item_ct1.get_local_range().get(2))
-                {
-			genotype_candidate[gene_counter] = offspring_genotype[gene_counter] +
-			                                   genotype_deviate[gene_counter]   +
-			                                   genotype_bias[gene_counter];
+		for (uint32_t gene_counter = item_ct1.get_local_id(2);
+					  gene_counter < cData.dockpars.num_of_genes;
+					  gene_counter += item_ct1.get_local_range().get(2))
+		{
+			genotype_candidate[gene_counter] = offspring_genotype[gene_counter] + genotype_deviate[gene_counter] + genotype_bias[gene_counter];
 		}
+
 		// Evaluating candidate
-                /*
-                DPCT1007:46: Migration of this CUDA API is not supported by the
-                Intel(R) DPC++ Compatibility Tool.
-                */
-                __threadfence();
-                item_ct1.barrier(SYCL_MEMORY_SPACE);
+		/*
+		DPCT1007:46: Migration of this CUDA API is not supported by the
+		Intel(R) DPC++ Compatibility Tool.
+		*/
+		__threadfence();
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-                // =================================================================
-                gpu_calc_energy(genotype_candidate, candidate_energy, run_id,
-                                calc_coords, sFloatAccumulator, item_ct1,
-                                cData);
-                // =================================================================
-                if (item_ct1.get_local_id(2) == 0) {
-                        (*evaluation_cnt)++;
-                }
-                /*
-                DPCT1007:47: Migration of this CUDA API is not supported by the
-                Intel(R) DPC++ Compatibility Tool.
-                */
-                __threadfence();
-                item_ct1.barrier(SYCL_MEMORY_SPACE);
+		// =================================================================
+		gpu_calc_energy(
+			genotype_candidate,
+			candidate_energy,
+			run_id,
+			calc_coords,
+			sFloatAccumulator,
+			item_ct1,
+			cData
+		);
+        // =================================================================
+        
+		if (item_ct1.get_local_id(2) == 0) {
+			(*evaluation_cnt)++;
+		}
 
-                if (candidate_energy < *offspring_energy) // If candidate is better, success
-                {
-                        for (uint32_t gene_counter = item_ct1.get_local_id(2);
-                             gene_counter < cData.dockpars.num_of_genes;
-                             gene_counter += item_ct1.get_local_range().get(2))
-                        {
+		/*
+		DPCT1007:47: Migration of this CUDA API is not supported by the
+		Intel(R) DPC++ Compatibility Tool.
+		*/
+		__threadfence();
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+
+		if (candidate_energy < *offspring_energy) // If candidate is better, success
+		{
+			for (uint32_t gene_counter = item_ct1.get_local_id(2);
+						  gene_counter < cData.dockpars.num_of_genes;
+						  gene_counter += item_ct1.get_local_range().get(2))
+			{
 				// Updating offspring_genotype
 				offspring_genotype[gene_counter] = genotype_candidate[gene_counter];
 				// Updating genotype_bias
-				genotype_bias[gene_counter] = 0.6f*genotype_bias[gene_counter] + 0.4f*genotype_deviate[gene_counter];
+				genotype_bias[gene_counter] = 0.6f * genotype_bias[gene_counter] + 0.4f * genotype_deviate[gene_counter];
 			}
 
 			// Work-item 0 will overwrite the shared variables
 			// used in the previous if condition
-                        /*
-                        DPCT1007:49: Migration of this CUDA API is not supported
-                        by the Intel(R) DPC++ Compatibility Tool.
-                        */
-                        __threadfence();
-                        item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-                        if (item_ct1.get_local_id(2) == 0)
-                        {
-                                *offspring_energy = candidate_energy;
-                                (*cons_succ)++;
-                                *cons_fail = 0;
-                        }
+			/*
+			DPCT1007:49: Migration of this CUDA API is not supported
+			by the Intel(R) DPC++ Compatibility Tool.
+			*/
+			__threadfence();
+			item_ct1.barrier(SYCL_MEMORY_SPACE);
+
+			if (item_ct1.get_local_id(2) == 0)
+			{
+				*offspring_energy = candidate_energy;
+				(*cons_succ)++;
+				*cons_fail = 0;
+				}
 		}
 		else // If candidate is worse, check the opposite direction
 		{
 			// Generating the other genotype candidate
-                        for (uint32_t gene_counter = item_ct1.get_local_id(2);
-                             gene_counter < cData.dockpars.num_of_genes;
-                             gene_counter += item_ct1.get_local_range().get(2))
-                        {
-				genotype_candidate[gene_counter] = offspring_genotype[gene_counter] -
-				                                   genotype_deviate[gene_counter] -
-				                                   genotype_bias[gene_counter];
+			for (uint32_t gene_counter = item_ct1.get_local_id(2);
+						  gene_counter < cData.dockpars.num_of_genes;
+						  gene_counter += item_ct1.get_local_range().get(2))
+			{
+				genotype_candidate[gene_counter] = offspring_genotype[gene_counter] - genotype_deviate[gene_counter] - genotype_bias[gene_counter];
 			}
 
 			// Evaluating candidate
-                        /*
-                        DPCT1007:50: Migration of this CUDA API is not supported
-                        by the Intel(R) DPC++ Compatibility Tool.
-                        */
-                        __threadfence();
-                        item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-                        // =================================================================
-                        gpu_calc_energy(genotype_candidate, candidate_energy,
-                                        run_id, calc_coords, sFloatAccumulator,
-                                        item_ct1, cData);
-                        // =================================================================
+			/*
+			DPCT1007:50: Migration of this CUDA API is not supported
+			by the Intel(R) DPC++ Compatibility Tool.
+			*/
+			__threadfence();
+			item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-                        if (item_ct1.get_local_id(2) == 0) {
-                                (*evaluation_cnt)++;
+			// =================================================================
+			gpu_calc_energy(
+				genotype_candidate,
+				candidate_energy,
+				run_id,
+				calc_coords,
+				sFloatAccumulator,
+				item_ct1,
+				cData
+			);
+			// =================================================================
 
-#if defined (DEBUG_ENERGY_KERNEL)
+			if (item_ct1.get_local_id(2) == 0) {
+				(*evaluation_cnt)++;
+				#if defined (DEBUG_ENERGY_KERNEL)
 				printf("%-18s [%-5s]---{%-5s}   [%-10.8f]---{%-10.8f}\n", "-ENERGY-KERNEL3-", "GRIDS", "INTRA", partial_interE[0], partial_intraE[0]);
 				#endif
 			}
-                        /*
-                        DPCT1007:51: Migration of this CUDA API is not supported
-                        by the Intel(R) DPC++ Compatibility Tool.
-                        */
-                        __threadfence();
-                        item_ct1.barrier(SYCL_MEMORY_SPACE);
+                        
+			/*
+			DPCT1007:51: Migration of this CUDA API is not supported
+			by the Intel(R) DPC++ Compatibility Tool.
+			*/
+			__threadfence();
+			item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-                        if (candidate_energy < *offspring_energy) // If candidate is better, success
-                        {
-                                for (uint32_t gene_counter =
-                                         item_ct1.get_local_id(2);
-                                     gene_counter < cData.dockpars.num_of_genes;
-                                     gene_counter +=
-                                     item_ct1.get_local_range().get(2))
-                                {
+			if (candidate_energy < *offspring_energy) // If candidate is better, success
+			{
+				for (uint32_t gene_counter = item_ct1.get_local_id(2);
+							  gene_counter < cData.dockpars.num_of_genes;
+							  gene_counter += item_ct1.get_local_range().get(2))
+				{
 					// Updating offspring_genotype
 					offspring_genotype[gene_counter] = genotype_candidate[gene_counter];
+
 					// Updating genotype_bias
-					genotype_bias[gene_counter] = 0.6f*genotype_bias[gene_counter] - 0.4f*genotype_deviate[gene_counter];
+					genotype_bias[gene_counter] = 0.6f * genotype_bias[gene_counter] - 0.4f * genotype_deviate[gene_counter];
 				}
 
 				// Work-item 0 will overwrite the shared variables
 				// used in the previous if condition
-                                /*
-                                DPCT1007:52: Migration of this CUDA API is not
-                                supported by the Intel(R) DPC++ Compatibility
-                                Tool.
-                                */
-                                __threadfence();
-                                item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-                                if (item_ct1.get_local_id(2) == 0)
-                                {
-                                        *offspring_energy = candidate_energy;
-                                        (*cons_succ)++;
-                                        *cons_fail = 0;
-                                }
+				/*
+				DPCT1007:52: Migration of this CUDA API is not
+				supported by the Intel(R) DPC++ Compatibility
+				Tool.
+				*/
+				__threadfence();
+				item_ct1.barrier(SYCL_MEMORY_SPACE);
+
+				if (item_ct1.get_local_id(2) == 0)
+				{
+					*offspring_energy = candidate_energy;
+					(*cons_succ)++;
+					*cons_fail = 0;
+				}
 			}
 			else	// Failure in both directions
 			{
-                                for (uint32_t gene_counter =
-                                         item_ct1.get_local_id(2);
-                                     gene_counter < cData.dockpars.num_of_genes;
-                                     gene_counter +=
-                                     item_ct1.get_local_range().get(2))
-                                {
+				for (uint32_t gene_counter = item_ct1.get_local_id(2);
+							  gene_counter < cData.dockpars.num_of_genes;
+							  gene_counter += item_ct1.get_local_range().get(2))
+				{
 					// Updating genotype_bias
-					genotype_bias[gene_counter] = 0.5f*genotype_bias[gene_counter];
+					genotype_bias[gene_counter] = 0.5f * genotype_bias[gene_counter];
 				}
-                                if (item_ct1.get_local_id(2) == 0)
-                                {
-                                        *cons_succ = 0;
-                                        (*cons_fail)++;
-                                }
+                
+				if (item_ct1.get_local_id(2) == 0)
+				{
+					*cons_succ = 0;
+					(*cons_fail)++;
+				}
 			}
 		}
 
 		// Changing rho if needed
-                if (item_ct1.get_local_id(2) == 0)
-                {
-                        (*iteration_cnt)++;
-                        if (*cons_succ >= cData.dockpars.cons_limit)
-                        {
-                                *rho *= LS_EXP_FACTOR;
-                                *cons_succ = 0;
-                        } else if (*cons_fail >= cData.dockpars.cons_limit)
-                                {
-                                        *rho *= LS_CONT_FACTOR;
-                                        *cons_fail = 0;
-                                }
+		if (item_ct1.get_local_id(2) == 0)
+		{
+			(*iteration_cnt)++;
+			if (*cons_succ >= cData.dockpars.cons_limit)
+			{
+				*rho *= LS_EXP_FACTOR;
+				*cons_succ = 0;
+			}
+			else if (*cons_fail >= cData.dockpars.cons_limit)
+			{
+				*rho *= LS_CONT_FACTOR;
+				*cons_fail = 0;
+			}
 		}
-                /*
-                DPCT1007:48: Migration of this CUDA API is not supported by the
-                Intel(R) DPC++ Compatibility Tool.
-                */
-                __threadfence();
-                item_ct1.barrier(SYCL_MEMORY_SPACE);
-        }
+
+		/*
+		DPCT1007:48: Migration of this CUDA API is not supported by the
+		Intel(R) DPC++ Compatibility Tool.
+		*/
+		__threadfence();
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
 
 	// Updating eval counter and energy
-        if (item_ct1.get_local_id(2) == 0) {
-                cData.pMem_evals_of_new_entities[run_id *
-                                                     cData.dockpars.pop_size +
-                                                 *entity_id] += *evaluation_cnt;
-                pMem_energies_next[run_id * cData.dockpars.pop_size +
-                                   *entity_id] = *offspring_energy;
-        }
+	if (item_ct1.get_local_id(2) == 0)
+	{
+		cData.pMem_evals_of_new_entities[run_id * cData.dockpars.pop_size + *entity_id] += *evaluation_cnt;
+ 		pMem_energies_next[run_id * cData.dockpars.pop_size + *entity_id] = *offspring_energy;
+	}
 
 	// Mapping torsion angles and writing out results
-        offset = (run_id * cData.dockpars.pop_size + *entity_id) *
-                 GENOTYPE_LENGTH_IN_GLOBMEM;
-        for (uint32_t gene_counter = item_ct1.get_local_id(2);
-             gene_counter < cData.dockpars.num_of_genes;
-             gene_counter += item_ct1.get_local_range().get(2))
-        {
+	offset = (run_id * cData.dockpars.pop_size + *entity_id) * GENOTYPE_LENGTH_IN_GLOBMEM;
+
+	for (uint32_t gene_counter = item_ct1.get_local_id(2);
+				  gene_counter < cData.dockpars.num_of_genes;
+				  gene_counter += item_ct1.get_local_range().get(2))
+	{
 		if (gene_counter >= 3) {
 			map_angle(offspring_genotype[gene_counter]);
 		}
 		pMem_conformations_next[offset + gene_counter] = offspring_genotype[gene_counter];
 	}
 }
-
 
 void gpu_perform_LS(
                     uint32_t blocks,

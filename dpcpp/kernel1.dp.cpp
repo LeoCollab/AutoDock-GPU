@@ -30,31 +30,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 void
 
 gpu_calc_initpop_kernel(
-                        float* pMem_conformations_current,
-                        float* pMem_energies_current
-                       ,
-                        sycl::nd_item<3> item_ct1,
-                        GpuData cData,
-                        sycl::float3 *calc_coords,
-                        float *sFloatAccumulator)
+	float* pMem_conformations_current,
+	float* pMem_energies_current
+	,
+	sycl::nd_item<3> item_ct1,
+	GpuData cData,
+	sycl::float3 *calc_coords,
+	float *sFloatAccumulator)
 {
+	float  energy = 0.0f;
+	int run_id = item_ct1.get_group(2) / cData.dockpars.pop_size;
+	float *pGenotype = pMem_conformations_current + item_ct1.get_group(2) * GENOTYPE_LENGTH_IN_GLOBMEM;
 
-        float  energy = 0.0f;
-        int run_id = item_ct1.get_group(2) / cData.dockpars.pop_size;
-        float *pGenotype = pMem_conformations_current +
-                           item_ct1.get_group(2) * GENOTYPE_LENGTH_IN_GLOBMEM;
-
-        // =============================================================
-        gpu_calc_energy(pGenotype, energy, run_id, calc_coords,
-                        sFloatAccumulator, item_ct1, cData);
-        // =============================================================
+	// =============================================================
+	gpu_calc_energy(
+		pGenotype,
+		energy,
+		run_id,
+		calc_coords,
+		sFloatAccumulator,
+		item_ct1,
+		cData
+	);
+	// =============================================================
 
 	// Write out final energy
-        if (item_ct1.get_local_id(2) == 0)
-        {
-                pMem_energies_current[item_ct1.get_group(2)] = energy;
-                cData.pMem_evals_of_new_entities[item_ct1.get_group(2)] = 1;
-        }
+	if (item_ct1.get_local_id(2) == 0)
+	{
+		pMem_energies_current[item_ct1.get_group(2)] = energy;
+		cData.pMem_evals_of_new_entities[item_ct1.get_group(2)] = 1;
+	}
 }
 
 void gpu_calc_initpop(

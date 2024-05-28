@@ -29,32 +29,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 void
 
-gpu_sum_evals_kernel(sycl::nd_item<3> item_ct1, GpuData cData,
-                     int *sSum_evals)
+gpu_sum_evals_kernel(
+	sycl::nd_item<3> item_ct1,
+	GpuData cData,
+	int *sSum_evals)
 // The GPU global function sums the evaluation counter states
 // which are stored in evals_of_new_entities array foreach entity,
 // calculates the sums for each run and stores it in evals_of_runs array.
 // The number of blocks which should be started equals to num_of_runs,
 // since each block performs the summation for one run.
 {
-
-        int partsum_evals = 0;
-        int *pEvals_of_new_entities =
-            cData.pMem_evals_of_new_entities +
-            item_ct1.get_group(2) * cData.dockpars.pop_size;
-        for (int entity_counter = item_ct1.get_local_id(2);
-             entity_counter < cData.dockpars.pop_size;
-             entity_counter += item_ct1.get_local_range().get(2))
-        {
+	int partsum_evals = 0;
+	int *pEvals_of_new_entities = cData.pMem_evals_of_new_entities + item_ct1.get_group(2) * cData.dockpars.pop_size;
+	for (int entity_counter = item_ct1.get_local_id(2);
+			 entity_counter < cData.dockpars.pop_size;
+			 entity_counter += item_ct1.get_local_range().get(2))
+	{
 		partsum_evals += pEvals_of_new_entities[entity_counter];
 	}
 	
 	// Perform warp-wise reduction
-        REDUCEINTEGERSUM(partsum_evals, sSum_evals);
-        if (item_ct1.get_local_id(2) == 0)
-        {
-            cData.pMem_gpu_evals_of_runs[item_ct1.get_group(2)] += *sSum_evals;
-        }
+	REDUCEINTEGERSUM(partsum_evals, sSum_evals);
+	if (item_ct1.get_local_id(2) == 0)
+	{
+		cData.pMem_gpu_evals_of_runs[item_ct1.get_group(2)] += *sSum_evals;
+	}
 }
 
 void gpu_sum_evals(uint32_t blocks, uint32_t threadsPerBlock)
