@@ -416,52 +416,55 @@ void gpu_gen_and_eval_newpops(
                               float*   pMem_energies_next
                              )
 {
-        /*
-        DPCT1049:65: The workgroup size passed to the SYCL kernel may exceed the
-        limit. To get the device limit, query info::device::max_work_group_size.
-        Adjust the workgroup size if needed.
-        */
-        dpct::get_default_queue().submit([&](sycl::handler &cgh) {
-                extern dpct::constant_memory<GpuData, 0> cData;
+	/*
+	DPCT1049:65: The workgroup size passed to the SYCL kernel may exceed the
+	limit. To get the device limit, query info::device::max_work_group_size.
+	Adjust the workgroup size if needed.
+	*/
+	dpct::get_default_queue().submit([&](sycl::handler &cgh) {
+		extern dpct::constant_memory<GpuData, 0> cData;
+		cData.init();
+		auto cData_ptr_ct1 = cData.get_ptr();
 
-                cData.init();
+		sycl::local_accessor<float, 1> offspring_genotype_acc_ct1(sycl::range<1>(64 /*ACTUAL_GENOTYPE_LENGTH*/), cgh);
+		sycl::local_accessor<int, 1> parent_candidates_acc_ct1(sycl::range<1>(4), cgh);
+		sycl::local_accessor<float, 1> candidate_energies_acc_ct1(sycl::range<1>(4), cgh);
+		sycl::local_accessor<int, 1> parents_acc_ct1(sycl::range<1>(2), cgh);
+		sycl::local_accessor<int, 1> covr_point_acc_ct1(sycl::range<1>(2), cgh);
+		sycl::local_accessor<float, 1> randnums_acc_ct1(sycl::range<1>(10), cgh);
+		sycl::local_accessor<float, 1> sBestEnergy_acc_ct1(sycl::range<1>(32), cgh);
+		sycl::local_accessor<int, 1> sBestID_acc_ct1(sycl::range<1>(32), cgh);
+		sycl::local_accessor<sycl::float3, 1> calc_coords_acc_ct1(sycl::range<1>(256 /*MAX_NUM_OF_ATOMS*/), cgh);
+		sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
 
-                auto cData_ptr_ct1 = cData.get_ptr();
-
-                sycl::local_accessor<float, 1> offspring_genotype_acc_ct1(sycl::range<1>(64 /*ACTUAL_GENOTYPE_LENGTH*/), cgh);
-                sycl::local_accessor<int, 1> parent_candidates_acc_ct1(sycl::range<1>(4), cgh);
-                sycl::local_accessor<float, 1> candidate_energies_acc_ct1(sycl::range<1>(4), cgh);
-                sycl::local_accessor<int, 1> parents_acc_ct1(sycl::range<1>(2), cgh);
-                sycl::local_accessor<int, 1> covr_point_acc_ct1(sycl::range<1>(2), cgh);
-                sycl::local_accessor<float, 1> randnums_acc_ct1(sycl::range<1>(10), cgh);
-                sycl::local_accessor<float, 1> sBestEnergy_acc_ct1(sycl::range<1>(32), cgh);
-                sycl::local_accessor<int, 1> sBestID_acc_ct1(sycl::range<1>(32), cgh);
-                sycl::local_accessor<sycl::float3, 1> calc_coords_acc_ct1(sycl::range<1>(256 /*MAX_NUM_OF_ATOMS*/), cgh);
-                sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
-
-                cgh.parallel_for(
-                    sycl::nd_range<3>(sycl::range<3>(1, 1, blocks) *
-                                          sycl::range<3>(1, 1, threadsPerBlock),
-                                      sycl::range<3>(1, 1, threadsPerBlock)),
-                    [=](sycl::nd_item<3> item_ct1) {
-                            gpu_gen_and_eval_newpops_kernel(
-                                pMem_conformations_current,
-                                pMem_energies_current, pMem_conformations_next,
-                                pMem_energies_next, item_ct1, *cData_ptr_ct1,
-                                offspring_genotype_acc_ct1.get_pointer(),
-                                parent_candidates_acc_ct1.get_pointer(),
-                                candidate_energies_acc_ct1.get_pointer(),
-                                parents_acc_ct1.get_pointer(),
-                                covr_point_acc_ct1.get_pointer(),
-                                randnums_acc_ct1.get_pointer(),
-                                sBestEnergy_acc_ct1.get_pointer(),
-                                sBestID_acc_ct1.get_pointer(),
-                                calc_coords_acc_ct1.get_pointer(),
-                                sFloatAccumulator_acc_ct1.get_pointer());
-                    });
-        });
-        /*
-        DPCT1001:66: The statement could not be removed.
-        */
-        LAUNCHERROR("gpu_gen_and_eval_newpops_kernel");
+		cgh.parallel_for(
+			sycl::nd_range<3>(
+				sycl::range<3>(1, 1, blocks) * sycl::range<3>(1, 1, threadsPerBlock),
+				sycl::range<3>(1, 1, threadsPerBlock)
+			),
+			[=](sycl::nd_item<3> item_ct1) {
+				gpu_gen_and_eval_newpops_kernel(
+					pMem_conformations_current,
+					pMem_energies_current,
+					pMem_conformations_next,
+					pMem_energies_next,
+					item_ct1,
+					*cData_ptr_ct1,
+					offspring_genotype_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					parent_candidates_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					candidate_energies_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					parents_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					covr_point_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					randnums_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					sBestEnergy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					sBestID_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					calc_coords_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+				);
+		});
+	});
+	/*
+	DPCT1001:66: The statement could not be removed.
+	*/
+	LAUNCHERROR("gpu_gen_and_eval_newpops_kernel");
 }
