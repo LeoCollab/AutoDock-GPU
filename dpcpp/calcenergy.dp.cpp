@@ -506,13 +506,6 @@ void gpu_calc_energy(
 	} // End contributor_counter for-loop (INTRAMOLECULAR ENERGY)
 
 	// reduction to calculate energy
-	/*
-	DPCT1039:13: The generated code assumes that "pFloatAccumulator" points
-	to the global memory address space. If it points to a local memory
-	address space, replace "dpct::atomic_fetch_add" with
-	"dpct::atomic_fetch_add<float,
-	sycl::access::address_space::local_space>".
-	*/
 	REDUCEFLOATSUM(energy, pFloatAccumulator)
 #if defined (DEBUG_ENERGY_KERNEL)
 	REDUCEFLOATSUM(intraE, pFloatAccumulator)

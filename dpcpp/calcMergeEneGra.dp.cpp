@@ -694,29 +694,8 @@ void gpu_calc_energrad(
 	}
 
 	// Do a reduction over the total gradient containing prepared "gradient_intra_*" values
-	/*
-	DPCT1039:25: The generated code assumes that "pFloatAccumulator" points
-	to the global memory address space. If it points to a local memory
-	address space, replace "dpct::atomic_fetch_add" with
-	"dpct::atomic_fetch_add<float,
-	sycl::access::address_space::local_space>".
-	*/
 	REDUCEFLOATSUM(torque_rot.x(), pFloatAccumulator);
-	/*
-	DPCT1039:26: The generated code assumes that "pFloatAccumulator" points
-	to the global memory address space. If it points to a local memory
-	address space, replace "dpct::atomic_fetch_add" with
-	"dpct::atomic_fetch_add<float,
-	sycl::access::address_space::local_space>".
-	*/
 	REDUCEFLOATSUM(torque_rot.y(), pFloatAccumulator);
-	/*
-	DPCT1039:27: The generated code assumes that "pFloatAccumulator" points
-	to the global memory address space. If it points to a local memory
-	address space, replace "dpct::atomic_fetch_add" with
-	"dpct::atomic_fetch_add<float,
-	sycl::access::address_space::local_space>".
-	*/
 	REDUCEFLOATSUM(torque_rot.z(), pFloatAccumulator);
 
 	// TODO
@@ -725,44 +704,13 @@ void gpu_calc_energrad(
 	// -------------------------------------------------------
 	// reduction over partial energies and prepared "gradient_intra_*" values
 
-	/*
-	DPCT1039:28: The generated code assumes that "pFloatAccumulator" points
-	to the global memory address space. If it points to a local memory
-	address space, replace "dpct::atomic_fetch_add" with
-	"dpct::atomic_fetch_add<float,
-	sycl::access::address_space::local_space>".
-	*/
 	REDUCEFLOATSUM(energy, pFloatAccumulator);
-
 #if defined (DEBUG_ENERGY_KERNEL)
 	REDUCEFLOATSUM(intraE, pFloatAccumulator);
 #endif
 
-	/*
-	DPCT1039:29: The generated code assumes that "pFloatAccumulator" points
-	to the global memory address space. If it points to a local memory
-	address space, replace "dpct::atomic_fetch_add" with
-	"dpct::atomic_fetch_add<float,
-	sycl::access::address_space::local_space>".
-	*/
 	REDUCEFLOATSUM(gx, pFloatAccumulator);
-
-	/*
-	DPCT1039:30: The generated code assumes that "pFloatAccumulator" points
-	to the global memory address space. If it points to a local memory
-	address space, replace "dpct::atomic_fetch_add" with
-	"dpct::atomic_fetch_add<float,
-	sycl::access::address_space::local_space>".
-	*/
 	REDUCEFLOATSUM(gy, pFloatAccumulator);
-
-	/*
-	DPCT1039:31: The generated code assumes that "pFloatAccumulator" points
-	to the global memory address space. If it points to a local memory
-	address space, replace "dpct::atomic_fetch_add" with
-	"dpct::atomic_fetch_add<float,
-	sycl::access::address_space::local_space>".
-	*/
 	REDUCEFLOATSUM(gz, pFloatAccumulator);
 
 	global_energy = energy;
