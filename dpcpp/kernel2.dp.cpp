@@ -59,32 +59,33 @@ gpu_sum_evals_kernel(sycl::nd_item<3> item_ct1, GpuData cData,
 
 void gpu_sum_evals(uint32_t blocks, uint32_t threadsPerBlock)
 {
-        /*
-        DPCT1049:42: The workgroup size passed to the SYCL kernel may exceed the
-        limit. To get the device limit, query info::device::max_work_group_size.
-        Adjust the workgroup size if needed.
-        */
-        dpct::get_default_queue().submit([&](sycl::handler &cgh) {
-                extern dpct::constant_memory<GpuData, 0> cData;
+	/*
+	DPCT1049:42: The workgroup size passed to the SYCL kernel may exceed the
+	limit. To get the device limit, query info::device::max_work_group_size.
+	Adjust the workgroup size if needed.
+	*/
+	dpct::get_default_queue().submit([&](sycl::handler &cgh) {
+		extern dpct::constant_memory<GpuData, 0> cData;
+		cData.init();
+		auto cData_ptr_ct1 = cData.get_ptr();
 
-                cData.init();
+		sycl::local_accessor<int, 0> sSum_evals_acc_ct1(cgh);
 
-                auto cData_ptr_ct1 = cData.get_ptr();
-
-                sycl::local_accessor<int, 0> sSum_evals_acc_ct1(cgh);
-
-                cgh.parallel_for(
-                    sycl::nd_range<3>(sycl::range<3>(1, 1, blocks) *
-                                          sycl::range<3>(1, 1, threadsPerBlock),
-                                      sycl::range<3>(1, 1, threadsPerBlock)),
-                    [=](sycl::nd_item<3> item_ct1) {
-                            gpu_sum_evals_kernel(
-                                item_ct1, *cData_ptr_ct1,
-                                sSum_evals_acc_ct1.get_pointer());
-                    });
-        });
-        /*
-        DPCT1001:43: The statement could not be removed.
-        */
-        LAUNCHERROR("gpu_sum_evals_kernel");
+		cgh.parallel_for(
+			sycl::nd_range<3>(
+				sycl::range<3>(1, 1, blocks) * sycl::range<3>(1, 1, threadsPerBlock),
+				sycl::range<3>(1, 1, threadsPerBlock)
+			),
+			[=](sycl::nd_item<3> item_ct1) {
+				gpu_sum_evals_kernel(
+					item_ct1,
+					*cData_ptr_ct1,
+					sSum_evals_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+				);
+		});
+	});
+	/*
+	DPCT1001:43: The statement could not be removed.
+	*/
+	LAUNCHERROR("gpu_sum_evals_kernel");
 }
