@@ -70,30 +70,31 @@ void gpu_calc_initpop(
         Adjust the workgroup size if needed.
         */
         dpct::get_default_queue().submit([&](sycl::handler &cgh) {
-                extern dpct::constant_memory<GpuData, 0> cData;
+        	extern dpct::constant_memory<GpuData, 0> cData;
+        	cData.init();
+        	auto cData_ptr_ct1 = cData.get_ptr();
 
-                cData.init();
+			sycl::local_accessor<sycl::float3, 1> calc_coords_acc_ct1(sycl::range<1>(/*256*/ MAX_NUM_OF_ATOMS), cgh);
+			sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
 
-                auto cData_ptr_ct1 = cData.get_ptr();
-
-                sycl::local_accessor<sycl::float3, 1> calc_coords_acc_ct1(sycl::range<1>(/*256*/ MAX_NUM_OF_ATOMS), cgh);
-                sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
-
-                cgh.parallel_for(
-                    sycl::nd_range<3>(sycl::range<3>(1, 1, blocks) *
-                                          sycl::range<3>(1, 1, threadsPerBlock),
-                                      sycl::range<3>(1, 1, threadsPerBlock)),
-                    [=](sycl::nd_item<3> item_ct1) {
-                            gpu_calc_initpop_kernel(
-                                pConformations_current, pEnergies_current,
-                                item_ct1, *cData_ptr_ct1,
-                                calc_coords_acc_ct1.get_pointer(),
-                                sFloatAccumulator_acc_ct1.get_pointer());
-                    });
-        });
+			cgh.parallel_for(
+				sycl::nd_range<3>(
+					sycl::range<3>(1, 1, blocks) * sycl::range<3>(1, 1, threadsPerBlock),
+					sycl::range<3>(1, 1, threadsPerBlock)
+				),
+				[=](sycl::nd_item<3> item_ct1) {
+					gpu_calc_initpop_kernel(
+						pConformations_current,
+						pEnergies_current,
+						item_ct1,
+						*cData_ptr_ct1,
+						calc_coords_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+						sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+					);
+				});
+		});
         /*
         DPCT1001:36: The statement could not be removed.
         */
-        LAUNCHERROR("gpu_calc_initpop_kernel");
+		LAUNCHERROR("gpu_calc_initpop_kernel");
 }
-
