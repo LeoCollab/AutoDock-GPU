@@ -83,10 +83,7 @@ sycl::ext::oneapi::any_of.
 /*
 DPCT1023:41: The DPC++ sub-group does not support mask options for shuffle.
 */
-/*
-DPCT1007:39: Migration of this CUDA API is not supported by the Intel(R) DPC++
-Compatibility Tool.
-*/
+
 #define REDUCEINTEGERSUM(value, pAccumulator)                                          \
         int val = sycl::reduce_over_group(item_ct1.get_group(), value, std::plus<>()); \
         *pAccumulator = val;                                                           \
@@ -119,16 +116,11 @@ valid for all macro uses. Adjust the code.
 DPCT1064:24: Migrated __shfl_sync call is used in a macro definition and is not
 valid for all macro uses. Adjust the code.
 */
-/*
-DPCT1007:9: Migration of this CUDA API is not supported by the Intel(R) DPC++
-Compatibility Tool.
-*/
 
 #define REDUCEFLOATSUM(value, pAccumulator) \
         value = sycl::reduce_over_group(item_ct1.get_group(), value, std::plus<>());\
         *pAccumulator = (float) value;\
         item_ct1.barrier(SYCL_MEMORY_SPACE);
-
 
 static dpct::constant_memory<GpuData, 0> cData;
 static GpuData cpuData;
