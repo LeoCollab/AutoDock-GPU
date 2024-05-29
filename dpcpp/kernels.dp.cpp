@@ -90,16 +90,6 @@ inline int64_t ullitolli(uint64_t u)
 #define ATOMICSUBF32(pAccumulator, value) \
 	sycl::atomic_ref<float, SYCL_ATOMICS_MEMORY_ORDER, SYCL_ATOMICS_MEM_SCOPE, sycl::access::address_space::local_space>(*pAccumulator) -= ((float)(value))
 
-/*
-DPCT1064:23: Migrated __any_sync call is used in a macro definition and is not
-valid for all macro uses. Adjust the code.
-*/
-
-/*
-DPCT1064:24: Migrated __shfl_sync call is used in a macro definition and is not
-valid for all macro uses. Adjust the code.
-*/
-
 #define REDUCEFLOATSUM(value, pAccumulator)	\
 	value = sycl::reduce_over_group(item_ct1.get_group(), value, std::plus<>());	\
 	*pAccumulator = (float) value;	\
