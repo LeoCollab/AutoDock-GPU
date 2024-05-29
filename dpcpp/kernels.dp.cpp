@@ -132,15 +132,7 @@ static GpuData cpuData;
 void SetKernelsGpuData(GpuData *pData) try
 {
 	int status;
-
-	/*
-	DPCT1003:4: Migrated API does not return error code. (*, 0) is inserted.
-	You may need to rewrite this code.
-	*/
-	status = (dpct::get_default_queue()
-				.memcpy(cData.get_ptr(), pData, sizeof(GpuData))
-				.wait(),
-				0);
+	status = (dpct::get_default_queue().memcpy(cData.get_ptr(), pData, sizeof(GpuData)).wait(), 0);
 
 	/*
 	DPCT1001:2: The statement could not be removed.
@@ -158,15 +150,7 @@ catch (sycl::exception const &exc)
 void GetKernelsGpuData(GpuData *pData) try
 {
 	int status;
-
-	/*
-	DPCT1003:7: Migrated API does not return error code. (*, 0) is inserted.
-	You may need to rewrite this code.
-	*/
-	status = (dpct::get_default_queue()
-				.memcpy(pData, cData.get_ptr(), sizeof(GpuData))
-				.wait(),
-				0);
+	status = (dpct::get_default_queue().memcpy(pData, cData.get_ptr(), sizeof(GpuData)).wait(), 0);
 
 	/*
 	DPCT1001:6: The statement could not be removed.
