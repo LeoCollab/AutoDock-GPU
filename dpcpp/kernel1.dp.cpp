@@ -97,8 +97,6 @@ void gpu_calc_initpop(
 				);
 			});
 	});
-	/*
-	DPCT1001:36: The statement could not be removed.
-	*/
+
 	LAUNCHERROR("gpu_calc_initpop_kernel");
 }

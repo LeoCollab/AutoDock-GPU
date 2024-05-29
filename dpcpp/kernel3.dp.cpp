@@ -381,8 +381,6 @@ void gpu_perform_LS(
 				);
 		});
 	});
-	/*
-	DPCT1001:54: The statement could not be removed.
-	*/
+
 	LAUNCHERROR("gpu_perform_LS_kernel");
 }

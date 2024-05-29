@@ -464,8 +464,6 @@ void gpu_gradient_minAdam(
 				);
 		});
 	});
-	/*
-	DPCT1001:82: The statement could not be removed.
-	*/
+
 	LAUNCHERROR("gpu_gradient_minAdam_kernel");
 }

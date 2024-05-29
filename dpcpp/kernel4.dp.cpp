@@ -390,8 +390,6 @@ void gpu_gen_and_eval_newpops(
 				);
 		});
 	});
-	/*
-	DPCT1001:66: The statement could not be removed.
-	*/
+
 	LAUNCHERROR("gpu_gen_and_eval_newpops_kernel");
 }

@@ -102,10 +102,6 @@ void SetKernelsGpuData(GpuData *pData) try
 {
 	int status;
 	status = (dpct::get_default_queue().memcpy(cData.get_ptr(), pData, sizeof(GpuData)).wait(), 0);
-
-	/*
-	DPCT1001:2: The statement could not be removed.
-	*/
 	RTERROR(status, "SetKernelsGpuData copy to cData failed");
 	memcpy(&cpuData, pData, sizeof(GpuData));
 }
@@ -120,10 +116,6 @@ void GetKernelsGpuData(GpuData *pData) try
 {
 	int status;
 	status = (dpct::get_default_queue().memcpy(pData, cData.get_ptr(), sizeof(GpuData)).wait(), 0);
-
-	/*
-	DPCT1001:6: The statement could not be removed.
-	*/
 	RTERROR(status, "GetKernelsGpuData copy From cData failed");
 }
 catch (sycl::exception const &exc)
