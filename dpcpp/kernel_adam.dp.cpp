@@ -93,10 +93,9 @@ gpu_gradient_minAdam_kernel(
         // Gradient of the intermolecular energy per each ligand atom
 	// Also used to store the accummulated gradient per each ligand atom
 #ifdef FLOAT_GRADIENTS
-	float3* cartesian_gradient = (float3*)(calc_coords + cData.dockpars.num_of_atoms);
+	sycl::float3 *cartesian_gradient = (sycl::float3 *)(calc_coords + cData.dockpars.num_of_atoms);
 #else
-        sycl::int3 *cartesian_gradient =
-            (sycl::int3 *)(calc_coords + cData.dockpars.num_of_atoms);
+	sycl::int3 *cartesian_gradient = (sycl::int3 *)(calc_coords + cData.dockpars.num_of_atoms);
 #endif
 
 	// Genotype pointers

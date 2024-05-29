@@ -69,7 +69,7 @@ void gpu_calc_energrad(
 	float &intraE,
 #endif
 #ifdef FLOAT_GRADIENTS
-	float3 *gradient,
+	sycl::float3 *gradient,
 #else
 	sycl::int3 *gradient,
 #endif
@@ -249,13 +249,13 @@ void gpu_calc_energrad(
 			// The idea here is to push the offending
 			// molecule towards the center rather
 			#ifdef FLOAT_GRADIENTS
-			gradient[atom_id].x += 42.0f * x * inv_grid_spacing;
-			gradient[atom_id].y += 42.0f * y * inv_grid_spacing;
-			gradient[atom_id].z += 42.0f * z * inv_grid_spacing;
+			gradient[atom_id].x() += 42.0f * x * inv_grid_spacing;
+			gradient[atom_id].y() += 42.0f * y * inv_grid_spacing;
+			gradient[atom_id].z() += 42.0f * z * inv_grid_spacing;
 			#else
-			gradient[atom_id].x += lrintf(TERMSCALE * 42.0f * x * inv_grid_spacing);
-			gradient[atom_id].y += lrintf(TERMSCALE * 42.0f * y * inv_grid_spacing);
-			gradient[atom_id].z += lrintf(TERMSCALE * 42.0f * z * inv_grid_spacing);
+			gradient[atom_id].x() += lrintf(TERMSCALE * 42.0f * x * inv_grid_spacing);
+			gradient[atom_id].y() += lrintf(TERMSCALE * 42.0f * y * inv_grid_spacing);
+			gradient[atom_id].z() += lrintf(TERMSCALE * 42.0f * z * inv_grid_spacing);
 			#endif // FLOAT_GRADIENTS
 #else
 			energy += 16777216.0f; //100000.0f;
@@ -440,9 +440,9 @@ void gpu_calc_energrad(
 		               dy * (omdx * (cube [idx_011] - cube [idx_010]) + dx * (cube [idx_111] - cube [idx_110])));
 		// -------------------------------------------------------------------
 #ifdef FLOAT_GRADIENTS
-		gradient[atom_id].x += gx;
-		gradient[atom_id].y += gy;
-		gradient[atom_id].z += gz;
+		gradient[atom_id].x() += gx;
+		gradient[atom_id].y() += gy;
+		gradient[atom_id].z() += gz;
 #else
 		gradient[atom_id].x() += sycl::rint(sycl::fmin((float)MAXTERM, sycl::fmax(-MAXTERM, TERMSCALE * gx)));
 		gradient[atom_id].y() += sycl::rint(sycl::fmin((float)MAXTERM, sycl::fmax(-MAXTERM, TERMSCALE * gy)));
@@ -625,13 +625,13 @@ void gpu_calc_energrad(
 		// Gradients for both atoms in a single contributor pair
 		// have the same magnitude, but opposite directions
 #ifdef FLOAT_GRADIENTS
-		ATOMICSUBF32(&gradient[atom1_id].x, priv_intra_gradient_x);
-		ATOMICSUBF32(&gradient[atom1_id].y, priv_intra_gradient_y);
-		ATOMICSUBF32(&gradient[atom1_id].z, priv_intra_gradient_z);
+		ATOMICSUBF32(&gradient[atom1_id].x(), priv_intra_gradient_x);
+		ATOMICSUBF32(&gradient[atom1_id].y(), priv_intra_gradient_y);
+		ATOMICSUBF32(&gradient[atom1_id].z(), priv_intra_gradient_z);
 
-		ATOMICADDF32(&gradient[atom2_id].x, priv_intra_gradient_x);
-		ATOMICADDF32(&gradient[atom2_id].y, priv_intra_gradient_y);
-		ATOMICADDF32(&gradient[atom2_id].z, priv_intra_gradient_z);
+		ATOMICADDF32(&gradient[atom2_id].x(), priv_intra_gradient_x);
+		ATOMICADDF32(&gradient[atom2_id].y(), priv_intra_gradient_y);
+		ATOMICADDF32(&gradient[atom2_id].z(), priv_intra_gradient_z);
 #else
 		ATOMICSUBI32(&gradient[atom1_id].x(), priv_intra_gradient_x);
 		ATOMICSUBI32(&gradient[atom1_id].y(), priv_intra_gradient_y);
@@ -676,9 +676,9 @@ void gpu_calc_energrad(
 		// Re-using "gradient_inter_*" for total gradient (inter+intra)
 		sycl::float3 force;
 #ifdef FLOAT_GRADIENTS
-		force.x = gradient[atom_cnt].x;
-		force.y = gradient[atom_cnt].y;
-		force.z = gradient[atom_cnt].z;
+		force.x() = gradient[atom_cnt].x();
+		force.y() = gradient[atom_cnt].y();
+		force.z() = gradient[atom_cnt].z();
 #else
 		force.x() = ONEOVERTERMSCALE * (float)gradient[atom_cnt].x();
 		force.y() = ONEOVERTERMSCALE * (float)gradient[atom_cnt].y();
@@ -999,9 +999,9 @@ void gpu_calc_energrad(
 
 		// Re-using "gradient_inter_*" for total gradient (inter+intra)
 #ifdef FLOAT_GRADIENTS
-		atom_force.x = gradient[lig_atom_id].x;
-		atom_force.y = gradient[lig_atom_id].y;
-		atom_force.z = gradient[lig_atom_id].z;
+		atom_force.x() = gradient[lig_atom_id].x();
+		atom_force.y() = gradient[lig_atom_id].y();
+		atom_force.z() = gradient[lig_atom_id].z();
 #else
 		atom_force.x() = ONEOVERTERMSCALE * gradient[lig_atom_id].x();
 		atom_force.y() = ONEOVERTERMSCALE * gradient[lig_atom_id].y();

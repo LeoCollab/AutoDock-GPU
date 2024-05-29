@@ -101,11 +101,15 @@ Compatibility Tool.
 /*
 DPCT1058:94: "atomicAdd" is not migrated because it is not called in the code.
 */
-#define ATOMICADDF32(pAccumulator, value) atomicAdd(pAccumulator, (value))
+//#define ATOMICADDF32(pAccumulator, value) atomicAdd(pAccumulator, (value))
+#define ATOMICADDF32(pAccumulator, value) \
+		sycl::atomic_ref<float, SYCL_ATOMICS_MEMORY_ORDER, SYCL_ATOMICS_MEM_SCOPE, sycl::access::address_space::local_space>(*pAccumulator) += ((float)(value))
 /*
 DPCT1058:93: "atomicAdd" is not migrated because it is not called in the code.
 */
-#define ATOMICSUBF32(pAccumulator, value) atomicAdd(pAccumulator, -(value))
+//#define ATOMICSUBF32(pAccumulator, value) atomicAdd(pAccumulator, -(value))
+#define ATOMICSUBF32(pAccumulator, value) \
+		sycl::atomic_ref<float, SYCL_ATOMICS_MEMORY_ORDER, SYCL_ATOMICS_MEM_SCOPE, sycl::access::address_space::local_space>(*pAccumulator) -= ((float)(value))
 
 /*
 DPCT1023:11: The DPC++ sub-group does not support mask options for
