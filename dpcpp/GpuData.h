@@ -23,7 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 */
 
-
 #ifndef GPUDATADOTH
 #define GPUDATADOTH
 #include <CL/sycl.hpp>
@@ -42,48 +41,52 @@ static const float MAXFORCE         = FLT_MAX / 100.0f; // Used to cap absurd gr
 /*
 DPCT1000:3: Error handling if-stmt was detected but could not be rewritten.
 */
+
 /*
 DPCT1009:5: SYCL uses exceptions to report errors and does not use the error
 codes. The original code was commented out and a warning string was inserted.
 You need to rewrite this code.
 */
-#define RTERROR(status, s)                                                              \
-        if (status != 0) {                                                                     \
-                printf(                                                                 \
-                    "%s %s\n", s,                                                       \
-                    "GetErrorString not supported" /*cudaGetErrorString(status)*/); \
-                assert(0);                                                                            \
-                dpct::get_current_device().reset();                                                   \
-                exit(-1);                                                                             \
-        }
+#define RTERROR(status, s)	\
+	if (status != 0)	\
+	{	\
+		printf(	\
+			"%s %s\n", s,	\
+			"GetErrorString not supported" /*cudaGetErrorString(status)*/);	\
+			assert(0);	\
+			dpct::get_current_device().reset();	\
+			exit(-1);	\
+	}
 
 #define SYNCHRONOUS
+
 #ifdef SYNCHRONOUS
 /*
 DPCT1010:37: SYCL uses exceptions to report errors and does not use the error
 codes. The call was replaced with 0. You need to rewrite this code.
 */
+
 /*
 DPCT1009:38: SYCL uses exceptions to report errors and does not use the error
 codes. The original code was commented out and a warning string was inserted.
 You need to rewrite this code.
 */
-#define LAUNCHERROR(s)                                                         \
-        {                                                                      \
-                int status = 0;                                                              \
-                                                                               \
-                XeDeviceSynchronize();                                            \
-                RTERROR(status, s);                                                          \
-        }
+	#define LAUNCHERROR(s)	\
+	{	\
+		int status = 0;	\
+		XeDeviceSynchronize();	\
+		RTERROR(status, s);	\
+	}
 #else
-#define LAUNCHERROR(s) \
-	{ \
-		cudaError_t status = cudaGetLastError(); \
-		if (status != cudaSuccess) { \
+	#define LAUNCHERROR(s)	\
+	{	\
+		cudaError_t status = cudaGetLastError();	\
+		if (status != cudaSuccess)	\
+		{	\
 			printf("Error: %s launching kernel %s\n", cudaGetErrorString(status), s); \
 			cudaDeviceReset(); \
 			exit(-1); \
-		} \
+		}	\
 	}
 #endif
 
@@ -167,4 +170,3 @@ struct GpuTempData {
 	bool        device_busy;
 };
 #endif
-
