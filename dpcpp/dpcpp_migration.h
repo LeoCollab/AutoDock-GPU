@@ -32,13 +32,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 inline int ad_MemGetInfo(size_t *freemem, size_t *totalmem)
 { 
-    
-    dpct::device_info properties; 
-
-    dpct::get_current_device().get_device_info(properties);
-    *freemem = *totalmem = properties.get_global_mem_size();
-    // printf("Freemem is %zu\n", *freemem);
-    // returns 0 if success
-    if (*freemem) return 0; else return (*freemem);
+	dpct::device_info properties;
+	dpct::get_current_device().get_device_info(properties);
+	*freemem = *totalmem = properties.get_global_mem_size();
+	// printf("Freemem is %zu\n", *freemem);
+	// returns 0 if success
+	if (*freemem) return 0; else return (*freemem);
 }
 #endif
