@@ -44,7 +44,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #define RHO             0.8f
 #define EPSILON         1e-2f
 
-
 // Enable DEBUG_ADADELTA_MINIMIZER for a seeing a detailed ADADELTA evolution
 // If only PRINT_ADADELTA_MINIMIZER_ENERGY_EVOLUTION is enabled,
 // then a only a simplified ADADELTA evolution will be shown
@@ -55,17 +54,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 //#define DEBUG_ADADELTA_INITIAL_2BRT
 
 void
-
 gpu_gradient_minAdam_kernel(
-                            float* pMem_conformations_next,
-                            float* pMem_energies_next
-                           ,
-                            sycl::nd_item<3> item_ct1,
-                            GpuData cData,
-                            uint8_t *dpct_local,
-                            int *entity_id,
-                            float *best_energy,
-                            float *sFloatAccumulator)
+	float* pMem_conformations_next,
+	float* pMem_energies_next
+	,
+	sycl::nd_item<3> item_ct1,
+	GpuData cData,
+	uint8_t *dpct_local,
+	int *entity_id,
+	float *best_energy,
+	float *sFloatAccumulator)
 // The GPU global function performs gradient-based minimization on (some) entities of conformations_next.
 // The number of OpenCL compute units (CU) which should be started equals to num_of_minEntities*num_of_runs.
 // This way the first num_of_lsentities entity of each population will be subjected to local search
@@ -79,18 +77,18 @@ gpu_gradient_minAdam_kernel(
 	// -----------------------------------------------------------------------------
 
 	// Determining entity, and its run, energy, and genotype
-        int run_id = item_ct1.get_group(2) / cData.dockpars.num_of_lsentities;
-        float energy;
+	int run_id = item_ct1.get_group(2) / cData.dockpars.num_of_lsentities;
+	float energy;
+
 	// Energy may go up, so we keep track of the best energy ever calculated.
 	// Then, we return the genotype corresponding
 	// to the best observed energy, i.e. "best_genotype"
+	auto sFloatBuff = (float *)dpct_local;
 
-        auto sFloatBuff = (float *)dpct_local;
+	// Ligand-atom position and partial energies
+	sycl::float3 *calc_coords = (sycl::float3 *)sFloatBuff;
 
-        // Ligand-atom position and partial energies
-        sycl::float3 *calc_coords = (sycl::float3 *)sFloatBuff;
-
-        // Gradient of the intermolecular energy per each ligand atom
+	// Gradient of the intermolecular energy per each ligand atom
 	// Also used to store the accummulated gradient per each ligand atom
 #ifdef FLOAT_GRADIENTS
 	sycl::float3 *cartesian_gradient = (sycl::float3 *)(calc_coords + cData.dockpars.num_of_atoms);
@@ -114,24 +112,22 @@ gpu_gradient_minAdam_kernel(
 	// Iteration counter for the minimizer
 	uint32_t iteration_cnt = 0;
 
-        if (item_ct1.get_local_id(2) == 0)
-        {
+	if (item_ct1.get_local_id(2) == 0)
+	{
 		// Since entity 0 is the best one due to elitism,
 		// it should be subjected to random selection
-                *entity_id = item_ct1.get_group(2) % cData.dockpars.num_of_lsentities;
-                if (*entity_id == 0) {
-                        // If entity 0 is not selected according to LS-rate,
+		*entity_id = item_ct1.get_group(2) % cData.dockpars.num_of_lsentities;
+		if (*entity_id == 0)
+		{
+			// If entity 0 is not selected according to LS-rate,
 			// choosing another entity
-                        if (100.0f *
-                                gpu_randf(cData.pMem_prng_states, item_ct1) >
-                            cData.dockpars.lsearch_rate) {
-                                *entity_id =
-                                    cData.dockpars
-                                        .num_of_lsentities; // AT - Should this
-                                                            // be
-                                                            // (uint)(dockpars_pop_size
-                                                            // * gpu_randf(dockpars_prng_states))?
-                        }
+			if (100.0f * gpu_randf(cData.pMem_prng_states, item_ct1) > cData.dockpars.lsearch_rate)
+			{
+				*entity_id = cData.dockpars.num_of_lsentities;	// AT - Should this
+																// be
+																// (uint)(dockpars_pop_size
+																// * gpu_randf(dockpars_prng_states))?
+			}
 		}
 		
 		#if defined (DEBUG_ADADELTA_MINIMIZER) || defined (PRINT_ADADELTA_MINIMIZER_ENERGY_EVOLUTION)
@@ -144,15 +140,16 @@ gpu_gradient_minAdam_kernel(
 		printf("%20s %.6f\n", "initial energy: ", energy);
 		#endif
 	}
-        item_ct1.barrier(SYCL_MEMORY_SPACE);
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-        energy = pMem_energies_next[run_id * cData.dockpars.pop_size + *entity_id];
+	energy = pMem_energies_next[run_id * cData.dockpars.pop_size + *entity_id];
 
-        int offset = (run_id * cData.dockpars.pop_size + *entity_id) *
-                     GENOTYPE_LENGTH_IN_GLOBMEM;
-        for (int i = item_ct1.get_local_id(2); i < cData.dockpars.num_of_genes;
-             i += item_ct1.get_local_range().get(2))
-        {
+	int offset = (run_id * cData.dockpars.pop_size + *entity_id) * GENOTYPE_LENGTH_IN_GLOBMEM;
+
+	for (int i = item_ct1.get_local_id(2);
+			 i < cData.dockpars.num_of_genes;
+			 i += item_ct1.get_local_range().get(2))
+	{
 		genotype[i] = pMem_conformations_next[offset + i];
 	}
 
@@ -177,28 +174,31 @@ gpu_gradient_minAdam_kernel(
 	// Asynchronous copy should be finished by here
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-        // Enable this for debugging ADADELTA from a defined initial genotype
+	// Enable this for debugging ADADELTA from a defined initial genotype
 
 	// Initializing vectors
-        for (uint32_t i = item_ct1.get_local_id(2);
-             i < cData.dockpars.num_of_genes;
-             i += item_ct1.get_local_range().get(2)) {
-                gradient[i]        = 0.0f;
-		mt[i]              = 0.0f;
-		vt[i]              = 0.0f;
+	for (uint32_t i = item_ct1.get_local_id(2);
+				  i < cData.dockpars.num_of_genes;
+				  i += item_ct1.get_local_range().get(2))
+	{
+		gradient[i]      = 0.0f;
+		mt[i]			 = 0.0f;
+		vt[i]			 = 0.0f;
 		best_genotype[i] = genotype[i];
 	}
 
 	// Initializing best energy
-        if (item_ct1.get_local_id(2) == 0) {
-                *best_energy = INFINITY;
-        }
+	if (item_ct1.get_local_id(2) == 0)
+	{
+		*best_energy = INFINITY;
+	}
 
 #ifdef AD_RHO_CRITERION
 	__shared__ float rho;
 	__shared__ int cons_succ;
 	__shared__ int cons_fail;
-	if (threadIdx.x == 0) {
+	if (threadIdx.x == 0)
+	{
 		rho = 1.0f;
 		cons_succ = 0;
 		cons_fail = 0;
@@ -228,17 +228,26 @@ gpu_gradient_minAdam_kernel(
 		// Calculating energy & gradient
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-                gpu_calc_energrad(genotype, energy, run_id, calc_coords,
-#if defined (DEBUG_ENERGY_KERNEL)
-                                  interE, intraE,
-		                  #endif
-                                  // Gradient-related arguments
-                                  cartesian_gradient, gradient,
-                                  sFloatAccumulator, item_ct1, cData);
+		gpu_calc_energrad(
+			genotype,
+			energy,
+			run_id,
+			calc_coords,
+			#if defined (DEBUG_ENERGY_KERNEL)
+			interE,
+			intraE,
+			#endif
+			// Gradient-related arguments
+			cartesian_gradient,
+			gradient,
+			sFloatAccumulator,
+			item_ct1,
+			cData
+		);
+		// =============================================================
+		// =============================================================
+		// =============================================================
 
-		// =============================================================
-		// =============================================================
-		// =============================================================
 		#if defined (DEBUG_ENERGY_ADADELTA)
 		if (threadIdx.x == 0) {
 			#if defined (PRINT_ADADELTA_ENERGIES)
@@ -287,20 +296,18 @@ gpu_gradient_minAdam_kernel(
 			}
 		}
 #endif
-                float beta1p =
-                    1.0f - SYCL_POWN(cData.dockpars.adam_beta1, (1.0f + iteration_cnt));
-                float beta2p =
-                    1.0f - SYCL_POWN(cData.dockpars.adam_beta2, (1.0f + iteration_cnt));
 
-                for (int i = item_ct1.get_local_id(2);
-                     i < cData.dockpars.num_of_genes;
-                     i += item_ct1.get_local_range().get(2))
-                {
-                        if (energy <
-                            *best_energy) // we need to be careful not to change
-                                          // best_energy until we had a chance
-                                          // to update the whole array
-                                best_genotype[i] = genotype[i];
+		float beta1p = 1.0f - SYCL_POWN(cData.dockpars.adam_beta1, (1.0f + iteration_cnt));
+		float beta2p = 1.0f - SYCL_POWN(cData.dockpars.adam_beta2, (1.0f + iteration_cnt));
+
+		for (int i = item_ct1.get_local_id(2);
+				 i < cData.dockpars.num_of_genes;
+				 i += item_ct1.get_local_range().get(2))
+		{
+			if (energy < *best_energy)	// we need to be careful not to change
+										// best_energy until we had a chance
+										// to update the whole array
+				best_genotype[i] = genotype[i];
 			
 			// Update Adam parameters
 			mt[i] = cData.dockpars.adam_beta1 * mt[i] + (1.0f - cData.dockpars.adam_beta1) * gradient[i];
@@ -310,10 +317,10 @@ gpu_gradient_minAdam_kernel(
 
 			// Applying update
 			genotype[i] -= SYCL_DIVIDE(mp, (SYCL_SQRT(vp) + cData.dockpars.adam_epsilon));
-                }
+		}
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-#if defined (DEBUG_SQDELTA_ADADELTA)
+		#if defined (DEBUG_SQDELTA_ADADELTA)
 		if (/*(get_group_id(0) == 0) &&*/ (threadIdx.x == 0)) {
 			for(int i = 0; i < cData.dockpars.num_of_genes; i++) {
 				if (i == 0) {
@@ -328,22 +335,23 @@ gpu_gradient_minAdam_kernel(
 
 		// Updating number of ADADELTA iterations (energy evaluations)
 		iteration_cnt = iteration_cnt + 1;
-                if (item_ct1.get_local_id(2) == 0) {
-                        if (energy < *best_energy)
-                        {
-                                *best_energy = energy;
-#ifdef AD_RHO_CRITERION
+		if (item_ct1.get_local_id(2) == 0)
+		{
+			if (energy < *best_energy)
+			{
+				*best_energy = energy;
+				#ifdef AD_RHO_CRITERION
 				cons_succ++;
 				cons_fail = 0;
-#endif
+				#endif
 			}
-#ifdef AD_RHO_CRITERION
+			#ifdef AD_RHO_CRITERION
 			else
 			{
 				cons_succ = 0;
 				cons_fail++;
 			}
-#endif
+			#endif
 
 			#if defined (DEBUG_ADADELTA_MINIMIZER) || defined (PRINT_ADADELTA_MINIMIZER_ENERGY_EVOLUTION)
 			printf("%20s %10.6f\n", "new.energy: ", energy);
@@ -352,7 +360,8 @@ gpu_gradient_minAdam_kernel(
 			#if defined (DEBUG_ENERGY_ADADELTA)
 			printf("%-18s [%-5s]---{%-5s}   [%-10.7f]---{%-10.7f}\n", "-ENERGY-KERNEL7-", "GRIDS", "INTRA", partial_interE[0], partial_intraE[0]);
 			#endif
-#ifdef AD_RHO_CRITERION
+
+			#ifdef AD_RHO_CRITERION
 			if (cons_succ >= 4)
 			{
 				rho *= LS_EXP_FACTOR;
@@ -366,7 +375,7 @@ gpu_gradient_minAdam_kernel(
 					cons_fail = 0;
 				}
 			}
-#endif
+			#endif
 		}
 
 		item_ct1.barrier(SYCL_MEMORY_SPACE); // making sure that iteration_cnt is up-to-date
@@ -380,41 +389,38 @@ gpu_gradient_minAdam_kernel(
 	// -----------------------------------------------------------------------------
 
 	// Mapping torsion angles
-        for (uint32_t gene_counter = item_ct1.get_local_id(2) + 3;
-             gene_counter < cData.dockpars.num_of_genes;
-             gene_counter += item_ct1.get_local_range().get(2))
-        {
+	for (uint32_t gene_counter = item_ct1.get_local_id(2) + 3;
+				  gene_counter < cData.dockpars.num_of_genes;
+				  gene_counter += item_ct1.get_local_range().get(2))
+	{
 		map_angle(best_genotype[gene_counter]);
 	}
 
 	// Updating old offspring in population
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-        offset = (run_id * cData.dockpars.pop_size + *entity_id) *
-                 GENOTYPE_LENGTH_IN_GLOBMEM;
-        for (uint gene_counter = item_ct1.get_local_id(2);
-             gene_counter < cData.dockpars.num_of_genes;
-             gene_counter += item_ct1.get_local_range().get(2))
-        {
+	offset = (run_id * cData.dockpars.pop_size + *entity_id) * GENOTYPE_LENGTH_IN_GLOBMEM;
+
+	for (uint gene_counter = item_ct1.get_local_id(2);
+			  gene_counter < cData.dockpars.num_of_genes;
+			  gene_counter += item_ct1.get_local_range().get(2))
+	{
 		pMem_conformations_next[gene_counter + offset] = best_genotype[gene_counter];
 	}
 
 	// Updating eval counter and energy
-        if (item_ct1.get_local_id(2) == 0) {
-                cData.pMem_evals_of_new_entities[run_id *
-                                                     cData.dockpars.pop_size +
-                                                 *entity_id] += iteration_cnt;
-                pMem_energies_next[run_id * cData.dockpars.pop_size +
-                                   *entity_id] = *best_energy;
+	if (item_ct1.get_local_id(2) == 0)
+	{
+		cData.pMem_evals_of_new_entities[run_id * cData.dockpars.pop_size + *entity_id] += iteration_cnt;
+		pMem_energies_next[run_id * cData.dockpars.pop_size + *entity_id] = *best_energy;
 
-#if defined (DEBUG_ADADELTA_MINIMIZER) || defined (PRINT_ADADELTA_MINIMIZER_ENERGY_EVOLUTION)
+		#if defined (DEBUG_ADADELTA_MINIMIZER) || defined (PRINT_ADADELTA_MINIMIZER_ENERGY_EVOLUTION)
 		printf("\n");
 		printf("Termination criteria: ( #adadelta-iters >= %-3u )\n", dockpars_max_num_of_iters);
 		printf("-------> End of ADADELTA minimization cycle, num of energy evals: %u, final energy: %.6f\n", iteration_cnt, best_energy);
 		#endif
 	}
 }
-
 
 void gpu_gradient_minAdam(
                           uint32_t blocks,
