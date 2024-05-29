@@ -54,9 +54,6 @@ inline int64_t ullitolli(uint64_t u)
 	return l;
 }
 
-/*
-DPCT1023:57: The DPC++ sub-group does not support mask options for shuffle.
-*/
 #define WARPMINIMUMEXCHANGE(tgx, v0, k0, mask)	\
 {	\
 	float v1 = v0;	\
@@ -76,15 +73,6 @@ DPCT1023:57: The DPC++ sub-group does not support mask options for shuffle.
 	WARPMINIMUMEXCHANGE(tgx, v0, k0, 8) \
 	WARPMINIMUMEXCHANGE(tgx, v0, k0, 16)
 
-/*
-DPCT1023:40: The DPC++ sub-group does not support mask options for
-sycl::ext::oneapi::any_of.
-*/
-
-/*
-DPCT1023:41: The DPC++ sub-group does not support mask options for shuffle.
-*/
-
 #define REDUCEINTEGERSUM(value, pAccumulator)	\
 	int val = sycl::reduce_over_group(item_ct1.get_group(), value, std::plus<>());	\
 	*pAccumulator = val;	\
@@ -101,15 +89,6 @@ DPCT1023:41: The DPC++ sub-group does not support mask options for shuffle.
 
 #define ATOMICSUBF32(pAccumulator, value) \
 	sycl::atomic_ref<float, SYCL_ATOMICS_MEMORY_ORDER, SYCL_ATOMICS_MEM_SCOPE, sycl::access::address_space::local_space>(*pAccumulator) -= ((float)(value))
-
-/*
-DPCT1023:11: The DPC++ sub-group does not support mask options for
-sycl::ext::oneapi::any_of.
-*/
-
-/*
-DPCT1023:12: The DPC++ sub-group does not support mask options for shuffle.
-*/
 
 /*
 DPCT1064:23: Migrated __any_sync call is used in a macro definition and is not
