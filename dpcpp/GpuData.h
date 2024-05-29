@@ -38,15 +38,6 @@ static const float MAXREDUCE        = (float)(1 << (31 - TERMBITS - 4)); // 2^(3
 static const float MAXENERGY        = FLT_MAX / 100.0f; // Used to cap absurd energies so placeholder energy is always skipped in sorts
 static const float MAXFORCE         = FLT_MAX / 100.0f; // Used to cap absurd gradients
 
-/*
-DPCT1000:3: Error handling if-stmt was detected but could not be rewritten.
-*/
-
-/*
-DPCT1009:5: SYCL uses exceptions to report errors and does not use the error
-codes. The original code was commented out and a warning string was inserted.
-You need to rewrite this code.
-*/
 #define RTERROR(status, s)	\
 	if (status != 0)	\
 	{	\
@@ -61,16 +52,6 @@ You need to rewrite this code.
 #define SYNCHRONOUS
 
 #ifdef SYNCHRONOUS
-/*
-DPCT1010:37: SYCL uses exceptions to report errors and does not use the error
-codes. The call was replaced with 0. You need to rewrite this code.
-*/
-
-/*
-DPCT1009:38: SYCL uses exceptions to report errors and does not use the error
-codes. The original code was commented out and a warning string was inserted.
-You need to rewrite this code.
-*/
 	#define LAUNCHERROR(s)	\
 	{	\
 		int status = 0;	\
