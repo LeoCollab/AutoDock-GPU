@@ -1,0 +1,6 @@
+#ifndef CUSTOM_DYN_MEM_ALLOC_HPP
+#define CUSTOM_DYN_MEM_ALLOC_HPP
+
+//#define CUSTOM_DYN_MEM_ALLOC
+
+#endif

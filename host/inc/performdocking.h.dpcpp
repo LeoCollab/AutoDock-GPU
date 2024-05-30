@@ -51,6 +51,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define ELAPSEDSECS(stop,start) ((float) stop-start)/((float) CLOCKS_PER_SEC)
 
+#include "custom_dyn_mem_allocation.hpp"
+
 #if 0
 // Experimental TSRI gradient-based minimizer kernel argument
 // Setup here (temporarily?) the gradient-based minimizer and associated parameters.

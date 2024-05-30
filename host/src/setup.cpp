@@ -92,7 +92,11 @@ int setup(
 		if (argcmp("derivtype", argv [i], 'T'))
 		{
 			if(mypars->nr_deriv_atypes==0){
+				#ifdef CUSTOM_DYN_MEM_ALLOC
+				
+				#else
 				mypars->deriv_atypes=(deriv_atype*)malloc(sizeof(deriv_atype));
+				#endif
 				if(mypars->deriv_atypes==NULL){
 					printf("Error: Cannot allocate memory for --derivtype (-T).\n");
 					exit(1);
@@ -191,7 +195,11 @@ int setup(
 			while(success && (*tmp!='\0')){
 				mypars->nr_mod_atype_pairs++;
 				if(mypars->nr_mod_atype_pairs==1)
+					#ifdef CUSTOM_DYN_MEM_ALLOC
+					
+					#else
 					mypars->mod_atype_pairs=(pair_mod*)malloc(sizeof(pair_mod));
+					#endif
 				else
 					mypars->mod_atype_pairs=(pair_mod*)realloc(mypars->mod_atype_pairs, mypars->nr_mod_atype_pairs*sizeof(pair_mod));
 				if(mypars->mod_atype_pairs==NULL){
@@ -357,7 +365,11 @@ int setup(
 	// command-line specified resname with more than one file
 	if (!mypars->xml2dlg){ // if the user specified an xml file, that's the one we want to use
 		if ((strcmp(orig_resname,mypars->resname)!=0) && (filelist.nfiles>1)){ // use resname as prefix
+			#ifdef CUSTOM_DYN_MEM_ALLOC
+			
+			#else
 			char* tmp = (char*)malloc(strlen(mypars->resname)+strlen(orig_resname)+1);
+			#endif
 			// take care of potential directory path
 			long long dir = strrchr(orig_resname,'/')-orig_resname+1;
 			if(dir>0){

@@ -180,8 +180,12 @@ try {
 
 	RTERROR((dpct::dev_mgr::instance().get_device(cData.devnum).get_device_info(props), 0), "cudaGetDeviceProperties failed");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	tData.device_name = (char *)malloc(strlen(props.get_name()) + 32);	// make sure array is large enough
 																		// to hold device number text too
+	#endif
 
 	strcpy(tData.device_name, props.get_name());
 	if (gpuCount > 1) sprintf(&tData.device_name[strlen(props.get_name())]," (#%d / %d)", cData.devnum + 1, gpuCount);
@@ -225,38 +229,82 @@ try {
 	*/
 
 	// Allocate kernel constant GPU memory
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (cData.pKerconst_interintra = sycl::malloc_device<kernelconstant_interintra>(1, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cData.pKerconst_interintra: failed to allocate GPU memory.\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (cData.pKerconst_intracontrib = sycl::malloc_device<kernelconstant_intracontrib>(1, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status,"cData.pKerconst_intracontrib: failed to allocate GPU memory.\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (cData.pKerconst_intra = sycl::malloc_device<kernelconstant_intra>(1, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cData.pKerconst_intra: failed to allocate GPU memory.\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (cData.pKerconst_rotlist = sycl::malloc_device<kernelconstant_rotlist>(1, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cData.pKerconst_rotlist: failed to allocate GPU memory.\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (cData.pKerconst_conform = sycl::malloc_device<kernelconstant_conform>(1, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cData.pKerconst_conform: failed to allocate GPU memory.\n");
 
 	// Allocate mem data
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (cData.pMem_angle_const = sycl::malloc_device<float>(1000, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cData.pMem_angle_const: failed to allocate GPU memory.\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (cData.pMem_dependence_on_theta_const = sycl::malloc_device<float>(1000, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cData.pMem_dependence_on_theta_const: failed to " "allocate GPU memory.\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (cData.pMem_dependence_on_rotangle_const = sycl::malloc_device<float>(1000, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cData.pMem_dependence_on_rotangle_const: failed to " "allocate GPU memory.\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (cData.pMem_rotbonds_const = sycl::malloc_device<int>(2 * MAX_NUM_OF_ROTBONDS, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cData.pMem_rotbonds_const: failed to allocate GPU memory.\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (cData.pMem_rotbonds_atoms_const = sycl::malloc_device<int>(MAX_NUM_OF_ATOMS * MAX_NUM_OF_ROTBONDS, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cData.pMem_rotbonds_atoms_const: failed to allocate " "GPU memory.\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (cData.pMem_num_rotating_atoms_per_rotbond_const = sycl::malloc_device<int>(MAX_NUM_OF_ROTBONDS, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cData.pMem_num_rotiating_atoms_per_rotbond_const: " "failed to allocate GPU memory.\n");
 
 	// Upload mem data
@@ -276,38 +324,70 @@ try {
 	// Allocate temporary data - JL TODO - Are these sizes correct?
 	if(cData.preallocated_gridsize>0)
 	{
+		#ifdef CUSTOM_DYN_MEM_ALLOC
+		
+		#else
 		status = (tData.pMem_fgrids = sycl::malloc_device<float>(cData.preallocated_gridsize, dpct::get_default_queue()), 0);
+		#endif
 		RTERROR(status, "pMem_fgrids: failed to allocate GPU memory.\n");
 	}
 
 	size_t size_populations = MAX_NUM_OF_RUNS * MAX_POPSIZE * GENOTYPE_LENGTH_IN_GLOBMEM * sizeof(float);
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (((tData.pMem_conformations1) = (float *)sycl::malloc_device(size_populations, dpct::get_default_queue())), 0);
+	#endif
 	RTERROR(status, "pMem_conformations1: failed to allocate GPU memory.\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (((tData.pMem_conformations2) = (float *)sycl::malloc_device(size_populations, dpct::get_default_queue())), 0);
+	#endif
 	RTERROR(status, "pMem_conformations2: failed to allocate GPU memory.\n");
 
 	size_t size_energies = MAX_POPSIZE * MAX_NUM_OF_RUNS * sizeof(float);
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (((tData.pMem_energies1) = (float *)sycl::malloc_device(size_energies, dpct::get_default_queue())), 0);
+	#endif
 	RTERROR(status, "pMem_energies1: failed to allocate GPU memory.\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (((tData.pMem_energies2) = (float *)sycl::malloc_device(size_energies, dpct::get_default_queue())), 0);
+	#endif
 	RTERROR(status, "pMem_energies2: failed to allocate GPU memory.\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (((tData.pMem_evals_of_new_entities) = sycl::malloc_device<int>(MAX_POPSIZE * MAX_NUM_OF_RUNS, dpct::get_default_queue())), 0);
+	#endif
 	RTERROR(status, "pMem_evals_of_new_Entities: failed to allocate GPU memory.\n");
 
 	size_t size_evals_of_runs = MAX_NUM_OF_RUNS*sizeof(int);
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (((tData.pMem_gpu_evals_of_runs) = (int *)sycl::malloc_shared(size_evals_of_runs, dpct::get_default_queue())), 0);
+	#endif
 	RTERROR(status, "pMem_gpu_evals_of_runs: failed to allocate GPU memory.\n");
 
 	size_t blocksPerGridForEachEntity = MAX_POPSIZE * MAX_NUM_OF_RUNS;
 	size_t size_prng_seeds = blocksPerGridForEachEntity * NUM_OF_THREADS_PER_BLOCK * sizeof(unsigned int);
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (((tData.pMem_prng_states) = (uint32_t *)sycl::malloc_device(size_prng_seeds, dpct::get_default_queue())), 0);
+	#endif
 	RTERROR(status, "pMem_prng_states: failed to allocate GPU memory.\n");
 }
 catch (sycl::exception const &exc)
@@ -422,7 +502,15 @@ int docking_with_gpu(
 try
 {
 	char* outbuf;
-	if(output!=NULL) outbuf = (char*)malloc(256*sizeof(char));
+	
+	if(output!=NULL)
+	{
+		#ifdef CUSTOM_DYN_MEM_ALLOC
+		
+		#else
+		outbuf = (char*)malloc(256*sizeof(char));
+		#endif
+	}
 
 	auto const t1 = std::chrono::steady_clock::now();
 
@@ -479,7 +567,12 @@ try
 	// allocating memory in CPU for pseudorandom number generator seeds and
 	// generating them (seed for each thread during GA)
 	size_prng_seeds = blocksPerGridForEachEntity * threadsPerBlock * sizeof(unsigned int);
+	
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	cpu_prng_seeds = (unsigned int*) malloc(size_prng_seeds);
+	#endif
 
 	LocalRNG r(mypars->seed);
 //	para_printf("RNG seed is %u\n", mypars->seed);
@@ -545,7 +638,11 @@ try
 	// evaluation counters and random number generator states
 	if(cData.preallocated_gridsize==0)
 	{
+		#ifdef CUSTOM_DYN_MEM_ALLOC
+		
+		#else
 		status = (tData.pMem_fgrids = sycl::malloc_device<float>(mygrid->grids.size(), dpct::get_default_queue()), 0);
+		#endif
 		RTERROR(status, "pMem_fgrids: failed to allocate GPU memory.\n");
 	}
 
