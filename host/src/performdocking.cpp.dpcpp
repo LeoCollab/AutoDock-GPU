@@ -105,10 +105,6 @@ try
 	int gpuCount = 0;
 	int status;
 
-	/*
-	DPCT1003:90: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (gpuCount = dpct::dev_mgr::instance().device_count(), 0);
 
 	/*
@@ -119,10 +115,6 @@ try
 	dpct::device_info props;
 	for (unsigned int i = 0; i < gpuCount; i++)
 	{
-		/*
-		DPCT1003:91: Migrated API does not return error code. (*, 0) is
-		inserted. You may need to rewrite this code.
-		*/
 		RTERROR((dpct::dev_mgr::instance().get_device(i).get_device_info(props), 0), "cudaGetDeviceProperties failed");
 
 		/*
@@ -160,10 +152,6 @@ try {
 	// Initialize CUDA
 	int gpuCount=0;
 
-	/*
-	DPCT1003:109: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.  ACK
-	*/
 	int status = (gpuCount = dpct::dev_mgr::instance().device_count(), 0);
 
 	/*
@@ -184,18 +172,10 @@ try {
 	}
 
 	if (cData.devnum<0)
-		/*
-		DPCT1003:110: Migrated API does not return error code. (*, 0) is
-		inserted. You may need to rewrite this code. ACK
-		*/
 		status = (sycl::free(NULL, dpct::get_default_queue()),
 				  0); // Trick driver into creating context on current device
 	else
 	{
-		/*
-		DPCT1003:111: Migrated API does not return error code. (*, 0) is
-		inserted. You may need to rewrite this code. ACK
-		*/
 		status = (dpct::dev_mgr::instance().select_device(cData.devnum), 0);
 	}
 
@@ -203,16 +183,9 @@ try {
 	size_t freemem, totalmem;
 	dpct::device_info props;
 
-	RTERROR((cData.devnum = dpct::dev_mgr::instance().current_device_id()),
-			"cudaGetDevice failed");
+	RTERROR((cData.devnum = dpct::dev_mgr::instance().current_device_id()), "cudaGetDevice failed");
 
-	/*
-	DPCT1003:112: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code. ACK
-	*/
-	RTERROR((dpct::dev_mgr::instance().get_device(cData.devnum).get_device_info(props),
-				0),
-				"cudaGetDeviceProperties failed");
+	RTERROR((dpct::dev_mgr::instance().get_device(cData.devnum).get_device_info(props), 0), "cudaGetDeviceProperties failed");
 
 	tData.device_name = (char *)malloc(strlen(props.get_name()) + 32);	// make sure array is large enough
 																		// to hold device number text too
@@ -260,124 +233,68 @@ try {
 
 	// Allocate kernel constant GPU memory
 
-	/*
-	DPCT1003:113: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (cData.pKerconst_interintra = sycl::malloc_device<kernelconstant_interintra>(1, dpct::get_default_queue()), 0);
-
 	/*
 	DPCT1001:88: The statement could not be removed.
 	*/
 	RTERROR(status, "cData.pKerconst_interintra: failed to allocate GPU memory.\n");
 
-	/*
-	DPCT1003:114: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (cData.pKerconst_intracontrib = sycl::malloc_device<kernelconstant_intracontrib>(1, dpct::get_default_queue()), 0);
-
 	/*
 	DPCT1001:89: The statement could not be removed.
 	*/
 	RTERROR(status,"cData.pKerconst_intracontrib: failed to allocate GPU memory.\n");
 
-	/*
-	DPCT1003:115: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (cData.pKerconst_intra = sycl::malloc_device<kernelconstant_intra>(1, dpct::get_default_queue()), 0);
-
 	/*
 	DPCT1001:90: The statement could not be removed.
 	*/
 	RTERROR(status, "cData.pKerconst_intra: failed to allocate GPU memory.\n");
 
-	/*
-	DPCT1003:116: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (cData.pKerconst_rotlist = sycl::malloc_device<kernelconstant_rotlist>(1, dpct::get_default_queue()), 0);
-
 	/*
 	DPCT1001:91: The statement could not be removed.
 	*/
 	RTERROR(status, "cData.pKerconst_rotlist: failed to allocate GPU memory.\n");
 
-	/*
-	DPCT1003:117: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code. ACK
-	*/
 	status = (cData.pKerconst_conform = sycl::malloc_device<kernelconstant_conform>(1, dpct::get_default_queue()), 0);
-
 	/*
 	DPCT1001:92: The statement could not be removed.
 	*/
 	RTERROR(status, "cData.pKerconst_conform: failed to allocate GPU memory.\n");
 
 	// Allocate mem data
-
-	/*
-	DPCT1003:118: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (cData.pMem_angle_const = sycl::malloc_device<float>(1000, dpct::get_default_queue()), 0);
-
 	/*
 	DPCT1001:93: The statement could not be removed.
 	*/
 	RTERROR(status, "cData.pMem_angle_const: failed to allocate GPU memory.\n");
 
-	/*
-	DPCT1003:119: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (cData.pMem_dependence_on_theta_const = sycl::malloc_device<float>(1000, dpct::get_default_queue()), 0);
-
 	/*
 	DPCT1001:94: The statement could not be removed.
 	*/
 	RTERROR(status, "cData.pMem_dependence_on_theta_const: failed to " "allocate GPU memory.\n");
 
-	/*
-	DPCT1003:120: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (cData.pMem_dependence_on_rotangle_const = sycl::malloc_device<float>(1000, dpct::get_default_queue()), 0);
-
 	/*
 	DPCT1001:95: The statement could not be removed.
 	*/
 	RTERROR(status, "cData.pMem_dependence_on_rotangle_const: failed to " "allocate GPU memory.\n");
 
-	/*
-	DPCT1003:121: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (cData.pMem_rotbonds_const = sycl::malloc_device<int>(2 * MAX_NUM_OF_ROTBONDS, dpct::get_default_queue()), 0);
-
 	/*
 	DPCT1001:96: The statement could not be removed.
 	*/
 	RTERROR(status, "cData.pMem_rotbonds_const: failed to allocate GPU memory.\n");
 
-	/*
-	DPCT1003:122: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (cData.pMem_rotbonds_atoms_const = sycl::malloc_device<int>(MAX_NUM_OF_ATOMS * MAX_NUM_OF_ROTBONDS, dpct::get_default_queue()), 0);
-
 	/*
 	DPCT1001:97: The statement could not be removed.
 	*/
 	RTERROR(status, "cData.pMem_rotbonds_atoms_const: failed to allocate " "GPU memory.\n");
 
-	/*
-	DPCT1003:123: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (cData.pMem_num_rotating_atoms_per_rotbond_const = sycl::malloc_device<int>(MAX_NUM_OF_ROTBONDS, dpct::get_default_queue()), 0);
-
 	/*
 	DPCT1001:98: The statement could not be removed.
 	*/
@@ -413,10 +330,6 @@ try {
 	// Allocate temporary data - JL TODO - Are these sizes correct?
 	if(cData.preallocated_gridsize>0)
 	{
-		/*
-		DPCT1003:125: Migrated API does not return error code. (*, 0) is
-		inserted. You may need to rewrite this code.
-		*/
 		status = (tData.pMem_fgrids = sycl::malloc_device<float>(cData.preallocated_gridsize, dpct::get_default_queue()), 0);
 		/*
 		DPCT1001:124: The statement could not be removed.
@@ -426,10 +339,6 @@ try {
 
 	size_t size_populations = MAX_NUM_OF_RUNS * MAX_POPSIZE * GENOTYPE_LENGTH_IN_GLOBMEM * sizeof(float);
 
-	/*
-	DPCT1003:126: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (((tData.pMem_conformations1) = (float *)sycl::malloc_device(size_populations, dpct::get_default_queue())), 0);
 
 	/*
@@ -437,12 +346,7 @@ try {
 	*/
 	RTERROR(status, "pMem_conformations1: failed to allocate GPU memory.\n");
 
-	/*
-	DPCT1003:127: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (((tData.pMem_conformations2) = (float *)sycl::malloc_device(size_populations, dpct::get_default_queue())), 0);
-
 	/*
 	DPCT1001:103: The statement could not be removed.
 	*/
@@ -450,34 +354,19 @@ try {
 
 	size_t size_energies = MAX_POPSIZE * MAX_NUM_OF_RUNS * sizeof(float);
 
-	/*
-	DPCT1003:128: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (((tData.pMem_energies1) = (float *)sycl::malloc_device(size_energies, dpct::get_default_queue())), 0);
-
 	/*
 	DPCT1001:104: The statement could not be removed.
 	*/
 	RTERROR(status, "pMem_energies1: failed to allocate GPU memory.\n");
 
-	/*
-	DPCT1003:129: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (((tData.pMem_energies2) = (float *)sycl::malloc_device(size_energies, dpct::get_default_queue())), 0);
-
 	/*
 	DPCT1001:105: The statement could not be removed.
 	*/
 	RTERROR(status, "pMem_energies2: failed to allocate GPU memory.\n");
 
-	/*
-	DPCT1003:130: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (((tData.pMem_evals_of_new_entities) = sycl::malloc_device<int>(MAX_POPSIZE * MAX_NUM_OF_RUNS, dpct::get_default_queue())), 0);
-
 	/*
 	DPCT1001:106: The statement could not be removed.
 	*/
@@ -485,12 +374,7 @@ try {
 
 	size_t size_evals_of_runs = MAX_NUM_OF_RUNS*sizeof(int);
 
-	/*
-	DPCT1003:131: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (((tData.pMem_gpu_evals_of_runs) = (int *)sycl::malloc_shared(size_evals_of_runs, dpct::get_default_queue())), 0);
-
 	/*
 	DPCT1001:107: The statement could not be removed.
 	*/
@@ -498,12 +382,7 @@ try {
 	size_t blocksPerGridForEachEntity = MAX_POPSIZE * MAX_NUM_OF_RUNS;
 	size_t size_prng_seeds = blocksPerGridForEachEntity * NUM_OF_THREADS_PER_BLOCK * sizeof(unsigned int);
 
-	/*
-	DPCT1003:132: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (((tData.pMem_prng_states) = (uint32_t *)sycl::malloc_device(size_prng_seeds, dpct::get_default_queue())), 0);
-
 	/*
 	DPCT1001:108: The statement could not be removed.
 	*/
@@ -527,110 +406,66 @@ try
 	// Release all CUDA objects
 	// Constant objects
 
-	/*
-	DPCT1003:152: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(cData.pKerconst_interintra, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:133: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_interintra\n");
 
-	/*
-	DPCT1003:153: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(cData.pKerconst_intracontrib, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:134: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_intracontrib\n");
 
-	/*
-	DPCT1003:154: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(cData.pKerconst_intra, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:135: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_intra\n");
 
-	/*
-	DPCT1003:155: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(cData.pKerconst_rotlist, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:136: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_rotlist\n");
 
-	/*
-	DPCT1003:156: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(cData.pKerconst_conform, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:137: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_conform\n");
 
-	/*
-	DPCT1003:157: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(cData.pMem_rotbonds_const, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:138: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing cData.pMem_rotbonds_const");
 
-	/*
-	DPCT1003:158: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(cData.pMem_rotbonds_atoms_const, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:139: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing cData.pMem_rotbonds_atoms_const");
 
-	/*
-	DPCT1003:159: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code. ACK
-	*/
 	status = (sycl::free(cData.pMem_num_rotating_atoms_per_rotbond_const, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:140: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing " "cData.pMem_num_rotating_atoms_per_rotbond_const");
 
-	/*
-	DPCT1003:160: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(cData.pMem_angle_const, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:141: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing cData.pMem_angle_const");
 
-	/*
-	DPCT1003:161: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(cData.pMem_dependence_on_theta_const, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:142: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing cData.pMem_dependence_on_theta_const");
 
-	/*
-	DPCT1003:162: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(cData.pMem_dependence_on_rotangle_const, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:143: The statement could not be removed.
@@ -640,10 +475,6 @@ try
 	// Non-constant
 	if(tData.pMem_fgrids)
 	{
-		/*
-		DPCT1003:171: Migrated API does not return error code. (*, 0) is
-		inserted. You may need to rewrite this code.
-		*/
 		status = (sycl::free(tData.pMem_fgrids, dpct::get_default_queue()), 0);
 		/*
 		DPCT1001:170: The statement could not be removed.
@@ -651,70 +482,42 @@ try
 		RTERROR(status, "cudaFree: error freeing pMem_fgrids");
 	}
 
-	/*
-	DPCT1003:172: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(tData.pMem_conformations1, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:145: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing pMem_conformations1");
 
-	/*
-	DPCT1003:165: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(tData.pMem_conformations2, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:146: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing pMem_conformations2");
 
-	/*
-	DPCT1003:166: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(tData.pMem_energies1, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:147: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing pMem_energies1");
 
-	/*
-	DPCT1003:167: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(tData.pMem_energies2, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:148: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing pMem_energies2");
 
-	/*
-	DPCT1003:168: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(tData.pMem_evals_of_new_entities, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:149: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing pMem_evals_of_new_entities");
 
-	/*
-	DPCT1003:169: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(tData.pMem_gpu_evals_of_runs, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:150: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaFree: error freeing pMem_gpu_evals_of_runs");
 
-	/*
-	DPCT1003:170: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (sycl::free(tData.pMem_prng_states, dpct::get_default_queue()), 0);
 	/*
 	DPCT1001:151: The statement could not be removed.
@@ -758,10 +561,6 @@ try
 
 	auto const t1 = std::chrono::steady_clock::now();
 
-	/*
-	DPCT1003:192: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	int status = (dpct::dev_mgr::instance().select_device(cData.devid), 0); // make sure we're on the correct device
 
 	Liganddata myligand_reference;
@@ -850,48 +649,27 @@ try
 	}
 
 	// Upload kernel constant data - JL FIXME - Can these be moved once?
-
-	/*
-	DPCT1003:184: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (dpct::get_default_queue().memcpy(cData.pKerconst_interintra, KerConst_interintra, sizeof(kernelconstant_interintra)).wait(), 0);
 	/*
 	DPCT1001:171: The statement could not be removed.
 	*/
 	RTERROR(status, "cData.pKerconst_interintra: failed to upload to GPU memory.\n");
 
-	/*
-	DPCT1003:185: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (dpct::get_default_queue().memcpy(cData.pKerconst_intracontrib, KerConst_intracontrib, sizeof(kernelconstant_intracontrib)).wait(), 0);
 	/*
 	DPCT1001:172: The statement could not be removed.
 	*/
 	RTERROR(status, "cData.pKerconst_intracontrib: failed to upload to GPU memory.\n");
 
-	/*
-	DPCT1003:186: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (dpct::get_default_queue().memcpy(cData.pKerconst_intra, KerConst_intra, sizeof(kernelconstant_intra)).wait(), 0);
 	/*
 	DPCT1001:173: The statement could not be removed.
 	*/
 	RTERROR(status, "cData.pKerconst_intra: failed to upload to GPU memory.\n");
 
-	/*
-	DPCT1003:187: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (dpct::get_default_queue().memcpy(cData.pKerconst_rotlist, KerConst_rotlist, sizeof(kernelconstant_rotlist)).wait(), 0);
 	RTERROR(status, "cData.pKerconst_rotlist: failed to upload to GPU memory.\n");
 
-	/*
-	DPCT1003:188: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (dpct::get_default_queue().memcpy(cData.pKerconst_conform, KerConst_conform, sizeof(kernelconstant_conform)).wait(), 0);
 	/*
 	DPCT1001:175: The statement could not be removed.
@@ -923,10 +701,6 @@ try
 	// evaluation counters and random number generator states
 	if(cData.preallocated_gridsize==0)
 	{
-		/*
-		DPCT1003:190: Migrated API does not return error code. (*, 0) is
-		inserted. You may need to rewrite this code.
-		*/
 		status = (tData.pMem_fgrids = sycl::malloc_device<float>(mygrid->grids.size(), dpct::get_default_queue()), 0);
 		/*
 		DPCT1001:189: The statement could not be removed.
@@ -951,41 +725,24 @@ try
 	cData.warpbits = 5;
 
 	// Upload data
-
-	/*
-	DPCT1003:193: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (dpct::get_default_queue().memcpy(tData.pMem_fgrids, mygrid->grids.data(), mygrid->grids.size() * sizeof(float)).wait(), 0);
 	/*
 	DPCT1001:186: The statement could not be removed.
 	*/
 	RTERROR(status, "pMem_fgrids: failed to upload to GPU memory.\n");
 
-	/*
-	DPCT1003:201: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (dpct::get_default_queue().memcpy(pMem_conformations_current, cpu_init_populations, size_populations).wait(), 0);
 	/*
 	DPCT1001:179: The statement could not be removed.
 	*/
 	RTERROR(status, "pMem_conformations_current: failed to upload to GPU memory.\n");
 
-	/*
-	DPCT1003:194: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = ((dpct::get_default_queue().memcpy(tData.pMem_gpu_evals_of_runs, sim_state.cpu_evals_of_runs.data(), size_evals_of_runs).wait()), 0);
 	/*
 	DPCT1001:180: The statement could not be removed.
 	*/
 	RTERROR(status, "pMem_gpu_evals_of_runs: failed to upload to GPU memory.\n");
 
-	/*
-	DPCT1003:195: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = ((dpct::get_default_queue().memcpy(tData.pMem_prng_states, cpu_prng_seeds, size_prng_seeds).wait()), 0);
 	/*
 	DPCT1001:181: The statement could not be removed.
@@ -1296,11 +1053,6 @@ try
 		if (mypars->autostop) {
 			if (generation_cnt % mypars->as_frequency == 0)
 			{
-				/*
-				DPCT1003:198: Migrated API does not return error
-				code. (*, 0) is inserted. You may need to
-				rewrite this code.
-				*/
 				status = (dpct::get_default_queue().memcpy(sim_state.cpu_energies.data(), pMem_energies_current, size_energies).wait(), 0);
 				/*
 				DPCT1001:197: The statement could not be
@@ -1491,21 +1243,12 @@ try
 	// http://www.cc.gatech.edu/~vetter/keeneland/tutorial-2012-02-20/08-opencl.pdf
 	// ===============================================================================
 	//processing results
-
-	/*
-	DPCT1003:200: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (dpct::get_default_queue().memcpy(cpu_final_populations, pMem_conformations_current, size_populations).wait(), 0);
 	/*
 	DPCT1001:182: The statement could not be removed.
 	*/
 	RTERROR(status, "cudaMemcpy: couldn't copy pMem_conformations_current to host.\n");
 
-	/*
-	DPCT1003:201: Migrated API does not return error code. (*, 0) is
-	inserted. You may need to rewrite this code.
-	*/
 	status = (dpct::get_default_queue().memcpy(sim_state.cpu_energies.data(), pMem_energies_current, size_energies).wait(), 0);
 	/*
 	DPCT1001:183: The statement could not be removed.
