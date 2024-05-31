@@ -263,9 +263,9 @@ int parse_dpf(
 						if(strcmp(argstr,ltypes[mtype_nr])){ // derived type
 							if(mypars->nr_deriv_atypes==0){ // get the derived atom types started
 								#ifdef CUSTOM_DYN_MEM_ALLOC
-								
+								mypars->deriv_atypes=(deriv_atype*) hbw_malloc(sizeof(deriv_atype));
 								#else
-								mypars->deriv_atypes=(deriv_atype*)malloc(sizeof(deriv_atype));
+								mypars->deriv_atypes=(deriv_atype*) malloc(sizeof(deriv_atype));
 								#endif
 								if(mypars->deriv_atypes==NULL){
 									printf("Error: Cannot allocate memory for derivative type.\n");
@@ -312,9 +312,9 @@ int parse_dpf(
 						mypars->nr_mod_atype_pairs++;
 						if(mypars->nr_mod_atype_pairs==1)
 							#ifdef CUSTOM_DYN_MEM_ALLOC
-							
+							mypars->mod_atype_pairs=(pair_mod*) hbw_malloc(sizeof(pair_mod));
 							#else
-							mypars->mod_atype_pairs=(pair_mod*)malloc(sizeof(pair_mod));
+							mypars->mod_atype_pairs=(pair_mod*) malloc(sizeof(pair_mod));
 							#endif
 						else
 							mypars->mod_atype_pairs=(pair_mod*)realloc(mypars->mod_atype_pairs, mypars->nr_mod_atype_pairs*sizeof(pair_mod));
@@ -327,9 +327,9 @@ int parse_dpf(
 						strcpy(curr_pair->B,typeB);
 						curr_pair->nr_parameters=4;
 						#ifdef CUSTOM_DYN_MEM_ALLOC
-						
+						curr_pair->parameters=(float*) hbw_malloc(curr_pair->nr_parameters*sizeof(float));
 						#else
-						curr_pair->parameters=(float*)malloc(curr_pair->nr_parameters*sizeof(float));
+						curr_pair->parameters=(float*) malloc(curr_pair->nr_parameters*sizeof(float));
 						#endif
 						if(curr_pair->parameters==NULL){
 							printf("Error: Cannot allocate memory for <%s> pair energy modification.\n at %s:%u.\n",tempstr,mypars->dpffile,line_count);
@@ -397,9 +397,9 @@ int parse_dpf(
 								len=strlen(mypars->ligandfile)-6; // .pdbqt = 6 chars
 								if(len>0){
 									#ifdef CUSTOM_DYN_MEM_ALLOC
-									
+									mypars->resname = (char*) hbw_malloc((len+1)*sizeof(char));
 									#else
-									mypars->resname = (char*)malloc((len+1)*sizeof(char));
+									mypars->resname = (char*) malloc((len+1)*sizeof(char));
 									#endif
 									strncpy(mypars->resname,mypars->ligandfile,len); // Default is ligand file basename
 									mypars->resname[len]='\0';
@@ -1248,9 +1248,9 @@ int get_commandpars(
 			if(strlen(mypars->load_xml)>4){ // .xml = 4 chars
 				i=strlen(mypars->load_xml)-4;
 				#ifdef CUSTOM_DYN_MEM_ALLOC
-				
+				mypars->resname = (char*) hbw_malloc((i+1)*sizeof(char));
 				#else
-				mypars->resname = (char*)malloc((i+1)*sizeof(char));
+				mypars->resname = (char*) malloc((i+1)*sizeof(char));
 				#endif
 				strncpy(mypars->resname,mypars->load_xml,i);    // Default is ligand file basename
 				mypars->resname[i]='\0';
@@ -1260,9 +1260,9 @@ int get_commandpars(
 				if(strlen(mypars->ligandfile)>6){ // .pdbqt = 6 chars
 					i=strlen(mypars->ligandfile)-6;
 					#ifdef CUSTOM_DYN_MEM_ALLOC
-					
+					mypars->resname = (char*) hbw_malloc((i+1)*sizeof(char));
 					#else
-					mypars->resname = (char*)malloc((i+1)*sizeof(char));
+					mypars->resname = (char*) malloc((i+1)*sizeof(char));
 					#endif
 					strncpy(mypars->resname,mypars->ligandfile,i);    // Default is ligand file basename
 					mypars->resname[i]='\0';
@@ -2105,9 +2105,12 @@ std::vector<ReceptorAtom> read_receptor(
 	// sort so we can assign index list for atoms_in_reach to grid map
 	std::sort(atom_and_grid_ids.begin(), atom_and_grid_ids.end(), compare_aagid);
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	in_reach_map = (unsigned int*) hbw_malloc(sizeof(unsigned int)*
+	                                     (mygrid->size_xyz[0])*
+	                                     (mygrid->size_xyz[1])*
+	                                     (mygrid->size_xyz[2]));
 	#else
-	in_reach_map = (unsigned int*)malloc(sizeof(unsigned int)*
+	in_reach_map = (unsigned int*) malloc(sizeof(unsigned int)*
 	                                     (mygrid->size_xyz[0])*
 	                                     (mygrid->size_xyz[1])*
 	                                     (mygrid->size_xyz[2]));
@@ -2138,9 +2141,9 @@ std::vector<ReceptorAtom> read_receptor(
 	}
 	folded_atom_list[count_idx] = count; // last one needs to be taken care of
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	atom_map_list = (unsigned int*) hbw_malloc(sizeof(unsigned int)*folded_atom_list.size());
 	#else
-	atom_map_list = (unsigned int*)malloc(sizeof(unsigned int)*folded_atom_list.size());
+	atom_map_list = (unsigned int*) malloc(sizeof(unsigned int)*folded_atom_list.size());
 	#endif
 	memcpy(atom_map_list, folded_atom_list.data(), sizeof(unsigned int)*folded_atom_list.size());
 //	printf("total: %d atoms in %d grid boxes\n", folded_atom_list.size(), grid_boxes);
