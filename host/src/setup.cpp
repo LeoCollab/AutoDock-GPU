@@ -389,7 +389,11 @@ int setup(
 				strcpy(tmp, mypars->resname);
 				strcat(tmp, orig_resname);
 			}
+			#ifdef CUSTOM_DYN_MEM_ALLOC
+			hbw_free(mypars->resname);
+			#else
 			free(mypars->resname);
+			#endif
 			mypars->resname = tmp;
 		}
 	}
