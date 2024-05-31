@@ -93,9 +93,9 @@ int setup(
 		{
 			if(mypars->nr_deriv_atypes==0){
 				#ifdef CUSTOM_DYN_MEM_ALLOC
-				
+				mypars->deriv_atypes=(deriv_atype*) hbw_malloc(sizeof(deriv_atype));
 				#else
-				mypars->deriv_atypes=(deriv_atype*)malloc(sizeof(deriv_atype));
+				mypars->deriv_atypes=(deriv_atype*) malloc(sizeof(deriv_atype));
 				#endif
 				if(mypars->deriv_atypes==NULL){
 					printf("Error: Cannot allocate memory for --derivtype (-T).\n");
@@ -196,12 +196,16 @@ int setup(
 				mypars->nr_mod_atype_pairs++;
 				if(mypars->nr_mod_atype_pairs==1)
 					#ifdef CUSTOM_DYN_MEM_ALLOC
-					
+					mypars->mod_atype_pairs=(pair_mod*) hbw_malloc(sizeof(pair_mod));
 					#else
-					mypars->mod_atype_pairs=(pair_mod*)malloc(sizeof(pair_mod));
+					mypars->mod_atype_pairs=(pair_mod*) malloc(sizeof(pair_mod));
 					#endif
 				else
-					mypars->mod_atype_pairs=(pair_mod*)realloc(mypars->mod_atype_pairs, mypars->nr_mod_atype_pairs*sizeof(pair_mod));
+					#ifdef CUSTOM_DYN_MEM_ALLOC
+					mypars->mod_atype_pairs=(pair_mod*) hbw_realloc(mypars->mod_atype_pairs, mypars->nr_mod_atype_pairs*sizeof(pair_mod));
+					#else
+					mypars->mod_atype_pairs=(pair_mod*) realloc(mypars->mod_atype_pairs, mypars->nr_mod_atype_pairs*sizeof(pair_mod));
+					#endif
 				if(mypars->mod_atype_pairs==NULL){
 					printf("Error: Cannot allocate memory for --modpair (-P).\n");
 					exit(1);
@@ -251,7 +255,11 @@ int setup(
 							float tmpfloat;
 							sscanf(start_block, "%f", &tmpfloat);
 							curr_pair->nr_parameters++;
-							curr_pair->parameters=(float*)realloc(curr_pair->parameters,curr_pair->nr_parameters*sizeof(float));
+							#ifdef CUSTOM_DYN_MEM_ALLOC
+							curr_pair->parameters=(float*) hbw_realloc(curr_pair->parameters,curr_pair->nr_parameters*sizeof(float));
+							#else
+							curr_pair->parameters=(float*) realloc(curr_pair->parameters,curr_pair->nr_parameters*sizeof(float));
+							#endif
 							if(curr_pair->parameters==NULL){
 								printf("Error: Cannot allocate memory for --modpair (-P).\n");
 								exit(1);
@@ -366,9 +374,9 @@ int setup(
 	if (!mypars->xml2dlg){ // if the user specified an xml file, that's the one we want to use
 		if ((strcmp(orig_resname,mypars->resname)!=0) && (filelist.nfiles>1)){ // use resname as prefix
 			#ifdef CUSTOM_DYN_MEM_ALLOC
-			
+			char* tmp = (char*) hbw_malloc(strlen(mypars->resname)+strlen(orig_resname)+1);
 			#else
-			char* tmp = (char*)malloc(strlen(mypars->resname)+strlen(orig_resname)+1);
+			char* tmp = (char*) malloc(strlen(mypars->resname)+strlen(orig_resname)+1);
 			#endif
 			// take care of potential directory path
 			long long dir = strrchr(orig_resname,'/')-orig_resname+1;
