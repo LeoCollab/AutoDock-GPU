@@ -428,77 +428,88 @@ try
 	// Constant objects
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(cData.pKerconst_interintra), 0);
 	#else
 	status = (sycl::free(cData.pKerconst_interintra, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_interintra\n");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(cData.pKerconst_intracontrib), 0);
 	#else
 	status = (sycl::free(cData.pKerconst_intracontrib, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_intracontrib\n");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(cData.pKerconst_intra), 0);
 	#else
 	status = (sycl::free(cData.pKerconst_intra, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_intra\n");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(cData.pKerconst_rotlist), 0);
 	#else
 	status = (sycl::free(cData.pKerconst_rotlist, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_rotlist\n");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(cData.pKerconst_conform), 0);
 	#else
 	status = (sycl::free(cData.pKerconst_conform, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_conform\n");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(cData.pMem_rotbonds_const), 0);
 	#else
 	status = (sycl::free(cData.pMem_rotbonds_const, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pMem_rotbonds_const");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(cData.pMem_rotbonds_atoms_const), 0);
 	#else
 	status = (sycl::free(cData.pMem_rotbonds_atoms_const, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pMem_rotbonds_atoms_const");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(cData.pMem_num_rotating_atoms_per_rotbond_const), 0);
 	#else
 	status = (sycl::free(cData.pMem_num_rotating_atoms_per_rotbond_const, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing " "cData.pMem_num_rotating_atoms_per_rotbond_const");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(cData.pMem_angle_const), 0);
 	#else
 	status = (sycl::free(cData.pMem_angle_const, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pMem_angle_const");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(cData.pMem_dependence_on_theta_const), 0);
 	#else
 	status = (sycl::free(cData.pMem_dependence_on_theta_const, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pMem_dependence_on_theta_const");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(cData.pMem_dependence_on_rotangle_const), 0);
 	#else
 	status = (sycl::free(cData.pMem_dependence_on_rotangle_const, dpct::get_default_queue()), 0);
 	#endif
@@ -508,7 +519,8 @@ try
 	if(tData.pMem_fgrids)
 	{
 		#ifdef CUSTOM_DYN_MEM_ALLOC
-		
+		// TODO: CAUTION: this is only for CPU targets!
+		status = (hbw_free(tData.pMem_fgrids), 0);
 		#else
 		status = (sycl::free(tData.pMem_fgrids, dpct::get_default_queue()), 0);
 		#endif
@@ -516,56 +528,63 @@ try
 	}
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(tData.pMem_conformations1), 0);
 	#else
 	status = (sycl::free(tData.pMem_conformations1, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_conformations1");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(tData.pMem_conformations2), 0);
 	#else
 	status = (sycl::free(tData.pMem_conformations2, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_conformations2");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(tData.pMem_energies1), 0);
 	#else
 	status = (sycl::free(tData.pMem_energies1, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_energies1");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(tData.pMem_energies2), 0);
 	#else
 	status = (sycl::free(tData.pMem_energies2, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_energies2");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(tData.pMem_evals_of_new_entities), 0);
 	#else
 	status = (sycl::free(tData.pMem_evals_of_new_entities, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_evals_of_new_entities");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(tData.pMem_gpu_evals_of_runs), 0);
 	#else
 	status = (sycl::free(tData.pMem_gpu_evals_of_runs, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_gpu_evals_of_runs");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	// TODO: CAUTION: this is only for CPU targets!
+	status = (hbw_free(tData.pMem_prng_states), 0);
 	#else
 	status = (sycl::free(tData.pMem_prng_states, dpct::get_default_queue()), 0);
 	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_prng_states");
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	hbw_free(tData.device_name);
 	#else
 	free(tData.device_name);
 	#endif
@@ -1281,7 +1300,7 @@ try
 	sim_state.total_evals = total_evals;
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	hbw_free(cpu_prng_seeds);
 	#else
 	free(cpu_prng_seeds);
 	#endif
@@ -1299,7 +1318,7 @@ try
 	if(output!=NULL)
 	{
 		#ifdef CUSTOM_DYN_MEM_ALLOC
-		
+		hbw_free(outbuf);
 		#else
 		free(outbuf);
 		#endif
