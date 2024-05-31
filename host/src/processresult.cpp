@@ -361,9 +361,9 @@ void make_resfiles(
 	memcpy(init_atom_idxyzq, ligand_ref->atom_idxyzq, sizeof(ligand_ref->atom_idxyzq));
 	int len = strlen(mypars->ligandfile) - 6 + 24 + 10 + 10; // length with added bits for things below (numbers below 11 digits should be a safe enough threshold)
 	#ifdef CUSTOM_DYN_MEM_ALLOC
-	
+	char* temp_filename = (char*) hbw_malloc((len+1)*sizeof(char)); // +\0 at the end
 	#else
-	char* temp_filename = (char*)malloc((len+1)*sizeof(char)); // +\0 at the end
+	char* temp_filename = (char*) malloc((len+1)*sizeof(char)); // +\0 at the end
 	#endif
 	char* name_ext_start;
 	float accurate_interE;
@@ -690,9 +690,9 @@ void generate_output(
 	if(mypars->output_dlg){
 		if(!mypars->dlg2stdout){
 			#ifdef CUSTOM_DYN_MEM_ALLOC
-			
+			char* report_file_name = (char*) hbw_malloc(len*sizeof(char));
 			#else
-			char* report_file_name = (char*)malloc(len*sizeof(char));
+			char* report_file_name = (char*) malloc(len*sizeof(char));
 			#endif
 			strcpy(report_file_name, mypars->resname);
 			strcat(report_file_name, ".dlg");
@@ -1096,9 +1096,9 @@ void generate_output(
 	if (mypars->output_xml)
 	{
 		#ifdef CUSTOM_DYN_MEM_ALLOC
-		
+		char* xml_file_name = (char*) hbw_malloc(len*sizeof(char));
 		#else
-		char* xml_file_name = (char*)malloc(len*sizeof(char));
+		char* xml_file_name = (char*) malloc(len*sizeof(char));
 		#endif
 		strcpy(xml_file_name, mypars->resname);
 		strcat(xml_file_name, ".xml");
