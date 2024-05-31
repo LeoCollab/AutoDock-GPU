@@ -69,6 +69,11 @@ ifeq ($(OVERLAP), ON)
 	PIPELINE=-DUSE_PIPELINE -fopenmp
 endif
 
+# Enabling hbwmalloc
+ifeq ($(HBM), ON)
+	CFLAGS+=-DCUSTOM_DYN_MEM_ALLOC
+	CFLAGS+=-lmemkind
+endif
 
 BIN := $(wildcard $(TARGET)*)
 

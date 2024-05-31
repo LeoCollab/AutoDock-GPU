@@ -90,7 +90,8 @@ int main(int argc, char* argv[])
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	int hbm_status = hbw_check_available();
 	if (hbm_status == ENODEV) {
-		printf("High memory bandwidth (HBM) is unavailable!\n\n");
+		printf("High memory bandwidth (HBM) is unavailable!\n");
+		printf("Terminated.\n\n");
 		exit(-1);
 	}
 	else {

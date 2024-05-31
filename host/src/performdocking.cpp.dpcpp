@@ -348,7 +348,7 @@ try {
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
-	status = (((tData.pMem_conformations1) = (float*) hbw_malloc(size_populations), 0);
+	status = (((tData.pMem_conformations1) = (float*) hbw_malloc(size_populations)), 0);
 	#else
 	status = (((tData.pMem_conformations1) = (float*) sycl::malloc_device(size_populations, dpct::get_default_queue())), 0);
 	#endif
@@ -356,7 +356,7 @@ try {
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
-	status = (((tData.pMem_conformations2) = (float*) hbw_malloc(size_populations), 0);
+	status = (((tData.pMem_conformations2) = (float*) hbw_malloc(size_populations)), 0);
 	#else
 	status = (((tData.pMem_conformations2) = (float*) sycl::malloc_device(size_populations, dpct::get_default_queue())), 0);
 	#endif
@@ -366,7 +366,7 @@ try {
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
-	status = (((tData.pMem_energies1) = (float*) hbw_malloc(size_energies), 0);
+	status = (((tData.pMem_energies1) = (float*) hbw_malloc(size_energies)), 0);
 	#else
 	status = (((tData.pMem_energies1) = (float*) sycl::malloc_device(size_energies, dpct::get_default_queue())), 0);
 	#endif
@@ -374,7 +374,7 @@ try {
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
-	status = (((tData.pMem_energies2) = (float*) hbw_malloc(size_energies), 0);
+	status = (((tData.pMem_energies2) = (float*) hbw_malloc(size_energies)), 0);
 	#else
 	status = (((tData.pMem_energies2) = (float*) sycl::malloc_device(size_energies, dpct::get_default_queue())), 0);
 	#endif
@@ -382,7 +382,7 @@ try {
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
-	status = (((tData.pMem_evals_of_new_entities) = (int*) hbw_malloc(MAX_POPSIZE * MAX_NUM_OF_RUNS * sizeof(int)), 0);
+	status = (((tData.pMem_evals_of_new_entities) = (int*) hbw_malloc(MAX_POPSIZE * MAX_NUM_OF_RUNS * sizeof(int))), 0);
 	#else
 	status = (((tData.pMem_evals_of_new_entities) = sycl::malloc_device<int>(MAX_POPSIZE * MAX_NUM_OF_RUNS, dpct::get_default_queue())), 0);
 	#endif
@@ -392,7 +392,7 @@ try {
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
-	status = (((tData.pMem_gpu_evals_of_runs) = (int*) hbw_malloc(size_evals_of_runs), 0);
+	status = (((tData.pMem_gpu_evals_of_runs) = (int*) hbw_malloc(size_evals_of_runs)), 0);
 	#else
 	status = (((tData.pMem_gpu_evals_of_runs) = (int*) sycl::malloc_shared(size_evals_of_runs, dpct::get_default_queue())), 0);
 	#endif
@@ -403,7 +403,7 @@ try {
 
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
-	status = (((tData.pMem_prng_states) = (uint32_t*) hbw_malloc(size_prng_seeds), 0);
+	status = (((tData.pMem_prng_states) = (uint32_t*) hbw_malloc(size_prng_seeds)), 0);
 	#else
 	status = (((tData.pMem_prng_states) = (uint32_t*) sycl::malloc_device(size_prng_seeds, dpct::get_default_queue())), 0);
 	#endif
