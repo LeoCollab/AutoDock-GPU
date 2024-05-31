@@ -165,8 +165,8 @@ try {
 	}
 
 	if (cData.devnum<0)
-		status = (sycl::free(NULL, dpct::get_default_queue()),
-				  0); // Trick driver into creating context on current device
+		// Trick driver into creating context on current device
+		status = (sycl::free(NULL, dpct::get_default_queue()), 0);
 	else
 	{
 		status = (dpct::dev_mgr::instance().select_device(cData.devnum), 0);
@@ -427,68 +427,148 @@ try
 	// Release all CUDA objects
 	// Constant objects
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(cData.pKerconst_interintra, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_interintra\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(cData.pKerconst_intracontrib, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_intracontrib\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(cData.pKerconst_intra, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_intra\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(cData.pKerconst_rotlist, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_rotlist\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(cData.pKerconst_conform, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pKerconst_conform\n");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(cData.pMem_rotbonds_const, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pMem_rotbonds_const");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(cData.pMem_rotbonds_atoms_const, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pMem_rotbonds_atoms_const");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(cData.pMem_num_rotating_atoms_per_rotbond_const, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing " "cData.pMem_num_rotating_atoms_per_rotbond_const");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(cData.pMem_angle_const, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pMem_angle_const");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(cData.pMem_dependence_on_theta_const, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pMem_dependence_on_theta_const");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(cData.pMem_dependence_on_rotangle_const, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing cData.pMem_dependence_on_rotangle_const");
 
 	// Non-constant
 	if(tData.pMem_fgrids)
 	{
+		#ifdef CUSTOM_DYN_MEM_ALLOC
+		
+		#else
 		status = (sycl::free(tData.pMem_fgrids, dpct::get_default_queue()), 0);
+		#endif
 		RTERROR(status, "cudaFree: error freeing pMem_fgrids");
 	}
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(tData.pMem_conformations1, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_conformations1");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(tData.pMem_conformations2, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_conformations2");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(tData.pMem_energies1, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_energies1");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(tData.pMem_energies2, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_energies2");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(tData.pMem_evals_of_new_entities, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_evals_of_new_entities");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(tData.pMem_gpu_evals_of_runs, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_gpu_evals_of_runs");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	status = (sycl::free(tData.pMem_prng_states, dpct::get_default_queue()), 0);
+	#endif
 	RTERROR(status, "cudaFree: error freeing pMem_prng_states");
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	free(tData.device_name);
+	#endif
 }
 catch (sycl::exception const &exc)
 {
@@ -1200,7 +1280,11 @@ try
 	sim_state.sec_per_run = ELAPSEDSECS(clock_stop_docking, clock_start_docking)/mypars->num_of_runs;
 	sim_state.total_evals = total_evals;
 
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	
+	#else
 	free(cpu_prng_seeds);
+	#endif
 
 	delete KerConst_interintra;
 	delete KerConst_intracontrib;
@@ -1211,7 +1295,15 @@ try
 
 	auto const t4 = std::chrono::steady_clock::now();
 	para_printf("\nShutdown time %fs\n", elapsed_seconds(t3, t4));
-	if(output!=NULL) free(outbuf);
+	
+	if(output!=NULL)
+	{
+		#ifdef CUSTOM_DYN_MEM_ALLOC
+		
+		#else
+		free(outbuf);
+		#endif
+	}
 
 	return 0;
 }
