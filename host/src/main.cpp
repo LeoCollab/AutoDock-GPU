@@ -86,6 +86,21 @@ int main(int argc, char* argv[])
 	//  between will be caught in initial_commandpars later)
 	if((argc<2) || (argcmp("help", argv[argc-1], 'h')))
 		print_options(argv[0]);
+
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	int hbm_status = hbw_check_available();
+	if (hbm_status == ENODEV) {
+		printf("High memory bandwidth (HBM) is unavailable!\n\n");
+		exit(-1);
+	}
+	else {
+		if (hbm_status == 0) {
+			printf("High memory bandwidth (HBM) is available!\n");
+			printf("Dynamically-allocated data structures will be placed on HBM.\n\n");
+		}
+	}
+	#endif
+
 	// Timer initializations
 #ifndef _WIN32
 	timeval time_start, idle_timer;
