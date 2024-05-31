@@ -525,7 +525,11 @@ void make_resfiles(
 	// need to restore ligand_ref to original coordinates before we leave
 	memcpy(ligand_ref->atom_idxyzq, init_atom_idxyzq, sizeof(ligand_ref->atom_idxyzq));
 	if (mypars->gen_finalpop) fclose(fp);
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	hbw_free(temp_filename);
+	#else
 	free(temp_filename);
+	#endif
 }
 
 void ligand_calc_output(
@@ -701,7 +705,11 @@ void generate_output(
 				printf("Error: Cannot create dlg output file %s: %s\n",report_file_name,strerror(errno));
 				exit(7);
 			}
+			#ifdef CUSTOM_DYN_MEM_ALLOC
+			hbw_free(report_file_name);
+			#else
 			free(report_file_name);
+			#endif
 		}
 
 		// writing basic info
@@ -1248,7 +1256,11 @@ void generate_output(
 		}
 		fprintf(fp_xml, "</autodock_gpu>\n");
 		fclose(fp_xml);
+		#ifdef CUSTOM_DYN_MEM_ALLOC
+		hbw_free(xml_file_name);
+		#else
 		free(xml_file_name);
+		#endif
 	}
 }
 
