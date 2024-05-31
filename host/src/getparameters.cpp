@@ -317,7 +317,11 @@ int parse_dpf(
 							mypars->mod_atype_pairs=(pair_mod*) malloc(sizeof(pair_mod));
 							#endif
 						else
-							mypars->mod_atype_pairs=(pair_mod*)realloc(mypars->mod_atype_pairs, mypars->nr_mod_atype_pairs*sizeof(pair_mod));
+							#ifdef CUSTOM_DYN_MEM_ALLOC
+							mypars->mod_atype_pairs=(pair_mod*) hbw_realloc(mypars->mod_atype_pairs, mypars->nr_mod_atype_pairs*sizeof(pair_mod));
+							#else
+							mypars->mod_atype_pairs=(pair_mod*) realloc(mypars->mod_atype_pairs, mypars->nr_mod_atype_pairs*sizeof(pair_mod));
+							#endif
 						if(mypars->mod_atype_pairs==NULL){
 							printf("Error: Cannot allocate memory for <%s> pair energy modification.\n at %s:%u.\n",tempstr,mypars->dpffile,line_count);
 							return 1;
