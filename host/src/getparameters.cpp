@@ -397,7 +397,14 @@ int parse_dpf(
 								// Add the ligand to filelist
 								filelist.ligand_files.push_back(mypars->ligandfile);
 								// Default resname is filelist basename
-								if(mypars->resname) free(mypars->resname);
+								if(mypars->resname)
+								{
+									#ifdef CUSTOM_DYN_MEM_ALLOC
+									hbw_free(mypars->resname);
+									#else
+									free(mypars->resname);
+									#endif
+								}
 								len=strlen(mypars->ligandfile)-6; // .pdbqt = 6 chars
 								if(len>0){
 									#ifdef CUSTOM_DYN_MEM_ALLOC
@@ -1877,7 +1884,11 @@ int get_commandpars(
 		if (argcmp("resnam", argv [i], 'N'))
 		{
 			arg_recognized = 1;
+			#ifdef CUSTOM_DYN_MEM_ALLOC
+			hbw_free(mypars->resname);
+			#else
 			free(mypars->resname); // as we assign a default value dynamically created to it
+			#endif
 			mypars->resname = strdup(argv [i+1]);
 		}
 
