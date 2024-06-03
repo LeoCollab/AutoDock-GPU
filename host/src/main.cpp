@@ -491,11 +491,7 @@ int main(int argc, char* argv[])
 				if(mypars.ligandfile) free(mypars.ligandfile);
 				if(mypars.flexresfile) free(mypars.flexresfile);
 				if(mypars.xrayligandfile) free(mypars.xrayligandfile);
-//				#ifdef CUSTOM_DYN_MEM_ALLOC
-//				if(mypars.resname) hbw_free(mypars.resname);
-//				#else
 				if(mypars.resname) free(mypars.resname);
-//				#endif
 			}
 		} // end of for loop
 #ifdef USE_PIPELINE
@@ -508,11 +504,7 @@ int main(int argc, char* argv[])
 			if(mypars.ligandfile) free(mypars.ligandfile);
 			if(mypars.flexresfile) free(mypars.flexresfile);
 			if(mypars.xrayligandfile) free(mypars.xrayligandfile);
-//			#ifdef CUSTOM_DYN_MEM_ALLOC
-//			if(mypars.resname) hbw_free(mypars.resname);
-//			#else
 			if(mypars.resname) free(mypars.resname);
-//			#endif
 		}
 	} // end of parallel section
 	if(initial_pars.xml2dlg && !initial_pars.dlg2stdout && (n_files>100)) printf("\n\n"); // finish progress bar

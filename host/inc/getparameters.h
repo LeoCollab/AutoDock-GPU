@@ -41,8 +41,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define LS_METHOD_STRING_LEN 8
 
-//#include "custom_dyn_mem_allocation.hpp"
-
 typedef struct
 {
 	double AD4_coeff_vdW;
