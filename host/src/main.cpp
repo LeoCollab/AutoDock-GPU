@@ -99,6 +99,8 @@ int main(int argc, char* argv[])
 			printf("High memory bandwidth (HBM) is available!\n");
 			printf("Dynamically-allocated data structures will be placed on HBM.\n\n");
 		}
+		hbw_policy_t current_fallback_policy = hbw_get_policy();
+		printf("Current fallback policy when insufficient HBM is available: %s\n\n", current_fallback_policy);
 	}
 	#endif
 
