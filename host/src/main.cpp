@@ -99,8 +99,25 @@ int main(int argc, char* argv[])
 			printf("High memory bandwidth (HBM) is available!\n");
 			printf("Dynamically-allocated data structures will be placed on HBM.\n\n");
 		}
-		hbw_policy_t current_fallback_policy = hbw_get_policy();
-		printf("Current fallback policy when insufficient HBM is available: %s\n\n", current_fallback_policy);
+		hbw_policy_t fallback_policy = hbw_get_policy();
+		std::string policy_idea;
+		switch(fallback_policy)
+		{
+			case HBW_POLICY_BIND:
+				policy_idea = "a";
+				break;
+			case HBW_POLICY_BIND_ALL:
+				policy_idea = "b";
+				break;
+			case HBW_POLICY_PREFERRED:
+				policy_idea = "c";
+				break;
+			case HBW_POLICY_INTERLEAVE:
+				policy_idea = "d";
+				break;
+		}
+		
+		printf("Current fallback policy when insufficient HBM is available: %s\n\n", policy_idea.c_str());
 	}
 	#endif
 
