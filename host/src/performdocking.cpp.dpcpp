@@ -518,7 +518,8 @@ try {
 		dyn_mem_consumption += size_prng_seeds;
 		printf("\tAllocated dynamically in setup_gpu_for_docking(): %lu B / %.3f kB / %.3f MB / %.3f GB\n",
 				dyn_mem_consumption, convert_B_to_kB(dyn_mem_consumption),
-				convert_kB_to_MB(dyn_mem_consumption), convert_MB_to_GB(dyn_mem_consumption));
+				convert_kB_to_MB(convert_B_to_kB(dyn_mem_consumption)),
+				convert_MB_to_GB(convert_kB_to_MB(convert_B_to_kB(dyn_mem_consumption))));
 		#endif
 	#else
 	status = (((tData.pMem_prng_states) = (uint32_t*) sycl::malloc_device(size_prng_seeds, dpct::get_default_queue())), 0);
