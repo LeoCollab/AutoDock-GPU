@@ -183,6 +183,17 @@ try {
 	// make sure array is large enough to hold device number text too
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	tData.device_name = (char*) hbw_malloc(strlen(props.get_name()) + 32);
+	int hbm_verify_status = hbw_verify_memory_region(tData.device_name, strlen(props.get_name()), HBW_TOUCH_PAGES);
+	if (hbm_verify_status != 0)
+	{
+		printf("\t%s: memory region doesn't fully fall into HBM\n", "tData.device_name");
+		printf("Terminated.\n\n");
+		exit(-1);
+	}
+	else
+	{
+		printf("\t%s: memory region fully falls into HBM\n\n", "tData.device_name");
+	}
 	#else
 	tData.device_name = (char*) malloc(strlen(props.get_name()) + 32);
 	#endif
