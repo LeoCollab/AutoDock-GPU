@@ -97,8 +97,39 @@ int main(int argc, char* argv[])
 	else {
 		if (hbm_status == 0) {
 			printf("High memory bandwidth (HBM) is available!\n");
-			printf("Dynamically-allocated data structures will be placed on HBM.\n\n");
+			printf("\tDynamically-allocated data structures will be placed on HBM.\n\n");
 		}
+		hbw_policy_t fallback_policy = hbw_get_policy();
+		std::string policy_idea;
+		std::string policy_explanation; // Taken from <man hbwmalloc>
+		switch(fallback_policy)
+		{
+			case HBW_POLICY_BIND:
+				policy_idea = "HBW_POLICY_BIND";
+				policy_explanation = "\tIf insufficient high bandwidth memory from the nearest NUMA node is available to satisfy a request, \
+									\n\tthe allocated pointer is set to NULL and errno is set to ENOMEM [...]";
+				break;
+			case HBW_POLICY_BIND_ALL:
+				policy_idea = "HBW_POLICY_BIND_ALL";
+				policy_explanation = "\tIf insufficient high bandwidth memory is available to satisfy a request, \
+									\n\tthe allocated pointer is set to NULL and errno is set to ENOMEM.  \
+									\n\tIf  insufficient  high bandwidth  memory  pages  are  available at the fault time \
+									\n\tthe Out Of Memory (OOM) Killer is triggered [...]";
+				break;
+			case HBW_POLICY_PREFERRED:
+				policy_idea = "HBW_POLICY_PREFERRED";
+				policy_explanation = "\tIf insufficient memory is available from the high bandwidth NUMA node closest at the allocation time, \
+									\n\tfall back to standard memory (default) with the smallest NUMA distance.";
+				break;
+			case HBW_POLICY_INTERLEAVE:
+				policy_idea = "HBW_POLICY_INTERLEAVE";
+				policy_explanation = "\tInterleave faulted pages from across all high bandwidth NUMA nodes \
+									\n\tusing standard size pages (the Transparent Huge Page feature is disabled).";
+				break;
+		}
+		
+		printf("Current fallback policy when insufficient HBM is available: %s\n", policy_idea.c_str());
+		printf("%s\n\n", policy_explanation.c_str());
 	}
 	#endif
 
@@ -491,11 +522,7 @@ int main(int argc, char* argv[])
 				if(mypars.ligandfile) free(mypars.ligandfile);
 				if(mypars.flexresfile) free(mypars.flexresfile);
 				if(mypars.xrayligandfile) free(mypars.xrayligandfile);
-				#ifdef CUSTOM_DYN_MEM_ALLOC
-				if(mypars.resname) hbw_free(mypars.resname);
-				#else
 				if(mypars.resname) free(mypars.resname);
-				#endif
 			}
 		} // end of for loop
 #ifdef USE_PIPELINE
@@ -508,11 +535,7 @@ int main(int argc, char* argv[])
 			if(mypars.ligandfile) free(mypars.ligandfile);
 			if(mypars.flexresfile) free(mypars.flexresfile);
 			if(mypars.xrayligandfile) free(mypars.xrayligandfile);
-			#ifdef CUSTOM_DYN_MEM_ALLOC
-			if(mypars.resname) hbw_free(mypars.resname);
-			#else
 			if(mypars.resname) free(mypars.resname);
-			#endif
 		}
 	} // end of parallel section
 	if(initial_pars.xml2dlg && !initial_pars.dlg2stdout && (n_files>100)) printf("\n\n"); // finish progress bar

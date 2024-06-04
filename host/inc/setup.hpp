@@ -35,8 +35,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "processligand.h"
 #include "getparameters.h"
 
-#include "custom_dyn_mem_allocation.hpp"
-
 int preallocated_gridsize(FileList& filelist);
 
 int setup(
