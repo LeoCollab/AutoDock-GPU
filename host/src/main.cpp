@@ -97,27 +97,33 @@ int main(int argc, char* argv[])
 	else {
 		if (hbm_status == 0) {
 			printf("High memory bandwidth (HBM) is available!\n");
-			printf("Dynamically-allocated data structures will be placed on HBM.\n\n");
+			printf("\tDynamically-allocated data structures will be placed on HBM.\n\n");
 		}
 		hbw_policy_t fallback_policy = hbw_get_policy();
 		std::string policy_idea;
+		std::string policy_explanation; // Taken from man hbwmalloc
 		switch(fallback_policy)
 		{
 			case HBW_POLICY_BIND:
 				policy_idea = "HBW_POLICY_BIND";
+				policy_explanation = "If insufficient high bandwidth memory from the nearest NUMA node is available to satisfy a request, the allocated pointer is set to NULL and errno is set to ENOMEM [...]";
 				break;
 			case HBW_POLICY_BIND_ALL:
 				policy_idea = "HBW_POLICY_BIND_ALL";
+				policy_explanation = "If insufficient high bandwidth memory is available to satisfy a request, the allocated pointer is set to NULL and errno is set to ENOMEM.  If  insufficient  high bandwidth  memory  pages  are  available at the fault time the Out Of Memory (OOM) Killer is triggered [...]";
 				break;
 			case HBW_POLICY_PREFERRED:
 				policy_idea = "HBW_POLICY_PREFERRED";
+				policy_explanation = "If insufficient memory is available from the high bandwidth NUMA node closest at the allocation time, fall back to standard memory (default)  with  the  smallest NUMA distance.";
 				break;
 			case HBW_POLICY_INTERLEAVE:
 				policy_idea = "HBW_POLICY_INTERLEAVE";
+				policy_explanation = "Interleave faulted pages from across all high bandwidth NUMA nodes using standard size pages (the Transparent Huge Page feature is disabled).";
 				break;
 		}
 		
-		printf("Current fallback policy when insufficient HBM is available: %s\n\n", policy_idea.c_str());
+		printf("Current fallback policy when insufficient HBM is available: %s\n", policy_idea.c_str());
+		printf("\t %s\n\n", policy_explanation.c_str());
 	}
 	#endif
 
