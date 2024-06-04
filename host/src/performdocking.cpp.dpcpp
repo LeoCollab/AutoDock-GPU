@@ -664,6 +664,7 @@ try
 		#ifdef CUSTOM_DYN_MEM_ALLOC
 		// TODO: CAUTION: this is only for CPU targets!
 		outbuf = (char*) hbw_malloc(256*sizeof(char));
+		verify_ptr_fills_into_hbm((void*) outbuf, 256*sizeof(char), "outbuf");
 		#else
 		outbuf = (char*) malloc(256*sizeof(char));
 		#endif
@@ -728,6 +729,7 @@ try
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	cpu_prng_seeds = (unsigned int*) hbw_malloc(size_prng_seeds);
+	verify_ptr_fills_into_hbm((void*) cpu_prng_seeds, size_prng_seeds, "cpu_prng_seeds");
 	#else
 	cpu_prng_seeds = (unsigned int*) malloc(size_prng_seeds);
 	#endif
@@ -799,6 +801,7 @@ try
 		#ifdef CUSTOM_DYN_MEM_ALLOC
 		// TODO: CAUTION: this is only for CPU targets!
 		status = (tData.pMem_fgrids = (float*) hbw_malloc(mygrid->grids.size() * sizeof(float)), 0);
+		verify_ptr_fills_into_hbm((void*) tData.pMem_fgrids, mygrid->grids.size() * sizeof(float), "tData.pMem_fgrids");
 		#else
 		status = (tData.pMem_fgrids = sycl::malloc_device<float>(mygrid->grids.size(), dpct::get_default_queue()), 0);
 		#endif
