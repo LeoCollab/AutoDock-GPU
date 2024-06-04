@@ -143,13 +143,13 @@ void verify_ptr_fills_into_hbm(void* ptr, size_t size, std::string ptr_name)
 	int ptr_fills_into_hbm_status = hbw_verify_memory_region(ptr, size, HBW_TOUCH_PAGES);
 	if (ptr_fills_into_hbm_status != 0)
 	{
-		printf("\t%s: \t\tmemory region doesn't fully fall into HBM\n", ptr_name.c_str());
+		printf("\tMemory region doesn't fully fall into HBM: %s\n", ptr_name.c_str());
 		printf("Terminated.\n\n");
 		exit(-1);
 	}
 	else
 	{
-		printf("\t%s: \t\tmemory region fully falls into HBM\n", ptr_name.c_str());
+		printf("\tMemory region fully falls into HBM: %s\n", ptr_name.c_str());
 	}
 }
 #endif
