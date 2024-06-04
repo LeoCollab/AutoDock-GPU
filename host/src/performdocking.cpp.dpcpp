@@ -251,6 +251,7 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pKerconst_interintra = (kernelconstant_interintra*) hbw_malloc(sizeof(kernelconstant_interintra)), 0);
+	verify_ptr_fills_into_hbm((void*) cData.pKerconst_interintra, sizeof(kernelconstant_interintra), "cData.pKerconst_interintra");
 	#else
 	status = (cData.pKerconst_interintra = sycl::malloc_device<kernelconstant_interintra>(1, dpct::get_default_queue()), 0);
 	#endif
@@ -259,6 +260,7 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pKerconst_intracontrib = (kernelconstant_intracontrib*) hbw_malloc(sizeof(kernelconstant_intracontrib)), 0);
+	verify_ptr_fills_into_hbm((void*) cData.pKerconst_intracontrib, sizeof(kernelconstant_intracontrib), "cData.pKerconst_intracontrib");
 	#else
 	status = (cData.pKerconst_intracontrib = sycl::malloc_device<kernelconstant_intracontrib>(1, dpct::get_default_queue()), 0);
 	#endif
@@ -267,6 +269,7 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pKerconst_intra = (kernelconstant_intra*) hbw_malloc(sizeof(kernelconstant_intra)), 0);
+	verify_ptr_fills_into_hbm((void*) cData.pKerconst_intra, sizeof(kernelconstant_intra), "cData.pKerconst_intra");
 	#else
 	status = (cData.pKerconst_intra = sycl::malloc_device<kernelconstant_intra>(1, dpct::get_default_queue()), 0);
 	#endif
