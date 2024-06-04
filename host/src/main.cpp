@@ -104,16 +104,16 @@ int main(int argc, char* argv[])
 		switch(fallback_policy)
 		{
 			case HBW_POLICY_BIND:
-				policy_idea = "a";
+				policy_idea = "HBW_POLICY_BIND";
 				break;
 			case HBW_POLICY_BIND_ALL:
-				policy_idea = "b";
+				policy_idea = "HBW_POLICY_BIND_ALL";
 				break;
 			case HBW_POLICY_PREFERRED:
-				policy_idea = "c";
+				policy_idea = "HBW_POLICY_PREFERRED";
 				break;
 			case HBW_POLICY_INTERLEAVE:
-				policy_idea = "d";
+				policy_idea = "HBW_POLICY_INTERLEAVE";
 				break;
 		}
 		
