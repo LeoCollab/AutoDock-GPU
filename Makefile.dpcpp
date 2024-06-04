@@ -73,6 +73,9 @@ endif
 ifeq ($(HBM), ON)
 	CFLAGS+=-DCUSTOM_DYN_MEM_ALLOC
 	CFLAGS+=-lmemkind
+	ifeq ($(HBM_DEBUG), ON)
+		CFLAGS+=-DHBW_VERIFY
+	endif
 endif
 
 BIN := $(wildcard $(TARGET)*)

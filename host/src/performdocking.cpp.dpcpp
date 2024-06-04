@@ -201,7 +201,9 @@ try {
 	// make sure array is large enough to hold device number text too
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	tData.device_name = (char*) hbw_malloc(strlen(props.get_name()) + 32);
-	verify_ptr_fills_into_hbm((void*) tData.device_name, strlen(props.get_name()), "tData.device_name");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) tData.device_name, strlen(props.get_name()), "tData.device_name");
+		#endif
 	#else
 	tData.device_name = (char*) malloc(strlen(props.get_name()) + 32);
 	#endif
@@ -251,7 +253,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pKerconst_interintra = (kernelconstant_interintra*) hbw_malloc(sizeof(kernelconstant_interintra)), 0);
-	verify_ptr_fills_into_hbm((void*) cData.pKerconst_interintra, sizeof(kernelconstant_interintra), "cData.pKerconst_interintra");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) cData.pKerconst_interintra, sizeof(kernelconstant_interintra), "cData.pKerconst_interintra");
+		#endif
 	#else
 	status = (cData.pKerconst_interintra = sycl::malloc_device<kernelconstant_interintra>(1, dpct::get_default_queue()), 0);
 	#endif
@@ -260,7 +264,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pKerconst_intracontrib = (kernelconstant_intracontrib*) hbw_malloc(sizeof(kernelconstant_intracontrib)), 0);
-	verify_ptr_fills_into_hbm((void*) cData.pKerconst_intracontrib, sizeof(kernelconstant_intracontrib), "cData.pKerconst_intracontrib");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) cData.pKerconst_intracontrib, sizeof(kernelconstant_intracontrib), "cData.pKerconst_intracontrib");
+		#endif
 	#else
 	status = (cData.pKerconst_intracontrib = sycl::malloc_device<kernelconstant_intracontrib>(1, dpct::get_default_queue()), 0);
 	#endif
@@ -269,7 +275,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pKerconst_intra = (kernelconstant_intra*) hbw_malloc(sizeof(kernelconstant_intra)), 0);
-	verify_ptr_fills_into_hbm((void*) cData.pKerconst_intra, sizeof(kernelconstant_intra), "cData.pKerconst_intra");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) cData.pKerconst_intra, sizeof(kernelconstant_intra), "cData.pKerconst_intra");
+		#endif
 	#else
 	status = (cData.pKerconst_intra = sycl::malloc_device<kernelconstant_intra>(1, dpct::get_default_queue()), 0);
 	#endif
@@ -278,7 +286,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pKerconst_rotlist = (kernelconstant_rotlist*) hbw_malloc(sizeof(kernelconstant_rotlist)), 0);
-	verify_ptr_fills_into_hbm((void*) cData.pKerconst_rotlist, sizeof(kernelconstant_rotlist), "cData.pKerconst_rotlist");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) cData.pKerconst_rotlist, sizeof(kernelconstant_rotlist), "cData.pKerconst_rotlist");
+		#endif
 	#else
 	status = (cData.pKerconst_rotlist = sycl::malloc_device<kernelconstant_rotlist>(1, dpct::get_default_queue()), 0);
 	#endif
@@ -287,7 +297,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pKerconst_conform = (kernelconstant_conform*) hbw_malloc(sizeof(kernelconstant_conform)), 0);
-	verify_ptr_fills_into_hbm((void*) cData.pKerconst_conform, sizeof(kernelconstant_conform), "cData.pKerconst_conform");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) cData.pKerconst_conform, sizeof(kernelconstant_conform), "cData.pKerconst_conform");
+		#endif
 	#else
 	status = (cData.pKerconst_conform = sycl::malloc_device<kernelconstant_conform>(1, dpct::get_default_queue()), 0);
 	#endif
@@ -297,7 +309,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pMem_angle_const = (float*) hbw_malloc(1000 * sizeof(float)), 0);
-	verify_ptr_fills_into_hbm((void*) cData.pMem_angle_const, 1000 * sizeof(float), "cData.pMem_angle_const");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) cData.pMem_angle_const, 1000 * sizeof(float), "cData.pMem_angle_const");
+		#endif
 	#else
 	status = (cData.pMem_angle_const = sycl::malloc_device<float>(1000, dpct::get_default_queue()), 0);
 	#endif
@@ -306,7 +320,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pMem_dependence_on_theta_const = (float*) hbw_malloc(1000 * sizeof(float)), 0);
-	verify_ptr_fills_into_hbm((void*) cData.pMem_dependence_on_theta_const, 1000 * sizeof(float), "cData.pMem_dependence_on_theta_const");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) cData.pMem_dependence_on_theta_const, 1000 * sizeof(float), "cData.pMem_dependence_on_theta_const");
+		#endif
 	#else
 	status = (cData.pMem_dependence_on_theta_const = sycl::malloc_device<float>(1000, dpct::get_default_queue()), 0);
 	#endif
@@ -315,7 +331,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pMem_dependence_on_rotangle_const = (float*) hbw_malloc(1000 * sizeof(float)), 0);
-	verify_ptr_fills_into_hbm((void*) cData.pMem_dependence_on_rotangle_const, 1000 * sizeof(float), "cData.pMem_dependence_on_rotangle_const");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) cData.pMem_dependence_on_rotangle_const, 1000 * sizeof(float), "cData.pMem_dependence_on_rotangle_const");
+		#endif
 	#else
 	status = (cData.pMem_dependence_on_rotangle_const = sycl::malloc_device<float>(1000, dpct::get_default_queue()), 0);
 	#endif
@@ -324,7 +342,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pMem_rotbonds_const = (int*) hbw_malloc(2 * MAX_NUM_OF_ROTBONDS * sizeof(int)), 0);
-	verify_ptr_fills_into_hbm((void*) cData.pMem_rotbonds_const, 2 * MAX_NUM_OF_ROTBONDS * sizeof(int), "cData.pMem_rotbonds_const");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) cData.pMem_rotbonds_const, 2 * MAX_NUM_OF_ROTBONDS * sizeof(int), "cData.pMem_rotbonds_const");
+		#endif
 	#else
 	status = (cData.pMem_rotbonds_const = sycl::malloc_device<int>(2 * MAX_NUM_OF_ROTBONDS, dpct::get_default_queue()), 0);
 	#endif
@@ -333,7 +353,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pMem_rotbonds_atoms_const = (int*) hbw_malloc(MAX_NUM_OF_ATOMS * MAX_NUM_OF_ROTBONDS * sizeof(int)), 0);
-	verify_ptr_fills_into_hbm((void*) cData.pMem_rotbonds_atoms_const, MAX_NUM_OF_ATOMS * MAX_NUM_OF_ROTBONDS * sizeof(int), "cData.pMem_rotbonds_atoms_const");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) cData.pMem_rotbonds_atoms_const, MAX_NUM_OF_ATOMS * MAX_NUM_OF_ROTBONDS * sizeof(int), "cData.pMem_rotbonds_atoms_const");
+		#endif
 	#else
 	status = (cData.pMem_rotbonds_atoms_const = sycl::malloc_device<int>(MAX_NUM_OF_ATOMS * MAX_NUM_OF_ROTBONDS, dpct::get_default_queue()), 0);
 	#endif
@@ -342,7 +364,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (cData.pMem_num_rotating_atoms_per_rotbond_const = (int*) hbw_malloc(MAX_NUM_OF_ROTBONDS * sizeof(int)), 0);
-	verify_ptr_fills_into_hbm((void*) cData.pMem_num_rotating_atoms_per_rotbond_const, MAX_NUM_OF_ROTBONDS * sizeof(int), "cData.pMem_num_rotating_atoms_per_rotbond_const");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) cData.pMem_num_rotating_atoms_per_rotbond_const, MAX_NUM_OF_ROTBONDS * sizeof(int), "cData.pMem_num_rotating_atoms_per_rotbond_const");
+		#endif
 	#else
 	status = (cData.pMem_num_rotating_atoms_per_rotbond_const = sycl::malloc_device<int>(MAX_NUM_OF_ROTBONDS, dpct::get_default_queue()), 0);
 	#endif
@@ -368,7 +392,9 @@ try {
 		#ifdef CUSTOM_DYN_MEM_ALLOC
 		// TODO: CAUTION: this is only for CPU targets!
 		status = (tData.pMem_fgrids = (float*) hbw_malloc(cData.preallocated_gridsize * sizeof(float)), 0);
-		verify_ptr_fills_into_hbm((void*) tData.pMem_fgrids, cData.preallocated_gridsize * sizeof(float), "tData.pMem_fgrids");
+			#ifdef HBW_VERIFY
+			verify_ptr_fills_into_hbm((void*) tData.pMem_fgrids, cData.preallocated_gridsize * sizeof(float), "tData.pMem_fgrids");
+			#endif
 		#else
 		status = (tData.pMem_fgrids = sycl::malloc_device<float>(cData.preallocated_gridsize, dpct::get_default_queue()), 0);
 		#endif
@@ -380,7 +406,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_conformations1) = (float*) hbw_malloc(size_populations)), 0);
-	verify_ptr_fills_into_hbm((void*) tData.pMem_conformations1, size_populations, "tData.pMem_conformations1");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) tData.pMem_conformations1, size_populations, "tData.pMem_conformations1");
+		#endif
 	#else
 	status = (((tData.pMem_conformations1) = (float*) sycl::malloc_device(size_populations, dpct::get_default_queue())), 0);
 	#endif
@@ -389,7 +417,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_conformations2) = (float*) hbw_malloc(size_populations)), 0);
-	verify_ptr_fills_into_hbm((void*) tData.pMem_conformations2, size_populations, "tData.pMem_conformations2");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) tData.pMem_conformations2, size_populations, "tData.pMem_conformations2");
+		#endif
 	#else
 	status = (((tData.pMem_conformations2) = (float*) sycl::malloc_device(size_populations, dpct::get_default_queue())), 0);
 	#endif
@@ -400,7 +430,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_energies1) = (float*) hbw_malloc(size_energies)), 0);
-	verify_ptr_fills_into_hbm((void*) tData.pMem_energies1, size_energies, "tData.pMem_energies1");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) tData.pMem_energies1, size_energies, "tData.pMem_energies1");
+		#endif
 	#else
 	status = (((tData.pMem_energies1) = (float*) sycl::malloc_device(size_energies, dpct::get_default_queue())), 0);
 	#endif
@@ -409,7 +441,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_energies2) = (float*) hbw_malloc(size_energies)), 0);
-	verify_ptr_fills_into_hbm((void*) tData.pMem_energies2, size_energies, "tData.pMem_energies2");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) tData.pMem_energies2, size_energies, "tData.pMem_energies2");
+		#endif
 	#else
 	status = (((tData.pMem_energies2) = (float*) sycl::malloc_device(size_energies, dpct::get_default_queue())), 0);
 	#endif
@@ -418,7 +452,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_evals_of_new_entities) = (int*) hbw_malloc(MAX_POPSIZE * MAX_NUM_OF_RUNS * sizeof(int))), 0);
-	verify_ptr_fills_into_hbm((void*) tData.pMem_evals_of_new_entities, MAX_POPSIZE * MAX_NUM_OF_RUNS * sizeof(int), "tData.pMem_evals_of_new_entities");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) tData.pMem_evals_of_new_entities, MAX_POPSIZE * MAX_NUM_OF_RUNS * sizeof(int), "tData.pMem_evals_of_new_entities");
+		#endif
 	#else
 	status = (((tData.pMem_evals_of_new_entities) = sycl::malloc_device<int>(MAX_POPSIZE * MAX_NUM_OF_RUNS, dpct::get_default_queue())), 0);
 	#endif
@@ -429,7 +465,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_gpu_evals_of_runs) = (int*) hbw_malloc(size_evals_of_runs)), 0);
-	verify_ptr_fills_into_hbm((void*) tData.pMem_gpu_evals_of_runs, size_evals_of_runs, "tData.pMem_gpu_evals_of_runs");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) tData.pMem_gpu_evals_of_runs, size_evals_of_runs, "tData.pMem_gpu_evals_of_runs");
+		#endif
 	#else
 	status = (((tData.pMem_gpu_evals_of_runs) = (int*) sycl::malloc_shared(size_evals_of_runs, dpct::get_default_queue())), 0);
 	#endif
@@ -441,7 +479,9 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_prng_states) = (uint32_t*) hbw_malloc(size_prng_seeds)), 0);
-	verify_ptr_fills_into_hbm((void*) tData.pMem_prng_states, size_prng_seeds, "tData.pMem_prng_states");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) tData.pMem_prng_states, size_prng_seeds, "tData.pMem_prng_states");
+		#endif
 	#else
 	status = (((tData.pMem_prng_states) = (uint32_t*) sycl::malloc_device(size_prng_seeds, dpct::get_default_queue())), 0);
 	#endif
@@ -664,7 +704,9 @@ try
 		#ifdef CUSTOM_DYN_MEM_ALLOC
 		// TODO: CAUTION: this is only for CPU targets!
 		outbuf = (char*) hbw_malloc(256*sizeof(char));
-		verify_ptr_fills_into_hbm((void*) outbuf, 256*sizeof(char), "outbuf");
+			#ifdef HBW_VERIFY
+			verify_ptr_fills_into_hbm((void*) outbuf, 256*sizeof(char), "outbuf");
+			#endif
 		#else
 		outbuf = (char*) malloc(256*sizeof(char));
 		#endif
@@ -729,7 +771,9 @@ try
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	cpu_prng_seeds = (unsigned int*) hbw_malloc(size_prng_seeds);
-	verify_ptr_fills_into_hbm((void*) cpu_prng_seeds, size_prng_seeds, "cpu_prng_seeds");
+		#ifdef HBW_VERIFY
+		verify_ptr_fills_into_hbm((void*) cpu_prng_seeds, size_prng_seeds, "cpu_prng_seeds");
+		#endif
 	#else
 	cpu_prng_seeds = (unsigned int*) malloc(size_prng_seeds);
 	#endif
@@ -801,7 +845,9 @@ try
 		#ifdef CUSTOM_DYN_MEM_ALLOC
 		// TODO: CAUTION: this is only for CPU targets!
 		status = (tData.pMem_fgrids = (float*) hbw_malloc(mygrid->grids.size() * sizeof(float)), 0);
-		verify_ptr_fills_into_hbm((void*) tData.pMem_fgrids, mygrid->grids.size() * sizeof(float), "tData.pMem_fgrids");
+			#ifdef HBW_VERIFY
+			verify_ptr_fills_into_hbm((void*) tData.pMem_fgrids, mygrid->grids.size() * sizeof(float), "tData.pMem_fgrids");
+			#endif
 		#else
 		status = (tData.pMem_fgrids = sycl::malloc_device<float>(mygrid->grids.size(), dpct::get_default_queue()), 0);
 		#endif
