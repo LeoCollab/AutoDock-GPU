@@ -215,10 +215,14 @@ try {
 
 	// make sure array is large enough to hold device number text too
 	#ifdef CUSTOM_DYN_MEM_ALLOC
+	size_t dyn_mem_consumption = 0;
+	#endif
+
+	#ifdef CUSTOM_DYN_MEM_ALLOC
 	tData.device_name = (char*) hbw_malloc(strlen(props.get_name()) + 32);
 		#ifdef HBW_VERIFY
 		verify_ptr_fills_into_hbm((void*) tData.device_name, strlen(props.get_name()), "tData.device_name");
-		size_t dyn_mem_consumption = strlen(props.get_name());
+		dyn_mem_consumption += strlen(props.get_name());
 		#endif
 	#else
 	tData.device_name = (char*) malloc(strlen(props.get_name()) + 32);
@@ -738,6 +742,10 @@ try
 {
 	char* outbuf;
 	
+	#ifdef CUSTOM_DYN_MEM_ALLOC
+	size_t dyn_mem_consumption_2 = 0;
+	#endif
+
 	if(output!=NULL)
 	{
 		#ifdef CUSTOM_DYN_MEM_ALLOC
@@ -745,7 +753,7 @@ try
 		outbuf = (char*) hbw_malloc(256*sizeof(char));
 			#ifdef HBW_VERIFY
 			verify_ptr_fills_into_hbm((void*) outbuf, 256*sizeof(char), "outbuf");
-//			dyn_mem_consumption += outbuf, 256*sizeof(char);
+			dyn_mem_consumption_2 += 256*sizeof(char);
 			#endif
 		#else
 		outbuf = (char*) malloc(256*sizeof(char));
@@ -813,7 +821,7 @@ try
 	cpu_prng_seeds = (unsigned int*) hbw_malloc(size_prng_seeds);
 		#ifdef HBW_VERIFY
 		verify_ptr_fills_into_hbm((void*) cpu_prng_seeds, size_prng_seeds, "cpu_prng_seeds");
-//		dyn_mem_consumption += size_prng_seeds;
+		dyn_mem_consumption_2 += size_prng_seeds;
 		#endif
 	#else
 	cpu_prng_seeds = (unsigned int*) malloc(size_prng_seeds);
@@ -888,7 +896,11 @@ try
 		status = (tData.pMem_fgrids = (float*) hbw_malloc(mygrid->grids.size() * sizeof(float)), 0);
 			#ifdef HBW_VERIFY
 			verify_ptr_fills_into_hbm((void*) tData.pMem_fgrids, mygrid->grids.size() * sizeof(float), "tData.pMem_fgrids");
-//			dyn_mem_consumption += mygrid->grids.size() * sizeof(float);
+			dyn_mem_consumption_2 += mygrid->grids.size() * sizeof(float);
+			printf("\tAllocated dynamically in docking_with_gpu(): %lu B / %.3f kB / %.3f MB / %.3f GB\n",
+				dyn_mem_consumption_2, convert_B_to_kB(dyn_mem_consumption_2),
+				convert_kB_to_MB(convert_B_to_kB(dyn_mem_consumption_2)),
+				convert_MB_to_GB(convert_kB_to_MB(convert_B_to_kB(dyn_mem_consumption_2))));
 			#endif
 		#else
 		status = (tData.pMem_fgrids = sycl::malloc_device<float>(mygrid->grids.size(), dpct::get_default_queue()), 0);
