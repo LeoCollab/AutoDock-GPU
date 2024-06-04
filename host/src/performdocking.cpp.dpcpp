@@ -136,6 +136,24 @@ catch (sycl::exception const &exc)
 	std::exit(1);
 }
 
+#ifdef CUSTOM_DYN_MEM_ALLOC
+void verify_ptr_fills_into_hbm(void* ptr, size_t size, std::string ptr_name)
+{
+	// TODO: CAUTION: using this function in production code may result in a serious performance penalty!
+	int ptr_fills_into_hbm_status = hbw_verify_memory_region(ptr, size, HBW_TOUCH_PAGES);
+	if (ptr_fills_into_hbm_status != 0)
+	{
+		printf("\t%s: memory region doesn't fully fall into HBM\n", ptr_name.c_str());
+		printf("Terminated.\n\n");
+		exit(-1);
+	}
+	else
+	{
+		printf("\t%s: memory region fully falls into HBM\n\n", ptr_name.c_str());
+	}
+}
+#endif
+
 void setup_gpu_for_docking(
 	GpuData &cData,
 	GpuTempData &tData)
@@ -183,17 +201,7 @@ try {
 	// make sure array is large enough to hold device number text too
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	tData.device_name = (char*) hbw_malloc(strlen(props.get_name()) + 32);
-	int hbm_verify_status = hbw_verify_memory_region(tData.device_name, strlen(props.get_name()), HBW_TOUCH_PAGES);
-	if (hbm_verify_status != 0)
-	{
-		printf("\t%s: memory region doesn't fully fall into HBM\n", "tData.device_name");
-		printf("Terminated.\n\n");
-		exit(-1);
-	}
-	else
-	{
-		printf("\t%s: memory region fully falls into HBM\n\n", "tData.device_name");
-	}
+	verify_ptr_fills_into_hbm((void*) tData.device_name, strlen(props.get_name()), "tData.device_name");
 	#else
 	tData.device_name = (char*) malloc(strlen(props.get_name()) + 32);
 	#endif
