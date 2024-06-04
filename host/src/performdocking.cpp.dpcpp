@@ -368,6 +368,7 @@ try {
 		#ifdef CUSTOM_DYN_MEM_ALLOC
 		// TODO: CAUTION: this is only for CPU targets!
 		status = (tData.pMem_fgrids = (float*) hbw_malloc(cData.preallocated_gridsize * sizeof(float)), 0);
+		verify_ptr_fills_into_hbm((void*) tData.pMem_fgrids, cData.preallocated_gridsize * sizeof(float), "tData.pMem_fgrids");
 		#else
 		status = (tData.pMem_fgrids = sycl::malloc_device<float>(cData.preallocated_gridsize, dpct::get_default_queue()), 0);
 		#endif
@@ -379,6 +380,7 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_conformations1) = (float*) hbw_malloc(size_populations)), 0);
+	verify_ptr_fills_into_hbm((void*) tData.pMem_conformations1, size_populations, "tData.pMem_conformations1");
 	#else
 	status = (((tData.pMem_conformations1) = (float*) sycl::malloc_device(size_populations, dpct::get_default_queue())), 0);
 	#endif
@@ -387,6 +389,7 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_conformations2) = (float*) hbw_malloc(size_populations)), 0);
+	verify_ptr_fills_into_hbm((void*) tData.pMem_conformations2, size_populations, "tData.pMem_conformations2");
 	#else
 	status = (((tData.pMem_conformations2) = (float*) sycl::malloc_device(size_populations, dpct::get_default_queue())), 0);
 	#endif
@@ -397,6 +400,7 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_energies1) = (float*) hbw_malloc(size_energies)), 0);
+	verify_ptr_fills_into_hbm((void*) tData.pMem_energies1, size_energies, "tData.pMem_energies1");
 	#else
 	status = (((tData.pMem_energies1) = (float*) sycl::malloc_device(size_energies, dpct::get_default_queue())), 0);
 	#endif
@@ -405,6 +409,7 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_energies2) = (float*) hbw_malloc(size_energies)), 0);
+	verify_ptr_fills_into_hbm((void*) tData.pMem_energies2, size_energies, "tData.pMem_energies2");
 	#else
 	status = (((tData.pMem_energies2) = (float*) sycl::malloc_device(size_energies, dpct::get_default_queue())), 0);
 	#endif
@@ -413,6 +418,7 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_evals_of_new_entities) = (int*) hbw_malloc(MAX_POPSIZE * MAX_NUM_OF_RUNS * sizeof(int))), 0);
+	verify_ptr_fills_into_hbm((void*) tData.pMem_evals_of_new_entities, MAX_POPSIZE * MAX_NUM_OF_RUNS * sizeof(int), "tData.pMem_evals_of_new_entities");
 	#else
 	status = (((tData.pMem_evals_of_new_entities) = sycl::malloc_device<int>(MAX_POPSIZE * MAX_NUM_OF_RUNS, dpct::get_default_queue())), 0);
 	#endif
@@ -423,6 +429,7 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_gpu_evals_of_runs) = (int*) hbw_malloc(size_evals_of_runs)), 0);
+	verify_ptr_fills_into_hbm((void*) tData.pMem_gpu_evals_of_runs, size_evals_of_runs, "tData.pMem_gpu_evals_of_runs");
 	#else
 	status = (((tData.pMem_gpu_evals_of_runs) = (int*) sycl::malloc_shared(size_evals_of_runs, dpct::get_default_queue())), 0);
 	#endif
@@ -434,6 +441,7 @@ try {
 	#ifdef CUSTOM_DYN_MEM_ALLOC
 	// TODO: CAUTION: this is only for CPU targets!
 	status = (((tData.pMem_prng_states) = (uint32_t*) hbw_malloc(size_prng_seeds)), 0);
+	verify_ptr_fills_into_hbm((void*) tData.pMem_prng_states, size_prng_seeds, "tData.pMem_prng_states");
 	#else
 	status = (((tData.pMem_prng_states) = (uint32_t*) sycl::malloc_device(size_prng_seeds, dpct::get_default_queue())), 0);
 	#endif
