@@ -6,8 +6,22 @@ echo ${prog}
 echo ${prog_options}
 echo ${cmd}
 
+# --interleave=2,3:
+#	Memory will be allocated using round robin on NUMA nodes 2 and 3.
+#	When memory cannot be allocated on the current interleave
+#	target fall back to other nodes.
+#	--interleave=2,3 chooses HBM first. If not enough, then uses DDR
+#
+# --physcpubind=0-190:
+#	Only executes process(es) on CPU cores 0-190.
+#	This leaves core 191 free for measurements
+#	(otherwise output hangs or it is hard to visualize it)
+#
+#	Commands for measuring
+#	numactl --physcpubind=191 watch -n0.5 numastat -p autodock
+#	numactl --physcpubind=191 htop
 function run_adgpu () {
-	numactl --interleave=2,3 $cmd
+	numactl --interleave=2,3 --physcpubind=0-190 $cmd
 }
 
 # https://unix.stackexchange.com/questions/392951/how-to-write-a-for-loop-which-runs-an-asynchronous-command-in-each-iteration
