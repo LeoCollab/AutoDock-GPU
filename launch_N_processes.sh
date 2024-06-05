@@ -19,6 +19,7 @@ echo ${cmd}
 #
 #	Commands for measuring
 #	numactl --physcpubind=191 watch -n0.5 numastat -p autodock
+#	numactl --physcpubind=191 numastat -p autodock  | tail -n 5
 #	numactl --physcpubind=191 htop
 function run_adgpu () {
 	numactl --interleave=2,3 --physcpubind=0-190 $cmd
