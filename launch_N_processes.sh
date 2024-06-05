@@ -7,7 +7,7 @@ echo ${prog_options}
 echo ${cmd}
 
 function run_adgpu () {
-        numactl --interleave=2,3 $cmd
+	numactl --interleave=2,3 $cmd
 }
 
 # https://unix.stackexchange.com/questions/392951/how-to-write-a-for-loop-which-runs-an-asynchronous-command-in-each-iteration
@@ -17,9 +17,9 @@ function run_adgpu () {
 
 re='^[0-9]+$'
 if ! [[ ${1} =~ ${re} ]] ; then
-        printf "\n\n>>> Error: not an number!\n\n"; exit 1
+	printf "\n\n>>> Error: not an number!\n\n"; exit 1
 else
-        printf "\n\n>>>> Number of process to be run simultaneously: ${1}\n\n"
+	printf "\n\n>>>> Number of process to be run simultaneously: ${1}\n\n"
 fi
 
 # https://www.hostinger.com/tutorials/bash-for-loop-guide-and-examples
@@ -27,8 +27,8 @@ fi
 i=1
 while [ $i -le $1 ]
 do
-        run_adgpu &
-        ((i++))
+	run_adgpu &
+	((i++))
 done
 
 # ./launch_N_processes.sh 10 1stp
