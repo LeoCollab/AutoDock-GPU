@@ -22,11 +22,19 @@ else
 	printf "\n\n>>>> Number of process to be run simultaneously: ${1}\n\n"
 fi
 
+# Running processes asynchronously and storing pids in array
 # https://www.hostinger.com/tutorials/bash-for-loop-guide-and-examples
-# From 1 to $1
+# https://stackoverflow.com/a/356154
 for i in `seq 1 $1`
 do
 	run_adgpu &
+	pids[${i}] = $!
+done
+
+# Waiting for all pids
+for pid in ${pids[*]}
+do
+	wait $pid
 done
 
 # ./launch_N_processes.sh 10 1stp
