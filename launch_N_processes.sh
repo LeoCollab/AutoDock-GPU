@@ -27,7 +27,11 @@ fi
 i=1
 while [ $i -le $1 ]
 do
-	run_adgpu &
+	if [[ $i -lt $1 ]] ; then
+		run_adgpu &
+	else
+		run_adgpu
+	fi
 	((i++))
 done
 
