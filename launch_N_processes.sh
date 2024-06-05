@@ -24,7 +24,7 @@ fi
 
 # https://www.hostinger.com/tutorials/bash-for-loop-guide-and-examples
 # From 1 to $1
-for i in $1
+for i in `seq 1 $1`
 do
 	run_adgpu &
 done
