@@ -24,15 +24,9 @@ fi
 
 # https://www.hostinger.com/tutorials/bash-for-loop-guide-and-examples
 # From 1 to $1
-i=1
-while [ $i -le $1 ]
+for i in $1
 do
-	if [[ $i -lt $1 ]] ; then
-		run_adgpu &
-	else
-		run_adgpu
-	fi
-	((i++))
+	run_adgpu &
 done
 
 # ./launch_N_processes.sh 10 1stp
