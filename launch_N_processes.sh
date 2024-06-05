@@ -28,7 +28,7 @@ fi
 for i in `seq 1 $1`
 do
 	run_adgpu &
-	pids[${i}] = $!
+	pids[${i}]=$!
 done
 
 # Waiting for all pids
