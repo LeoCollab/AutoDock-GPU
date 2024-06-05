@@ -1,13 +1,13 @@
 #! /bin/bash
 prog="./bin/autodock_xegpu_64wi"
-prog_options="-ffile ./input/${2}/derived/${2}_protein.maps.fld -lfile ./input/${2}/derived/${2}_ligand.pdbqt -nrun 100 -ngen 27000 -psize 150 -resnam test -gfpop 0 -lsmet sw
+prog_options="-ffile ./input/${2}/derived/${2}_protein.maps.fld -lfile ./input/${2}/derived/${2}_ligand.pdbqt -nrun 100 -ngen 27000 -psize 150 -resnam test -gfpop 0 -lsmet sw"
 cmd="${prog} ${prog_options}"
 echo ${prog}
 echo ${prog_options}
 echo ${cmd}
 
 function run_adgpu () {
-        $cmd
+        numactl --interleave=2,3 $cmd
 }
 
 # https://unix.stackexchange.com/questions/392951/how-to-write-a-for-loop-which-runs-an-asynchronous-command-in-each-iteration
@@ -27,7 +27,7 @@ fi
 i=1
 while [ $i -le $1 ]
 do
-        numactl --interleave=2,3 run_adgpu &
+        run_adgpu &
         ((i++))
 done
 
