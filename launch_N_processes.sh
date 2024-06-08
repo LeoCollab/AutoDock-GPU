@@ -22,9 +22,9 @@ echo ${cmd}
 #	numactl --physcpubind=191 numastat -p autodock  | tail -n 5
 #	numactl --physcpubind=191 htop
 function run_adgpu () {
-#	numactl --interleave=2,3 --physcpubind=0-190 $cmd
-        numactl --physcpubind=0-47,96-143 --preferred=2 $cmd &
-        numactl --physcpubind=48-95,144-190 --preferred=3 $cmd
+	numactl --interleave=2,3 --physcpubind=0-190 $cmd
+#        numactl --physcpubind=0-47,96-143 --preferred=2 $cmd &
+#        numactl --physcpubind=48-95,144-190 --preferred=3 $cmd
 }
 
 # https://unix.stackexchange.com/questions/392951/how-to-write-a-for-loop-which-runs-an-asynchronous-command-in-each-iteration
