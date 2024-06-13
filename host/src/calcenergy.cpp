@@ -393,14 +393,43 @@ void make_reqrot_ordering(
 int gen_rotlist(
 	Liganddata* myligand,
 	int rotlist[MAX_NUM_OF_ROTATIONS]
+	/*
+	,
+	int subrotlist_1[MAX_NUM_OF_ROTATIONS],
+	int subrotlist_2[MAX_NUM_OF_ROTATIONS],
+	int subrotlist_3[MAX_NUM_OF_ROTATIONS],
+	int subrotlist_4[MAX_NUM_OF_ROTATIONS],
+	int subrotlist_5[MAX_NUM_OF_ROTATIONS],
+	int subrotlist_6[MAX_NUM_OF_ROTATIONS],
+	int subrotlist_7[MAX_NUM_OF_ROTATIONS],
+	int subrotlist_8[MAX_NUM_OF_ROTATIONS],
+	int subrotlist_9[MAX_NUM_OF_ROTATIONS],
+	int subrotlist_10[MAX_NUM_OF_ROTATIONS],
+	int subrotlist_11[MAX_NUM_OF_ROTATIONS],
+	unsigned int* subrotlist_1_length,
+	unsigned int* subrotlist_2_length,
+	unsigned int* subrotlist_3_length,
+	unsigned int* subrotlist_4_length,
+	unsigned int* subrotlist_5_length,
+	unsigned int* subrotlist_6_length,
+	unsigned int* subrotlist_7_length,
+	unsigned int* subrotlist_8_length,
+	unsigned int* subrotlist_9_length,
+	unsigned int* subrotlist_10_length,
+	unsigned int* subrotlist_11_length
+	*/
 )
 // The function generates the rotation list which will be stored in the constant memory field rotlist_const by
 // prepare_const_fields_for_gpu(). The structure of this array is described at that function.
 {
 	int atom_id, rotb_id, parallel_rot_id, rotlist_id;
+
 	int number_of_req_rotations[MAX_NUM_OF_ATOMS];
+	int number_of_req_rotations_copy[MAX_NUM_OF_ATOMS];
+
 	int atom_id_of_numrots[MAX_NUM_OF_ATOMS];
 	bool atom_wasnt_rotated_yet[MAX_NUM_OF_ATOMS];
+
 	int new_rotlist_element;
 	bool rotbond_found;
 	int rotbond_candidate;
@@ -498,5 +527,21 @@ int gen_rotlist(
 		make_reqrot_ordering(number_of_req_rotations, atom_id_of_numrots, myligand->num_of_atoms);
 		(myligand->num_of_rotcyc)++;
 	}
+
+	// ---------------------------------------------------------------------------
+	// Building rotation lists
+	// ---------------------------------------------------------------------------
+	printf("\n# rotlist elements: %u\n", rotlist_id);
+	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+		unsigned int atom_id = rotlist[rot_cnt] & RLIST_ATOMID_MASK;
+		printf("rot-id: %u \tatom-id: %u\n", rot_cnt, atom_id);
+	}
+
+	printf("\n# atoms: %u\n", myligand->num_of_atoms);
+	for (unsigned int atom_cnt = 0; atom_cnt < myligand->num_of_atoms; atom_cnt++) {
+		printf("atom-id: %u \tnumber-rot-req: %u\n", atom_cnt, number_of_req_rotations_copy[atom_cnt]);
+	}
+
+
 	return 0;
 }
