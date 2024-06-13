@@ -818,6 +818,44 @@ int gen_rotlist(
 	//*subrotlist_7_length = rot_7_cnt;
 	printf("\tsubrotlist_7 length: %u\n", /**subrotlist_7_length*/rot_7_cnt);
 
+	// ---------------------------------------------------------------------------
+	// 8th rotations (for only those atoms that experiment such)
+	// ---------------------------------------------------------------------------
+	int subrotlist_8[MAX_NUM_OF_ROTATIONS];
+	int rot_8_cnt = 0;
+
+	printf("\nsubrotlist_8:\n");
+	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
+
+		// Making sure rot id to be added to "subrotlist_8"
+		// was not already added to neither
+		// "subrotlist_1" nor "subrotlist_2" nor "subrotlist_3" nor "subrotlist_4" nor "subrotlist_5" nor "subrotlist_6" nor "subrotlist_7"
+		if ((rots_used_in_subrotlist_1[rot_cnt] != rot_cnt) && (rots_used_in_subrotlist_2[rot_cnt] != rot_cnt) &&
+		    (rots_used_in_subrotlist_3[rot_cnt] != rot_cnt) && (rots_used_in_subrotlist_4[rot_cnt] != rot_cnt) &&
+			(rots_used_in_subrotlist_5[rot_cnt] != rot_cnt) && (rots_used_in_subrotlist_6[rot_cnt] != rot_cnt) &&
+			(rots_used_in_subrotlist_7[rot_cnt] != rot_cnt)
+			) {
+
+			if ((num_times_atom_in_subrotlist[atom_id] == 7) && (number_of_req_rotations_copy[atom_id] >= 8)) {
+				printf("[subrot_8 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_8_cnt, rot_cnt, atom_id);
+
+				// Storing ids from the original "rotlist" that are used in "subrotlist_8"
+				rots_used_in_subrotlist_8[rot_cnt] = rot_cnt;
+
+				// 8th rotation of this atom is stored in "subrotlist_8"
+				subrotlist_8[rot_8_cnt] = rotlist[rot_cnt];
+				rot_8_cnt++;
+
+				// An eventual 9th rotation of this atom will be stored in "subrotlist_9"
+				num_times_atom_in_subrotlist[atom_id]++;
+			}
+
+		}
+	}
+	//*subrotlist_8_length = rot_8_cnt;
+	printf("\tsubrotlist_8 length: %u\n", /**subrotlist_8_length*/rot_8_cnt);
+
 
 	return 0;
 }
