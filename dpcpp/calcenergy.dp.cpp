@@ -482,15 +482,17 @@ void gpu_calc_energy(
 			float dist2 = atomic_distance * atomic_distance;
 			// Calculating desolvation term
 			// 1/25.92 = 0.038580246913580245
+			float tmp_0 = -0.001947f * dist2 + 1.0f;
+			float tmp_1 = -0.1063f * tmp_0 * dist2 + 12.96f;
+			float tmp_2 = 0.000112f * dist2 + 0.00357f;
+			float tmp_3 = tmp_2 * dist2 + 0.4137f;
+			float tmp_4 = tmp_3 * dist2 + 12.96f;
 			float desolv_energy =
 				((cData.pKerconst_intra->dspars_S_const[atom1_typeid] +
 				  cData.dockpars.qasp * sycl::fabs(q1)) * cData.pKerconst_intra->dspars_V_const[atom2_typeid] +
 				 (cData.pKerconst_intra->dspars_S_const[atom2_typeid] +
 				  cData.dockpars.qasp * sycl::fabs(q2)) * cData.pKerconst_intra->dspars_V_const[atom1_typeid]) *
-				  SYCL_DIVIDE(
-				  	cData.dockpars.coeff_desolv * (12.96f - 0.1063f * dist2 * (1.0f - 0.001947f * dist2)),
-				  	(12.96f + dist2 * (0.4137f + dist2 * (0.00357f + 0.000112f * dist2)))
-				  );
+				  SYCL_DIVIDE(cData.dockpars.coeff_desolv * tmp_1, tmp_4);
 
 			// Calculating electrostatic term
 			float dist_shift = atomic_distance + 1.26366f;
