@@ -542,6 +542,69 @@ int gen_rotlist(
 		printf("atom-id: %u \tnumber-rot-req: %u\n", atom_cnt, number_of_req_rotations_copy[atom_cnt]);
 	}
 
+	// Builing first rotation list
+	int num_times_atom_in_subrotlist[MAX_NUM_OF_ATOMS];
+	for (unsigned int atom_cnt = 0; atom_cnt < MAX_NUM_OF_ATOMS; atom_cnt++) {
+		num_times_atom_in_subrotlist[atom_cnt] = 0;
+	}
+
+	// ---------------------------------------------------------------------------
+	// Arrays storing rot ids already used in "subrotlist_1" or "subrotlist_2" or etc
+	int rots_used_in_subrotlist_1[MAX_NUM_OF_ROTATIONS];
+	int rots_used_in_subrotlist_2[MAX_NUM_OF_ROTATIONS];
+	int rots_used_in_subrotlist_3[MAX_NUM_OF_ROTATIONS];
+	int rots_used_in_subrotlist_4[MAX_NUM_OF_ROTATIONS];
+	int rots_used_in_subrotlist_5[MAX_NUM_OF_ROTATIONS];
+	int rots_used_in_subrotlist_6[MAX_NUM_OF_ROTATIONS];
+	int rots_used_in_subrotlist_7[MAX_NUM_OF_ROTATIONS];
+	int rots_used_in_subrotlist_8[MAX_NUM_OF_ROTATIONS];
+	int rots_used_in_subrotlist_9[MAX_NUM_OF_ROTATIONS];
+	int rots_used_in_subrotlist_10[MAX_NUM_OF_ROTATIONS];
+	int rots_used_in_subrotlist_11[MAX_NUM_OF_ROTATIONS];
+
+	// Assigning an initial value of MAX_NUM_OF_ROTATIONS,
+	// which of course will never be taken by a rot id
+	for (unsigned int rot_cnt = 0; rot_cnt < MAX_NUM_OF_ROTATIONS; rot_cnt++) {
+		rots_used_in_subrotlist_1[rot_cnt] = MAX_NUM_OF_ROTATIONS;
+		rots_used_in_subrotlist_2[rot_cnt] = MAX_NUM_OF_ROTATIONS;
+		rots_used_in_subrotlist_3[rot_cnt] = MAX_NUM_OF_ROTATIONS;
+		rots_used_in_subrotlist_4[rot_cnt] = MAX_NUM_OF_ROTATIONS;
+		rots_used_in_subrotlist_5[rot_cnt] = MAX_NUM_OF_ROTATIONS;
+		rots_used_in_subrotlist_6[rot_cnt] = MAX_NUM_OF_ROTATIONS;
+		rots_used_in_subrotlist_7[rot_cnt] = MAX_NUM_OF_ROTATIONS;
+		rots_used_in_subrotlist_8[rot_cnt] = MAX_NUM_OF_ROTATIONS;
+		rots_used_in_subrotlist_9[rot_cnt] = MAX_NUM_OF_ROTATIONS;
+		rots_used_in_subrotlist_10[rot_cnt] = MAX_NUM_OF_ROTATIONS;
+		rots_used_in_subrotlist_11[rot_cnt] = MAX_NUM_OF_ROTATIONS;
+	}
+
+	// ---------------------------------------------------------------------------
+	// First rotations
+	// ---------------------------------------------------------------------------
+	int subrotlist_1[MAX_NUM_OF_ROTATIONS];
+	int rot_1_cnt = 0;
+
+	printf("\nsubrotlist_1:\n");
+	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
+
+		if ((num_times_atom_in_subrotlist[atom_id] == 0)  && (number_of_req_rotations_copy[atom_id] >= 1)) {
+			printf("[subrot_1 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_1_cnt, rot_cnt, atom_id);
+
+			// Storing ids from the original "rotlist" that are used in "subrotlist_1"
+			rots_used_in_subrotlist_1[rot_cnt] = rot_cnt;
+
+			// First rotation of this atom is stored in "subrotlist_1"
+			subrotlist_1[rot_1_cnt] = rotlist[rot_cnt];
+			rot_1_cnt++;
+
+			// An eventual second rotation of this atom will be stored in "subrotlist_2"
+			num_times_atom_in_subrotlist[atom_id]++;
+		}
+	}
+	//*subrotlist_1_length = rot_1_cnt;
+	printf("\tsubrotlist_1 length: %u\n", /**subrotlist_1_length*/rot_1_cnt);
+
 
 	return 0;
 }
