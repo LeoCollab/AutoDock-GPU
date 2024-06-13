@@ -136,25 +136,25 @@ typedef struct
 } kernelconstant_grads;
 
 int prepare_const_fields_for_gpu(
-                                 Liganddata*                  myligand_reference,
-                                 Dockpars*                    mypars,
-                                 kernelconstant_interintra*   KerConst_interintra,
-                                 kernelconstant_intracontrib* KerConst_intracontrib,
-                                 kernelconstant_intra*        KerConst_intra,
-                                 kernelconstant_rotlist*      KerConst_rotlist,
-                                 kernelconstant_conform*      KerConst_conform,
-                                 kernelconstant_grads*        KerConst_grads
-                                );
+	Liganddata*                  myligand_reference,
+	Dockpars*                    mypars,
+	kernelconstant_interintra*   KerConst_interintra,
+	kernelconstant_intracontrib* KerConst_intracontrib,
+	kernelconstant_intra*        KerConst_intra,
+	kernelconstant_rotlist*      KerConst_rotlist,
+	kernelconstant_conform*      KerConst_conform,
+	kernelconstant_grads*        KerConst_grads
+);
 
 void make_reqrot_ordering(
-                          int number_of_req_rotations[MAX_NUM_OF_ATOMS],
-                          int atom_id_of_numrots[MAX_NUM_OF_ATOMS],
-                          int num_of_atoms
-                         );
+	int number_of_req_rotations[MAX_NUM_OF_ATOMS],
+	int atom_id_of_numrots[MAX_NUM_OF_ATOMS],
+	int num_of_atoms
+);
 
 int gen_rotlist(
-                Liganddata* myligand,
-                int         rotlist[MAX_NUM_OF_ROTATIONS]
-               );
+	Liganddata* myligand,
+	int         rotlist[MAX_NUM_OF_ROTATIONS]
+);
 
 #endif /* CALCENERGY_H_ */

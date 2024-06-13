@@ -37,15 +37,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #endif
 
 int prepare_const_fields_for_gpu(
-                                 Liganddata*                  myligand_reference,
-                                 Dockpars*                    mypars,
-                                 kernelconstant_interintra*   KerConst_interintra,
-                                 kernelconstant_intracontrib* KerConst_intracontrib,
-                                 kernelconstant_intra*        KerConst_intra,
-                                 kernelconstant_rotlist*      KerConst_rotlist,
-                                 kernelconstant_conform*      KerConst_conform,
-                                 kernelconstant_grads*        KerConst_grads
-                                )
+	Liganddata*                  myligand_reference,
+	Dockpars*                    mypars,
+	kernelconstant_interintra*   KerConst_interintra,
+	kernelconstant_intracontrib* KerConst_intracontrib,
+	kernelconstant_intra*        KerConst_intra,
+	kernelconstant_rotlist*      KerConst_rotlist,
+	kernelconstant_conform*      KerConst_conform,
+	kernelconstant_grads*        KerConst_grads
+)
 // The function fills the constant memory field of the GPU
 // based on the parameters describing ligand, flexres, and
 // docking parameters as well as reference orientation angles.
