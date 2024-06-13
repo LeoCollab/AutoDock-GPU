@@ -458,6 +458,11 @@ int gen_rotlist(
 		myligand->num_of_rotations_required += number_of_req_rotations[atom_id];
 	}
 
+	for (atom_id=0; atom_id<myligand->num_of_atoms; atom_id++)
+	{
+		number_of_req_rotations_copy[atom_id] = number_of_req_rotations[atom_id];
+	}
+
 	rotlist_id = 0;
 	make_reqrot_ordering(number_of_req_rotations, atom_id_of_numrots, myligand->num_of_atoms);
 
