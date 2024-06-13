@@ -709,6 +709,40 @@ int gen_rotlist(
 	//*subrotlist_4_length = rot_4_cnt;
 	printf("\tsubrotlist_4 length: %u\n", /**subrotlist_4_length*/rot_4_cnt);
 
+	// ---------------------------------------------------------------------------
+	// Fifth rotations (for only those atoms that experiment such)
+	// ---------------------------------------------------------------------------
+	int subrotlist_5[MAX_NUM_OF_ROTATIONS];
+	int rot_5_cnt = 0;
+
+	printf("\nsubrotlist_5:\n");
+	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
+
+		// Making sure rot id to be added to "subrotlist_5"
+		// was not already added to neither
+		// "subrotlist_1" nor "subrotlist_2" nor "subrotlist_3" nor "subrotlist_4"
+		if ((rots_used_in_subrotlist_1[rot_cnt] != rot_cnt) && (rots_used_in_subrotlist_2[rot_cnt] != rot_cnt) &&
+		    (rots_used_in_subrotlist_3[rot_cnt] != rot_cnt) && (rots_used_in_subrotlist_4[rot_cnt] != rot_cnt)) {
+
+			if ((num_times_atom_in_subrotlist[atom_id] == 4) && (number_of_req_rotations_copy[atom_id] >= 5)) {
+				printf("[subrot_5 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_5_cnt, rot_cnt, atom_id);
+
+				// Storing ids from the original "rotlist" that are used in "subrotlist_5"
+				rots_used_in_subrotlist_5[rot_cnt] = rot_cnt;
+
+				// Fifth rotation of this atom is stored in "subrotlist_5"
+				subrotlist_5[rot_5_cnt] = rotlist[rot_cnt];
+				rot_5_cnt++;
+
+				// An eventual 6th rotation of this atom will be stored in "rotlist_six"
+				num_times_atom_in_subrotlist[atom_id]++;
+			}
+
+		}
+	}
+	//*subrotlist_5_length = rot_5_cnt;
+	printf("\tsubrotlist_5 length: %u\n", /**subrotlist_5_length*/rot_5_cnt);
 
 
 
