@@ -610,6 +610,37 @@ int gen_rotlist(
 	//*subrotlist_1_length = rot_1_cnt;
 	printf("\tsubrotlist_1 length: %u\n", /**subrotlist_1_length*/rot_1_cnt);
 
+	// ---------------------------------------------------------------------------
+	// Second rotations (for only those atoms that experiment such)
+	// ---------------------------------------------------------------------------
+	int subrotlist_2[MAX_NUM_OF_ROTATIONS];
+	int rot_2_cnt = 0;
+
+	printf("\nsubrotlist_2:\n");
+	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
+
+		// Making sure rot id to be added to "subrotlist_2" was not already added to "subrotlist_1"
+		if (rots_used_in_subrotlist_1[rot_cnt] != rot_cnt) {
+
+			if ((num_times_atom_in_subrotlist[atom_id] == 1) && (number_of_req_rotations_copy[atom_id] >= 2)) {
+				printf("[subrot_2 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_2_cnt, rot_cnt, atom_id);
+
+				// Storing ids from the original "rotlist" that are used in "subrotlist_2"
+				rots_used_in_subrotlist_2[rot_cnt] = rot_cnt;
+
+				// Second rotation of this atom is stored in "subrotlist_2"
+				subrotlist_2[rot_2_cnt] = rotlist[rot_cnt];
+				rot_2_cnt++;
+
+				// An eventual third rotation of this atom will be stored in "subrotlist_3"
+				num_times_atom_in_subrotlist[atom_id]++;
+			}
+
+		}
+	}
+	//*subrotlist_2_length = rot_2_cnt;
+	printf("\tsubrotlist_2 length: %u\n", /**subrotlist_2_length*/rot_2_cnt);
 
 	return 0;
 }
