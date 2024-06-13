@@ -355,10 +355,10 @@ int prepare_const_fields_for_gpu(
 
 
 void make_reqrot_ordering(
-                          int number_of_req_rotations[MAX_NUM_OF_ATOMS],
-                          int atom_id_of_numrots     [MAX_NUM_OF_ATOMS],
-                          int num_of_atoms
-                         )
+	int number_of_req_rotations[MAX_NUM_OF_ATOMS],
+	int atom_id_of_numrots[MAX_NUM_OF_ATOMS],
+	int num_of_atoms
+)
 // The function puts the first array into a descending order and
 // performs the same operations on the second array (since element i of
 // number_or_req_rotations and element i of atom_id_of_numrots correspond to each other).
@@ -382,20 +382,18 @@ void make_reqrot_ordering(
 				atom_id_of_numrots[i+1] = temp;
 			}
 
-/*	printf("\n\nRotation priority list after re-ordering:\n");
+/*
+	printf("\n\nRotation priority list after re-ordering:\n");
 	for (i=0; i<num_of_atoms; i++)
 		printf("Roatom_rotbondstation of %d (required rots remaining: %d)\n", atom_id_of_numrots[i], number_of_req_rotations[i]);
-	printf("\n\n");*/
-
-
+	printf("\n\n");
+*/
 }
 
-
-
 int gen_rotlist(
-                Liganddata* myligand,
-                int         rotlist[MAX_NUM_OF_ROTATIONS]
-               )
+	Liganddata* myligand,
+	int rotlist[MAX_NUM_OF_ROTATIONS]
+)
 // The function generates the rotation list which will be stored in the constant memory field rotlist_const by
 // prepare_const_fields_for_gpu(). The structure of this array is described at that function.
 {
@@ -408,13 +406,14 @@ int gen_rotlist(
 	int rotbond_candidate;
 	int remaining_rots_around_rotbonds;
 
-
 	myligand->num_of_rotcyc = 0;
 	myligand->num_of_rotations_required = 0;
 
-
-	for (atom_id=0; atom_id<NUM_OF_THREADS_PER_BLOCK; atom_id++) // handling special case when num_of_atoms<NUM_OF_THREADS_PER_BLOCK
+	// Handling special case when num_of_atoms < NUM_OF_THREADS_PER_BLOCK
+	for (atom_id=0; atom_id<NUM_OF_THREADS_PER_BLOCK; atom_id++)
+	{
 		number_of_req_rotations[atom_id] = 0;
+	}
 
 	for (atom_id=0; atom_id<myligand->num_of_atoms; atom_id++)
 	{
@@ -430,25 +429,34 @@ int gen_rotlist(
 		myligand->num_of_rotations_required += number_of_req_rotations[atom_id];
 	}
 
-	rotlist_id=0;
+	rotlist_id = 0;
 	make_reqrot_ordering(number_of_req_rotations, atom_id_of_numrots, myligand->num_of_atoms);
-	while (number_of_req_rotations[0] != 0) // if the atom with the most remaining rotations has to be rotated 0 times, done
+
+	// If the atom with the most remaining rotations has to be rotated 0 times, done
+	while (number_of_req_rotations[0] != 0)
 	{
 		if (rotlist_id == MAX_NUM_OF_ROTATIONS)
+		{
 			return 1;
+		}
 
-		// putting the NUM_OF_THREADS_PER_BLOCK pieces of most important rotations to the list
+		// Putting the NUM_OF_THREADS_PER_BLOCK pieces of most important rotations to the list
 		for (parallel_rot_id=0; parallel_rot_id<NUM_OF_THREADS_PER_BLOCK; parallel_rot_id++)
 		{
-			if (number_of_req_rotations[parallel_rot_id] == 0) // if the atom has not to be rotated anymore, dummy rotation
+			// If the atom has not to be rotated anymore, dummy rotation
+			if (number_of_req_rotations[parallel_rot_id] == 0)
+			{
 				new_rotlist_element = RLIST_DUMMY_MASK;
+			}
 			else
 			{
 				atom_id = atom_id_of_numrots[parallel_rot_id];
 				new_rotlist_element = ((int) atom_id) & RLIST_ATOMID_MASK;
 
 				if (number_of_req_rotations[parallel_rot_id] == 1)
+				{
 					new_rotlist_element |= RLIST_GENROT_MASK;
+				}
 				else
 				{
 					rotbond_found = false;
@@ -478,14 +486,12 @@ int gen_rotlist(
 				if (atom_wasnt_rotated_yet[atom_id])
 					new_rotlist_element |= RLIST_FIRSTROT_MASK;
 
-				// put atom_id's next rotation to rotlist
+				// Putting atom_id's next rotation to rotlist
 				atom_wasnt_rotated_yet[atom_id] = false;
 				(number_of_req_rotations[parallel_rot_id])--;
 			}
 
-
 			rotlist[rotlist_id] = new_rotlist_element;
-
 			rotlist_id++;
 		}
 
