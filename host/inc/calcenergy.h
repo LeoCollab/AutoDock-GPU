@@ -111,6 +111,28 @@ typedef struct
 typedef struct
 {
 	int rotlist_const[MAX_NUM_OF_ROTATIONS];
+	int subrotlist_1_const [MAX_NUM_OF_ROTATIONS];
+	int subrotlist_2_const [MAX_NUM_OF_ROTATIONS];
+	int subrotlist_3_const [MAX_NUM_OF_ROTATIONS];
+	int subrotlist_4_const [MAX_NUM_OF_ROTATIONS];
+	int subrotlist_5_const [MAX_NUM_OF_ROTATIONS];
+	int subrotlist_6_const [MAX_NUM_OF_ROTATIONS];
+	int subrotlist_7_const [MAX_NUM_OF_ROTATIONS];
+	int subrotlist_8_const [MAX_NUM_OF_ROTATIONS];
+	int subrotlist_9_const [MAX_NUM_OF_ROTATIONS];
+	int subrotlist_10_const [MAX_NUM_OF_ROTATIONS];
+	int subrotlist_11_const [MAX_NUM_OF_ROTATIONS];
+	unsigned int subrotlist_1_length;
+	unsigned int subrotlist_2_length;
+	unsigned int subrotlist_3_length;
+	unsigned int subrotlist_4_length;
+	unsigned int subrotlist_5_length;
+	unsigned int subrotlist_6_length;
+	unsigned int subrotlist_7_length;
+	unsigned int subrotlist_8_length;
+	unsigned int subrotlist_9_length;
+	unsigned int subrotlist_10_length;
+	unsigned int subrotlist_11_length;
 } kernelconstant_rotlist;
 
 typedef struct
@@ -154,7 +176,29 @@ void make_reqrot_ordering(
 
 int gen_rotlist(
 	Liganddata* myligand,
-	int         rotlist[MAX_NUM_OF_ROTATIONS]
+	int* rotlist,
+	int* subrotlist_1,
+	int* subrotlist_2,
+	int* subrotlist_3,
+	int* subrotlist_4,
+	int* subrotlist_5,
+	int* subrotlist_6,
+	int* subrotlist_7,
+	int* subrotlist_8,
+	int* subrotlist_9,
+	int* subrotlist_10,
+	int* subrotlist_11,
+	unsigned int* subrotlist_1_length,
+	unsigned int* subrotlist_2_length,
+	unsigned int* subrotlist_3_length,
+	unsigned int* subrotlist_4_length,
+	unsigned int* subrotlist_5_length,
+	unsigned int* subrotlist_6_length,
+	unsigned int* subrotlist_7_length,
+	unsigned int* subrotlist_8_length,
+	unsigned int* subrotlist_9_length,
+	unsigned int* subrotlist_10_length,
+	unsigned int* subrotlist_11_length
 );
 
 #endif /* CALCENERGY_H_ */

@@ -95,6 +95,28 @@ int prepare_const_fields_for_gpu(
 //                          If bit 18 is 1, this is a "dummy" rotation, that is, no rotation can be performed in this cycle
 //                                         (considering the other rotations which are being carried out in this period).
 	int*   rotlist                 = new int[MAX_NUM_OF_ROTATIONS];
+// subrotlist_*				Stores a sub (rotation) list built from above rotlist.
+//							Each of these sublists contains rotations that can be executed in parallel.
+//							Reasoning: conformation calculation (originally processing a rotlist) consists of a large loop that cannot be parallelized
+//							because every processed atom (identified as "atom_id") may be rotated several times.
+// 							Any rotation modifies the spatial coordinates of "atom_id".
+// 							A consecutive rotation on "atom_id" requires the latest coordinates of "atom_id",
+//							and thus, it needs to wait until the former rotation on that same atom_id has finished.
+// 							However, rotations on different "atom_id"s can be performed safely in parallel.
+// 							To achieve that, we sort rotlist's rotations into sublists, each containing different "atom_id"s.
+//							The loops (rotations) within each of these sublists are independent, and thus, processed in parallel.
+//							While the sublists, among themselves, are processed in sequence.
+	int* subrotlist_1				= new int[MAX_NUM_OF_ROTATIONS];
+	int* subrotlist_2				= new int[MAX_NUM_OF_ROTATIONS];
+	int* subrotlist_3				= new int[MAX_NUM_OF_ROTATIONS];
+	int* subrotlist_4				= new int[MAX_NUM_OF_ROTATIONS];
+	int* subrotlist_5				= new int[MAX_NUM_OF_ROTATIONS];
+	int* subrotlist_6				= new int[MAX_NUM_OF_ROTATIONS];
+	int* subrotlist_7				= new int[MAX_NUM_OF_ROTATIONS];
+	int* subrotlist_8				= new int[MAX_NUM_OF_ROTATIONS];
+	int* subrotlist_9				= new int[MAX_NUM_OF_ROTATIONS];
+	int* subrotlist_10				= new int[MAX_NUM_OF_ROTATIONS];
+	int* subrotlist_11				= new int[MAX_NUM_OF_ROTATIONS];
 // ref_coords_x:            Stores the x coordinates of the reference ligand atoms.
 //                          Element i corresponds to the x coordinate of the atom with atom ID i (according to myligand_reference).
 	float* ref_coords_x            = new float[MAX_NUM_OF_ATOMS];
@@ -129,6 +151,19 @@ int prepare_const_fields_for_gpu(
 //                          The value of an entry indicates the number of atoms that rotate along with that rotbond_id
 	int*   num_rotating_atoms_per_rotbond = new int[MAX_NUM_OF_ROTBONDS];
 // --------------------------------------------------
+
+	// Number of rotations in every subrotlist
+	unsigned int subrotlist_1_length;
+	unsigned int subrotlist_2_length;
+	unsigned int subrotlist_3_length;
+	unsigned int subrotlist_4_length;
+	unsigned int subrotlist_5_length;
+	unsigned int subrotlist_6_length;
+	unsigned int subrotlist_7_length;
+	unsigned int subrotlist_8_length;
+	unsigned int subrotlist_9_length;
+	unsigned int subrotlist_10_length;
+	unsigned int subrotlist_11_length;
 
 	// charges and type id-s
 	floatpoi = atom_charges;
@@ -218,7 +253,33 @@ int prepare_const_fields_for_gpu(
 	}
 
 	// generate rotation list
-	if (gen_rotlist(myligand_reference, rotlist) != 0)
+	if (gen_rotlist(
+			myligand_reference,
+			rotlist,
+			subrotlist_1,
+			subrotlist_2,
+			subrotlist_3,
+			subrotlist_4,
+			subrotlist_5,
+			subrotlist_6,
+			subrotlist_7,
+			subrotlist_8,
+			subrotlist_9,
+			subrotlist_10,
+			subrotlist_11,
+			&subrotlist_1_length,
+			&subrotlist_2_length,
+			&subrotlist_3_length,
+			&subrotlist_4_length,
+			&subrotlist_5_length,
+			&subrotlist_6_length,
+			&subrotlist_7_length,
+			&subrotlist_8_length,
+			&subrotlist_9_length,
+			&subrotlist_10_length,
+			&subrotlist_11_length
+			)
+		!= 0)
 	{
 		printf("Error: Number of required rotations is larger than maximum (%d).\n",MAX_NUM_OF_ROTATIONS);
 		return 1;
@@ -305,7 +366,20 @@ int prepare_const_fields_for_gpu(
 	for (m=0;m<MAX_NUM_OF_ATYPES;m++)		   	{ KerConst_intra->dspars_V_const[m]         = dspars_V[m]; }
 
 	for (m=0;m<MAX_NUM_OF_ROTATIONS;m++) {
-		KerConst_rotlist->rotlist_const[m]  = rotlist[m];
+		KerConst_rotlist->rotlist_const[m] = rotlist[m];
+/*
+		KerConst_rotlist->subrotlist_1_const[m] = subrotlist_1[m];
+		KerConst_rotlist->subrotlist_2_const[m] = subrotlist_2[m];
+		KerConst_rotlist->subrotlist_3_const[m] = subrotlist_3[m];
+		KerConst_rotlist->subrotlist_4_const[m] = subrotlist_4[m];
+		KerConst_rotlist->subrotlist_5_const[m] = subrotlist_5[m];
+		KerConst_rotlist->subrotlist_6_const[m] = subrotlist_6[m];
+		KerConst_rotlist->subrotlist_7_const[m] = subrotlist_7[m];
+		KerConst_rotlist->subrotlist_8_const[m] = subrotlist_8[m];
+		KerConst_rotlist->subrotlist_9_const[m] = subrotlist_9[m];
+		KerConst_rotlist->subrotlist_10_const[m] = subrotlist_10[m];
+		KerConst_rotlist->subrotlist_11_const[m] = subrotlist_11[m];
+*/
 /*
 		if(m!=0 && m%myligand_reference->num_of_atoms==0)
 			printf("***\n");
@@ -340,6 +414,17 @@ int prepare_const_fields_for_gpu(
 	delete[] dspars_S;
 	delete[] dspars_V;
 	delete[] rotlist;
+	delete[] subrotlist_1;
+	delete[] subrotlist_2;
+	delete[] subrotlist_3;
+	delete[] subrotlist_4;
+	delete[] subrotlist_5;
+	delete[] subrotlist_6;
+	delete[] subrotlist_7;
+	delete[] subrotlist_8;
+	delete[] subrotlist_9;
+	delete[] subrotlist_10;
+	delete[] subrotlist_11;
 	delete[] ref_coords_x;
 	delete[] ref_coords_y;
 	delete[] ref_coords_z;
@@ -392,20 +477,18 @@ void make_reqrot_ordering(
 
 int gen_rotlist(
 	Liganddata* myligand,
-	int rotlist[MAX_NUM_OF_ROTATIONS]
-	/*
-	,
-	int subrotlist_1[MAX_NUM_OF_ROTATIONS],
-	int subrotlist_2[MAX_NUM_OF_ROTATIONS],
-	int subrotlist_3[MAX_NUM_OF_ROTATIONS],
-	int subrotlist_4[MAX_NUM_OF_ROTATIONS],
-	int subrotlist_5[MAX_NUM_OF_ROTATIONS],
-	int subrotlist_6[MAX_NUM_OF_ROTATIONS],
-	int subrotlist_7[MAX_NUM_OF_ROTATIONS],
-	int subrotlist_8[MAX_NUM_OF_ROTATIONS],
-	int subrotlist_9[MAX_NUM_OF_ROTATIONS],
-	int subrotlist_10[MAX_NUM_OF_ROTATIONS],
-	int subrotlist_11[MAX_NUM_OF_ROTATIONS],
+	int* rotlist,
+	int* subrotlist_1,
+	int* subrotlist_2,
+	int* subrotlist_3,
+	int* subrotlist_4,
+	int* subrotlist_5,
+	int* subrotlist_6,
+	int* subrotlist_7,
+	int* subrotlist_8,
+	int* subrotlist_9,
+	int* subrotlist_10,
+	int* subrotlist_11,
 	unsigned int* subrotlist_1_length,
 	unsigned int* subrotlist_2_length,
 	unsigned int* subrotlist_3_length,
@@ -417,7 +500,6 @@ int gen_rotlist(
 	unsigned int* subrotlist_9_length,
 	unsigned int* subrotlist_10_length,
 	unsigned int* subrotlist_11_length
-	*/
 )
 // The function generates the rotation list which will be stored in the constant memory field rotlist_const by
 // prepare_const_fields_for_gpu(). The structure of this array is described at that function.
@@ -554,7 +636,7 @@ int gen_rotlist(
 	}
 
 	// ---------------------------------------------------------------------------
-	// Arrays storing rot ids already used in "subrotlist_1" or "subrotlist_2" or etc
+	// Arrays storing rot ids already used in "subrotlist_*"
 	int rots_used_in_subrotlist_1[MAX_NUM_OF_ROTATIONS];
 	int rots_used_in_subrotlist_2[MAX_NUM_OF_ROTATIONS];
 	int rots_used_in_subrotlist_3[MAX_NUM_OF_ROTATIONS];
@@ -584,9 +666,9 @@ int gen_rotlist(
 	}
 
 	// ---------------------------------------------------------------------------
-	// First rotations
+	// 1st rotations
 	// ---------------------------------------------------------------------------
-	int subrotlist_1[MAX_NUM_OF_ROTATIONS];
+	//int subrotlist_1[MAX_NUM_OF_ROTATIONS];
 	int rot_1_cnt = 0;
 
 	printf("\nsubrotlist_1:\n");
@@ -607,13 +689,13 @@ int gen_rotlist(
 			num_times_atom_in_subrotlist[atom_id]++;
 		}
 	}
-	//*subrotlist_1_length = rot_1_cnt;
-	printf("\tsubrotlist_1 length: %u\n", /**subrotlist_1_length*/rot_1_cnt);
+	*subrotlist_1_length = rot_1_cnt;
+	printf("\tsubrotlist_1 length: %u\n", *subrotlist_1_length);
 
 	// ---------------------------------------------------------------------------
-	// Second rotations (for only those atoms that experiment such)
+	// 2nd rotations (for only those atoms that experiment such)
 	// ---------------------------------------------------------------------------
-	int subrotlist_2[MAX_NUM_OF_ROTATIONS];
+	//int subrotlist_2[MAX_NUM_OF_ROTATIONS];
 	int rot_2_cnt = 0;
 
 	printf("\nsubrotlist_2:\n");
@@ -639,13 +721,13 @@ int gen_rotlist(
 
 		}
 	}
-	//*subrotlist_2_length = rot_2_cnt;
-	printf("\tsubrotlist_2 length: %u\n", /**subrotlist_2_length*/rot_2_cnt);
+	*subrotlist_2_length = rot_2_cnt;
+	printf("\tsubrotlist_2 length: %u\n", *subrotlist_2_length);
 
 	// ---------------------------------------------------------------------------
-	// Third rotations (for only those atoms that experiment such)
+	// 3rd rotations (for only those atoms that experiment such)
 	// ---------------------------------------------------------------------------
-	int subrotlist_3[MAX_NUM_OF_ROTATIONS];
+	//int subrotlist_3[MAX_NUM_OF_ROTATIONS];
 	int rot_3_cnt = 0;
 
 	printf("\nsubrotlist_3:\n");
@@ -672,13 +754,13 @@ int gen_rotlist(
 
 		}
 	}
-	//*subrotlist_3_length = rot_3_cnt;
-	printf("\tsubrotlist_3 length: %u\n", /**subrotlist_3_length*/rot_3_cnt);
+	*subrotlist_3_length = rot_3_cnt;
+	printf("\tsubrotlist_3 length: %u\n", *subrotlist_3_length);
 
 	// ---------------------------------------------------------------------------
-	// Fourth rotations (for only those atoms that experiment such)
+	// 4th rotations (for only those atoms that experiment such)
 	// ---------------------------------------------------------------------------
-	int subrotlist_4[MAX_NUM_OF_ROTATIONS];
+	//int subrotlist_4[MAX_NUM_OF_ROTATIONS];
 	int rot_4_cnt = 0;
 
 	printf("\nsubrotlist_4:\n");
@@ -706,13 +788,13 @@ int gen_rotlist(
 
 		}
 	}
-	//*subrotlist_4_length = rot_4_cnt;
-	printf("\tsubrotlist_4 length: %u\n", /**subrotlist_4_length*/rot_4_cnt);
+	*subrotlist_4_length = rot_4_cnt;
+	printf("\tsubrotlist_4 length: %u\n", *subrotlist_4_length);
 
 	// ---------------------------------------------------------------------------
-	// Fifth rotations (for only those atoms that experiment such)
+	// 5th rotations (for only those atoms that experiment such)
 	// ---------------------------------------------------------------------------
-	int subrotlist_5[MAX_NUM_OF_ROTATIONS];
+	//int subrotlist_5[MAX_NUM_OF_ROTATIONS];
 	int rot_5_cnt = 0;
 
 	printf("\nsubrotlist_5:\n");
@@ -741,13 +823,13 @@ int gen_rotlist(
 
 		}
 	}
-	//*subrotlist_5_length = rot_5_cnt;
-	printf("\tsubrotlist_5 length: %u\n", /**subrotlist_5_length*/rot_5_cnt);
+	*subrotlist_5_length = rot_5_cnt;
+	printf("\tsubrotlist_5 length: %u\n", *subrotlist_5_length);
 
 	// ---------------------------------------------------------------------------
-	// Sixth rotations (for only those atoms that experiment such)
+	// 6th rotations (for only those atoms that experiment such)
 	// ---------------------------------------------------------------------------
-	int subrotlist_6[MAX_NUM_OF_ROTATIONS];
+	//int subrotlist_6[MAX_NUM_OF_ROTATIONS];
 	int rot_6_cnt = 0;
 
 	printf("\nsubrotlist_6:\n");
@@ -778,13 +860,13 @@ int gen_rotlist(
 
 		}
 	}
-	//*subrotlist_6_length = rot_6_cnt;
-	printf("\tsubrotlist_6 length: %u\n", /**subrotlist_6_length*/rot_6_cnt);
+	*subrotlist_6_length = rot_6_cnt;
+	printf("\tsubrotlist_6 length: %u\n", *subrotlist_6_length);
 
 	// ---------------------------------------------------------------------------
-	// Seventh rotations (for only those atoms that experiment such)
+	// 7th rotations (for only those atoms that experiment such)
 	// ---------------------------------------------------------------------------
-	int subrotlist_7[MAX_NUM_OF_ROTATIONS];
+	//int subrotlist_7[MAX_NUM_OF_ROTATIONS];
 	int rot_7_cnt = 0;
 
 	printf("\nsubrotlist_7:\n");
@@ -815,13 +897,13 @@ int gen_rotlist(
 
 		}
 	}
-	//*subrotlist_7_length = rot_7_cnt;
-	printf("\tsubrotlist_7 length: %u\n", /**subrotlist_7_length*/rot_7_cnt);
+	*subrotlist_7_length = rot_7_cnt;
+	printf("\tsubrotlist_7 length: %u\n", *subrotlist_7_length);
 
 	// ---------------------------------------------------------------------------
 	// 8th rotations (for only those atoms that experiment such)
 	// ---------------------------------------------------------------------------
-	int subrotlist_8[MAX_NUM_OF_ROTATIONS];
+	//int subrotlist_8[MAX_NUM_OF_ROTATIONS];
 	int rot_8_cnt = 0;
 
 	printf("\nsubrotlist_8:\n");
@@ -853,13 +935,13 @@ int gen_rotlist(
 
 		}
 	}
-	//*subrotlist_8_length = rot_8_cnt;
-	printf("\tsubrotlist_8 length: %u\n", /**subrotlist_8_length*/rot_8_cnt);
+	*subrotlist_8_length = rot_8_cnt;
+	printf("\tsubrotlist_8 length: %u\n", *subrotlist_8_length);
 
 	// ---------------------------------------------------------------------------
 	// 9th rotations (for only those atoms that experiment such)
 	// ---------------------------------------------------------------------------
-	int subrotlist_9[MAX_NUM_OF_ROTATIONS];
+	//int subrotlist_9[MAX_NUM_OF_ROTATIONS];
 	int rot_9_cnt = 0;
 
 	printf("\nsubrotlist_9:\n");
@@ -892,13 +974,13 @@ int gen_rotlist(
 
 		}
 	}
-	//*subrotlist_9_length = rot_9_cnt;
-	printf("\tsubrotlist_9 length: %u\n", /**subrotlist_9_length*/rot_9_cnt);
+	*subrotlist_9_length = rot_9_cnt;
+	printf("\tsubrotlist_9 length: %u\n", *subrotlist_9_length);
 
 	// ---------------------------------------------------------------------------
 	// 10th rotations (for only those atoms that experiment such)
 	// ---------------------------------------------------------------------------
-	int subrotlist_10[MAX_NUM_OF_ROTATIONS];
+	//int subrotlist_10[MAX_NUM_OF_ROTATIONS];
 	int rot_10_cnt = 0;
 
 	printf("\nsubrotlist_10:\n");
@@ -933,13 +1015,13 @@ int gen_rotlist(
 
 		}
 	}
-	//*subrotlist_10_length = rot_10_cnt;
-	printf("\tsubrotlist_10 length: %u\n", /**subrotlist_10_length*/rot_10_cnt);
+	*subrotlist_10_length = rot_10_cnt;
+	printf("\tsubrotlist_10 length: %u\n", *subrotlist_10_length);
 
 	// ---------------------------------------------------------------------------
 	// 11th rotations (for only those atoms that experiment such)
 	// ---------------------------------------------------------------------------
-	int subrotlist_11[MAX_NUM_OF_ROTATIONS];
+	//int subrotlist_11[MAX_NUM_OF_ROTATIONS];
 	int rot_11_cnt = 0;
 
 	printf("\nsubrotlist_11:\n");
@@ -974,8 +1056,8 @@ int gen_rotlist(
 
 		}
 	}
-	//*subrotlist_11_length = rot_11_cnt;
-	printf("\tsubrotlist_11 length: %u\n", /**subrotlist_11_length*/rot_11_cnt);
+	*subrotlist_11_length = rot_11_cnt;
+	printf("\tsubrotlist_11 length: %u\n", *subrotlist_11_length);
 
 	return 0;
 }
