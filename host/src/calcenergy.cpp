@@ -367,7 +367,6 @@ int prepare_const_fields_for_gpu(
 
 	for (m=0;m<MAX_NUM_OF_ROTATIONS;m++) {
 		KerConst_rotlist->rotlist_const[m] = rotlist[m];
-/*
 		KerConst_rotlist->subrotlist_1_const[m] = subrotlist_1[m];
 		KerConst_rotlist->subrotlist_2_const[m] = subrotlist_2[m];
 		KerConst_rotlist->subrotlist_3_const[m] = subrotlist_3[m];
@@ -379,7 +378,6 @@ int prepare_const_fields_for_gpu(
 		KerConst_rotlist->subrotlist_9_const[m] = subrotlist_9[m];
 		KerConst_rotlist->subrotlist_10_const[m] = subrotlist_10[m];
 		KerConst_rotlist->subrotlist_11_const[m] = subrotlist_11[m];
-*/
 /*
 		if(m!=0 && m%myligand_reference->num_of_atoms==0)
 			printf("***\n");
@@ -388,6 +386,116 @@ int prepare_const_fields_for_gpu(
 		printf("%i (%i): %i -> atom_id: %i, dummy: %i, first: %i, genrot: %i, rotbond_id: %i\n",m,m%NUM_OF_THREADS_PER_BLOCK,rotlist[m],rotlist[m] & RLIST_ATOMID_MASK, rotlist[m] & RLIST_DUMMY_MASK,rotlist[m] & RLIST_FIRSTROT_MASK,rotlist[m] & RLIST_GENROT_MASK,(rotlist[m] & RLIST_RBONDID_MASK) >> RLIST_RBONDID_SHIFT);
 */
 	}
+	KerConst_rotlist->subrotlist_1_length = subrotlist_1_length;
+	KerConst_rotlist->subrotlist_2_length = subrotlist_2_length;
+	KerConst_rotlist->subrotlist_3_length = subrotlist_3_length;
+	KerConst_rotlist->subrotlist_4_length = subrotlist_4_length;
+	KerConst_rotlist->subrotlist_5_length = subrotlist_5_length;
+	KerConst_rotlist->subrotlist_6_length = subrotlist_6_length;
+	KerConst_rotlist->subrotlist_7_length = subrotlist_7_length;
+	KerConst_rotlist->subrotlist_8_length = subrotlist_8_length;
+	KerConst_rotlist->subrotlist_9_length = subrotlist_9_length;
+	KerConst_rotlist->subrotlist_10_length = subrotlist_10_length;
+	KerConst_rotlist->subrotlist_11_length = subrotlist_11_length;
+
+	printf("\n");
+	for (m = 0; m < MAX_NUM_OF_ROTATIONS; m++)
+	{
+		bool b1 = (m >= subrotlist_1_length);
+		bool b2 = (m >= subrotlist_2_length);
+		bool b3 = (m >= subrotlist_3_length);
+		bool b4 = (m >= subrotlist_4_length);
+		bool b5 = (m >= subrotlist_5_length);
+		bool b6 = (m >= subrotlist_6_length);
+		bool b7 = (m >= subrotlist_7_length);
+		bool b8 = (m >= subrotlist_8_length);
+		bool b9 = (m >= subrotlist_9_length);
+		bool b10 = (m >= subrotlist_10_length);
+		bool b11 = (m >= subrotlist_11_length);
+		if (b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10 && b11)
+		{
+			break;
+		}
+
+		if ((subrotlist_1_length > 0) && (m < subrotlist_1_length))
+		{
+			printf("\t%i \t%i", m, KerConst_rotlist->subrotlist_1_const[m]);
+		}
+		else {printf("\t-");}
+
+		if ((subrotlist_2_length > 0) && (m < subrotlist_2_length))
+		{
+			printf("\t%i", KerConst_rotlist->subrotlist_2_const[m]);
+		}
+		else {printf("\t-");}
+
+		if ((subrotlist_3_length > 0) && (m < subrotlist_3_length))
+		{
+			printf("\t%i", KerConst_rotlist->subrotlist_3_const[m]);
+		}
+		else {printf("\t-");}
+
+		if ((subrotlist_4_length > 0) && (m < subrotlist_4_length))
+		{
+			printf("\t%i", KerConst_rotlist->subrotlist_4_const[m]);
+		}
+		else {printf("\t-");}
+
+		if ((subrotlist_5_length > 0) && (m < subrotlist_5_length))
+		{
+			printf("\t%i", KerConst_rotlist->subrotlist_5_const[m]);
+		}
+		else {printf("\t-");}
+
+		if ((subrotlist_6_length > 0) && (m < subrotlist_6_length))
+		{
+			printf("\t%i", KerConst_rotlist->subrotlist_6_const[m]);
+		}
+		else {printf("\t-");}
+
+		if ((subrotlist_7_length > 0) && (m < subrotlist_7_length))
+		{
+			printf("\t%i", KerConst_rotlist->subrotlist_7_const[m]);
+		}
+		else {printf("\t-");}
+
+		if ((subrotlist_8_length > 0) && (m < subrotlist_8_length))
+		{
+			printf("\t%i", KerConst_rotlist->subrotlist_8_const[m]);
+		}
+		else {printf("\t-");}
+
+		if ((subrotlist_9_length > 0) && (m < subrotlist_9_length))
+		{
+			printf("\t%i", KerConst_rotlist->subrotlist_9_const[m]);
+		}
+		else {printf("\t-");}
+
+		if ((subrotlist_10_length > 0) && (m < subrotlist_10_length))
+		{
+			printf("\t%i", KerConst_rotlist->subrotlist_10_const[m]);
+		}
+		else {printf("\t-");}
+
+		if ((subrotlist_11_length > 0) && (m < subrotlist_11_length))
+		{
+			printf("\t%i\n", KerConst_rotlist->subrotlist_11_const[m]);
+		}
+		else {printf("\t-\n");}
+	}
+
+	printf("\tKerConst_rotlist->subrotlist_1_length: %u\n", KerConst_rotlist->subrotlist_1_length);
+	printf("\tKerConst_rotlist->subrotlist_2_length: %u\n", KerConst_rotlist->subrotlist_2_length);
+	printf("\tKerConst_rotlist->subrotlist_3_length: %u\n", KerConst_rotlist->subrotlist_3_length);
+	printf("\tKerConst_rotlist->subrotlist_4_length: %u\n", KerConst_rotlist->subrotlist_4_length);
+	printf("\tKerConst_rotlist->subrotlist_5_length: %u\n", KerConst_rotlist->subrotlist_5_length);
+	printf("\tKerConst_rotlist->subrotlist_6_length: %u\n", KerConst_rotlist->subrotlist_6_length);
+	printf("\tKerConst_rotlist->subrotlist_7_length: %u\n", KerConst_rotlist->subrotlist_7_length);
+	printf("\tKerConst_rotlist->subrotlist_8_length: %u\n", KerConst_rotlist->subrotlist_8_length);
+	printf("\tKerConst_rotlist->subrotlist_9_length: %u\n", KerConst_rotlist->subrotlist_9_length);
+	printf("\tKerConst_rotlist->subrotlist_10_length: %u\n", KerConst_rotlist->subrotlist_10_length);
+	printf("\tKerConst_rotlist->subrotlist_11_length: %u\n", KerConst_rotlist->subrotlist_11_length);
+	printf("\n");
 
 	for (m=0;m<MAX_NUM_OF_ATOMS;m++) {
 		KerConst_conform->ref_coords_const[3*m]		 = ref_coords_x[m];
@@ -691,6 +799,10 @@ int gen_rotlist(
 	}
 	*subrotlist_1_length = rot_1_cnt;
 	printf("\tsubrotlist_1 length: %u\n", *subrotlist_1_length);
+	for (unsigned int i = 0; i < *subrotlist_1_length; i++)
+	{
+		printf("\t%i \t%i\n", i, subrotlist_1[i]);
+	}
 
 	// ---------------------------------------------------------------------------
 	// 2nd rotations (for only those atoms that experiment such)
@@ -723,6 +835,10 @@ int gen_rotlist(
 	}
 	*subrotlist_2_length = rot_2_cnt;
 	printf("\tsubrotlist_2 length: %u\n", *subrotlist_2_length);
+	for (unsigned int i = 0; i < *subrotlist_2_length; i++)
+	{
+		printf("\t%i \t%i\n", i, subrotlist_2[i]);
+	}
 
 	// ---------------------------------------------------------------------------
 	// 3rd rotations (for only those atoms that experiment such)
@@ -756,6 +872,10 @@ int gen_rotlist(
 	}
 	*subrotlist_3_length = rot_3_cnt;
 	printf("\tsubrotlist_3 length: %u\n", *subrotlist_3_length);
+	for (unsigned int i = 0; i < *subrotlist_3_length; i++)
+	{
+		printf("\t%i \t%i\n", i, subrotlist_3[i]);
+	}
 
 	// ---------------------------------------------------------------------------
 	// 4th rotations (for only those atoms that experiment such)
@@ -790,6 +910,10 @@ int gen_rotlist(
 	}
 	*subrotlist_4_length = rot_4_cnt;
 	printf("\tsubrotlist_4 length: %u\n", *subrotlist_4_length);
+	for (unsigned int i = 0; i < *subrotlist_4_length; i++)
+	{
+		printf("\t%i \t%i\n", i, subrotlist_4[i]);
+	}
 
 	// ---------------------------------------------------------------------------
 	// 5th rotations (for only those atoms that experiment such)
@@ -825,6 +949,10 @@ int gen_rotlist(
 	}
 	*subrotlist_5_length = rot_5_cnt;
 	printf("\tsubrotlist_5 length: %u\n", *subrotlist_5_length);
+	for (unsigned int i = 0; i < *subrotlist_5_length; i++)
+	{
+		printf("\t%i \t%i\n", i, subrotlist_5[i]);
+	}
 
 	// ---------------------------------------------------------------------------
 	// 6th rotations (for only those atoms that experiment such)
@@ -862,6 +990,10 @@ int gen_rotlist(
 	}
 	*subrotlist_6_length = rot_6_cnt;
 	printf("\tsubrotlist_6 length: %u\n", *subrotlist_6_length);
+	for (unsigned int i = 0; i < *subrotlist_6_length; i++)
+	{
+		printf("\t%i \t%i\n", i, subrotlist_6[i]);
+	}
 
 	// ---------------------------------------------------------------------------
 	// 7th rotations (for only those atoms that experiment such)
@@ -899,6 +1031,10 @@ int gen_rotlist(
 	}
 	*subrotlist_7_length = rot_7_cnt;
 	printf("\tsubrotlist_7 length: %u\n", *subrotlist_7_length);
+	for (unsigned int i = 0; i < *subrotlist_7_length; i++)
+	{
+		printf("\t%i \t%i\n", i, subrotlist_7[i]);
+	}
 
 	// ---------------------------------------------------------------------------
 	// 8th rotations (for only those atoms that experiment such)
@@ -937,6 +1073,10 @@ int gen_rotlist(
 	}
 	*subrotlist_8_length = rot_8_cnt;
 	printf("\tsubrotlist_8 length: %u\n", *subrotlist_8_length);
+	for (unsigned int i = 0; i < *subrotlist_8_length; i++)
+	{
+		printf("\t%i \t%i\n", i, subrotlist_8[i]);
+	}
 
 	// ---------------------------------------------------------------------------
 	// 9th rotations (for only those atoms that experiment such)
@@ -976,6 +1116,10 @@ int gen_rotlist(
 	}
 	*subrotlist_9_length = rot_9_cnt;
 	printf("\tsubrotlist_9 length: %u\n", *subrotlist_9_length);
+	for (unsigned int i = 0; i < *subrotlist_9_length; i++)
+	{
+		printf("\t%i \t%i\n", i, subrotlist_9[i]);
+	}
 
 	// ---------------------------------------------------------------------------
 	// 10th rotations (for only those atoms that experiment such)
@@ -1017,6 +1161,10 @@ int gen_rotlist(
 	}
 	*subrotlist_10_length = rot_10_cnt;
 	printf("\tsubrotlist_10 length: %u\n", *subrotlist_10_length);
+	for (unsigned int i = 0; i < *subrotlist_10_length; i++)
+	{
+		printf("\t%i \t%i\n", i, subrotlist_10[i]);
+	}
 
 	// ---------------------------------------------------------------------------
 	// 11th rotations (for only those atoms that experiment such)
@@ -1058,6 +1206,10 @@ int gen_rotlist(
 	}
 	*subrotlist_11_length = rot_11_cnt;
 	printf("\tsubrotlist_11 length: %u\n", *subrotlist_11_length);
+	for (unsigned int i = 0; i < *subrotlist_11_length; i++)
+	{
+		printf("\t%i \t%i\n", i, subrotlist_11[i]);
+	}
 
 	return 0;
 }
