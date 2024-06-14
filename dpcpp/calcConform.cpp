@@ -1,18 +1,22 @@
 void calcConform(
+	float *pGenotype,
 	sycl::float4 genrot_movingvec,
 	sycl::float4 genrot_unitvec,
 	sycl::float3* calc_coords,
 	sycl::nd_item<3> item_ct1,
-	GpuData* cData
+	GpuData* cData,
+	int* subrotlist,
+	int subrotlist_length
 ){
 	// ================================================
 	// CALCULATING ATOMIC POSITIONS AFTER ROTATIONS
 	// ================================================
 	for (uint rotation_counter = item_ct1.get_local_id(2);
-			  rotation_counter < cData.dockpars.rotbondlist_length;
+			  rotation_counter < subrotlist_length;
 			  rotation_counter += item_ct1.get_local_range().get(2))
 	{
-		int rotation_list_element = cData.pKerconst_rotlist->rotlist_const[rotation_counter];
+		//int rotation_list_element = (cData->pKerconst_rotlist)->rotlist_const[rotation_counter];
+		int rotation_list_element = subrotlist[rotation_counter];
 
 		if ((rotation_list_element & RLIST_DUMMY_MASK) == 0) // If not dummy rotation
 		{
@@ -29,7 +33,7 @@ void calcConform(
 			sycl::float4 rotation_unitvec;
 			sycl::float4 rotation_movingvec;
 
-			if (atom_id < cData.dockpars.true_ligand_atoms)
+			if (atom_id < (cData->dockpars).true_ligand_atoms)
 			{
 				rotation_unitvec = genrot_unitvec;
 				rotation_movingvec = genrot_movingvec;
@@ -51,14 +55,14 @@ void calcConform(
 
 				float rotation_angle = pGenotype[6+rotbond_id] * DEG_TO_RAD * 0.5f;
 				float s = SYCL_SIN(rotation_angle);
-				rotation_unitvec.x() = s * cData.pKerconst_conform->rotbonds_unit_vectors_const[3 * rotbond_id];
-				rotation_unitvec.y() = s * cData.pKerconst_conform->rotbonds_unit_vectors_const[3 * rotbond_id + 1];
-				rotation_unitvec.z() = s * cData.pKerconst_conform->rotbonds_unit_vectors_const[3 * rotbond_id + 2];
+				rotation_unitvec.x() = s * (cData->pKerconst_conform)->rotbonds_unit_vectors_const[3 * rotbond_id];
+				rotation_unitvec.y() = s * (cData->pKerconst_conform)->rotbonds_unit_vectors_const[3 * rotbond_id + 1];
+				rotation_unitvec.z() = s * (cData->pKerconst_conform)->rotbonds_unit_vectors_const[3 * rotbond_id + 2];
 				rotation_unitvec.w() = SYCL_COS(rotation_angle);
 
-				rotation_movingvec.x() = cData.pKerconst_conform->rotbonds_moving_vectors_const[3 * rotbond_id];
-				rotation_movingvec.y() = cData.pKerconst_conform->rotbonds_moving_vectors_const[3 * rotbond_id + 1];
-				rotation_movingvec.z() = cData.pKerconst_conform->rotbonds_moving_vectors_const[3 * rotbond_id + 2];
+				rotation_movingvec.x() = (cData->pKerconst_conform)->rotbonds_moving_vectors_const[3 * rotbond_id];
+				rotation_movingvec.y() = (cData->pKerconst_conform)->rotbonds_moving_vectors_const[3 * rotbond_id + 1];
+				rotation_movingvec.z() = (cData->pKerconst_conform)->rotbonds_moving_vectors_const[3 * rotbond_id + 2];
 
 				// Performing additionally the first movement which
 				// is needed only if rotating around rotatable bond
@@ -74,8 +78,7 @@ void calcConform(
 			calc_coords[atom_id].z() = qt.z() + rotation_movingvec.z();
 		} // End if-statement not dummy rotation
 
-		item_ct1.barrier(SYCL_MEMORY_SPACE);
+		//item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	} // End rotation_counter for-loop
-	
 }
