@@ -799,10 +799,12 @@ int gen_rotlist(
 	}
 	*subrotlist_1_length = rot_1_cnt;
 	printf("\tsubrotlist_1 length: %u\n", *subrotlist_1_length);
+	/*
 	for (unsigned int i = 0; i < *subrotlist_1_length; i++)
 	{
 		printf("\t%i \t%i\n", i, subrotlist_1[i]);
 	}
+	*/
 
 	// ---------------------------------------------------------------------------
 	// 2nd rotations (for only those atoms that experiment such)
@@ -835,10 +837,12 @@ int gen_rotlist(
 	}
 	*subrotlist_2_length = rot_2_cnt;
 	printf("\tsubrotlist_2 length: %u\n", *subrotlist_2_length);
+	/*
 	for (unsigned int i = 0; i < *subrotlist_2_length; i++)
 	{
 		printf("\t%i \t%i\n", i, subrotlist_2[i]);
 	}
+	*/
 
 	// ---------------------------------------------------------------------------
 	// 3rd rotations (for only those atoms that experiment such)
@@ -872,10 +876,12 @@ int gen_rotlist(
 	}
 	*subrotlist_3_length = rot_3_cnt;
 	printf("\tsubrotlist_3 length: %u\n", *subrotlist_3_length);
+	/*
 	for (unsigned int i = 0; i < *subrotlist_3_length; i++)
 	{
 		printf("\t%i \t%i\n", i, subrotlist_3[i]);
 	}
+	*/
 
 	// ---------------------------------------------------------------------------
 	// 4th rotations (for only those atoms that experiment such)
@@ -910,10 +916,12 @@ int gen_rotlist(
 	}
 	*subrotlist_4_length = rot_4_cnt;
 	printf("\tsubrotlist_4 length: %u\n", *subrotlist_4_length);
+	/*
 	for (unsigned int i = 0; i < *subrotlist_4_length; i++)
 	{
 		printf("\t%i \t%i\n", i, subrotlist_4[i]);
 	}
+	*/
 
 	// ---------------------------------------------------------------------------
 	// 5th rotations (for only those atoms that experiment such)
@@ -949,10 +957,12 @@ int gen_rotlist(
 	}
 	*subrotlist_5_length = rot_5_cnt;
 	printf("\tsubrotlist_5 length: %u\n", *subrotlist_5_length);
+	/*
 	for (unsigned int i = 0; i < *subrotlist_5_length; i++)
 	{
 		printf("\t%i \t%i\n", i, subrotlist_5[i]);
 	}
+	*/
 
 	// ---------------------------------------------------------------------------
 	// 6th rotations (for only those atoms that experiment such)
@@ -990,10 +1000,12 @@ int gen_rotlist(
 	}
 	*subrotlist_6_length = rot_6_cnt;
 	printf("\tsubrotlist_6 length: %u\n", *subrotlist_6_length);
+	/*
 	for (unsigned int i = 0; i < *subrotlist_6_length; i++)
 	{
 		printf("\t%i \t%i\n", i, subrotlist_6[i]);
 	}
+	*/
 
 	// ---------------------------------------------------------------------------
 	// 7th rotations (for only those atoms that experiment such)
@@ -1031,10 +1043,12 @@ int gen_rotlist(
 	}
 	*subrotlist_7_length = rot_7_cnt;
 	printf("\tsubrotlist_7 length: %u\n", *subrotlist_7_length);
+	/*
 	for (unsigned int i = 0; i < *subrotlist_7_length; i++)
 	{
 		printf("\t%i \t%i\n", i, subrotlist_7[i]);
 	}
+	*/
 
 	// ---------------------------------------------------------------------------
 	// 8th rotations (for only those atoms that experiment such)
@@ -1073,10 +1087,12 @@ int gen_rotlist(
 	}
 	*subrotlist_8_length = rot_8_cnt;
 	printf("\tsubrotlist_8 length: %u\n", *subrotlist_8_length);
+	/*
 	for (unsigned int i = 0; i < *subrotlist_8_length; i++)
 	{
 		printf("\t%i \t%i\n", i, subrotlist_8[i]);
 	}
+	*/
 
 	// ---------------------------------------------------------------------------
 	// 9th rotations (for only those atoms that experiment such)
@@ -1116,10 +1132,12 @@ int gen_rotlist(
 	}
 	*subrotlist_9_length = rot_9_cnt;
 	printf("\tsubrotlist_9 length: %u\n", *subrotlist_9_length);
+	/*
 	for (unsigned int i = 0; i < *subrotlist_9_length; i++)
 	{
 		printf("\t%i \t%i\n", i, subrotlist_9[i]);
 	}
+	*/
 
 	// ---------------------------------------------------------------------------
 	// 10th rotations (for only those atoms that experiment such)
@@ -1161,10 +1179,12 @@ int gen_rotlist(
 	}
 	*subrotlist_10_length = rot_10_cnt;
 	printf("\tsubrotlist_10 length: %u\n", *subrotlist_10_length);
+	/*
 	for (unsigned int i = 0; i < *subrotlist_10_length; i++)
 	{
 		printf("\t%i \t%i\n", i, subrotlist_10[i]);
 	}
+	*/
 
 	// ---------------------------------------------------------------------------
 	// 11th rotations (for only those atoms that experiment such)
@@ -1206,10 +1226,12 @@ int gen_rotlist(
 	}
 	*subrotlist_11_length = rot_11_cnt;
 	printf("\tsubrotlist_11 length: %u\n", *subrotlist_11_length);
+	/*
 	for (unsigned int i = 0; i < *subrotlist_11_length; i++)
 	{
 		printf("\t%i \t%i\n", i, subrotlist_11[i]);
 	}
+	*/
 
 	return 0;
 }
