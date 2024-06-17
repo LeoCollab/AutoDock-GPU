@@ -127,6 +127,7 @@ catch (sycl::exception const &exc)
 
 // Kernel files
 #include "auxiliary_calc.dp.cpp"
+#include "calcConform.dp.cpp"
 #include "calcenergy.dp.cpp"
 #include "calcMergeEneGra.dp.cpp"
 #include "auxiliary_genetic.dp.cpp"
