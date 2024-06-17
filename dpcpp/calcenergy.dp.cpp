@@ -162,21 +162,22 @@ void gpu_calc_energy(
 	} // End rotation_counter for-loop
 #endif
 
-	calcConform(
-		pGenotype,
-		genrot_movingvec,
-		genrot_unitvec,
-		calc_coords,
-		item_ct1,
-		&cData,
-/*
-		(cData.pKerconst_rotlist)->subrotlist_1_const,
-		(cData.pKerconst_rotlist)->subrotlist_1_length
-*/
-		(cData.pKerconst_rotlist)->rotlist_const,
-		cData.dockpars.rotbondlist_length
-
+	if ( (cData.pKerconst_rotlist)->subrotlist_1_length > 0 ) {
+		calcConform(
+			pGenotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+	/*
+			(cData.pKerconst_rotlist)->subrotlist_1_const,
+			(cData.pKerconst_rotlist)->subrotlist_1_length
+	*/
+			(cData.pKerconst_rotlist)->rotlist_const,
+			cData.dockpars.rotbondlist_length
 		);
+	}
 
 	// ================================================
 	// CALCULATING INTERMOLECULAR ENERGY
