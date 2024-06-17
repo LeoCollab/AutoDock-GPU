@@ -78,7 +78,7 @@ void calcConform(
 			calc_coords[atom_id].z() = qt.z() + rotation_movingvec.z();
 		} // End if-statement not dummy rotation
 
-		//item_ct1.barrier(SYCL_MEMORY_SPACE);
+		item_ct1.barrier(SYCL_MEMORY_SPACE); // TODO: should be commented-out here
 
 	} // End rotation_counter for-loop
 }

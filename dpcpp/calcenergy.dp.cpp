@@ -87,7 +87,7 @@ void gpu_calc_energy(
 	uint g3 = cData.dockpars.gridsize_x_times_y_times_z;
 
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
-
+#if 0
 	// ================================================
 	// CALCULATING ATOMIC POSITIONS AFTER ROTATIONS
 	// ================================================
@@ -160,6 +160,23 @@ void gpu_calc_energy(
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	} // End rotation_counter for-loop
+#endif
+
+	calcConform(
+		pGenotype,
+		genrot_movingvec,
+		genrot_unitvec,
+		calc_coords,
+		item_ct1,
+		&cData,
+/*
+		(cData.pKerconst_rotlist)->subrotlist_1_const,
+		(cData.pKerconst_rotlist)->subrotlist_1_length
+*/
+		(cData.pKerconst_rotlist)->rotlist_const,
+		cData.dockpars.rotbondlist_length
+
+		);
 
 	// ================================================
 	// CALCULATING INTERMOLECULAR ENERGY
