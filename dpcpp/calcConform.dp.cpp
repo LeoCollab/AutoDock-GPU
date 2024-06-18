@@ -38,7 +38,7 @@ void calcConform(
 			atom_to_rotate.y() = calc_coords[atom_id].y();
 			atom_to_rotate.z() = calc_coords[atom_id].z();
 			atom_to_rotate.w() = 0.0f;
-			printf("\tatom_id = %3i \tatom_to_rotate (x,y,z,w): % 02.6f \t% 02.6f \t% 02.6f \t% 02.6f\n", atom_id, atom_to_rotate.x(), atom_to_rotate.y(), atom_to_rotate.z(), atom_to_rotate.w());
+			//printf("\tatom_id = %3i \tatom_to_rotate (x,y,z,w): % 02.6f \t% 02.6f \t% 02.6f \t% 02.6f\n", atom_id, atom_to_rotate.x(), atom_to_rotate.y(), atom_to_rotate.z(), atom_to_rotate.w());
 
 			// initialize with general rotation values
 			sycl::float4 rotation_unitvec;
@@ -87,6 +87,8 @@ void calcConform(
 			calc_coords[atom_id].x() = qt.x() + rotation_movingvec.x();
 			calc_coords[atom_id].y() = qt.y() + rotation_movingvec.y();
 			calc_coords[atom_id].z() = qt.z() + rotation_movingvec.z();
+			
+			printf("\tatom_id = %3i \tcalc_coords (x,y,z): % 02.6f \t% 02.6f \t% 02.6f\n", atom_id, calc_coords[atom_id].x(), calc_coords[atom_id].y(), calc_coords[atom_id].z());
 		} // End if-statement not dummy rotation
 
 		//item_ct1.barrier(SYCL_MEMORY_SPACE);
