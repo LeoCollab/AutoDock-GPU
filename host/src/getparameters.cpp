@@ -2377,12 +2377,20 @@ void gen_initpop_and_reflig(
 	{
 		// randomize location and convert to grid coordinates
 		for (gene_id=0; gene_id<3; gene_id++)
+			/*
 			init_populations[entity_id*GENOTYPE_LENGTH_IN_GLOBMEM+gene_id] = r.random_float()*(mygrid->size_xyz_angstr[gene_id])/mygrid->spacing;
-		
+			*/
+			init_populations[entity_id*GENOTYPE_LENGTH_IN_GLOBMEM+gene_id] = 0.3011f*(mygrid->size_xyz_angstr[gene_id])/mygrid->spacing;
+			
 		// generate random quaternion
+		/*
 		u1 = r.random_float();
 		u2 = r.random_float();
 		u3 = r.random_float();
+		*/
+		u1 = 0.2605f;
+		u2 = 0.2204f;
+		u3 = 0.1902f;
 		qw = sqrt(1.0 - u1) * sin(PI_TIMES_2 * u2);
 		qx = sqrt(1.0 - u1) * cos(PI_TIMES_2 * u2);
 		qy = sqrt(      u1) * sin(PI_TIMES_2 * u3);
@@ -2407,7 +2415,10 @@ void gen_initpop_and_reflig(
 		init_populations[entity_id*GENOTYPE_LENGTH_IN_GLOBMEM+4] = theta / DEG_TO_RAD;
 		init_populations[entity_id*GENOTYPE_LENGTH_IN_GLOBMEM+5] = rotangle / DEG_TO_RAD;
 		for (gene_id=6; gene_id<MAX_NUM_OF_ROTBONDS+6; gene_id++) {
+			/*
 			init_populations[entity_id*GENOTYPE_LENGTH_IN_GLOBMEM+gene_id] = r.random_float()*360;
+			*/
+			init_populations[entity_id*GENOTYPE_LENGTH_IN_GLOBMEM+gene_id] = 0.1907f*360;
 		}
 	}
 	get_movvec_to_origo(myligand, movvec_to_origo);

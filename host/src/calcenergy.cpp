@@ -727,7 +727,7 @@ int gen_rotlist(
 	// Building rotation lists
 	// ---------------------------------------------------------------------------
 	printf("\n# rotlist elements: %u\n", rotlist_id);
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id/*myligand->num_of_rotations_required*/; rot_cnt++) {
 		unsigned int atom_id = rotlist[rot_cnt] & RLIST_ATOMID_MASK;
 		printf("rot-id: %u \tatom-id: %u\n", rot_cnt, atom_id);
 	}
@@ -780,7 +780,7 @@ int gen_rotlist(
 	int rot_1_cnt = 0;
 
 	printf("\nsubrotlist_1:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id/*myligand->num_of_rotations_required*/; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		if ((num_times_atom_in_subrotlist[atom_id] == 0)  && (number_of_req_rotations_copy[atom_id] >= 1)) {
@@ -813,7 +813,7 @@ int gen_rotlist(
 	int rot_2_cnt = 0;
 
 	printf("\nsubrotlist_2:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id/*myligand->num_of_rotations_required*/; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_2" was not already added to "subrotlist_1"
@@ -851,7 +851,7 @@ int gen_rotlist(
 	int rot_3_cnt = 0;
 
 	printf("\nsubrotlist_3:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id/*myligand->num_of_rotations_required*/; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_3"
@@ -890,7 +890,7 @@ int gen_rotlist(
 	int rot_4_cnt = 0;
 
 	printf("\nsubrotlist_4:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id/*myligand->num_of_rotations_required*/; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_4"
@@ -930,7 +930,7 @@ int gen_rotlist(
 	int rot_5_cnt = 0;
 
 	printf("\nsubrotlist_5:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id/*myligand->num_of_rotations_required*/; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_5"
@@ -971,7 +971,7 @@ int gen_rotlist(
 	int rot_6_cnt = 0;
 
 	printf("\nsubrotlist_6:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id/*myligand->num_of_rotations_required*/; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_6"
@@ -1014,7 +1014,7 @@ int gen_rotlist(
 	int rot_7_cnt = 0;
 
 	printf("\nsubrotlist_7:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id/*myligand->num_of_rotations_required*/; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_7"
@@ -1057,7 +1057,7 @@ int gen_rotlist(
 	int rot_8_cnt = 0;
 
 	printf("\nsubrotlist_8:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id/*myligand->num_of_rotations_required*/; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_8"
@@ -1101,7 +1101,7 @@ int gen_rotlist(
 	int rot_9_cnt = 0;
 
 	printf("\nsubrotlist_9:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id/*myligand->num_of_rotations_required*/; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_9"
@@ -1146,7 +1146,7 @@ int gen_rotlist(
 	int rot_10_cnt = 0;
 
 	printf("\nsubrotlist_10:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id/*myligand->num_of_rotations_required*/; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_10"
@@ -1193,7 +1193,7 @@ int gen_rotlist(
 	int rot_11_cnt = 0;
 
 	printf("\nsubrotlist_11:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id/*myligand->num_of_rotations_required*/; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_11"
