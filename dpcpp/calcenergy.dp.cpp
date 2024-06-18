@@ -105,12 +105,11 @@ void gpu_calc_energy(
 	{
 */
 		int rotation_list_element = cData.pKerconst_rotlist->rotlist_const[rotation_counter];
-		printf("rot_counter = %i \trot_list_element = %i\n", rotation_counter, rotation_list_element);
+		//printf("rot_counter = %i \trot_list_element = %i\n", rotation_counter, rotation_list_element);
 
 		if ((rotation_list_element & RLIST_DUMMY_MASK) == 0) // If not dummy rotation
 		{
 			uint atom_id = rotation_list_element & RLIST_ATOMID_MASK;
-			printf("\tatom_id = %i\n", atom_id);
 
 			// Capturing atom coordinates
 			sycl::float4 atom_to_rotate;
@@ -118,7 +117,7 @@ void gpu_calc_energy(
 			atom_to_rotate.y() = calc_coords[atom_id].y();
 			atom_to_rotate.z() = calc_coords[atom_id].z();
 			atom_to_rotate.w() = 0.0f;
-			printf("atom_to_rotate: x=%f \ty=%f \tz=%f \tz=%f\n", atom_to_rotate.x(), atom_to_rotate.y(), atom_to_rotate.z(), atom_to_rotate.w());
+			printf("\tatom_id = %3i \tatom_to_rotate (x,y,z,w): % 02.6f \t% 02.6f \t% 02.6f \t% 02.6f\n", atom_id, atom_to_rotate.x(), atom_to_rotate.y(), atom_to_rotate.z(), atom_to_rotate.w());
 
 			// initialize with general rotation values
 			sycl::float4 rotation_unitvec;
