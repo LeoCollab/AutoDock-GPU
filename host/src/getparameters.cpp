@@ -2378,8 +2378,7 @@ void gen_initpop_and_reflig(
 		// randomize location and convert to grid coordinates
 		for (gene_id=0; gene_id<3; gene_id++)
 			init_populations[entity_id*GENOTYPE_LENGTH_IN_GLOBMEM+gene_id] = r.random_float()*(mygrid->size_xyz_angstr[gene_id])/mygrid->spacing;
-		
-		// generate random quaternion
+
 		u1 = r.random_float();
 		u2 = r.random_float();
 		u3 = r.random_float();

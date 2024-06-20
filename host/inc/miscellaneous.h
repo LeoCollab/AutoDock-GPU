@@ -190,6 +190,7 @@ public:
 			x++;
 			c++;
 		}
+		
 		return(Q[i] = m-x);
 	}
 

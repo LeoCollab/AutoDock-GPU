@@ -419,71 +419,71 @@ int prepare_const_fields_for_gpu(
 
 		if ((subrotlist_1_length > 0) && (m < subrotlist_1_length))
 		{
-			printf("\t%i \t%i", m, KerConst_rotlist->subrotlist_1_const[m]);
+			printf("\t%3i \t%6i", m, KerConst_rotlist->subrotlist_1_const[m]);
 		}
-		else {printf("\t-");}
+		else {printf("\t------");}
 
 		if ((subrotlist_2_length > 0) && (m < subrotlist_2_length))
 		{
-			printf("\t%i", KerConst_rotlist->subrotlist_2_const[m]);
+			printf("\t%6i", KerConst_rotlist->subrotlist_2_const[m]);
 		}
-		else {printf("\t-");}
+		else {printf("\t------");}
 
 		if ((subrotlist_3_length > 0) && (m < subrotlist_3_length))
 		{
-			printf("\t%i", KerConst_rotlist->subrotlist_3_const[m]);
+			printf("\t%6i", KerConst_rotlist->subrotlist_3_const[m]);
 		}
-		else {printf("\t-");}
+		else {printf("\t------");}
 
 		if ((subrotlist_4_length > 0) && (m < subrotlist_4_length))
 		{
-			printf("\t%i", KerConst_rotlist->subrotlist_4_const[m]);
+			printf("\t%6i", KerConst_rotlist->subrotlist_4_const[m]);
 		}
-		else {printf("\t-");}
+		else {printf("\t------");}
 
 		if ((subrotlist_5_length > 0) && (m < subrotlist_5_length))
 		{
-			printf("\t%i", KerConst_rotlist->subrotlist_5_const[m]);
+			printf("\t%6i", KerConst_rotlist->subrotlist_5_const[m]);
 		}
-		else {printf("\t-");}
+		else {printf("\t------");}
 
 		if ((subrotlist_6_length > 0) && (m < subrotlist_6_length))
 		{
-			printf("\t%i", KerConst_rotlist->subrotlist_6_const[m]);
+			printf("\t%6i", KerConst_rotlist->subrotlist_6_const[m]);
 		}
-		else {printf("\t-");}
+		else {printf("\t------");}
 
 		if ((subrotlist_7_length > 0) && (m < subrotlist_7_length))
 		{
-			printf("\t%i", KerConst_rotlist->subrotlist_7_const[m]);
+			printf("\t%6i", KerConst_rotlist->subrotlist_7_const[m]);
 		}
-		else {printf("\t-");}
+		else {printf("\t------");}
 
 		if ((subrotlist_8_length > 0) && (m < subrotlist_8_length))
 		{
-			printf("\t%i", KerConst_rotlist->subrotlist_8_const[m]);
+			printf("\t%6i", KerConst_rotlist->subrotlist_8_const[m]);
 		}
-		else {printf("\t-");}
+		else {printf("\t------");}
 
 		if ((subrotlist_9_length > 0) && (m < subrotlist_9_length))
 		{
-			printf("\t%i", KerConst_rotlist->subrotlist_9_const[m]);
+			printf("\t%6i", KerConst_rotlist->subrotlist_9_const[m]);
 		}
-		else {printf("\t-");}
+		else {printf("\t------");}
 
 		if ((subrotlist_10_length > 0) && (m < subrotlist_10_length))
 		{
-			printf("\t%i", KerConst_rotlist->subrotlist_10_const[m]);
+			printf("\t%6i", KerConst_rotlist->subrotlist_10_const[m]);
 		}
-		else {printf("\t-");}
+		else {printf("\t------");}
 
 		if ((subrotlist_11_length > 0) && (m < subrotlist_11_length))
 		{
-			printf("\t%i\n", KerConst_rotlist->subrotlist_11_const[m]);
+			printf("\t%6i\n", KerConst_rotlist->subrotlist_11_const[m]);
 		}
-		else {printf("\t-\n");}
+		else {printf("\t------\n");}
 	}
-
+	/*
 	printf("\tKerConst_rotlist->subrotlist_1_length: %u\n", KerConst_rotlist->subrotlist_1_length);
 	printf("\tKerConst_rotlist->subrotlist_2_length: %u\n", KerConst_rotlist->subrotlist_2_length);
 	printf("\tKerConst_rotlist->subrotlist_3_length: %u\n", KerConst_rotlist->subrotlist_3_length);
@@ -496,7 +496,7 @@ int prepare_const_fields_for_gpu(
 	printf("\tKerConst_rotlist->subrotlist_10_length: %u\n", KerConst_rotlist->subrotlist_10_length);
 	printf("\tKerConst_rotlist->subrotlist_11_length: %u\n", KerConst_rotlist->subrotlist_11_length);
 	printf("\n");
-
+	*/
 	for (m=0;m<MAX_NUM_OF_ATOMS;m++) {
 		KerConst_conform->ref_coords_const[3*m]		 = ref_coords_x[m];
 		KerConst_conform->ref_coords_const[3*m+1]	 = ref_coords_y[m];
@@ -727,7 +727,7 @@ int gen_rotlist(
 	// Building rotation lists
 	// ---------------------------------------------------------------------------
 	printf("\n# rotlist elements: %u\n", rotlist_id);
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		unsigned int atom_id = rotlist[rot_cnt] & RLIST_ATOMID_MASK;
 		printf("rot-id: %u \tatom-id: %u\n", rot_cnt, atom_id);
 	}
@@ -780,7 +780,7 @@ int gen_rotlist(
 	int rot_1_cnt = 0;
 
 	printf("\nsubrotlist_1:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		if ((num_times_atom_in_subrotlist[atom_id] == 0)  && (number_of_req_rotations_copy[atom_id] >= 1)) {
@@ -813,7 +813,7 @@ int gen_rotlist(
 	int rot_2_cnt = 0;
 
 	printf("\nsubrotlist_2:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_2" was not already added to "subrotlist_1"
@@ -851,7 +851,7 @@ int gen_rotlist(
 	int rot_3_cnt = 0;
 
 	printf("\nsubrotlist_3:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_3"
@@ -890,7 +890,7 @@ int gen_rotlist(
 	int rot_4_cnt = 0;
 
 	printf("\nsubrotlist_4:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_4"
@@ -930,7 +930,7 @@ int gen_rotlist(
 	int rot_5_cnt = 0;
 
 	printf("\nsubrotlist_5:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_5"
@@ -971,7 +971,7 @@ int gen_rotlist(
 	int rot_6_cnt = 0;
 
 	printf("\nsubrotlist_6:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_6"
@@ -1014,7 +1014,7 @@ int gen_rotlist(
 	int rot_7_cnt = 0;
 
 	printf("\nsubrotlist_7:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_7"
@@ -1057,7 +1057,7 @@ int gen_rotlist(
 	int rot_8_cnt = 0;
 
 	printf("\nsubrotlist_8:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_8"
@@ -1101,7 +1101,7 @@ int gen_rotlist(
 	int rot_9_cnt = 0;
 
 	printf("\nsubrotlist_9:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_9"
@@ -1146,7 +1146,7 @@ int gen_rotlist(
 	int rot_10_cnt = 0;
 
 	printf("\nsubrotlist_10:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_10"
@@ -1193,7 +1193,7 @@ int gen_rotlist(
 	int rot_11_cnt = 0;
 
 	printf("\nsubrotlist_11:\n");
-	for (unsigned int rot_cnt = 0; rot_cnt < myligand->num_of_rotations_required; rot_cnt++) {
+	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		// Making sure rot id to be added to "subrotlist_11"
