@@ -171,7 +171,7 @@ void gpu_calc_energy(
 			//printf("\tatom_id = %3i \tcalc_coords (x,y,z): % 02.6f \t% 02.6f \t% 02.6f\n", atom_id, calc_coords[atom_id].x(), calc_coords[atom_id].y(), calc_coords[atom_id].z());
 		} // End if-statement not dummy rotation
 
-		item_ct1.barrier(SYCL_MEMORY_SPACE);// TODO: MUST uncomment
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	} // End rotation_counter for-loop
 	/*
