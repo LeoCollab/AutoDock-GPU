@@ -192,9 +192,6 @@ public:
 		}
 		
 		return(Q[i] = m-x);
-		/*
-		return 1;
-		*/
 	}
 
 	float random_float(){
