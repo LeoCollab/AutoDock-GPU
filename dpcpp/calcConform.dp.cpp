@@ -1,3 +1,4 @@
+SYCL_EXTERNAL inline
 void calcConform(
 	float *pGenotype,
 	sycl::float4 genrot_movingvec,
@@ -93,6 +94,7 @@ if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 			//printf("\tatom_id = %3i \tcalc_coords (x,y,z): % 02.6f \t% 02.6f \t% 02.6f\n", atom_id, calc_coords[atom_id].x(), calc_coords[atom_id].y(), calc_coords[atom_id].z());
 		} // End if-statement not dummy rotation
 
+		// This barrier is disabled for subrotation lists
 		//item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	} // End rotation_counter for-loop
