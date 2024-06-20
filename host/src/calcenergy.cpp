@@ -378,13 +378,13 @@ int prepare_const_fields_for_gpu(
 		KerConst_rotlist->subrotlist_9_const[m] = subrotlist_9[m];
 		KerConst_rotlist->subrotlist_10_const[m] = subrotlist_10[m];
 		KerConst_rotlist->subrotlist_11_const[m] = subrotlist_11[m];
-/*
+		/*
 		if(m!=0 && m%myligand_reference->num_of_atoms==0)
 			printf("***\n");
 		if(m!=0 && m%NUM_OF_THREADS_PER_BLOCK==0)
 			printf("===\n");
 		printf("%i (%i): %i -> atom_id: %i, dummy: %i, first: %i, genrot: %i, rotbond_id: %i\n",m,m%NUM_OF_THREADS_PER_BLOCK,rotlist[m],rotlist[m] & RLIST_ATOMID_MASK, rotlist[m] & RLIST_DUMMY_MASK,rotlist[m] & RLIST_FIRSTROT_MASK,rotlist[m] & RLIST_GENROT_MASK,(rotlist[m] & RLIST_RBONDID_MASK) >> RLIST_RBONDID_SHIFT);
-*/
+		*/
 	}
 	KerConst_rotlist->subrotlist_1_length = subrotlist_1_length;
 	KerConst_rotlist->subrotlist_2_length = subrotlist_2_length;
@@ -1238,6 +1238,31 @@ int gen_rotlist(
 		printf("\t%i \t%i\n", i, subrotlist_11[i]);
 	}
 	*/
+
+	std::vector<int> v;
+	std::vector<int>::iterator i_v;
+	for (unsigned int atom_cnt = 0; atom_cnt < myligand->num_of_atoms; atom_cnt++)
+	{
+		v.push_back(number_of_req_rotations_copy[atom_id]);
+	}
+	i_v = std::max_element(v.begin(), v.end());
+	printf("\nMaximum number of required subrotation lists: %2u\n", *i_v);
+
+	std::vector<int> w;
+	std::vector<int>::iterator i_w;
+	w.push_back(*subrotlist_1_length);
+	w.push_back(*subrotlist_2_length);
+	w.push_back(*subrotlist_3_length);
+	w.push_back(*subrotlist_4_length);
+	w.push_back(*subrotlist_5_length);
+	w.push_back(*subrotlist_6_length);
+	w.push_back(*subrotlist_7_length);
+	w.push_back(*subrotlist_8_length);
+	w.push_back(*subrotlist_9_length);
+	w.push_back(*subrotlist_10_length);
+	w.push_back(*subrotlist_11_length);
+	i_w = std::max_element(w.begin(), w.end());
+	printf("\nSize of the largest subrotation list: %2u\n", *i_w);
 
 	return 0;
 }
