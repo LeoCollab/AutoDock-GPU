@@ -91,19 +91,21 @@ void gpu_calc_energy(
 	// ================================================
 	// CALCULATING ATOMIC POSITIONS AFTER ROTATIONS
 	// ================================================
+	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 	{
-	
+	*/
+/*	
 	for (uint rotation_counter = 0;
 			  rotation_counter < cData.dockpars.rotbondlist_length;
-			  rotation_counter ++)
+			  rotation_counter++)
 	{
-/*
+*/
 	for (uint rotation_counter = item_ct1.get_local_id(2);
 			  rotation_counter < cData.dockpars.rotbondlist_length;
 			  rotation_counter += item_ct1.get_local_range().get(2))
 	{
-*/
+
 		int rotation_list_element = cData.pKerconst_rotlist->rotlist_const[rotation_counter];
 		//printf("rot_counter = %i \trot_list_element = %i\n", rotation_counter, rotation_list_element);
 
@@ -166,23 +168,23 @@ void gpu_calc_energy(
 			calc_coords[atom_id].x() = qt.x() + rotation_movingvec.x();
 			calc_coords[atom_id].y() = qt.y() + rotation_movingvec.y();
 			calc_coords[atom_id].z() = qt.z() + rotation_movingvec.z();
-			printf("\tatom_id = %3i \tcalc_coords (x,y,z): % 02.6f \t% 02.6f \t% 02.6f\n", atom_id, calc_coords[atom_id].x(), calc_coords[atom_id].y(), calc_coords[atom_id].z());
+			//printf("\tatom_id = %3i \tcalc_coords (x,y,z): % 02.6f \t% 02.6f \t% 02.6f\n", atom_id, calc_coords[atom_id].x(), calc_coords[atom_id].y(), calc_coords[atom_id].z());
 		} // End if-statement not dummy rotation
 
-		//item_ct1.barrier(SYCL_MEMORY_SPACE);// TODO: MUST uncomment
+		item_ct1.barrier(SYCL_MEMORY_SPACE);// TODO: MUST uncomment
 
 	} // End rotation_counter for-loop
-	
+	/*
 	}
-#endif
-#if 1
-
+	*/
+#else
+	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 	{
 		printf("---------------------------------------------------\n");
 		printf("-------------------------------------------subrot 1\n");
 	}
-
+	*/
 	if ( (cData.pKerconst_rotlist)->subrotlist_1_length > 0 ) {
 		calcConform(
 			pGenotype,
@@ -201,13 +203,13 @@ void gpu_calc_energy(
 	}
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 	
-	
+	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 	{
 		printf("---------------------------------------------------\n");
 		printf("-------------------------------------------subrot 2\n");
 	}
-	
+	*/
 	if ( (cData.pKerconst_rotlist)->subrotlist_2_length > 0 ) {
 		calcConform(
 			pGenotype,
@@ -221,13 +223,13 @@ void gpu_calc_energy(
 		);
 	}
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
-	
+	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 	{
 		printf("---------------------------------------------------\n");
 		printf("-------------------------------------------subrot 3\n");
 	}
-	
+	*/
 	if ( (cData.pKerconst_rotlist)->subrotlist_3_length > 0 ) {
 		calcConform(
 			pGenotype,
@@ -241,13 +243,13 @@ void gpu_calc_energy(
 		);
 	}
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
-	
+	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 	{
 		printf("---------------------------------------------------\n");
 		printf("-------------------------------------------subrot 4\n");
 	}
-	
+	*/
 	if ( (cData.pKerconst_rotlist)->subrotlist_4_length > 0 ) {
 		calcConform(
 			pGenotype,
@@ -261,13 +263,13 @@ void gpu_calc_energy(
 		);
 	}
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
-	
+	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 	{
 		printf("---------------------------------------------------\n");
 		printf("-------------------------------------------subrot 5\n");
 	}
-	
+	*/
 	if ( (cData.pKerconst_rotlist)->subrotlist_5_length > 0 ) {
 		calcConform(
 			pGenotype,
@@ -281,13 +283,13 @@ void gpu_calc_energy(
 		);
 	}
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
-	
+	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 	{
 		printf("---------------------------------------------------\n");
 		printf("-------------------------------------------subrot 6\n");
 	}
-	
+	*/
 	if ( (cData.pKerconst_rotlist)->subrotlist_6_length > 0 ) {
 		calcConform(
 			pGenotype,
@@ -301,13 +303,13 @@ void gpu_calc_energy(
 		);
 	}
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
-	
+	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 	{
 		printf("---------------------------------------------------\n");
 		printf("-------------------------------------------subrot 7\n");
 	}
-	
+	*/
 	if ( (cData.pKerconst_rotlist)->subrotlist_7_length > 0 ) {
 		calcConform(
 			pGenotype,
@@ -321,13 +323,13 @@ void gpu_calc_energy(
 		);
 	}
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
-	
+	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 	{
 		printf("---------------------------------------------------\n");
 		printf("-------------------------------------------subrot 8\n");
 	}
-	
+	*/
 	if ( (cData.pKerconst_rotlist)->subrotlist_8_length > 0 ) {
 		calcConform(
 			pGenotype,
@@ -341,13 +343,13 @@ void gpu_calc_energy(
 		);
 	}
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
-
+	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 	{
 		printf("---------------------------------------------------\n");
 		printf("-------------------------------------------subrot 9\n");
 	}
-	
+	*/
 	if ( (cData.pKerconst_rotlist)->subrotlist_9_length > 0 ) {
 		calcConform(
 			pGenotype,
@@ -361,13 +363,13 @@ void gpu_calc_energy(
 		);
 	}
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
-	
+	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 	{
 		printf("---------------------------------------------------\n");
 		printf("-------------------------------------------subrot 10\n");
 	}
-	
+	*/
 	if ( (cData.pKerconst_rotlist)->subrotlist_10_length > 0 ) {
 		calcConform(
 			pGenotype,
@@ -381,13 +383,13 @@ void gpu_calc_energy(
 		);
 	}
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
-	
+	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 	{
 		printf("---------------------------------------------------\n");
 		printf("-------------------------------------------subrot 11\n");
 	}
-	
+	*/
 	if ( (cData.pKerconst_rotlist)->subrotlist_11_length > 0 ) {
 		calcConform(
 			pGenotype,
@@ -402,6 +404,21 @@ void gpu_calc_energy(
 	}
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
 #endif
+
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
+#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		for (uint atom_id = 0;
+			 	  atom_id < cData.dockpars.num_of_atoms;
+			  	  atom_id++)
+		{
+			printf("calc_coords[%3i]: % 02.6f \t% 02.6f \t% 02.6f\n", atom_id, calc_coords[atom_id].x(), calc_coords[atom_id].y(), calc_coords[atom_id].z());
+		}
+	}
+#endif
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
+
 	// ================================================
 	// CALCULATING INTERMOLECULAR ENERGY
 	// ================================================
@@ -517,6 +534,16 @@ void gpu_calc_energy(
 
 #if defined (DEBUG_ENERGY_KERNEL)
 	REDUCEFLOATSUM(interE, pFloatAccumulator)
+#endif
+
+#if 0
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("IE = %f\n", energy);
+
+	}
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
 #endif
 
 	// In paper: intermolecular and internal energy calculation
@@ -641,6 +668,16 @@ void gpu_calc_energy(
 	REDUCEFLOATSUM(energy, pFloatAccumulator)
 #if defined (DEBUG_ENERGY_KERNEL)
 	REDUCEFLOATSUM(intraE, pFloatAccumulator)
+#endif
+
+#if 0
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("IA = %f\n", energy);
+
+	}
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
 #endif
 }
 

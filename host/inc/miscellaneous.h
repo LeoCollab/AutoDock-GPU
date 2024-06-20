@@ -190,10 +190,11 @@ public:
 			x++;
 			c++;
 		}
-		/*
+		
 		return(Q[i] = m-x);
+		/*
+		return 1;
 		*/
-		return 2;
 	}
 
 	float random_float(){

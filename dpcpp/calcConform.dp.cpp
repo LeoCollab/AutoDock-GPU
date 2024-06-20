@@ -11,19 +11,21 @@ void calcConform(
 	// ================================================
 	// CALCULATING ATOMIC POSITIONS AFTER ROTATIONS
 	// ================================================
+	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
 	{
-	
+	*/
+/*
 	for (uint rotation_counter = 0;
 			  rotation_counter < subrotlist_length;
-			  rotation_counter ++)
+			  rotation_counter++)
 	{
-/*
+*/
 	for (uint rotation_counter = item_ct1.get_local_id(2);
 			  rotation_counter < subrotlist_length;
 			  rotation_counter += item_ct1.get_local_range().get(2))
 	{
-*/
+
 		//int rotation_list_element = (cData->pKerconst_rotlist)->rotlist_const[rotation_counter];
 		int rotation_list_element = subrotlist[rotation_counter];
 		//printf("rot_counter = %i \trot_list_element = %i\n", rotation_counter, rotation_list_element);
@@ -88,11 +90,13 @@ void calcConform(
 			calc_coords[atom_id].y() = qt.y() + rotation_movingvec.y();
 			calc_coords[atom_id].z() = qt.z() + rotation_movingvec.z();
 			
-			printf("\tatom_id = %3i \tcalc_coords (x,y,z): % 02.6f \t% 02.6f \t% 02.6f\n", atom_id, calc_coords[atom_id].x(), calc_coords[atom_id].y(), calc_coords[atom_id].z());
+			//printf("\tatom_id = %3i \tcalc_coords (x,y,z): % 02.6f \t% 02.6f \t% 02.6f\n", atom_id, calc_coords[atom_id].x(), calc_coords[atom_id].y(), calc_coords[atom_id].z());
 		} // End if-statement not dummy rotation
 
 		//item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	} // End rotation_counter for-loop
 }
+/*
 }
+*/
