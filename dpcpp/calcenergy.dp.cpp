@@ -91,23 +91,12 @@ void gpu_calc_energy(
 	// ================================================
 	// CALCULATING ATOMIC POSITIONS AFTER ROTATIONS
 	// ================================================
-	/*
-	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
-	{
-	*/
-/*	
-	for (uint rotation_counter = 0;
-			  rotation_counter < cData.dockpars.rotbondlist_length;
-			  rotation_counter++)
-	{
-*/
 	for (uint rotation_counter = item_ct1.get_local_id(2);
 			  rotation_counter < cData.dockpars.rotbondlist_length;
 			  rotation_counter += item_ct1.get_local_range().get(2))
 	{
 
 		int rotation_list_element = cData.pKerconst_rotlist->rotlist_const[rotation_counter];
-		//printf("rot_counter = %i \trot_list_element = %i\n", rotation_counter, rotation_list_element);
 
 		if ((rotation_list_element & RLIST_DUMMY_MASK) == 0) // If not dummy rotation
 		{
@@ -119,7 +108,6 @@ void gpu_calc_energy(
 			atom_to_rotate.y() = calc_coords[atom_id].y();
 			atom_to_rotate.z() = calc_coords[atom_id].z();
 			atom_to_rotate.w() = 0.0f;
-			//printf("\tatom_id = %3i \tatom_to_rotate (x,y,z,w): % 02.6f \t% 02.6f \t% 02.6f \t% 02.6f\n", atom_id, atom_to_rotate.x(), atom_to_rotate.y(), atom_to_rotate.z(), atom_to_rotate.w());
 
 			// initialize with general rotation values
 			sycl::float4 rotation_unitvec;
@@ -168,15 +156,11 @@ void gpu_calc_energy(
 			calc_coords[atom_id].x() = qt.x() + rotation_movingvec.x();
 			calc_coords[atom_id].y() = qt.y() + rotation_movingvec.y();
 			calc_coords[atom_id].z() = qt.z() + rotation_movingvec.z();
-			//printf("\tatom_id = %3i \tcalc_coords (x,y,z): % 02.6f \t% 02.6f \t% 02.6f\n", atom_id, calc_coords[atom_id].x(), calc_coords[atom_id].y(), calc_coords[atom_id].z());
 		} // End if-statement not dummy rotation
 
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	} // End rotation_counter for-loop
-	/*
-	}
-	*/
 #else
 	/*
 	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
@@ -195,6 +179,7 @@ void gpu_calc_energy(
 			&cData,
 			(cData.pKerconst_rotlist)->subrotlist_1_const,
 			(cData.pKerconst_rotlist)->subrotlist_1_length
+			// Debug: use the original rotlist + enable/disable internal barrier accordingly
 			/*
 			(cData.pKerconst_rotlist)->rotlist_const,
 			cData.dockpars.rotbondlist_length

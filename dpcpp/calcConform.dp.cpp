@@ -11,16 +11,16 @@ void calcConform(
 	// ================================================
 	// CALCULATING ATOMIC POSITIONS AFTER ROTATIONS
 	// ================================================
-	/*
-	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
-	{
-	*/
+/*
+if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+{
+*/
 /*
 	for (uint rotation_counter = 0;
 			  rotation_counter < subrotlist_length;
 			  rotation_counter++)
 	{
-*/
+	*/
 	for (uint rotation_counter = item_ct1.get_local_id(2);
 			  rotation_counter < subrotlist_length;
 			  rotation_counter += item_ct1.get_local_range().get(2))
