@@ -399,6 +399,10 @@ int prepare_const_fields_for_gpu(
 	KerConst_rotlist->subrotlist_11_length = subrotlist_11_length;
 
 	printf("\n");
+	printf("Table of subrotlists\n");
+	printf("\t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s\n", "---", "------", "------", "------", "------", "------", "------", "------", "------", "------", "------", "------");
+	printf("\t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s\n", " id", " sub 1", " sub 2", " sub 3", " sub 4", " sub 5", " sub 6", " sub 7", " sub 8", " sub 9", "sub 10", "sub 11");
+	printf("\t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s\n", "---", "------", "------", "------", "------", "------", "------", "------", "------", "------", "------", "------");
 	for (m = 0; m < MAX_NUM_OF_ROTATIONS; m++)
 	{
 		bool b1 = (m >= subrotlist_1_length);
@@ -421,68 +425,70 @@ int prepare_const_fields_for_gpu(
 		{
 			printf("\t%3i \t%6i", m, KerConst_rotlist->subrotlist_1_const[m]);
 		}
-		else {printf("\t------");}
+		else {printf("\t-x-x-x");}
 
 		if ((subrotlist_2_length > 0) && (m < subrotlist_2_length))
 		{
 			printf("\t%6i", KerConst_rotlist->subrotlist_2_const[m]);
 		}
-		else {printf("\t------");}
+		else {printf("\t-x-x-x");}
 
 		if ((subrotlist_3_length > 0) && (m < subrotlist_3_length))
 		{
 			printf("\t%6i", KerConst_rotlist->subrotlist_3_const[m]);
 		}
-		else {printf("\t------");}
+		else {printf("\t-x-x-x");}
 
 		if ((subrotlist_4_length > 0) && (m < subrotlist_4_length))
 		{
 			printf("\t%6i", KerConst_rotlist->subrotlist_4_const[m]);
 		}
-		else {printf("\t------");}
+		else {printf("\t-x-x-x");}
 
 		if ((subrotlist_5_length > 0) && (m < subrotlist_5_length))
 		{
 			printf("\t%6i", KerConst_rotlist->subrotlist_5_const[m]);
 		}
-		else {printf("\t------");}
+		else {printf("\t-x-x-x");}
 
 		if ((subrotlist_6_length > 0) && (m < subrotlist_6_length))
 		{
 			printf("\t%6i", KerConst_rotlist->subrotlist_6_const[m]);
 		}
-		else {printf("\t------");}
+		else {printf("\t-x-x-x");}
 
 		if ((subrotlist_7_length > 0) && (m < subrotlist_7_length))
 		{
 			printf("\t%6i", KerConst_rotlist->subrotlist_7_const[m]);
 		}
-		else {printf("\t------");}
+		else {printf("\t-x-x-x");}
 
 		if ((subrotlist_8_length > 0) && (m < subrotlist_8_length))
 		{
 			printf("\t%6i", KerConst_rotlist->subrotlist_8_const[m]);
 		}
-		else {printf("\t------");}
+		else {printf("\t-x-x-x");}
 
 		if ((subrotlist_9_length > 0) && (m < subrotlist_9_length))
 		{
 			printf("\t%6i", KerConst_rotlist->subrotlist_9_const[m]);
 		}
-		else {printf("\t------");}
+		else {printf("\t-x-x-x");}
 
 		if ((subrotlist_10_length > 0) && (m < subrotlist_10_length))
 		{
 			printf("\t%6i", KerConst_rotlist->subrotlist_10_const[m]);
 		}
-		else {printf("\t------");}
+		else {printf("\t-x-x-x");}
 
 		if ((subrotlist_11_length > 0) && (m < subrotlist_11_length))
 		{
 			printf("\t%6i\n", KerConst_rotlist->subrotlist_11_const[m]);
 		}
-		else {printf("\t------\n");}
+		else {printf("\t-x-x-x\n");}
 	}
+	printf("\t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s\n", "---", "------", "------", "------", "------", "------", "------", "------", "------", "------", "------", "------");
+	printf("\n");
 	/*
 	printf("\tKerConst_rotlist->subrotlist_1_length: %u\n", KerConst_rotlist->subrotlist_1_length);
 	printf("\tKerConst_rotlist->subrotlist_2_length: %u\n", KerConst_rotlist->subrotlist_2_length);
@@ -726,15 +732,15 @@ int gen_rotlist(
 	// ---------------------------------------------------------------------------
 	// Building rotation lists
 	// ---------------------------------------------------------------------------
-	printf("\n# rotlist elements: %u\n", rotlist_id);
+	printf("\n# Rotlist elements: %u\n", rotlist_id);
 	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		unsigned int atom_id = rotlist[rot_cnt] & RLIST_ATOMID_MASK;
-		printf("rot-id: %u \tatom-id: %u\n", rot_cnt, atom_id);
+		printf("\trot-id: %3u \tatom-id: %3u\n", rot_cnt, atom_id);
 	}
 
-	printf("\n# atoms: %u\n", myligand->num_of_atoms);
+	printf("\n# Atoms: %u\n", myligand->num_of_atoms);
 	for (unsigned int atom_cnt = 0; atom_cnt < myligand->num_of_atoms; atom_cnt++) {
-		printf("atom-id: %u \tnumber-rot-req: %u\n", atom_cnt, number_of_req_rotations_copy[atom_cnt]);
+		printf("\tatom-id: %3u \tnum-rot-req-per-atom: %3u\n", atom_cnt, number_of_req_rotations_copy[atom_cnt]);
 	}
 
 	// Builing first rotation list
@@ -779,12 +785,12 @@ int gen_rotlist(
 	//int subrotlist_1[MAX_NUM_OF_ROTATIONS];
 	int rot_1_cnt = 0;
 
-	printf("\nsubrotlist_1:\n");
+	printf("\nsubrotlist 1:\n");
 	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
 		if ((num_times_atom_in_subrotlist[atom_id] == 0)  && (number_of_req_rotations_copy[atom_id] >= 1)) {
-			printf("[subrot_1 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_1_cnt, rot_cnt, atom_id);
+			printf("\t[subrot_1 rot-id]: %3u \t[orig rot-id]: %3u \tatom-id: %3u\n", rot_1_cnt, rot_cnt, atom_id);
 
 			// Storing ids from the original "rotlist" that are used in "subrotlist_1"
 			rots_used_in_subrotlist_1[rot_cnt] = rot_cnt;
@@ -798,7 +804,7 @@ int gen_rotlist(
 		}
 	}
 	*subrotlist_1_length = rot_1_cnt;
-	printf("\tsubrotlist_1 length: %u\n", *subrotlist_1_length);
+	printf("\tlength: %3u\n", *subrotlist_1_length);
 	/*
 	for (unsigned int i = 0; i < *subrotlist_1_length; i++)
 	{
@@ -812,7 +818,7 @@ int gen_rotlist(
 	//int subrotlist_2[MAX_NUM_OF_ROTATIONS];
 	int rot_2_cnt = 0;
 
-	printf("\nsubrotlist_2:\n");
+	printf("\nsubrotlist 2:\n");
 	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
@@ -820,7 +826,7 @@ int gen_rotlist(
 		if (rots_used_in_subrotlist_1[rot_cnt] != rot_cnt) {
 
 			if ((num_times_atom_in_subrotlist[atom_id] == 1) && (number_of_req_rotations_copy[atom_id] >= 2)) {
-				printf("[subrot_2 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_2_cnt, rot_cnt, atom_id);
+				printf("\t[subrot_2 rot-id]: %3u \t[orig rot-id]: %3u \tatom-id: %3u\n", rot_2_cnt, rot_cnt, atom_id);
 
 				// Storing ids from the original "rotlist" that are used in "subrotlist_2"
 				rots_used_in_subrotlist_2[rot_cnt] = rot_cnt;
@@ -836,7 +842,7 @@ int gen_rotlist(
 		}
 	}
 	*subrotlist_2_length = rot_2_cnt;
-	printf("\tsubrotlist_2 length: %u\n", *subrotlist_2_length);
+	printf("\tlength: %3u\n", *subrotlist_2_length);
 	/*
 	for (unsigned int i = 0; i < *subrotlist_2_length; i++)
 	{
@@ -850,7 +856,7 @@ int gen_rotlist(
 	//int subrotlist_3[MAX_NUM_OF_ROTATIONS];
 	int rot_3_cnt = 0;
 
-	printf("\nsubrotlist_3:\n");
+	printf("\nsubrotlist 3:\n");
 	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
@@ -859,7 +865,7 @@ int gen_rotlist(
 		if ((rots_used_in_subrotlist_1[rot_cnt] != rot_cnt) && (rots_used_in_subrotlist_2[rot_cnt] != rot_cnt)) {
 
 			if ((num_times_atom_in_subrotlist[atom_id] == 2) && (number_of_req_rotations_copy[atom_id] >= 3)) {
-				printf("[subrot_3 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_3_cnt, rot_cnt, atom_id);
+				printf("\t[subrot_3 rot-id]: %3u \t[orig rot-id]: %3u \tatom-id: %3u\n", rot_3_cnt, rot_cnt, atom_id);
 
 				// Storing ids from the original "rotlist" that are used in "subrotlist_3"
 				rots_used_in_subrotlist_3[rot_cnt] = rot_cnt;
@@ -875,7 +881,7 @@ int gen_rotlist(
 		}
 	}
 	*subrotlist_3_length = rot_3_cnt;
-	printf("\tsubrotlist_3 length: %u\n", *subrotlist_3_length);
+	printf("\tlength: %3u\n", *subrotlist_3_length);
 	/*
 	for (unsigned int i = 0; i < *subrotlist_3_length; i++)
 	{
@@ -889,7 +895,7 @@ int gen_rotlist(
 	//int subrotlist_4[MAX_NUM_OF_ROTATIONS];
 	int rot_4_cnt = 0;
 
-	printf("\nsubrotlist_4:\n");
+	printf("\nsubrotlist 4:\n");
 	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
@@ -899,7 +905,7 @@ int gen_rotlist(
 		if ((rots_used_in_subrotlist_1[rot_cnt] != rot_cnt) && (rots_used_in_subrotlist_2[rot_cnt] != rot_cnt) && (rots_used_in_subrotlist_3[rot_cnt] != rot_cnt)) {
 
 			if ((num_times_atom_in_subrotlist[atom_id] == 3) && (number_of_req_rotations_copy[atom_id] >= 4)) {
-				printf("[subrot_4 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_4_cnt, rot_cnt, atom_id);
+				printf("\t[subrot_4 rot-id]: %3u \t[orig rot-id]: %3u \tatom-id: %3u\n", rot_4_cnt, rot_cnt, atom_id);
 
 				// Storing ids from the original "rotlist" that are used in "subrotlist_4"
 				rots_used_in_subrotlist_4[rot_cnt] = rot_cnt;
@@ -915,7 +921,7 @@ int gen_rotlist(
 		}
 	}
 	*subrotlist_4_length = rot_4_cnt;
-	printf("\tsubrotlist_4 length: %u\n", *subrotlist_4_length);
+	printf("\tlength: %3u\n", *subrotlist_4_length);
 	/*
 	for (unsigned int i = 0; i < *subrotlist_4_length; i++)
 	{
@@ -929,7 +935,7 @@ int gen_rotlist(
 	//int subrotlist_5[MAX_NUM_OF_ROTATIONS];
 	int rot_5_cnt = 0;
 
-	printf("\nsubrotlist_5:\n");
+	printf("\nsubrotlist 5:\n");
 	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
@@ -940,7 +946,7 @@ int gen_rotlist(
 		    (rots_used_in_subrotlist_3[rot_cnt] != rot_cnt) && (rots_used_in_subrotlist_4[rot_cnt] != rot_cnt)) {
 
 			if ((num_times_atom_in_subrotlist[atom_id] == 4) && (number_of_req_rotations_copy[atom_id] >= 5)) {
-				printf("[subrot_5 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_5_cnt, rot_cnt, atom_id);
+				printf("\t[subrot_5 rot-id]: %3u \t[orig rot-id]: %3u \tatom-id: %3u\n", rot_5_cnt, rot_cnt, atom_id);
 
 				// Storing ids from the original "rotlist" that are used in "subrotlist_5"
 				rots_used_in_subrotlist_5[rot_cnt] = rot_cnt;
@@ -956,7 +962,7 @@ int gen_rotlist(
 		}
 	}
 	*subrotlist_5_length = rot_5_cnt;
-	printf("\tsubrotlist_5 length: %u\n", *subrotlist_5_length);
+	printf("\tlength: %3u\n", *subrotlist_5_length);
 	/*
 	for (unsigned int i = 0; i < *subrotlist_5_length; i++)
 	{
@@ -970,7 +976,7 @@ int gen_rotlist(
 	//int subrotlist_6[MAX_NUM_OF_ROTATIONS];
 	int rot_6_cnt = 0;
 
-	printf("\nsubrotlist_6:\n");
+	printf("\nsubrotlist 6:\n");
 	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
@@ -983,7 +989,7 @@ int gen_rotlist(
 			) {
 
 			if ((num_times_atom_in_subrotlist[atom_id] == 5) && (number_of_req_rotations_copy[atom_id] >= 6)) {
-				printf("[subrot_6 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_6_cnt, rot_cnt, atom_id);
+				printf("\t[subrot_6 rot-id]: %3u \t[orig rot-id]: %3u \tatom-id: %3u\n", rot_6_cnt, rot_cnt, atom_id);
 
 				// Storing ids from the original "rotlist" that are used in "subrotlist_6"
 				rots_used_in_subrotlist_6[rot_cnt] = rot_cnt;
@@ -999,7 +1005,7 @@ int gen_rotlist(
 		}
 	}
 	*subrotlist_6_length = rot_6_cnt;
-	printf("\tsubrotlist_6 length: %u\n", *subrotlist_6_length);
+	printf("\tlength: %3u\n", *subrotlist_6_length);
 	/*
 	for (unsigned int i = 0; i < *subrotlist_6_length; i++)
 	{
@@ -1013,7 +1019,7 @@ int gen_rotlist(
 	//int subrotlist_7[MAX_NUM_OF_ROTATIONS];
 	int rot_7_cnt = 0;
 
-	printf("\nsubrotlist_7:\n");
+	printf("\nsubrotlist 7:\n");
 	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
@@ -1026,7 +1032,7 @@ int gen_rotlist(
 			) {
 
 			if ((num_times_atom_in_subrotlist[atom_id] == 6) && (number_of_req_rotations_copy[atom_id] >= 7)) {
-				printf("[subrot_7 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_7_cnt, rot_cnt, atom_id);
+				printf("\t[subrot_7 rot-id]: %3u \t[orig rot-id]: %3u \tatom-id: %3u\n", rot_7_cnt, rot_cnt, atom_id);
 
 				// Storing ids from the original "rotlist" that are used in "subrotlist_7"
 				rots_used_in_subrotlist_7[rot_cnt] = rot_cnt;
@@ -1042,7 +1048,7 @@ int gen_rotlist(
 		}
 	}
 	*subrotlist_7_length = rot_7_cnt;
-	printf("\tsubrotlist_7 length: %u\n", *subrotlist_7_length);
+	printf("\tlength: %3u\n", *subrotlist_7_length);
 	/*
 	for (unsigned int i = 0; i < *subrotlist_7_length; i++)
 	{
@@ -1056,7 +1062,7 @@ int gen_rotlist(
 	//int subrotlist_8[MAX_NUM_OF_ROTATIONS];
 	int rot_8_cnt = 0;
 
-	printf("\nsubrotlist_8:\n");
+	printf("\nsubrotlist 8:\n");
 	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
@@ -1070,7 +1076,7 @@ int gen_rotlist(
 			) {
 
 			if ((num_times_atom_in_subrotlist[atom_id] == 7) && (number_of_req_rotations_copy[atom_id] >= 8)) {
-				printf("[subrot_8 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_8_cnt, rot_cnt, atom_id);
+				printf("\t[subrot_8 rot-id]: %3u \t[orig rot-id]: %3u \tatom-id: %3u\n", rot_8_cnt, rot_cnt, atom_id);
 
 				// Storing ids from the original "rotlist" that are used in "subrotlist_8"
 				rots_used_in_subrotlist_8[rot_cnt] = rot_cnt;
@@ -1086,7 +1092,7 @@ int gen_rotlist(
 		}
 	}
 	*subrotlist_8_length = rot_8_cnt;
-	printf("\tsubrotlist_8 length: %u\n", *subrotlist_8_length);
+	printf("\tlength: %3u\n", *subrotlist_8_length);
 	/*
 	for (unsigned int i = 0; i < *subrotlist_8_length; i++)
 	{
@@ -1100,7 +1106,7 @@ int gen_rotlist(
 	//int subrotlist_9[MAX_NUM_OF_ROTATIONS];
 	int rot_9_cnt = 0;
 
-	printf("\nsubrotlist_9:\n");
+	printf("\nsubrotlist 9:\n");
 	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
@@ -1115,7 +1121,7 @@ int gen_rotlist(
 			) {
 
 			if ((num_times_atom_in_subrotlist[atom_id] == 8) && (number_of_req_rotations_copy[atom_id] >= 9)) {
-				printf("[subrot_9 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_9_cnt, rot_cnt, atom_id);
+				printf("\t[subrot_9 rot-id]: %3u \t[orig rot-id]: %3u \tatom-id: %3u\n", rot_9_cnt, rot_cnt, atom_id);
 
 				// Storing ids from the original "rotlist" that are used in "subrotlist_9"
 				rots_used_in_subrotlist_9[rot_cnt] = rot_cnt;
@@ -1131,7 +1137,7 @@ int gen_rotlist(
 		}
 	}
 	*subrotlist_9_length = rot_9_cnt;
-	printf("\tsubrotlist_9 length: %u\n", *subrotlist_9_length);
+	printf("\tlength: %3u\n", *subrotlist_9_length);
 	/*
 	for (unsigned int i = 0; i < *subrotlist_9_length; i++)
 	{
@@ -1145,7 +1151,7 @@ int gen_rotlist(
 	//int subrotlist_10[MAX_NUM_OF_ROTATIONS];
 	int rot_10_cnt = 0;
 
-	printf("\nsubrotlist_10:\n");
+	printf("\nsubrotlist 10:\n");
 	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
@@ -1162,7 +1168,7 @@ int gen_rotlist(
 			) {
 
 			if ((num_times_atom_in_subrotlist[atom_id] == 9) && (number_of_req_rotations_copy[atom_id] >= 10)) {
-				printf("[subrot_10 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_10_cnt, rot_cnt, atom_id);
+				printf("\t[subrot_10 rot-id]: %3u \t[orig rot-id]: %3u \tatom-id: %3u\n", rot_10_cnt, rot_cnt, atom_id);
 
 				// Storing ids from the original "rotlist" that are used in "subrotlist_10"
 				rots_used_in_subrotlist_10[rot_cnt] = rot_cnt;
@@ -1178,7 +1184,7 @@ int gen_rotlist(
 		}
 	}
 	*subrotlist_10_length = rot_10_cnt;
-	printf("\tsubrotlist_10 length: %u\n", *subrotlist_10_length);
+	printf("\tlength: %3u\n", *subrotlist_10_length);
 	/*
 	for (unsigned int i = 0; i < *subrotlist_10_length; i++)
 	{
@@ -1192,7 +1198,7 @@ int gen_rotlist(
 	//int subrotlist_11[MAX_NUM_OF_ROTATIONS];
 	int rot_11_cnt = 0;
 
-	printf("\nsubrotlist_11:\n");
+	printf("\nsubrotlist 11:\n");
 	for (unsigned int rot_cnt = 0; rot_cnt < rotlist_id; rot_cnt++) {
 		int atom_id = (rotlist[rot_cnt] & RLIST_ATOMID_MASK);
 
@@ -1209,7 +1215,7 @@ int gen_rotlist(
 			) {
 
 			if ((num_times_atom_in_subrotlist[atom_id] == 10) && (number_of_req_rotations_copy[atom_id] >= 11)) {
-				printf("[subrot_11 rot-id]: %u \t[orig rot-id]: %u \tatom-id: %u\n", rot_11_cnt, rot_cnt, atom_id);
+				printf("\t[subrot_11 rot-id]: %3u \t[orig rot-id]: %3u \tatom-id: %3u\n", rot_11_cnt, rot_cnt, atom_id);
 
 				// Storing ids from the original "rotlist" that are used in "subrotlist_11"
 				rots_used_in_subrotlist_11[rot_cnt] = rot_cnt;
@@ -1225,7 +1231,7 @@ int gen_rotlist(
 		}
 	}
 	*subrotlist_11_length = rot_11_cnt;
-	printf("\tsubrotlist_11 length: %u\n", *subrotlist_11_length);
+	printf("\tlength: %3u\n", *subrotlist_11_length);
 	/*
 	for (unsigned int i = 0; i < *subrotlist_11_length; i++)
 	{
