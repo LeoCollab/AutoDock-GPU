@@ -95,6 +95,7 @@ int prepare_const_fields_for_gpu(
 //                          If bit 18 is 1, this is a "dummy" rotation, that is, no rotation can be performed in this cycle
 //                                         (considering the other rotations which are being carried out in this period).
 	int*   rotlist                 = new int[MAX_NUM_OF_ROTATIONS];
+#ifdef USE_SUBROT
 // subrotlist_*				Stores a sub (rotation) list built from above rotlist.
 //							Each of these sublists contains rotations that can be executed in parallel.
 //							Reasoning: conformation calculation (originally processing a rotlist) consists of a large loop that cannot be parallelized
@@ -118,6 +119,7 @@ int prepare_const_fields_for_gpu(
 	int* subrotlist_10				= new int[MAX_NUM_OF_ROTATIONS];
 	int* subrotlist_11				= new int[MAX_NUM_OF_ROTATIONS];
 	int* subrotlist_12				= new int[MAX_NUM_OF_ROTATIONS];
+#endif
 // ref_coords_x:            Stores the x coordinates of the reference ligand atoms.
 //                          Element i corresponds to the x coordinate of the atom with atom ID i (according to myligand_reference).
 	float* ref_coords_x            = new float[MAX_NUM_OF_ATOMS];
@@ -153,6 +155,7 @@ int prepare_const_fields_for_gpu(
 	int*   num_rotating_atoms_per_rotbond = new int[MAX_NUM_OF_ROTBONDS];
 // --------------------------------------------------
 
+#ifdef USE_SUBROT
 	// Number of rotations in every subrotlist
 	unsigned int subrotlist_1_length;
 	unsigned int subrotlist_2_length;
@@ -166,6 +169,7 @@ int prepare_const_fields_for_gpu(
 	unsigned int subrotlist_10_length;
 	unsigned int subrotlist_11_length;
 	unsigned int subrotlist_12_length;
+#endif
 
 	// charges and type id-s
 	floatpoi = atom_charges;
@@ -257,7 +261,9 @@ int prepare_const_fields_for_gpu(
 	// generate rotation list
 	if (gen_rotlist(
 			myligand_reference,
-			rotlist,
+			rotlist
+#ifdef USE_SUBROT
+			,
 			subrotlist_1,
 			subrotlist_2,
 			subrotlist_3,
@@ -282,6 +288,7 @@ int prepare_const_fields_for_gpu(
 			&subrotlist_10_length,
 			&subrotlist_11_length,
 			&subrotlist_12_length
+#endif
 			)
 		!= 0)
 	{
@@ -371,6 +378,7 @@ int prepare_const_fields_for_gpu(
 
 	for (m=0;m<MAX_NUM_OF_ROTATIONS;m++) {
 		KerConst_rotlist->rotlist_const[m] = rotlist[m];
+#ifdef USE_SUBROT
 		KerConst_rotlist->subrotlist_1_const[m] = subrotlist_1[m];
 		KerConst_rotlist->subrotlist_2_const[m] = subrotlist_2[m];
 		KerConst_rotlist->subrotlist_3_const[m] = subrotlist_3[m];
@@ -383,6 +391,7 @@ int prepare_const_fields_for_gpu(
 		KerConst_rotlist->subrotlist_10_const[m] = subrotlist_10[m];
 		KerConst_rotlist->subrotlist_11_const[m] = subrotlist_11[m];
 		KerConst_rotlist->subrotlist_12_const[m] = subrotlist_12[m];
+#endif
 		/*
 		if(m!=0 && m%myligand_reference->num_of_atoms==0)
 			printf("***\n");
@@ -391,6 +400,7 @@ int prepare_const_fields_for_gpu(
 		printf("%i (%i): %i -> atom_id: %i, dummy: %i, first: %i, genrot: %i, rotbond_id: %i\n",m,m%NUM_OF_THREADS_PER_BLOCK,rotlist[m],rotlist[m] & RLIST_ATOMID_MASK, rotlist[m] & RLIST_DUMMY_MASK,rotlist[m] & RLIST_FIRSTROT_MASK,rotlist[m] & RLIST_GENROT_MASK,(rotlist[m] & RLIST_RBONDID_MASK) >> RLIST_RBONDID_SHIFT);
 		*/
 	}
+#ifdef USE_SUBROT
 	KerConst_rotlist->subrotlist_1_length = subrotlist_1_length;
 	KerConst_rotlist->subrotlist_2_length = subrotlist_2_length;
 	KerConst_rotlist->subrotlist_3_length = subrotlist_3_length;
@@ -409,6 +419,7 @@ int prepare_const_fields_for_gpu(
 	printf("\t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s\n", "---", "------", "------", "------", "------", "------", "------", "------", "------", "------", "------", "------", "------");
 	printf("\t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s\n", " id", " sub 1", " sub 2", " sub 3", " sub 4", " sub 5", " sub 6", " sub 7", " sub 8", " sub 9", "sub 10", "sub 11", "sub 12");
 	printf("\t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s \t%s\n", "---", "------", "------", "------", "------", "------", "------", "------", "------", "------", "------", "------", "------");
+
 	for (m = 0; m < MAX_NUM_OF_ROTATIONS; m++)
 	{
 		bool b1 = (m >= subrotlist_1_length);
@@ -517,6 +528,8 @@ int prepare_const_fields_for_gpu(
 	printf("\tKerConst_rotlist->subrotlist_12_length: %u\n", KerConst_rotlist->subrotlist_12_length);
 	printf("\n");
 	*/
+#endif
+
 	for (m=0;m<MAX_NUM_OF_ATOMS;m++) {
 		KerConst_conform->ref_coords_const[3*m]		 = ref_coords_x[m];
 		KerConst_conform->ref_coords_const[3*m+1]	 = ref_coords_y[m];
@@ -542,6 +555,7 @@ int prepare_const_fields_for_gpu(
 	delete[] dspars_S;
 	delete[] dspars_V;
 	delete[] rotlist;
+#ifdef USER_SUBROT
 	delete[] subrotlist_1;
 	delete[] subrotlist_2;
 	delete[] subrotlist_3;
@@ -554,6 +568,7 @@ int prepare_const_fields_for_gpu(
 	delete[] subrotlist_10;
 	delete[] subrotlist_11;
 	delete[] subrotlist_12;
+#endif
 	delete[] ref_coords_x;
 	delete[] ref_coords_y;
 	delete[] ref_coords_z;
@@ -606,7 +621,9 @@ void make_reqrot_ordering(
 
 int gen_rotlist(
 	Liganddata* myligand,
-	int* rotlist,
+	int* rotlist
+#ifdef USE_SUBROT
+	,
 	int* subrotlist_1,
 	int* subrotlist_2,
 	int* subrotlist_3,
@@ -631,6 +648,7 @@ int gen_rotlist(
 	unsigned int* subrotlist_10_length,
 	unsigned int* subrotlist_11_length,
 	unsigned int* subrotlist_12_length
+#endif
 )
 // The function generates the rotation list which will be stored in the constant memory field rotlist_const by
 // prepare_const_fields_for_gpu(). The structure of this array is described at that function.
@@ -638,7 +656,9 @@ int gen_rotlist(
 	int atom_id, rotb_id, parallel_rot_id, rotlist_id;
 
 	int number_of_req_rotations[MAX_NUM_OF_ATOMS];
+#ifdef USE_SUBROT
 	int number_of_req_rotations_copy[MAX_NUM_OF_ATOMS];
+#endif
 
 	int atom_id_of_numrots[MAX_NUM_OF_ATOMS];
 	bool atom_wasnt_rotated_yet[MAX_NUM_OF_ATOMS];
@@ -671,10 +691,12 @@ int gen_rotlist(
 		myligand->num_of_rotations_required += number_of_req_rotations[atom_id];
 	}
 
+#ifdef USE_SUBROT
 	for (atom_id=0; atom_id<myligand->num_of_atoms; atom_id++)
 	{
 		number_of_req_rotations_copy[atom_id] = number_of_req_rotations[atom_id];
 	}
+#endif
 
 	rotlist_id = 0;
 	make_reqrot_ordering(number_of_req_rotations, atom_id_of_numrots, myligand->num_of_atoms);
@@ -746,6 +768,7 @@ int gen_rotlist(
 		(myligand->num_of_rotcyc)++;
 	}
 
+#ifdef USE_SUBROT
 	// ---------------------------------------------------------------------------
 	// Building rotation lists
 	// ---------------------------------------------------------------------------
@@ -1260,6 +1283,7 @@ int gen_rotlist(
 	w.push_back(*subrotlist_11_length);
 	i_w = std::max_element(w.begin(), w.end());
 	printf("\nSize of the largest subrotation list: %2u\n", *i_w);
+#endif
 
 	return 0;
 }

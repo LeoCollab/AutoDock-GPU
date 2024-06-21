@@ -144,7 +144,7 @@ void gpu_calc_energrad(
 	// ================================================
 	// CALCULATING ATOMIC POSITIONS AFTER ROTATIONS
 	// ================================================
-#if 0
+#ifndef USE_SUBROT
 	for (uint32_t rotation_counter = item_ct1.get_local_id(2);
 				  rotation_counter < cData.dockpars.rotbondlist_length;
 				  rotation_counter += item_ct1.get_local_range().get(2))

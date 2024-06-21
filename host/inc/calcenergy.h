@@ -111,6 +111,7 @@ typedef struct
 typedef struct
 {
 	int rotlist_const[MAX_NUM_OF_ROTATIONS];
+#ifdef USE_SUBROT
 	int subrotlist_1_const [MAX_NUM_OF_ROTATIONS];
 	int subrotlist_2_const [MAX_NUM_OF_ROTATIONS];
 	int subrotlist_3_const [MAX_NUM_OF_ROTATIONS];
@@ -135,6 +136,7 @@ typedef struct
 	unsigned int subrotlist_10_length;
 	unsigned int subrotlist_11_length;
 	unsigned int subrotlist_12_length;
+#endif
 } kernelconstant_rotlist;
 
 typedef struct
@@ -178,7 +180,9 @@ void make_reqrot_ordering(
 
 int gen_rotlist(
 	Liganddata* myligand,
-	int* rotlist,
+	int* rotlist
+#ifdef USE_SUBROT
+	,
 	int* subrotlist_1,
 	int* subrotlist_2,
 	int* subrotlist_3,
@@ -203,6 +207,7 @@ int gen_rotlist(
 	unsigned int* subrotlist_10_length,
 	unsigned int* subrotlist_11_length,
 	unsigned int* subrotlist_12_length
+#endif
 );
 
 #endif /* CALCENERGY_H_ */

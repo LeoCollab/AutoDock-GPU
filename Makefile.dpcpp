@@ -69,6 +69,9 @@ ifeq ($(OVERLAP), ON)
 	PIPELINE=-DUSE_PIPELINE -fopenmp
 endif
 
+ifeq ($(SUBROT), ON)
+	IFLAGS+=-DUSE_SUBROT
+endif
 
 BIN := $(wildcard $(TARGET)*)
 
