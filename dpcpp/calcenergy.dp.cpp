@@ -399,6 +399,26 @@ void gpu_calc_energy(
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 	}
 
+	#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("---------------------------------------------------\n");
+		printf("-------------------------------------------subrot 12\n");
+	}
+	#endif
+	if ( (cData.pKerconst_rotlist)->subrotlist_12_length > 0 ) {
+		calcConform(
+			pGenotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+			(cData.pKerconst_rotlist)->subrotlist_12_const,
+			(cData.pKerconst_rotlist)->subrotlist_12_length
+		);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
 #endif
 
 #if 0
