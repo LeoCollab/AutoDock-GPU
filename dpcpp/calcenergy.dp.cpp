@@ -87,10 +87,11 @@ void gpu_calc_energy(
 	uint g3 = cData.dockpars.gridsize_x_times_y_times_z;
 
 	item_ct1.barrier(SYCL_MEMORY_SPACE);
-#if 0
+
 	// ================================================
 	// CALCULATING ATOMIC POSITIONS AFTER ROTATIONS
 	// ================================================
+#if 0
 	for (uint rotation_counter = item_ct1.get_local_id(2);
 			  rotation_counter < cData.dockpars.rotbondlist_length;
 			  rotation_counter += item_ct1.get_local_range().get(2))

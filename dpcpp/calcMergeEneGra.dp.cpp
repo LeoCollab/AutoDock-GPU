@@ -144,6 +144,7 @@ void gpu_calc_energrad(
 	// ================================================
 	// CALCULATING ATOMIC POSITIONS AFTER ROTATIONS
 	// ================================================
+#if 0
 	for (uint32_t rotation_counter = item_ct1.get_local_id(2);
 				  rotation_counter < cData.dockpars.rotbondlist_length;
 				  rotation_counter += item_ct1.get_local_range().get(2))
@@ -164,6 +165,7 @@ void gpu_calc_energrad(
 			// initialize with general rotation values
 			sycl::float4 rotation_unitvec;
 			sycl::float4 rotation_movingvec;
+
 			if (atom_id < cData.dockpars.true_ligand_atoms){
 				rotation_unitvec = genrot_unitvec;
 				rotation_movingvec = genrot_movingvec;
@@ -211,7 +213,267 @@ void gpu_calc_energrad(
 		} // End if-statement not dummy rotation
 
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
+
 	} // End rotation_counter for-loop
+#else
+
+	#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("---------------------------------------------------\n");
+		printf("-------------------------------------------subrot 1\n");
+	}
+	#endif
+	if ( (cData.pKerconst_rotlist)->subrotlist_1_length > 0 ) {
+		calcConform(
+			genotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+			(cData.pKerconst_rotlist)->subrotlist_1_const,
+			(cData.pKerconst_rotlist)->subrotlist_1_length
+			// Debug: use the original rotlist + enable/disable accordingly the barrier in calcConform()
+			/*
+			(cData.pKerconst_rotlist)->rotlist_const,
+			cData.dockpars.rotbondlist_length
+			*/
+		);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
+
+	#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("---------------------------------------------------\n");
+		printf("-------------------------------------------subrot 2\n");
+	}
+	#endif
+	if ( (cData.pKerconst_rotlist)->subrotlist_2_length > 0 ) {
+		calcConform(
+			genotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+			(cData.pKerconst_rotlist)->subrotlist_2_const,
+			(cData.pKerconst_rotlist)->subrotlist_2_length
+		);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
+
+	#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("---------------------------------------------------\n");
+		printf("-------------------------------------------subrot 3\n");
+	}
+	#endif
+	if ( (cData.pKerconst_rotlist)->subrotlist_3_length > 0 ) {
+		calcConform(
+			genotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+			(cData.pKerconst_rotlist)->subrotlist_3_const,
+			(cData.pKerconst_rotlist)->subrotlist_3_length
+		);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
+
+	#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("---------------------------------------------------\n");
+		printf("-------------------------------------------subrot 4\n");
+	}
+	#endif
+	if ( (cData.pKerconst_rotlist)->subrotlist_4_length > 0 ) {
+		calcConform(
+			genotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+			(cData.pKerconst_rotlist)->subrotlist_4_const,
+			(cData.pKerconst_rotlist)->subrotlist_4_length
+		);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
+
+	#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("---------------------------------------------------\n");
+		printf("-------------------------------------------subrot 5\n");
+	}
+	#endif
+	if ( (cData.pKerconst_rotlist)->subrotlist_5_length > 0 ) {
+		calcConform(
+			genotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+			(cData.pKerconst_rotlist)->subrotlist_5_const,
+			(cData.pKerconst_rotlist)->subrotlist_5_length
+		);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
+
+	#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("---------------------------------------------------\n");
+		printf("-------------------------------------------subrot 6\n");
+	}
+	#endif
+	if ( (cData.pKerconst_rotlist)->subrotlist_6_length > 0 ) {
+		calcConform(
+			genotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+			(cData.pKerconst_rotlist)->subrotlist_6_const,
+			(cData.pKerconst_rotlist)->subrotlist_6_length
+		);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
+
+	#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("---------------------------------------------------\n");
+		printf("-------------------------------------------subrot 7\n");
+	}
+	#endif
+	if ( (cData.pKerconst_rotlist)->subrotlist_7_length > 0 ) {
+		calcConform(
+			genotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+			(cData.pKerconst_rotlist)->subrotlist_7_const,
+			(cData.pKerconst_rotlist)->subrotlist_7_length
+		);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
+
+	#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("---------------------------------------------------\n");
+		printf("-------------------------------------------subrot 8\n");
+	}
+	#endif
+	if ( (cData.pKerconst_rotlist)->subrotlist_8_length > 0 ) {
+		calcConform(
+			genotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+			(cData.pKerconst_rotlist)->subrotlist_8_const,
+			(cData.pKerconst_rotlist)->subrotlist_8_length
+		);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
+
+	#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("---------------------------------------------------\n");
+		printf("-------------------------------------------subrot 9\n");
+	}
+	#endif
+	if ( (cData.pKerconst_rotlist)->subrotlist_9_length > 0 ) {
+		calcConform(
+			genotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+			(cData.pKerconst_rotlist)->subrotlist_9_const,
+			(cData.pKerconst_rotlist)->subrotlist_9_length
+		);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
+
+	#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("---------------------------------------------------\n");
+		printf("-------------------------------------------subrot 10\n");
+	}
+	#endif
+	if ( (cData.pKerconst_rotlist)->subrotlist_10_length > 0 ) {
+		calcConform(
+			genotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+			(cData.pKerconst_rotlist)->subrotlist_10_const,
+			(cData.pKerconst_rotlist)->subrotlist_10_length
+		);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
+
+	#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("---------------------------------------------------\n");
+		printf("-------------------------------------------subrot 11\n");
+	}
+	#endif
+	if ( (cData.pKerconst_rotlist)->subrotlist_11_length > 0 ) {
+		calcConform(
+			genotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+			(cData.pKerconst_rotlist)->subrotlist_11_const,
+			(cData.pKerconst_rotlist)->subrotlist_11_length
+		);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
+
+	#if 0
+	if ( (item_ct1.get_local_id(2) == 0) && (item_ct1.get_group(2) == 0) )
+	{
+		printf("---------------------------------------------------\n");
+		printf("-------------------------------------------subrot 12\n");
+	}
+	#endif
+	if ( (cData.pKerconst_rotlist)->subrotlist_12_length > 0 ) {
+		calcConform(
+			genotype,
+			genrot_movingvec,
+			genrot_unitvec,
+			calc_coords,
+			item_ct1,
+			&cData,
+			(cData.pKerconst_rotlist)->subrotlist_12_const,
+			(cData.pKerconst_rotlist)->subrotlist_12_length
+		);
+		item_ct1.barrier(SYCL_MEMORY_SPACE);
+	}
+#endif
 
 	// ================================================
 	// CALCULATING INTERMOLECULAR GRADIENTS
