@@ -122,6 +122,7 @@ typedef struct
 	int subrotlist_9_const [MAX_NUM_OF_ROTATIONS];
 	int subrotlist_10_const [MAX_NUM_OF_ROTATIONS];
 	int subrotlist_11_const [MAX_NUM_OF_ROTATIONS];
+	int subrotlist_12_const [MAX_NUM_OF_ROTATIONS];
 	unsigned int subrotlist_1_length;
 	unsigned int subrotlist_2_length;
 	unsigned int subrotlist_3_length;
@@ -133,6 +134,7 @@ typedef struct
 	unsigned int subrotlist_9_length;
 	unsigned int subrotlist_10_length;
 	unsigned int subrotlist_11_length;
+	unsigned int subrotlist_12_length;
 } kernelconstant_rotlist;
 
 typedef struct
@@ -188,6 +190,7 @@ int gen_rotlist(
 	int* subrotlist_9,
 	int* subrotlist_10,
 	int* subrotlist_11,
+	int* subrotlist_12,
 	unsigned int* subrotlist_1_length,
 	unsigned int* subrotlist_2_length,
 	unsigned int* subrotlist_3_length,
@@ -198,7 +201,8 @@ int gen_rotlist(
 	unsigned int* subrotlist_8_length,
 	unsigned int* subrotlist_9_length,
 	unsigned int* subrotlist_10_length,
-	unsigned int* subrotlist_11_length
+	unsigned int* subrotlist_11_length,
+	unsigned int* subrotlist_12_length
 );
 
 #endif /* CALCENERGY_H_ */
