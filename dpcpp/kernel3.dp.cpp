@@ -51,7 +51,11 @@ gpu_perform_LS_kernel(
  	int *evaluation_cnt,
 	float *offspring_energy,
  	float *sFloatAccumulator,
-	int *entity_id)
+	int *entity_id
+	,
+	float* weights,
+	float* cube		
+)
 // The GPU global function performs local search on the pre-defined entities of conformations_next.
 // The number of blocks which should be started equals to num_of_lsentities*num_of_runs.
 // This way the first num_of_lsentities entity of each population will be subjected to local search
@@ -178,6 +182,10 @@ gpu_perform_LS_kernel(
 			run_id,
 			calc_coords,
 			sFloatAccumulator,
+			
+			weights,
+			cube,
+		
 			item_ct1,
 			cData
 		);
@@ -233,6 +241,10 @@ gpu_perform_LS_kernel(
 				run_id,
 				calc_coords,
 				sFloatAccumulator,
+				
+				weights,
+				cube,
+				
 				item_ct1,
 				cData
 			);
@@ -358,6 +370,9 @@ void gpu_perform_LS(
 		sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
 		sycl::local_accessor<int, 0> entity_id_acc_ct1(cgh);
 
+		sycl::local_accessor<float, 1> weights_acc_ct1 (sycl::range<1>(threads * 8), cgh);
+		sycl::local_accessor<float, 1> cube_acc_ct1 (sycl::range<1>(threads * 8), cgh);
+
 		cgh.parallel_for(
 			sycl::nd_range<3>(
 				sycl::range<3>(1, 1, blocks) * sycl::range<3>(1, 1, threads),
@@ -378,6 +393,9 @@ void gpu_perform_LS(
 					offspring_energy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					entity_id_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+					,
+					weights_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					cube_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
 				);
 		});
 	});

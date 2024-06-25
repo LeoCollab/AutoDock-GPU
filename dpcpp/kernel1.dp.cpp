@@ -35,7 +35,11 @@ gpu_calc_initpop_kernel(
 	sycl::nd_item<3> item_ct1,
 	GpuData cData,
 	sycl::float3 *calc_coords,
-	float *sFloatAccumulator)
+	float *sFloatAccumulator
+	,
+	float* weights,
+	float* cube
+	)
 {
 	float  energy = 0.0f;
 	int run_id = item_ct1.get_group(2) / cData.dockpars.pop_size;
@@ -48,6 +52,10 @@ gpu_calc_initpop_kernel(
 		run_id,
 		calc_coords,
 		sFloatAccumulator,
+		
+		weights,
+		cube,
+		
 		item_ct1,
 		cData
 	);
@@ -81,6 +89,9 @@ void gpu_calc_initpop(
 		sycl::local_accessor<sycl::float3, 1> calc_coords_acc_ct1(sycl::range<1>(/*256*/ MAX_NUM_OF_ATOMS), cgh);
 		sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
 
+		sycl::local_accessor<float, 1> weights_acc_ct1 (sycl::range<1>(threadsPerBlock * 8), cgh);
+		sycl::local_accessor<float, 1> cube_acc_ct1 (sycl::range<1>(threadsPerBlock * 8), cgh);
+
 		cgh.parallel_for(
 			sycl::nd_range<3>(
 				sycl::range<3>(1, 1, blocks) * sycl::range<3>(1, 1, threadsPerBlock),
@@ -94,6 +105,9 @@ void gpu_calc_initpop(
 					*cData_ptr_ct1,
 					calc_coords_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+					,
+					weights_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					cube_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
 				);
 			});
 	});
