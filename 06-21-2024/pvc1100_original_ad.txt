@@ -1,0 +1,252 @@
+ 
+ 
+++ date +%Y-%m-%d-%H:%M
++ ./bin/autodock_xegpu_64wi -lsmet ad -lsit 300 -lsrat 100.000000 -smooth 0.500 -nev 2500000 -ngen 99999 -nrun 100 -psize 150 -lfile ./data/1u4d/rand-0.pdbqt -xraylfile ./data/1u4d/flex-xray.pdbqt -ffile ./data/1u4d/protein.maps.fld -xmloutput 0 -autostop 1 -heuristics 1 -resnam 1u4d_ad_2024-06-25-20:30
+AutoDock-GPU version: 578a1f27d44b2b773b06a20077a42c4d44621888-dirty
+
+Running 1 docking calculation
+
+XeGPU device:                              Intel(R) Data Center GPU Max 1100 (#1 / 18)
+
+Available memory on device:               49152 MB (total: 49152 MB)
+
+xPU Setup time 0.000162s
+
+Running Job #1
+    Using heuristics: (capped) number of evaluations set to 244898
+    Local-search chosen method is: ADADELTA (ad)
+
+Rest of Setup time 0.019554s
+
+Executing docking runs, stopping automatically after either reaching 0.15 kcal/mol standard deviation of
+the best molecules of the last 4 * 5 generations, 99999 generations, or 244898 evaluations:
+
+Generations |  Evaluations |     Threshold    |  Average energy of best 10%  | Samples |    Best energy
+------------+--------------+------------------+------------------------------+---------+-------------------
+          0 |          150 |   -1.91 kcal/mol |   -2.78 +/-    0.23 kcal/mol |       4 |   -3.01 kcal/mol
+          5 |        71789 |   -1.91 kcal/mol |   -3.86 +/-    1.06 kcal/mol |    4445 |   -7.26 kcal/mol
+         10 |       151218 |   -3.86 kcal/mol |   -6.73 +/-    0.45 kcal/mol |     313 |   -7.27 kcal/mol
+         15 |       239724 |   -6.71 kcal/mol |   -7.20 +/-    0.05 kcal/mol |     177 |   -7.27 kcal/mol
+         16 |       258234 |   -7.19 kcal/mol |   -7.20 +/-    0.05 kcal/mol |     177 |   -7.27 kcal/mol
+------------+--------------+------------------+------------------------------+---------+-------------------
+
+                                   Finished evaluation after reaching
+                           258234 evaluations. Best energy    -7.27 kcal/mol.
+
+Docking time 0.322650s
+
+Shutdown time 0.000613s
+
+Job #1 took 0.343 sec after waiting 0.114 sec for setup
+
+Run time of entire job set (1 file): 0.493 sec
+Processing time: 0.036 sec
+
+All jobs ran without errors.
+ 
+ 
+++ date +%Y-%m-%d-%H:%M
++ ./bin/autodock_xegpu_64wi -lsmet ad -lsit 300 -lsrat 100.000000 -smooth 0.500 -nev 2500000 -ngen 99999 -nrun 100 -psize 150 -lfile ./data/1oyt/rand-0.pdbqt -xraylfile ./data/1oyt/flex-xray.pdbqt -ffile ./data/1oyt/protein.maps.fld -xmloutput 0 -autostop 1 -heuristics 1 -resnam 1oyt_ad_2024-06-25-20:30
+AutoDock-GPU version: 578a1f27d44b2b773b06a20077a42c4d44621888-dirty
+
+Running 1 docking calculation
+
+XeGPU device:                              Intel(R) Data Center GPU Max 1100 (#1 / 18)
+
+Available memory on device:               49152 MB (total: 49152 MB)
+
+xPU Setup time 0.000141s
+
+Running Job #1
+    Using heuristics: (capped) number of evaluations set to 244898
+    Local-search chosen method is: ADADELTA (ad)
+
+Rest of Setup time 0.020100s
+
+Executing docking runs, stopping automatically after either reaching 0.15 kcal/mol standard deviation of
+the best molecules of the last 4 * 5 generations, 99999 generations, or 244898 evaluations:
+
+Generations |  Evaluations |     Threshold    |  Average energy of best 10%  | Samples |    Best energy
+------------+--------------+------------------+------------------------------+---------+-------------------
+          0 |          150 |   -2.26 kcal/mol |   -3.14 +/-    0.29 kcal/mol |       5 |   -3.72 kcal/mol
+          5 |        68635 |   -2.26 kcal/mol |   -6.20 +/-    2.00 kcal/mol |    5244 |  -14.07 kcal/mol
+         10 |       153561 |   -6.19 kcal/mol |  -11.97 +/-    1.26 kcal/mol |     437 |  -14.09 kcal/mol
+         15 |       255694 |  -11.92 kcal/mol |  -11.97 +/-    1.36 kcal/mol |     472 |  -14.09 kcal/mol
+------------+--------------+------------------+------------------------------+---------+-------------------
+
+                                   Finished evaluation after reaching
+                           255694 evaluations. Best energy   -14.09 kcal/mol.
+
+Docking time 0.869825s
+
+Shutdown time 0.000950s
+
+Job #1 took 0.891 sec after waiting 0.128 sec for setup
+
+Run time of entire job set (1 file): 1.140 sec
+Processing time: 0.120 sec
+
+All jobs ran without errors.
+ 
+ 
+++ date +%Y-%m-%d-%H:%M
++ ./bin/autodock_xegpu_64wi -lsmet ad -lsit 300 -lsrat 100.000000 -smooth 0.500 -nev 2500000 -ngen 99999 -nrun 100 -psize 150 -lfile ./data/1mzc/rand-0.pdbqt -xraylfile ./data/1mzc/flex-xray.pdbqt -ffile ./data/1mzc/protein.maps.fld -xmloutput 0 -autostop 1 -heuristics 1 -resnam 1mzc_ad_2024-06-25-20:30
+AutoDock-GPU version: 578a1f27d44b2b773b06a20077a42c4d44621888-dirty
+
+Running 1 docking calculation
+
+XeGPU device:                              Intel(R) Data Center GPU Max 1100 (#1 / 18)
+
+Available memory on device:               49152 MB (total: 49152 MB)
+
+xPU Setup time 0.000145s
+
+Running Job #1
+    Using heuristics: (capped) number of evaluations set to 361714
+    Local-search chosen method is: ADADELTA (ad)
+
+Rest of Setup time 0.019540s
+
+Executing docking runs, stopping automatically after either reaching 0.15 kcal/mol standard deviation of
+the best molecules of the last 4 * 5 generations, 99999 generations, or 361714 evaluations:
+
+Generations |  Evaluations |     Threshold    |  Average energy of best 10%  | Samples |    Best energy
+------------+--------------+------------------+------------------------------+---------+-------------------
+          0 |          150 |   -1.56 kcal/mol |   -4.17 +/-    0.86 kcal/mol |       5 |   -5.56 kcal/mol
+          5 |        70999 |   -1.60 kcal/mol |   -8.09 +/-    1.87 kcal/mol |    5865 |  -14.93 kcal/mol
+         10 |       168872 |   -8.09 kcal/mol |  -12.62 +/-    0.67 kcal/mol |     363 |  -15.30 kcal/mol
+         15 |       288456 |  -12.59 kcal/mol |  -14.88 +/-    0.42 kcal/mol |      36 |  -15.30 kcal/mol
+         18 |       364678 |  -14.70 kcal/mol |  -14.88 +/-    0.47 kcal/mol |      49 |  -15.34 kcal/mol
+------------+--------------+------------------+------------------------------+---------+-------------------
+
+                                   Finished evaluation after reaching
+                           364678 evaluations. Best energy   -15.34 kcal/mol.
+
+Docking time 1.556743s
+
+Shutdown time 0.000885s
+
+Job #1 took 1.577 sec after waiting 0.119 sec for setup
+
+Run time of entire job set (1 file): 1.877 sec
+Processing time: 0.180 sec
+
+All jobs ran without errors.
+ 
+ 
+++ date +%Y-%m-%d-%H:%M
++ ./bin/autodock_xegpu_64wi -lsmet ad -lsit 300 -lsrat 100.000000 -smooth 0.500 -nev 2500000 -ngen 99999 -nrun 100 -psize 150 -lfile ./data/3s8o/rand-0.pdbqt -xraylfile ./data/3s8o/flex-xray.pdbqt -ffile ./data/3s8o/protein.maps.fld -xmloutput 0 -autostop 1 -heuristics 1 -resnam 3s8o_ad_2024-06-25-20:30
+AutoDock-GPU version: 578a1f27d44b2b773b06a20077a42c4d44621888-dirty
+
+Running 1 docking calculation
+
+XeGPU device:                              Intel(R) Data Center GPU Max 1100 (#1 / 18)
+
+Available memory on device:               49152 MB (total: 49152 MB)
+
+xPU Setup time 0.000139s
+
+Running Job #1
+    Using heuristics: (capped) number of evaluations set to 1005533
+    Local-search chosen method is: ADADELTA (ad)
+
+Rest of Setup time 0.019157s
+
+Executing docking runs, stopping automatically after either reaching 0.15 kcal/mol standard deviation of
+the best molecules of the last 4 * 5 generations, 99999 generations, or 1005533 evaluations:
+
+Generations |  Evaluations |     Threshold    |  Average energy of best 10%  | Samples |    Best energy
+------------+--------------+------------------+------------------------------+---------+-------------------
+          0 |          150 |   -3.55 kcal/mol |   -3.96 +/-    0.11 kcal/mol |       4 |   -4.07 kcal/mol
+          5 |        88653 |   -3.55 kcal/mol |   -8.76 +/-    2.26 kcal/mol |    7220 |  -16.55 kcal/mol
+         10 |       196107 |   -8.75 kcal/mol |  -14.26 +/-    0.78 kcal/mol |     477 |  -17.24 kcal/mol
+         15 |       320039 |  -14.23 kcal/mol |  -16.41 +/-    0.45 kcal/mol |      70 |  -18.21 kcal/mol
+         20 |       453463 |  -16.31 kcal/mol |  -18.00 +/-    0.48 kcal/mol |       9 |  -18.65 kcal/mol
+         25 |       592936 |  -17.21 kcal/mol |  -18.61 +/-    0.17 kcal/mol |       7 |  -18.79 kcal/mol
+         30 |       736234 |  -18.24 kcal/mol |  -18.70 +/-    0.06 kcal/mol |       3 |  -18.79 kcal/mol
+         35 |       879747 |  -17.95 kcal/mol |  -18.67 +/-    0.15 kcal/mol |       7 |  -18.92 kcal/mol
+         40 |      1023698 |  -18.35 kcal/mol |  -18.74 +/-    0.19 kcal/mol |      13 |  -19.07 kcal/mol
+------------+--------------+------------------+------------------------------+---------+-------------------
+
+                                   Finished evaluation after reaching
+                          1023698 evaluations. Best energy   -19.07 kcal/mol.
+
+Docking time 5.961015s
+
+Shutdown time 0.000903s
+
+Job #1 took 5.981 sec after waiting 0.108 sec for setup
+
+Run time of entire job set (1 file): 6.341 sec
+Processing time: 0.251 sec
+
+All jobs ran without errors.
+ 
+ 
+++ date +%Y-%m-%d-%H:%M
++ ./bin/autodock_xegpu_64wi -lsmet ad -lsit 300 -lsrat 100.000000 -smooth 0.500 -nev 2500000 -ngen 99999 -nrun 100 -psize 150 -lfile ./data/2d1o/rand-0.pdbqt -xraylfile ./data/2d1o/flex-xray.pdbqt -ffile ./data/2d1o/protein.maps.fld -xmloutput 0 -autostop 1 -heuristics 1 -resnam 2d1o_ad_2024-06-25-20:31
+AutoDock-GPU version: 578a1f27d44b2b773b06a20077a42c4d44621888-dirty
+
+Running 1 docking calculation
+
+XeGPU device:                              Intel(R) Data Center GPU Max 1100 (#1 / 18)
+
+Available memory on device:               49152 MB (total: 49152 MB)
+
+xPU Setup time 0.000144s
+
+Running Job #1
+    Using heuristics: (capped) number of evaluations set to 7006794
+    Overriding heuristics, setting number of evaluations to --nev = 2500000 instead.
+    Warning: The set number of evals is 14.85% of the uncapped heuristics estimate of 16839184 evals.
+             This means this docking may not be able to converge. Increasing --heurmax may improve
+             convergence but will also increase runtime.
+             AutoStop will not stop before 62.17% (1554216) of the set number of evaluations.
+    Local-search chosen method is: ADADELTA (ad)
+
+Rest of Setup time 0.019789s
+
+Executing docking runs, stopping automatically after either reaching 0.15 kcal/mol standard deviation of
+the best molecules of the last 4 * 5 generations, 99999 generations, or 2500000 evaluations:
+
+Generations |  Evaluations |     Threshold    |  Average energy of best 10%  | Samples |    Best energy
+------------+--------------+------------------+------------------------------+---------+-------------------
+          0 |          150 |    0.26 kcal/mol |   -1.49 +/-    0.47 kcal/mol |       4 |   -2.08 kcal/mol
+          5 |        72254 |    0.26 kcal/mol |   -9.37 +/-    2.70 kcal/mol |    4995 |  -19.16 kcal/mol
+         10 |       153961 |   -9.36 kcal/mol |  -16.35 +/-    1.14 kcal/mol |     299 |  -19.87 kcal/mol
+         15 |       246913 |  -16.30 kcal/mol |  -19.29 +/-    0.47 kcal/mol |      18 |  -20.31 kcal/mol
+         20 |       349087 |  -18.89 kcal/mol |  -19.87 +/-    0.24 kcal/mol |       5 |  -20.31 kcal/mol
+         25 |       457326 |  -19.14 kcal/mol |  -19.87 +/-    0.24 kcal/mol |       5 |  -20.31 kcal/mol
+         30 |       569305 |  -19.14 kcal/mol |  -19.95 +/-    0.29 kcal/mol |      14 |  -20.34 kcal/mol
+         35 |       683293 |  -19.65 kcal/mol |  -20.38 +/-    0.10 kcal/mol |       8 |  -20.52 kcal/mol
+         40 |       799018 |  -20.20 kcal/mol |  -20.53 +/-    0.19 kcal/mol |       8 |  -20.96 kcal/mol
+         45 |       914846 |  -20.17 kcal/mol |  -20.91 +/-    0.18 kcal/mol |       9 |  -21.13 kcal/mol
+         50 |      1032199 |  -20.61 kcal/mol |  -20.90 +/-    0.21 kcal/mol |      10 |  -21.32 kcal/mol
+         55 |      1150085 |  -20.59 kcal/mol |  -21.16 +/-    0.22 kcal/mol |       8 |  -21.63 kcal/mol
+         60 |      1268470 |  -20.74 kcal/mol |  -21.47 +/-    0.30 kcal/mol |       5 |  -21.97 kcal/mol
+         65 |      1387959 |  -20.58 kcal/mol |  -21.52 +/-    0.27 kcal/mol |       6 |  -21.97 kcal/mol
+         70 |      1507378 |  -20.86 kcal/mol |  -21.54 +/-    0.20 kcal/mol |       9 |  -21.97 kcal/mol
+         75 |      1627264 |  -21.20 kcal/mol |  -21.72 +/-    0.14 kcal/mol |       4 |  -21.97 kcal/mol
+         80 |      1747472 |  -21.18 kcal/mol |  -21.74 +/-    0.13 kcal/mol |       4 |  -21.97 kcal/mol
+         85 |      1867160 |  -21.23 kcal/mol |  -21.80 +/-    0.17 kcal/mol |       6 |  -22.04 kcal/mol
+         90 |      1987647 |  -21.36 kcal/mol |  -21.56 +/-    0.22 kcal/mol |      18 |  -22.04 kcal/mol
+         95 |      2107804 |  -21.38 kcal/mol |  -21.60 +/-    0.19 kcal/mol |      18 |  -22.04 kcal/mol
+        100 |      2228292 |  -21.44 kcal/mol |  -21.97 +/-    0.12 kcal/mol |       5 |  -22.09 kcal/mol
+        105 |      2348506 |  -21.61 kcal/mol |  -22.13 +/-    0.14 kcal/mol |       7 |  -22.34 kcal/mol
+        110 |      2468898 |  -21.83 kcal/mol |  -22.12 +/-    0.16 kcal/mol |       3 |  -22.34 kcal/mol
+        112 |      2516968 |  -21.31 kcal/mol |  -21.96 +/-    0.25 kcal/mol |      13 |  -22.35 kcal/mol
+------------+--------------+------------------+------------------------------+---------+-------------------
+
+                                   Finished evaluation after reaching
+                          2516968 evaluations. Best energy   -22.35 kcal/mol.
+
+Docking time 17.061525s
+
+Shutdown time 0.001001s
+
+Job #1 took 17.082 sec after waiting 0.111 sec for setup
+
+Run time of entire job set (1 file): 17.486 sec
+Processing time: 0.292 sec
+
+All jobs ran without errors.

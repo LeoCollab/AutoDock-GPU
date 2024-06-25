@@ -1,0 +1,3240 @@
+ 
+ 
+++ date +%Y-%m-%d-%H:%M
++ ./bin/autodock_xegpu_64wi -lsmet sw -lsit 300 -lsrat 100.000000 -smooth 0.500 -nev 2500000 -ngen 99999 -nrun 100 -psize 150 -lfile ./data/1u4d/rand-0.pdbqt -xraylfile ./data/1u4d/flex-xray.pdbqt -ffile ./data/1u4d/protein.maps.fld -xmloutput 0 -autostop 1 -heuristics 1 -resnam 1u4d_sw_2024-06-25-20:21
+AutoDock-GPU version: 578a1f27d44b2b773b06a20077a42c4d44621888
+
+Running 1 docking calculation
+
+XeGPU device:                              Intel(R) Data Center GPU Max 1100 (#1 / 18)
+
+Available memory on device:               49152 MB (total: 49152 MB)
+
+xPU Setup time 0.000163s
+
+Running Job #1
+
+# Rotlist elements: 64
+	rot-id:   0 	atom-id:   0
+	rot-id:   1 	atom-id:   1
+	rot-id:   2 	atom-id:   2
+	rot-id:   3 	atom-id:   3
+	rot-id:   4 	atom-id:   4
+	rot-id:   5 	atom-id:   5
+	rot-id:   6 	atom-id:   6
+	rot-id:   7 	atom-id:   7
+	rot-id:   8 	atom-id:   8
+	rot-id:   9 	atom-id:   9
+	rot-id:  10 	atom-id:  10
+	rot-id:  11 	atom-id:  11
+	rot-id:  12 	atom-id:  12
+	rot-id:  13 	atom-id:  13
+	rot-id:  14 	atom-id:  14
+	rot-id:  15 	atom-id:  15
+	rot-id:  16 	atom-id:  16
+	rot-id:  17 	atom-id:  17
+	rot-id:  18 	atom-id:  18
+	rot-id:  19 	atom-id:  19
+	rot-id:  20 	atom-id:  20
+	rot-id:  21 	atom-id:  21
+	rot-id:  22 	atom-id:  22
+	rot-id:  23 	atom-id:   0
+	rot-id:  24 	atom-id:   0
+	rot-id:  25 	atom-id:   0
+	rot-id:  26 	atom-id:   0
+	rot-id:  27 	atom-id:   0
+	rot-id:  28 	atom-id:   0
+	rot-id:  29 	atom-id:   0
+	rot-id:  30 	atom-id:   0
+	rot-id:  31 	atom-id:   0
+	rot-id:  32 	atom-id:   0
+	rot-id:  33 	atom-id:   0
+	rot-id:  34 	atom-id:   0
+	rot-id:  35 	atom-id:   0
+	rot-id:  36 	atom-id:   0
+	rot-id:  37 	atom-id:   0
+	rot-id:  38 	atom-id:   0
+	rot-id:  39 	atom-id:   0
+	rot-id:  40 	atom-id:   0
+	rot-id:  41 	atom-id:   0
+	rot-id:  42 	atom-id:   0
+	rot-id:  43 	atom-id:   0
+	rot-id:  44 	atom-id:   0
+	rot-id:  45 	atom-id:   0
+	rot-id:  46 	atom-id:   0
+	rot-id:  47 	atom-id:   0
+	rot-id:  48 	atom-id:   0
+	rot-id:  49 	atom-id:   0
+	rot-id:  50 	atom-id:   0
+	rot-id:  51 	atom-id:   0
+	rot-id:  52 	atom-id:   0
+	rot-id:  53 	atom-id:   0
+	rot-id:  54 	atom-id:   0
+	rot-id:  55 	atom-id:   0
+	rot-id:  56 	atom-id:   0
+	rot-id:  57 	atom-id:   0
+	rot-id:  58 	atom-id:   0
+	rot-id:  59 	atom-id:   0
+	rot-id:  60 	atom-id:   0
+	rot-id:  61 	atom-id:   0
+	rot-id:  62 	atom-id:   0
+	rot-id:  63 	atom-id:   0
+
+# Atoms: 23
+	atom-id:   0 	num-rot-req-per-atom:   1
+	atom-id:   1 	num-rot-req-per-atom:   1
+	atom-id:   2 	num-rot-req-per-atom:   1
+	atom-id:   3 	num-rot-req-per-atom:   1
+	atom-id:   4 	num-rot-req-per-atom:   1
+	atom-id:   5 	num-rot-req-per-atom:   1
+	atom-id:   6 	num-rot-req-per-atom:   1
+	atom-id:   7 	num-rot-req-per-atom:   1
+	atom-id:   8 	num-rot-req-per-atom:   1
+	atom-id:   9 	num-rot-req-per-atom:   1
+	atom-id:  10 	num-rot-req-per-atom:   1
+	atom-id:  11 	num-rot-req-per-atom:   1
+	atom-id:  12 	num-rot-req-per-atom:   1
+	atom-id:  13 	num-rot-req-per-atom:   1
+	atom-id:  14 	num-rot-req-per-atom:   1
+	atom-id:  15 	num-rot-req-per-atom:   1
+	atom-id:  16 	num-rot-req-per-atom:   1
+	atom-id:  17 	num-rot-req-per-atom:   1
+	atom-id:  18 	num-rot-req-per-atom:   1
+	atom-id:  19 	num-rot-req-per-atom:   1
+	atom-id:  20 	num-rot-req-per-atom:   1
+	atom-id:  21 	num-rot-req-per-atom:   1
+	atom-id:  22 	num-rot-req-per-atom:   1
+
+subrotlist 1:
+	[subrot_1 rot-id]:   0 	[orig rot-id]:   0 	atom-id:   0
+	[subrot_1 rot-id]:   1 	[orig rot-id]:   1 	atom-id:   1
+	[subrot_1 rot-id]:   2 	[orig rot-id]:   2 	atom-id:   2
+	[subrot_1 rot-id]:   3 	[orig rot-id]:   3 	atom-id:   3
+	[subrot_1 rot-id]:   4 	[orig rot-id]:   4 	atom-id:   4
+	[subrot_1 rot-id]:   5 	[orig rot-id]:   5 	atom-id:   5
+	[subrot_1 rot-id]:   6 	[orig rot-id]:   6 	atom-id:   6
+	[subrot_1 rot-id]:   7 	[orig rot-id]:   7 	atom-id:   7
+	[subrot_1 rot-id]:   8 	[orig rot-id]:   8 	atom-id:   8
+	[subrot_1 rot-id]:   9 	[orig rot-id]:   9 	atom-id:   9
+	[subrot_1 rot-id]:  10 	[orig rot-id]:  10 	atom-id:  10
+	[subrot_1 rot-id]:  11 	[orig rot-id]:  11 	atom-id:  11
+	[subrot_1 rot-id]:  12 	[orig rot-id]:  12 	atom-id:  12
+	[subrot_1 rot-id]:  13 	[orig rot-id]:  13 	atom-id:  13
+	[subrot_1 rot-id]:  14 	[orig rot-id]:  14 	atom-id:  14
+	[subrot_1 rot-id]:  15 	[orig rot-id]:  15 	atom-id:  15
+	[subrot_1 rot-id]:  16 	[orig rot-id]:  16 	atom-id:  16
+	[subrot_1 rot-id]:  17 	[orig rot-id]:  17 	atom-id:  17
+	[subrot_1 rot-id]:  18 	[orig rot-id]:  18 	atom-id:  18
+	[subrot_1 rot-id]:  19 	[orig rot-id]:  19 	atom-id:  19
+	[subrot_1 rot-id]:  20 	[orig rot-id]:  20 	atom-id:  20
+	[subrot_1 rot-id]:  21 	[orig rot-id]:  21 	atom-id:  21
+	[subrot_1 rot-id]:  22 	[orig rot-id]:  22 	atom-id:  22
+	length:  23
+
+subrotlist 2:
+	length:   0
+
+subrotlist 3:
+	length:   0
+
+subrotlist 4:
+	length:   0
+
+subrotlist 5:
+	length:   0
+
+subrotlist 6:
+	length:   0
+
+subrotlist 7:
+	length:   0
+
+subrotlist 8:
+	length:   0
+
+subrotlist 9:
+	length:   0
+
+subrotlist 10:
+	length:   0
+
+subrotlist 11:
+	length:   0
+
+subrotlist 12:
+	length:   0
+
+Maximum number of required subrotation lists:  1
+
+Size of the largest subrotation list: 23
+
+Table of subrotlists
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+	 id 	 sub 1 	 sub 2 	 sub 3 	 sub 4 	 sub 5 	 sub 6 	 sub 7 	 sub 8 	 sub 9 	sub 10 	sub 11 	sub 12
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+	  0 	196608	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  1 	196609	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  2 	196610	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  3 	196611	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  4 	196612	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  5 	196613	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  6 	196614	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  7 	196615	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  8 	196616	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  9 	196617	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 10 	196618	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 11 	196619	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 12 	196620	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 13 	196621	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 14 	196622	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 15 	196623	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 16 	196624	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 17 	196625	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 18 	196626	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 19 	196627	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 20 	196628	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 21 	196629	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 22 	196630	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+
+    Using heuristics: (capped) number of evaluations set to 244898
+    Local-search chosen method is: Solis-Wets (sw)
+
+Rest of Setup time 0.020393s
+
+Executing docking runs, stopping automatically after either reaching 0.15 kcal/mol standard deviation of
+the best molecules of the last 4 * 5 generations, 99999 generations, or 244898 evaluations:
+
+Generations |  Evaluations |     Threshold    |  Average energy of best 10%  | Samples |    Best energy
+------------+--------------+------------------+------------------------------+---------+-------------------
+          0 |          150 |   -1.87 kcal/mol |   -2.87 +/-    0.27 kcal/mol |       4 |   -3.29 kcal/mol
+          5 |       125143 |   -1.87 kcal/mol |   -3.64 +/-    0.93 kcal/mol |    7317 |   -7.26 kcal/mol
+         10 |       248701 |   -3.64 kcal/mol |   -3.78 +/-    1.11 kcal/mol |    8029 |   -7.26 kcal/mol
+------------+--------------+------------------+------------------------------+---------+-------------------
+
+                                   Finished evaluation after reaching
+                           248701 evaluations. Best energy    -7.26 kcal/mol.
+
+Docking time 0.194137s
+
+Shutdown time 0.001039s
+
+Job #1 took 0.216 sec after waiting 0.117 sec for setup
+
+Run time of entire job set (1 file): 0.371 sec
+Processing time: 0.038 sec
+
+All jobs ran without errors.
+ 
+ 
+++ date +%Y-%m-%d-%H:%M
++ ./bin/autodock_xegpu_64wi -lsmet sw -lsit 300 -lsrat 100.000000 -smooth 0.500 -nev 2500000 -ngen 99999 -nrun 100 -psize 150 -lfile ./data/1oyt/rand-0.pdbqt -xraylfile ./data/1oyt/flex-xray.pdbqt -ffile ./data/1oyt/protein.maps.fld -xmloutput 0 -autostop 1 -heuristics 1 -resnam 1oyt_sw_2024-06-25-20:21
+AutoDock-GPU version: 578a1f27d44b2b773b06a20077a42c4d44621888
+
+Running 1 docking calculation
+
+XeGPU device:                              Intel(R) Data Center GPU Max 1100 (#1 / 18)
+
+Available memory on device:               49152 MB (total: 49152 MB)
+
+xPU Setup time 0.000134s
+
+Running Job #1
+
+# Rotlist elements: 192
+	rot-id:   0 	atom-id:  19
+	rot-id:   1 	atom-id:  20
+	rot-id:   2 	atom-id:  21
+	rot-id:   3 	atom-id:  22
+	rot-id:   4 	atom-id:  23
+	rot-id:   5 	atom-id:  24
+	rot-id:   6 	atom-id:  25
+	rot-id:   7 	atom-id:  27
+	rot-id:   8 	atom-id:  28
+	rot-id:   9 	atom-id:  29
+	rot-id:  10 	atom-id:  30
+	rot-id:  11 	atom-id:  31
+	rot-id:  12 	atom-id:  32
+	rot-id:  13 	atom-id:  33
+	rot-id:  14 	atom-id:  13
+	rot-id:  15 	atom-id:  14
+	rot-id:  16 	atom-id:  15
+	rot-id:  17 	atom-id:  16
+	rot-id:  18 	atom-id:  17
+	rot-id:  19 	atom-id:  18
+	rot-id:  20 	atom-id:  26
+	rot-id:  21 	atom-id:   0
+	rot-id:  22 	atom-id:   1
+	rot-id:  23 	atom-id:   2
+	rot-id:  24 	atom-id:   3
+	rot-id:  25 	atom-id:   4
+	rot-id:  26 	atom-id:   5
+	rot-id:  27 	atom-id:   6
+	rot-id:  28 	atom-id:   7
+	rot-id:  29 	atom-id:   8
+	rot-id:  30 	atom-id:   9
+	rot-id:  31 	atom-id:  10
+	rot-id:  32 	atom-id:  11
+	rot-id:  33 	atom-id:  12
+	rot-id:  34 	atom-id:   0
+	rot-id:  35 	atom-id:   0
+	rot-id:  36 	atom-id:   0
+	rot-id:  37 	atom-id:   0
+	rot-id:  38 	atom-id:   0
+	rot-id:  39 	atom-id:   0
+	rot-id:  40 	atom-id:   0
+	rot-id:  41 	atom-id:   0
+	rot-id:  42 	atom-id:   0
+	rot-id:  43 	atom-id:   0
+	rot-id:  44 	atom-id:   0
+	rot-id:  45 	atom-id:   0
+	rot-id:  46 	atom-id:   0
+	rot-id:  47 	atom-id:   0
+	rot-id:  48 	atom-id:   0
+	rot-id:  49 	atom-id:   0
+	rot-id:  50 	atom-id:   0
+	rot-id:  51 	atom-id:   0
+	rot-id:  52 	atom-id:   0
+	rot-id:  53 	atom-id:   0
+	rot-id:  54 	atom-id:   0
+	rot-id:  55 	atom-id:   0
+	rot-id:  56 	atom-id:   0
+	rot-id:  57 	atom-id:   0
+	rot-id:  58 	atom-id:   0
+	rot-id:  59 	atom-id:   0
+	rot-id:  60 	atom-id:   0
+	rot-id:  61 	atom-id:   0
+	rot-id:  62 	atom-id:   0
+	rot-id:  63 	atom-id:   0
+	rot-id:  64 	atom-id:  19
+	rot-id:  65 	atom-id:  20
+	rot-id:  66 	atom-id:  21
+	rot-id:  67 	atom-id:  22
+	rot-id:  68 	atom-id:  23
+	rot-id:  69 	atom-id:  24
+	rot-id:  70 	atom-id:  25
+	rot-id:  71 	atom-id:  27
+	rot-id:  72 	atom-id:  28
+	rot-id:  73 	atom-id:  29
+	rot-id:  74 	atom-id:  30
+	rot-id:  75 	atom-id:  31
+	rot-id:  76 	atom-id:  32
+	rot-id:  77 	atom-id:  33
+	rot-id:  78 	atom-id:  13
+	rot-id:  79 	atom-id:  14
+	rot-id:  80 	atom-id:  15
+	rot-id:  81 	atom-id:  16
+	rot-id:  82 	atom-id:  17
+	rot-id:  83 	atom-id:  18
+	rot-id:  84 	atom-id:  26
+	rot-id:  85 	atom-id:   0
+	rot-id:  86 	atom-id:   0
+	rot-id:  87 	atom-id:   0
+	rot-id:  88 	atom-id:   0
+	rot-id:  89 	atom-id:   0
+	rot-id:  90 	atom-id:   0
+	rot-id:  91 	atom-id:   0
+	rot-id:  92 	atom-id:   0
+	rot-id:  93 	atom-id:   0
+	rot-id:  94 	atom-id:   0
+	rot-id:  95 	atom-id:   0
+	rot-id:  96 	atom-id:   0
+	rot-id:  97 	atom-id:   0
+	rot-id:  98 	atom-id:   0
+	rot-id:  99 	atom-id:   0
+	rot-id: 100 	atom-id:   0
+	rot-id: 101 	atom-id:   0
+	rot-id: 102 	atom-id:   0
+	rot-id: 103 	atom-id:   0
+	rot-id: 104 	atom-id:   0
+	rot-id: 105 	atom-id:   0
+	rot-id: 106 	atom-id:   0
+	rot-id: 107 	atom-id:   0
+	rot-id: 108 	atom-id:   0
+	rot-id: 109 	atom-id:   0
+	rot-id: 110 	atom-id:   0
+	rot-id: 111 	atom-id:   0
+	rot-id: 112 	atom-id:   0
+	rot-id: 113 	atom-id:   0
+	rot-id: 114 	atom-id:   0
+	rot-id: 115 	atom-id:   0
+	rot-id: 116 	atom-id:   0
+	rot-id: 117 	atom-id:   0
+	rot-id: 118 	atom-id:   0
+	rot-id: 119 	atom-id:   0
+	rot-id: 120 	atom-id:   0
+	rot-id: 121 	atom-id:   0
+	rot-id: 122 	atom-id:   0
+	rot-id: 123 	atom-id:   0
+	rot-id: 124 	atom-id:   0
+	rot-id: 125 	atom-id:   0
+	rot-id: 126 	atom-id:   0
+	rot-id: 127 	atom-id:   0
+	rot-id: 128 	atom-id:  19
+	rot-id: 129 	atom-id:  20
+	rot-id: 130 	atom-id:  21
+	rot-id: 131 	atom-id:  22
+	rot-id: 132 	atom-id:  23
+	rot-id: 133 	atom-id:  24
+	rot-id: 134 	atom-id:  25
+	rot-id: 135 	atom-id:  27
+	rot-id: 136 	atom-id:  28
+	rot-id: 137 	atom-id:  29
+	rot-id: 138 	atom-id:  30
+	rot-id: 139 	atom-id:  31
+	rot-id: 140 	atom-id:  32
+	rot-id: 141 	atom-id:  33
+	rot-id: 142 	atom-id:   0
+	rot-id: 143 	atom-id:   0
+	rot-id: 144 	atom-id:   0
+	rot-id: 145 	atom-id:   0
+	rot-id: 146 	atom-id:   0
+	rot-id: 147 	atom-id:   0
+	rot-id: 148 	atom-id:   0
+	rot-id: 149 	atom-id:   0
+	rot-id: 150 	atom-id:   0
+	rot-id: 151 	atom-id:   0
+	rot-id: 152 	atom-id:   0
+	rot-id: 153 	atom-id:   0
+	rot-id: 154 	atom-id:   0
+	rot-id: 155 	atom-id:   0
+	rot-id: 156 	atom-id:   0
+	rot-id: 157 	atom-id:   0
+	rot-id: 158 	atom-id:   0
+	rot-id: 159 	atom-id:   0
+	rot-id: 160 	atom-id:   0
+	rot-id: 161 	atom-id:   0
+	rot-id: 162 	atom-id:   0
+	rot-id: 163 	atom-id:   0
+	rot-id: 164 	atom-id:   0
+	rot-id: 165 	atom-id:   0
+	rot-id: 166 	atom-id:   0
+	rot-id: 167 	atom-id:   0
+	rot-id: 168 	atom-id:   0
+	rot-id: 169 	atom-id:   0
+	rot-id: 170 	atom-id:   0
+	rot-id: 171 	atom-id:   0
+	rot-id: 172 	atom-id:   0
+	rot-id: 173 	atom-id:   0
+	rot-id: 174 	atom-id:   0
+	rot-id: 175 	atom-id:   0
+	rot-id: 176 	atom-id:   0
+	rot-id: 177 	atom-id:   0
+	rot-id: 178 	atom-id:   0
+	rot-id: 179 	atom-id:   0
+	rot-id: 180 	atom-id:   0
+	rot-id: 181 	atom-id:   0
+	rot-id: 182 	atom-id:   0
+	rot-id: 183 	atom-id:   0
+	rot-id: 184 	atom-id:   0
+	rot-id: 185 	atom-id:   0
+	rot-id: 186 	atom-id:   0
+	rot-id: 187 	atom-id:   0
+	rot-id: 188 	atom-id:   0
+	rot-id: 189 	atom-id:   0
+	rot-id: 190 	atom-id:   0
+	rot-id: 191 	atom-id:   0
+
+# Atoms: 34
+	atom-id:   0 	num-rot-req-per-atom:   1
+	atom-id:   1 	num-rot-req-per-atom:   1
+	atom-id:   2 	num-rot-req-per-atom:   1
+	atom-id:   3 	num-rot-req-per-atom:   1
+	atom-id:   4 	num-rot-req-per-atom:   1
+	atom-id:   5 	num-rot-req-per-atom:   1
+	atom-id:   6 	num-rot-req-per-atom:   1
+	atom-id:   7 	num-rot-req-per-atom:   1
+	atom-id:   8 	num-rot-req-per-atom:   1
+	atom-id:   9 	num-rot-req-per-atom:   1
+	atom-id:  10 	num-rot-req-per-atom:   1
+	atom-id:  11 	num-rot-req-per-atom:   1
+	atom-id:  12 	num-rot-req-per-atom:   1
+	atom-id:  13 	num-rot-req-per-atom:   2
+	atom-id:  14 	num-rot-req-per-atom:   2
+	atom-id:  15 	num-rot-req-per-atom:   2
+	atom-id:  16 	num-rot-req-per-atom:   2
+	atom-id:  17 	num-rot-req-per-atom:   2
+	atom-id:  18 	num-rot-req-per-atom:   2
+	atom-id:  19 	num-rot-req-per-atom:   3
+	atom-id:  20 	num-rot-req-per-atom:   3
+	atom-id:  21 	num-rot-req-per-atom:   3
+	atom-id:  22 	num-rot-req-per-atom:   3
+	atom-id:  23 	num-rot-req-per-atom:   3
+	atom-id:  24 	num-rot-req-per-atom:   3
+	atom-id:  25 	num-rot-req-per-atom:   3
+	atom-id:  26 	num-rot-req-per-atom:   2
+	atom-id:  27 	num-rot-req-per-atom:   3
+	atom-id:  28 	num-rot-req-per-atom:   3
+	atom-id:  29 	num-rot-req-per-atom:   3
+	atom-id:  30 	num-rot-req-per-atom:   3
+	atom-id:  31 	num-rot-req-per-atom:   3
+	atom-id:  32 	num-rot-req-per-atom:   3
+	atom-id:  33 	num-rot-req-per-atom:   3
+
+subrotlist 1:
+	[subrot_1 rot-id]:   0 	[orig rot-id]:   0 	atom-id:  19
+	[subrot_1 rot-id]:   1 	[orig rot-id]:   1 	atom-id:  20
+	[subrot_1 rot-id]:   2 	[orig rot-id]:   2 	atom-id:  21
+	[subrot_1 rot-id]:   3 	[orig rot-id]:   3 	atom-id:  22
+	[subrot_1 rot-id]:   4 	[orig rot-id]:   4 	atom-id:  23
+	[subrot_1 rot-id]:   5 	[orig rot-id]:   5 	atom-id:  24
+	[subrot_1 rot-id]:   6 	[orig rot-id]:   6 	atom-id:  25
+	[subrot_1 rot-id]:   7 	[orig rot-id]:   7 	atom-id:  27
+	[subrot_1 rot-id]:   8 	[orig rot-id]:   8 	atom-id:  28
+	[subrot_1 rot-id]:   9 	[orig rot-id]:   9 	atom-id:  29
+	[subrot_1 rot-id]:  10 	[orig rot-id]:  10 	atom-id:  30
+	[subrot_1 rot-id]:  11 	[orig rot-id]:  11 	atom-id:  31
+	[subrot_1 rot-id]:  12 	[orig rot-id]:  12 	atom-id:  32
+	[subrot_1 rot-id]:  13 	[orig rot-id]:  13 	atom-id:  33
+	[subrot_1 rot-id]:  14 	[orig rot-id]:  14 	atom-id:  13
+	[subrot_1 rot-id]:  15 	[orig rot-id]:  15 	atom-id:  14
+	[subrot_1 rot-id]:  16 	[orig rot-id]:  16 	atom-id:  15
+	[subrot_1 rot-id]:  17 	[orig rot-id]:  17 	atom-id:  16
+	[subrot_1 rot-id]:  18 	[orig rot-id]:  18 	atom-id:  17
+	[subrot_1 rot-id]:  19 	[orig rot-id]:  19 	atom-id:  18
+	[subrot_1 rot-id]:  20 	[orig rot-id]:  20 	atom-id:  26
+	[subrot_1 rot-id]:  21 	[orig rot-id]:  21 	atom-id:   0
+	[subrot_1 rot-id]:  22 	[orig rot-id]:  22 	atom-id:   1
+	[subrot_1 rot-id]:  23 	[orig rot-id]:  23 	atom-id:   2
+	[subrot_1 rot-id]:  24 	[orig rot-id]:  24 	atom-id:   3
+	[subrot_1 rot-id]:  25 	[orig rot-id]:  25 	atom-id:   4
+	[subrot_1 rot-id]:  26 	[orig rot-id]:  26 	atom-id:   5
+	[subrot_1 rot-id]:  27 	[orig rot-id]:  27 	atom-id:   6
+	[subrot_1 rot-id]:  28 	[orig rot-id]:  28 	atom-id:   7
+	[subrot_1 rot-id]:  29 	[orig rot-id]:  29 	atom-id:   8
+	[subrot_1 rot-id]:  30 	[orig rot-id]:  30 	atom-id:   9
+	[subrot_1 rot-id]:  31 	[orig rot-id]:  31 	atom-id:  10
+	[subrot_1 rot-id]:  32 	[orig rot-id]:  32 	atom-id:  11
+	[subrot_1 rot-id]:  33 	[orig rot-id]:  33 	atom-id:  12
+	length:  34
+
+subrotlist 2:
+	[subrot_2 rot-id]:   0 	[orig rot-id]:  64 	atom-id:  19
+	[subrot_2 rot-id]:   1 	[orig rot-id]:  65 	atom-id:  20
+	[subrot_2 rot-id]:   2 	[orig rot-id]:  66 	atom-id:  21
+	[subrot_2 rot-id]:   3 	[orig rot-id]:  67 	atom-id:  22
+	[subrot_2 rot-id]:   4 	[orig rot-id]:  68 	atom-id:  23
+	[subrot_2 rot-id]:   5 	[orig rot-id]:  69 	atom-id:  24
+	[subrot_2 rot-id]:   6 	[orig rot-id]:  70 	atom-id:  25
+	[subrot_2 rot-id]:   7 	[orig rot-id]:  71 	atom-id:  27
+	[subrot_2 rot-id]:   8 	[orig rot-id]:  72 	atom-id:  28
+	[subrot_2 rot-id]:   9 	[orig rot-id]:  73 	atom-id:  29
+	[subrot_2 rot-id]:  10 	[orig rot-id]:  74 	atom-id:  30
+	[subrot_2 rot-id]:  11 	[orig rot-id]:  75 	atom-id:  31
+	[subrot_2 rot-id]:  12 	[orig rot-id]:  76 	atom-id:  32
+	[subrot_2 rot-id]:  13 	[orig rot-id]:  77 	atom-id:  33
+	[subrot_2 rot-id]:  14 	[orig rot-id]:  78 	atom-id:  13
+	[subrot_2 rot-id]:  15 	[orig rot-id]:  79 	atom-id:  14
+	[subrot_2 rot-id]:  16 	[orig rot-id]:  80 	atom-id:  15
+	[subrot_2 rot-id]:  17 	[orig rot-id]:  81 	atom-id:  16
+	[subrot_2 rot-id]:  18 	[orig rot-id]:  82 	atom-id:  17
+	[subrot_2 rot-id]:  19 	[orig rot-id]:  83 	atom-id:  18
+	[subrot_2 rot-id]:  20 	[orig rot-id]:  84 	atom-id:  26
+	length:  21
+
+subrotlist 3:
+	[subrot_3 rot-id]:   0 	[orig rot-id]: 128 	atom-id:  19
+	[subrot_3 rot-id]:   1 	[orig rot-id]: 129 	atom-id:  20
+	[subrot_3 rot-id]:   2 	[orig rot-id]: 130 	atom-id:  21
+	[subrot_3 rot-id]:   3 	[orig rot-id]: 131 	atom-id:  22
+	[subrot_3 rot-id]:   4 	[orig rot-id]: 132 	atom-id:  23
+	[subrot_3 rot-id]:   5 	[orig rot-id]: 133 	atom-id:  24
+	[subrot_3 rot-id]:   6 	[orig rot-id]: 134 	atom-id:  25
+	[subrot_3 rot-id]:   7 	[orig rot-id]: 135 	atom-id:  27
+	[subrot_3 rot-id]:   8 	[orig rot-id]: 136 	atom-id:  28
+	[subrot_3 rot-id]:   9 	[orig rot-id]: 137 	atom-id:  29
+	[subrot_3 rot-id]:  10 	[orig rot-id]: 138 	atom-id:  30
+	[subrot_3 rot-id]:  11 	[orig rot-id]: 139 	atom-id:  31
+	[subrot_3 rot-id]:  12 	[orig rot-id]: 140 	atom-id:  32
+	[subrot_3 rot-id]:  13 	[orig rot-id]: 141 	atom-id:  33
+	length:  14
+
+subrotlist 4:
+	length:   0
+
+subrotlist 5:
+	length:   0
+
+subrotlist 6:
+	length:   0
+
+subrotlist 7:
+	length:   0
+
+subrotlist 8:
+	length:   0
+
+subrotlist 9:
+	length:   0
+
+subrotlist 10:
+	length:   0
+
+subrotlist 11:
+	length:   0
+
+subrotlist 12:
+	length:   0
+
+Maximum number of required subrotation lists:  3
+
+Size of the largest subrotation list: 34
+
+Table of subrotlists
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+	 id 	 sub 1 	 sub 2 	 sub 3 	 sub 4 	 sub 5 	 sub 6 	 sub 7 	 sub 8 	 sub 9 	sub 10 	sub 11 	sub 12
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+	  0 	 65555	   275	131091	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  1 	 65556	   276	131092	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  2 	 65557	   277	131093	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  3 	 65558	   278	131094	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  4 	 65559	   279	131095	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  5 	 65560	   280	131096	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  6 	 65561	   281	131097	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  7 	 66075	   795	131099	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  8 	 66076	   796	131100	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  9 	 66077	   797	131101	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 10 	 66078	   798	131102	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 11 	 66079	   799	131103	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 12 	 66080	   800	131104	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 13 	 66081	   801	131105	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 14 	 65805	131085	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 15 	 65806	131086	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 16 	 65807	131087	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 17 	 65808	131088	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 18 	 65809	131089	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 19 	 65810	131090	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 20 	 66330	131098	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 21 	196608	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 22 	196609	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 23 	196610	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 24 	196611	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 25 	196612	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 26 	196613	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 27 	196614	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 28 	196615	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 29 	196616	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 30 	196617	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 31 	196618	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 32 	196619	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 33 	196620	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+
+    Using heuristics: (capped) number of evaluations set to 287034
+    Local-search chosen method is: Solis-Wets (sw)
+
+Rest of Setup time 0.020653s
+
+Executing docking runs, stopping automatically after either reaching 0.15 kcal/mol standard deviation of
+the best molecules of the last 4 * 5 generations, 99999 generations, or 287034 evaluations:
+
+Generations |  Evaluations |     Threshold    |  Average energy of best 10%  | Samples |    Best energy
+------------+--------------+------------------+------------------------------+---------+-------------------
+          0 |          150 |   -2.29 kcal/mol |   -3.55 +/-    0.44 kcal/mol |       4 |   -4.00 kcal/mol
+          5 |       152554 |   -1.88 kcal/mol |   -5.10 +/-    1.47 kcal/mol |   11173 |  -14.02 kcal/mol
+         10 |       303958 |   -5.10 kcal/mol |   -5.40 +/-    1.82 kcal/mol |   12547 |  -14.04 kcal/mol
+------------+--------------+------------------+------------------------------+---------+-------------------
+
+                                   Finished evaluation after reaching
+                           303958 evaluations. Best energy   -14.04 kcal/mol.
+
+Docking time 0.523537s
+
+Shutdown time 0.001188s
+
+Job #1 took 0.545 sec after waiting 0.130 sec for setup
+
+Run time of entire job set (1 file): 0.797 sec
+Processing time: 0.121 sec
+
+All jobs ran without errors.
+ 
+ 
+++ date +%Y-%m-%d-%H:%M
++ ./bin/autodock_xegpu_64wi -lsmet sw -lsit 300 -lsrat 100.000000 -smooth 0.500 -nev 2500000 -ngen 99999 -nrun 100 -psize 150 -lfile ./data/1mzc/rand-0.pdbqt -xraylfile ./data/1mzc/flex-xray.pdbqt -ffile ./data/1mzc/protein.maps.fld -xmloutput 0 -autostop 1 -heuristics 1 -resnam 1mzc_sw_2024-06-25-20:21
+AutoDock-GPU version: 578a1f27d44b2b773b06a20077a42c4d44621888
+
+Running 1 docking calculation
+
+XeGPU device:                              Intel(R) Data Center GPU Max 1100 (#1 / 18)
+
+Available memory on device:               49152 MB (total: 49152 MB)
+
+xPU Setup time 0.000140s
+
+Running Job #1
+
+# Rotlist elements: 320
+	rot-id:   0 	atom-id:  36
+	rot-id:   1 	atom-id:  37
+	rot-id:   2 	atom-id:  27
+	rot-id:   3 	atom-id:  28
+	rot-id:   4 	atom-id:  29
+	rot-id:   5 	atom-id:  30
+	rot-id:   6 	atom-id:  31
+	rot-id:   7 	atom-id:  32
+	rot-id:   8 	atom-id:  33
+	rot-id:   9 	atom-id:  34
+	rot-id:  10 	atom-id:  35
+	rot-id:  11 	atom-id:   8
+	rot-id:  12 	atom-id:   9
+	rot-id:  13 	atom-id:  10
+	rot-id:  14 	atom-id:  11
+	rot-id:  15 	atom-id:  12
+	rot-id:  16 	atom-id:  13
+	rot-id:  17 	atom-id:  14
+	rot-id:  18 	atom-id:  15
+	rot-id:  19 	atom-id:  16
+	rot-id:  20 	atom-id:  17
+	rot-id:  21 	atom-id:  21
+	rot-id:  22 	atom-id:  22
+	rot-id:  23 	atom-id:  23
+	rot-id:  24 	atom-id:  24
+	rot-id:  25 	atom-id:  25
+	rot-id:  26 	atom-id:  26
+	rot-id:  27 	atom-id:   6
+	rot-id:  28 	atom-id:   7
+	rot-id:  29 	atom-id:  18
+	rot-id:  30 	atom-id:  19
+	rot-id:  31 	atom-id:  20
+	rot-id:  32 	atom-id:   0
+	rot-id:  33 	atom-id:   1
+	rot-id:  34 	atom-id:   2
+	rot-id:  35 	atom-id:   3
+	rot-id:  36 	atom-id:   4
+	rot-id:  37 	atom-id:   5
+	rot-id:  38 	atom-id:   0
+	rot-id:  39 	atom-id:   0
+	rot-id:  40 	atom-id:   0
+	rot-id:  41 	atom-id:   0
+	rot-id:  42 	atom-id:   0
+	rot-id:  43 	atom-id:   0
+	rot-id:  44 	atom-id:   0
+	rot-id:  45 	atom-id:   0
+	rot-id:  46 	atom-id:   0
+	rot-id:  47 	atom-id:   0
+	rot-id:  48 	atom-id:   0
+	rot-id:  49 	atom-id:   0
+	rot-id:  50 	atom-id:   0
+	rot-id:  51 	atom-id:   0
+	rot-id:  52 	atom-id:   0
+	rot-id:  53 	atom-id:   0
+	rot-id:  54 	atom-id:   0
+	rot-id:  55 	atom-id:   0
+	rot-id:  56 	atom-id:   0
+	rot-id:  57 	atom-id:   0
+	rot-id:  58 	atom-id:   0
+	rot-id:  59 	atom-id:   0
+	rot-id:  60 	atom-id:   0
+	rot-id:  61 	atom-id:   0
+	rot-id:  62 	atom-id:   0
+	rot-id:  63 	atom-id:   0
+	rot-id:  64 	atom-id:  36
+	rot-id:  65 	atom-id:  37
+	rot-id:  66 	atom-id:  27
+	rot-id:  67 	atom-id:  28
+	rot-id:  68 	atom-id:  29
+	rot-id:  69 	atom-id:  30
+	rot-id:  70 	atom-id:  31
+	rot-id:  71 	atom-id:  32
+	rot-id:  72 	atom-id:  33
+	rot-id:  73 	atom-id:  34
+	rot-id:  74 	atom-id:  35
+	rot-id:  75 	atom-id:   8
+	rot-id:  76 	atom-id:   9
+	rot-id:  77 	atom-id:  10
+	rot-id:  78 	atom-id:  11
+	rot-id:  79 	atom-id:  12
+	rot-id:  80 	atom-id:  13
+	rot-id:  81 	atom-id:  14
+	rot-id:  82 	atom-id:  15
+	rot-id:  83 	atom-id:  16
+	rot-id:  84 	atom-id:  17
+	rot-id:  85 	atom-id:  21
+	rot-id:  86 	atom-id:  22
+	rot-id:  87 	atom-id:  23
+	rot-id:  88 	atom-id:  24
+	rot-id:  89 	atom-id:  25
+	rot-id:  90 	atom-id:  26
+	rot-id:  91 	atom-id:   6
+	rot-id:  92 	atom-id:   7
+	rot-id:  93 	atom-id:  18
+	rot-id:  94 	atom-id:  19
+	rot-id:  95 	atom-id:  20
+	rot-id:  96 	atom-id:   0
+	rot-id:  97 	atom-id:   0
+	rot-id:  98 	atom-id:   0
+	rot-id:  99 	atom-id:   0
+	rot-id: 100 	atom-id:   0
+	rot-id: 101 	atom-id:   0
+	rot-id: 102 	atom-id:   0
+	rot-id: 103 	atom-id:   0
+	rot-id: 104 	atom-id:   0
+	rot-id: 105 	atom-id:   0
+	rot-id: 106 	atom-id:   0
+	rot-id: 107 	atom-id:   0
+	rot-id: 108 	atom-id:   0
+	rot-id: 109 	atom-id:   0
+	rot-id: 110 	atom-id:   0
+	rot-id: 111 	atom-id:   0
+	rot-id: 112 	atom-id:   0
+	rot-id: 113 	atom-id:   0
+	rot-id: 114 	atom-id:   0
+	rot-id: 115 	atom-id:   0
+	rot-id: 116 	atom-id:   0
+	rot-id: 117 	atom-id:   0
+	rot-id: 118 	atom-id:   0
+	rot-id: 119 	atom-id:   0
+	rot-id: 120 	atom-id:   0
+	rot-id: 121 	atom-id:   0
+	rot-id: 122 	atom-id:   0
+	rot-id: 123 	atom-id:   0
+	rot-id: 124 	atom-id:   0
+	rot-id: 125 	atom-id:   0
+	rot-id: 126 	atom-id:   0
+	rot-id: 127 	atom-id:   0
+	rot-id: 128 	atom-id:  36
+	rot-id: 129 	atom-id:  37
+	rot-id: 130 	atom-id:  27
+	rot-id: 131 	atom-id:  28
+	rot-id: 132 	atom-id:  29
+	rot-id: 133 	atom-id:  30
+	rot-id: 134 	atom-id:  31
+	rot-id: 135 	atom-id:  32
+	rot-id: 136 	atom-id:  33
+	rot-id: 137 	atom-id:  34
+	rot-id: 138 	atom-id:  35
+	rot-id: 139 	atom-id:   8
+	rot-id: 140 	atom-id:   9
+	rot-id: 141 	atom-id:  10
+	rot-id: 142 	atom-id:  11
+	rot-id: 143 	atom-id:  12
+	rot-id: 144 	atom-id:  13
+	rot-id: 145 	atom-id:  14
+	rot-id: 146 	atom-id:  15
+	rot-id: 147 	atom-id:  16
+	rot-id: 148 	atom-id:  17
+	rot-id: 149 	atom-id:  21
+	rot-id: 150 	atom-id:  22
+	rot-id: 151 	atom-id:  23
+	rot-id: 152 	atom-id:  24
+	rot-id: 153 	atom-id:  25
+	rot-id: 154 	atom-id:  26
+	rot-id: 155 	atom-id:   0
+	rot-id: 156 	atom-id:   0
+	rot-id: 157 	atom-id:   0
+	rot-id: 158 	atom-id:   0
+	rot-id: 159 	atom-id:   0
+	rot-id: 160 	atom-id:   0
+	rot-id: 161 	atom-id:   0
+	rot-id: 162 	atom-id:   0
+	rot-id: 163 	atom-id:   0
+	rot-id: 164 	atom-id:   0
+	rot-id: 165 	atom-id:   0
+	rot-id: 166 	atom-id:   0
+	rot-id: 167 	atom-id:   0
+	rot-id: 168 	atom-id:   0
+	rot-id: 169 	atom-id:   0
+	rot-id: 170 	atom-id:   0
+	rot-id: 171 	atom-id:   0
+	rot-id: 172 	atom-id:   0
+	rot-id: 173 	atom-id:   0
+	rot-id: 174 	atom-id:   0
+	rot-id: 175 	atom-id:   0
+	rot-id: 176 	atom-id:   0
+	rot-id: 177 	atom-id:   0
+	rot-id: 178 	atom-id:   0
+	rot-id: 179 	atom-id:   0
+	rot-id: 180 	atom-id:   0
+	rot-id: 181 	atom-id:   0
+	rot-id: 182 	atom-id:   0
+	rot-id: 183 	atom-id:   0
+	rot-id: 184 	atom-id:   0
+	rot-id: 185 	atom-id:   0
+	rot-id: 186 	atom-id:   0
+	rot-id: 187 	atom-id:   0
+	rot-id: 188 	atom-id:   0
+	rot-id: 189 	atom-id:   0
+	rot-id: 190 	atom-id:   0
+	rot-id: 191 	atom-id:   0
+	rot-id: 192 	atom-id:  36
+	rot-id: 193 	atom-id:  37
+	rot-id: 194 	atom-id:  27
+	rot-id: 195 	atom-id:  28
+	rot-id: 196 	atom-id:  29
+	rot-id: 197 	atom-id:  30
+	rot-id: 198 	atom-id:  31
+	rot-id: 199 	atom-id:  32
+	rot-id: 200 	atom-id:  33
+	rot-id: 201 	atom-id:  34
+	rot-id: 202 	atom-id:  35
+	rot-id: 203 	atom-id:   0
+	rot-id: 204 	atom-id:   0
+	rot-id: 205 	atom-id:   0
+	rot-id: 206 	atom-id:   0
+	rot-id: 207 	atom-id:   0
+	rot-id: 208 	atom-id:   0
+	rot-id: 209 	atom-id:   0
+	rot-id: 210 	atom-id:   0
+	rot-id: 211 	atom-id:   0
+	rot-id: 212 	atom-id:   0
+	rot-id: 213 	atom-id:   0
+	rot-id: 214 	atom-id:   0
+	rot-id: 215 	atom-id:   0
+	rot-id: 216 	atom-id:   0
+	rot-id: 217 	atom-id:   0
+	rot-id: 218 	atom-id:   0
+	rot-id: 219 	atom-id:   0
+	rot-id: 220 	atom-id:   0
+	rot-id: 221 	atom-id:   0
+	rot-id: 222 	atom-id:   0
+	rot-id: 223 	atom-id:   0
+	rot-id: 224 	atom-id:   0
+	rot-id: 225 	atom-id:   0
+	rot-id: 226 	atom-id:   0
+	rot-id: 227 	atom-id:   0
+	rot-id: 228 	atom-id:   0
+	rot-id: 229 	atom-id:   0
+	rot-id: 230 	atom-id:   0
+	rot-id: 231 	atom-id:   0
+	rot-id: 232 	atom-id:   0
+	rot-id: 233 	atom-id:   0
+	rot-id: 234 	atom-id:   0
+	rot-id: 235 	atom-id:   0
+	rot-id: 236 	atom-id:   0
+	rot-id: 237 	atom-id:   0
+	rot-id: 238 	atom-id:   0
+	rot-id: 239 	atom-id:   0
+	rot-id: 240 	atom-id:   0
+	rot-id: 241 	atom-id:   0
+	rot-id: 242 	atom-id:   0
+	rot-id: 243 	atom-id:   0
+	rot-id: 244 	atom-id:   0
+	rot-id: 245 	atom-id:   0
+	rot-id: 246 	atom-id:   0
+	rot-id: 247 	atom-id:   0
+	rot-id: 248 	atom-id:   0
+	rot-id: 249 	atom-id:   0
+	rot-id: 250 	atom-id:   0
+	rot-id: 251 	atom-id:   0
+	rot-id: 252 	atom-id:   0
+	rot-id: 253 	atom-id:   0
+	rot-id: 254 	atom-id:   0
+	rot-id: 255 	atom-id:   0
+	rot-id: 256 	atom-id:  36
+	rot-id: 257 	atom-id:  37
+	rot-id: 258 	atom-id:   0
+	rot-id: 259 	atom-id:   0
+	rot-id: 260 	atom-id:   0
+	rot-id: 261 	atom-id:   0
+	rot-id: 262 	atom-id:   0
+	rot-id: 263 	atom-id:   0
+	rot-id: 264 	atom-id:   0
+	rot-id: 265 	atom-id:   0
+	rot-id: 266 	atom-id:   0
+	rot-id: 267 	atom-id:   0
+	rot-id: 268 	atom-id:   0
+	rot-id: 269 	atom-id:   0
+	rot-id: 270 	atom-id:   0
+	rot-id: 271 	atom-id:   0
+	rot-id: 272 	atom-id:   0
+	rot-id: 273 	atom-id:   0
+	rot-id: 274 	atom-id:   0
+	rot-id: 275 	atom-id:   0
+	rot-id: 276 	atom-id:   0
+	rot-id: 277 	atom-id:   0
+	rot-id: 278 	atom-id:   0
+	rot-id: 279 	atom-id:   0
+	rot-id: 280 	atom-id:   0
+	rot-id: 281 	atom-id:   0
+	rot-id: 282 	atom-id:   0
+	rot-id: 283 	atom-id:   0
+	rot-id: 284 	atom-id:   0
+	rot-id: 285 	atom-id:   0
+	rot-id: 286 	atom-id:   0
+	rot-id: 287 	atom-id:   0
+	rot-id: 288 	atom-id:   0
+	rot-id: 289 	atom-id:   0
+	rot-id: 290 	atom-id:   0
+	rot-id: 291 	atom-id:   0
+	rot-id: 292 	atom-id:   0
+	rot-id: 293 	atom-id:   0
+	rot-id: 294 	atom-id:   0
+	rot-id: 295 	atom-id:   0
+	rot-id: 296 	atom-id:   0
+	rot-id: 297 	atom-id:   0
+	rot-id: 298 	atom-id:   0
+	rot-id: 299 	atom-id:   0
+	rot-id: 300 	atom-id:   0
+	rot-id: 301 	atom-id:   0
+	rot-id: 302 	atom-id:   0
+	rot-id: 303 	atom-id:   0
+	rot-id: 304 	atom-id:   0
+	rot-id: 305 	atom-id:   0
+	rot-id: 306 	atom-id:   0
+	rot-id: 307 	atom-id:   0
+	rot-id: 308 	atom-id:   0
+	rot-id: 309 	atom-id:   0
+	rot-id: 310 	atom-id:   0
+	rot-id: 311 	atom-id:   0
+	rot-id: 312 	atom-id:   0
+	rot-id: 313 	atom-id:   0
+	rot-id: 314 	atom-id:   0
+	rot-id: 315 	atom-id:   0
+	rot-id: 316 	atom-id:   0
+	rot-id: 317 	atom-id:   0
+	rot-id: 318 	atom-id:   0
+	rot-id: 319 	atom-id:   0
+
+# Atoms: 38
+	atom-id:   0 	num-rot-req-per-atom:   1
+	atom-id:   1 	num-rot-req-per-atom:   1
+	atom-id:   2 	num-rot-req-per-atom:   1
+	atom-id:   3 	num-rot-req-per-atom:   1
+	atom-id:   4 	num-rot-req-per-atom:   1
+	atom-id:   5 	num-rot-req-per-atom:   1
+	atom-id:   6 	num-rot-req-per-atom:   2
+	atom-id:   7 	num-rot-req-per-atom:   2
+	atom-id:   8 	num-rot-req-per-atom:   3
+	atom-id:   9 	num-rot-req-per-atom:   3
+	atom-id:  10 	num-rot-req-per-atom:   3
+	atom-id:  11 	num-rot-req-per-atom:   3
+	atom-id:  12 	num-rot-req-per-atom:   3
+	atom-id:  13 	num-rot-req-per-atom:   3
+	atom-id:  14 	num-rot-req-per-atom:   3
+	atom-id:  15 	num-rot-req-per-atom:   3
+	atom-id:  16 	num-rot-req-per-atom:   3
+	atom-id:  17 	num-rot-req-per-atom:   3
+	atom-id:  18 	num-rot-req-per-atom:   2
+	atom-id:  19 	num-rot-req-per-atom:   2
+	atom-id:  20 	num-rot-req-per-atom:   2
+	atom-id:  21 	num-rot-req-per-atom:   3
+	atom-id:  22 	num-rot-req-per-atom:   3
+	atom-id:  23 	num-rot-req-per-atom:   3
+	atom-id:  24 	num-rot-req-per-atom:   3
+	atom-id:  25 	num-rot-req-per-atom:   3
+	atom-id:  26 	num-rot-req-per-atom:   3
+	atom-id:  27 	num-rot-req-per-atom:   4
+	atom-id:  28 	num-rot-req-per-atom:   4
+	atom-id:  29 	num-rot-req-per-atom:   4
+	atom-id:  30 	num-rot-req-per-atom:   4
+	atom-id:  31 	num-rot-req-per-atom:   4
+	atom-id:  32 	num-rot-req-per-atom:   4
+	atom-id:  33 	num-rot-req-per-atom:   4
+	atom-id:  34 	num-rot-req-per-atom:   4
+	atom-id:  35 	num-rot-req-per-atom:   4
+	atom-id:  36 	num-rot-req-per-atom:   5
+	atom-id:  37 	num-rot-req-per-atom:   5
+
+subrotlist 1:
+	[subrot_1 rot-id]:   0 	[orig rot-id]:   0 	atom-id:  36
+	[subrot_1 rot-id]:   1 	[orig rot-id]:   1 	atom-id:  37
+	[subrot_1 rot-id]:   2 	[orig rot-id]:   2 	atom-id:  27
+	[subrot_1 rot-id]:   3 	[orig rot-id]:   3 	atom-id:  28
+	[subrot_1 rot-id]:   4 	[orig rot-id]:   4 	atom-id:  29
+	[subrot_1 rot-id]:   5 	[orig rot-id]:   5 	atom-id:  30
+	[subrot_1 rot-id]:   6 	[orig rot-id]:   6 	atom-id:  31
+	[subrot_1 rot-id]:   7 	[orig rot-id]:   7 	atom-id:  32
+	[subrot_1 rot-id]:   8 	[orig rot-id]:   8 	atom-id:  33
+	[subrot_1 rot-id]:   9 	[orig rot-id]:   9 	atom-id:  34
+	[subrot_1 rot-id]:  10 	[orig rot-id]:  10 	atom-id:  35
+	[subrot_1 rot-id]:  11 	[orig rot-id]:  11 	atom-id:   8
+	[subrot_1 rot-id]:  12 	[orig rot-id]:  12 	atom-id:   9
+	[subrot_1 rot-id]:  13 	[orig rot-id]:  13 	atom-id:  10
+	[subrot_1 rot-id]:  14 	[orig rot-id]:  14 	atom-id:  11
+	[subrot_1 rot-id]:  15 	[orig rot-id]:  15 	atom-id:  12
+	[subrot_1 rot-id]:  16 	[orig rot-id]:  16 	atom-id:  13
+	[subrot_1 rot-id]:  17 	[orig rot-id]:  17 	atom-id:  14
+	[subrot_1 rot-id]:  18 	[orig rot-id]:  18 	atom-id:  15
+	[subrot_1 rot-id]:  19 	[orig rot-id]:  19 	atom-id:  16
+	[subrot_1 rot-id]:  20 	[orig rot-id]:  20 	atom-id:  17
+	[subrot_1 rot-id]:  21 	[orig rot-id]:  21 	atom-id:  21
+	[subrot_1 rot-id]:  22 	[orig rot-id]:  22 	atom-id:  22
+	[subrot_1 rot-id]:  23 	[orig rot-id]:  23 	atom-id:  23
+	[subrot_1 rot-id]:  24 	[orig rot-id]:  24 	atom-id:  24
+	[subrot_1 rot-id]:  25 	[orig rot-id]:  25 	atom-id:  25
+	[subrot_1 rot-id]:  26 	[orig rot-id]:  26 	atom-id:  26
+	[subrot_1 rot-id]:  27 	[orig rot-id]:  27 	atom-id:   6
+	[subrot_1 rot-id]:  28 	[orig rot-id]:  28 	atom-id:   7
+	[subrot_1 rot-id]:  29 	[orig rot-id]:  29 	atom-id:  18
+	[subrot_1 rot-id]:  30 	[orig rot-id]:  30 	atom-id:  19
+	[subrot_1 rot-id]:  31 	[orig rot-id]:  31 	atom-id:  20
+	[subrot_1 rot-id]:  32 	[orig rot-id]:  32 	atom-id:   0
+	[subrot_1 rot-id]:  33 	[orig rot-id]:  33 	atom-id:   1
+	[subrot_1 rot-id]:  34 	[orig rot-id]:  34 	atom-id:   2
+	[subrot_1 rot-id]:  35 	[orig rot-id]:  35 	atom-id:   3
+	[subrot_1 rot-id]:  36 	[orig rot-id]:  36 	atom-id:   4
+	[subrot_1 rot-id]:  37 	[orig rot-id]:  37 	atom-id:   5
+	length:  38
+
+subrotlist 2:
+	[subrot_2 rot-id]:   0 	[orig rot-id]:  64 	atom-id:  36
+	[subrot_2 rot-id]:   1 	[orig rot-id]:  65 	atom-id:  37
+	[subrot_2 rot-id]:   2 	[orig rot-id]:  66 	atom-id:  27
+	[subrot_2 rot-id]:   3 	[orig rot-id]:  67 	atom-id:  28
+	[subrot_2 rot-id]:   4 	[orig rot-id]:  68 	atom-id:  29
+	[subrot_2 rot-id]:   5 	[orig rot-id]:  69 	atom-id:  30
+	[subrot_2 rot-id]:   6 	[orig rot-id]:  70 	atom-id:  31
+	[subrot_2 rot-id]:   7 	[orig rot-id]:  71 	atom-id:  32
+	[subrot_2 rot-id]:   8 	[orig rot-id]:  72 	atom-id:  33
+	[subrot_2 rot-id]:   9 	[orig rot-id]:  73 	atom-id:  34
+	[subrot_2 rot-id]:  10 	[orig rot-id]:  74 	atom-id:  35
+	[subrot_2 rot-id]:  11 	[orig rot-id]:  75 	atom-id:   8
+	[subrot_2 rot-id]:  12 	[orig rot-id]:  76 	atom-id:   9
+	[subrot_2 rot-id]:  13 	[orig rot-id]:  77 	atom-id:  10
+	[subrot_2 rot-id]:  14 	[orig rot-id]:  78 	atom-id:  11
+	[subrot_2 rot-id]:  15 	[orig rot-id]:  79 	atom-id:  12
+	[subrot_2 rot-id]:  16 	[orig rot-id]:  80 	atom-id:  13
+	[subrot_2 rot-id]:  17 	[orig rot-id]:  81 	atom-id:  14
+	[subrot_2 rot-id]:  18 	[orig rot-id]:  82 	atom-id:  15
+	[subrot_2 rot-id]:  19 	[orig rot-id]:  83 	atom-id:  16
+	[subrot_2 rot-id]:  20 	[orig rot-id]:  84 	atom-id:  17
+	[subrot_2 rot-id]:  21 	[orig rot-id]:  85 	atom-id:  21
+	[subrot_2 rot-id]:  22 	[orig rot-id]:  86 	atom-id:  22
+	[subrot_2 rot-id]:  23 	[orig rot-id]:  87 	atom-id:  23
+	[subrot_2 rot-id]:  24 	[orig rot-id]:  88 	atom-id:  24
+	[subrot_2 rot-id]:  25 	[orig rot-id]:  89 	atom-id:  25
+	[subrot_2 rot-id]:  26 	[orig rot-id]:  90 	atom-id:  26
+	[subrot_2 rot-id]:  27 	[orig rot-id]:  91 	atom-id:   6
+	[subrot_2 rot-id]:  28 	[orig rot-id]:  92 	atom-id:   7
+	[subrot_2 rot-id]:  29 	[orig rot-id]:  93 	atom-id:  18
+	[subrot_2 rot-id]:  30 	[orig rot-id]:  94 	atom-id:  19
+	[subrot_2 rot-id]:  31 	[orig rot-id]:  95 	atom-id:  20
+	length:  32
+
+subrotlist 3:
+	[subrot_3 rot-id]:   0 	[orig rot-id]: 128 	atom-id:  36
+	[subrot_3 rot-id]:   1 	[orig rot-id]: 129 	atom-id:  37
+	[subrot_3 rot-id]:   2 	[orig rot-id]: 130 	atom-id:  27
+	[subrot_3 rot-id]:   3 	[orig rot-id]: 131 	atom-id:  28
+	[subrot_3 rot-id]:   4 	[orig rot-id]: 132 	atom-id:  29
+	[subrot_3 rot-id]:   5 	[orig rot-id]: 133 	atom-id:  30
+	[subrot_3 rot-id]:   6 	[orig rot-id]: 134 	atom-id:  31
+	[subrot_3 rot-id]:   7 	[orig rot-id]: 135 	atom-id:  32
+	[subrot_3 rot-id]:   8 	[orig rot-id]: 136 	atom-id:  33
+	[subrot_3 rot-id]:   9 	[orig rot-id]: 137 	atom-id:  34
+	[subrot_3 rot-id]:  10 	[orig rot-id]: 138 	atom-id:  35
+	[subrot_3 rot-id]:  11 	[orig rot-id]: 139 	atom-id:   8
+	[subrot_3 rot-id]:  12 	[orig rot-id]: 140 	atom-id:   9
+	[subrot_3 rot-id]:  13 	[orig rot-id]: 141 	atom-id:  10
+	[subrot_3 rot-id]:  14 	[orig rot-id]: 142 	atom-id:  11
+	[subrot_3 rot-id]:  15 	[orig rot-id]: 143 	atom-id:  12
+	[subrot_3 rot-id]:  16 	[orig rot-id]: 144 	atom-id:  13
+	[subrot_3 rot-id]:  17 	[orig rot-id]: 145 	atom-id:  14
+	[subrot_3 rot-id]:  18 	[orig rot-id]: 146 	atom-id:  15
+	[subrot_3 rot-id]:  19 	[orig rot-id]: 147 	atom-id:  16
+	[subrot_3 rot-id]:  20 	[orig rot-id]: 148 	atom-id:  17
+	[subrot_3 rot-id]:  21 	[orig rot-id]: 149 	atom-id:  21
+	[subrot_3 rot-id]:  22 	[orig rot-id]: 150 	atom-id:  22
+	[subrot_3 rot-id]:  23 	[orig rot-id]: 151 	atom-id:  23
+	[subrot_3 rot-id]:  24 	[orig rot-id]: 152 	atom-id:  24
+	[subrot_3 rot-id]:  25 	[orig rot-id]: 153 	atom-id:  25
+	[subrot_3 rot-id]:  26 	[orig rot-id]: 154 	atom-id:  26
+	length:  27
+
+subrotlist 4:
+	[subrot_4 rot-id]:   0 	[orig rot-id]: 192 	atom-id:  36
+	[subrot_4 rot-id]:   1 	[orig rot-id]: 193 	atom-id:  37
+	[subrot_4 rot-id]:   2 	[orig rot-id]: 194 	atom-id:  27
+	[subrot_4 rot-id]:   3 	[orig rot-id]: 195 	atom-id:  28
+	[subrot_4 rot-id]:   4 	[orig rot-id]: 196 	atom-id:  29
+	[subrot_4 rot-id]:   5 	[orig rot-id]: 197 	atom-id:  30
+	[subrot_4 rot-id]:   6 	[orig rot-id]: 198 	atom-id:  31
+	[subrot_4 rot-id]:   7 	[orig rot-id]: 199 	atom-id:  32
+	[subrot_4 rot-id]:   8 	[orig rot-id]: 200 	atom-id:  33
+	[subrot_4 rot-id]:   9 	[orig rot-id]: 201 	atom-id:  34
+	[subrot_4 rot-id]:  10 	[orig rot-id]: 202 	atom-id:  35
+	length:  11
+
+subrotlist 5:
+	[subrot_5 rot-id]:   0 	[orig rot-id]: 256 	atom-id:  36
+	[subrot_5 rot-id]:   1 	[orig rot-id]: 257 	atom-id:  37
+	length:   2
+
+subrotlist 6:
+	length:   0
+
+subrotlist 7:
+	length:   0
+
+subrotlist 8:
+	length:   0
+
+subrotlist 9:
+	length:   0
+
+subrotlist 10:
+	length:   0
+
+subrotlist 11:
+	length:   0
+
+subrotlist 12:
+	length:   0
+
+Maximum number of required subrotation lists:  5
+
+Size of the largest subrotation list: 38
+
+Table of subrotlists
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+	 id 	 sub 1 	 sub 2 	 sub 3 	 sub 4 	 sub 5 	 sub 6 	 sub 7 	 sub 8 	 sub 9 	sub 10 	sub 11 	sub 12
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+	  0 	 66596	  1316	  1572	  1828	131108	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  1 	 66597	  1317	  1573	  1829	131109	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  2 	 66843	  1563	  1819	131099	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  3 	 66844	  1564	  1820	131100	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  4 	 66845	  1565	  1821	131101	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  5 	 66846	  1566	  1822	131102	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  6 	 66847	  1567	  1823	131103	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  7 	 66848	  1568	  1824	131104	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  8 	 66849	  1569	  1825	131105	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  9 	 66850	  1570	  1826	131106	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 10 	 66851	  1571	  1827	131107	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 11 	 65544	   520	131080	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 12 	 65545	   521	131081	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 13 	 65546	   522	131082	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 14 	 65547	   523	131083	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 15 	 65548	   524	131084	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 16 	 65549	   525	131085	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 17 	 65806	   526	131086	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 18 	 65807	   527	131087	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 19 	 65808	   528	131088	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 20 	 65809	   529	131089	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 21 	 67093	  1813	131093	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 22 	 67094	  1814	131094	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 23 	 67095	  1815	131095	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 24 	 67096	  1816	131096	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 25 	 67097	  1817	131097	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 26 	 67098	  1818	131098	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 27 	 66054	131078	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 28 	 66055	131079	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 29 	 66322	131090	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 30 	 66323	131091	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 31 	 67348	131092	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 32 	196608	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 33 	196609	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 34 	196610	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 35 	196611	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 36 	196612	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 37 	196613	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+
+    Using heuristics: (capped) number of evaluations set to 5686815
+    Overriding heuristics, setting number of evaluations to --nev = 2500000 instead.
+    Warning: The set number of evals is 23.13% of the uncapped heuristics estimate of 10809405 evals.
+             This means this docking may not be able to converge. Increasing --heurmax may improve
+             convergence but will also increase runtime.
+             AutoStop will not stop before 39.59% (989762) of the set number of evaluations.
+    Local-search chosen method is: Solis-Wets (sw)
+
+Rest of Setup time 0.019998s
+
+Executing docking runs, stopping automatically after either reaching 0.15 kcal/mol standard deviation of
+the best molecules of the last 4 * 5 generations, 99999 generations, or 2500000 evaluations:
+
+Generations |  Evaluations |     Threshold    |  Average energy of best 10%  | Samples |    Best energy
+------------+--------------+------------------+------------------------------+---------+-------------------
+          0 |          150 |   -1.40 kcal/mol |   -2.96 +/-    0.58 kcal/mol |       9 |   -4.35 kcal/mol
+          5 |       158695 |   -1.99 kcal/mol |   -6.97 +/-    1.71 kcal/mol |    9204 |  -13.77 kcal/mol
+         10 |       323030 |   -6.97 kcal/mol |  -11.22 +/-    0.70 kcal/mol |     532 |  -13.80 kcal/mol
+         15 |       491505 |  -11.20 kcal/mol |  -13.08 +/-    0.30 kcal/mol |      54 |  -13.84 kcal/mol
+         20 |       660798 |  -12.99 kcal/mol |  -13.60 +/-    0.20 kcal/mol |      24 |  -14.21 kcal/mol
+         25 |       831208 |  -13.48 kcal/mol |  -13.72 +/-    0.21 kcal/mol |      19 |  -14.52 kcal/mol
+         30 |      1002025 |  -13.55 kcal/mol |  -14.37 +/-    0.20 kcal/mol |       4 |  -14.56 kcal/mol
+         35 |      1173187 |  -13.62 kcal/mol |  -14.43 +/-    0.17 kcal/mol |       4 |  -14.65 kcal/mol
+         40 |      1344890 |  -13.81 kcal/mol |  -14.55 +/-    0.24 kcal/mol |       8 |  -14.88 kcal/mol
+         45 |      1516861 |  -14.09 kcal/mol |  -14.93 +/-    0.16 kcal/mol |       9 |  -15.11 kcal/mol
+         50 |      1688883 |  -14.67 kcal/mol |  -15.10 +/-    0.08 kcal/mol |       6 |  -15.22 kcal/mol
+         55 |      1861022 |  -14.91 kcal/mol |  -15.18 +/-    0.06 kcal/mol |       8 |  -15.26 kcal/mol
+         60 |      2032453 |  -14.89 kcal/mol |  -15.17 +/-    0.10 kcal/mol |       6 |  -15.32 kcal/mol
+         65 |      2204741 |  -14.93 kcal/mol |  -15.17 +/-    0.12 kcal/mol |       6 |  -15.34 kcal/mol
+         70 |      2376943 |  -14.88 kcal/mol |  -15.16 +/-    0.13 kcal/mol |      10 |  -15.35 kcal/mol
+         74 |      2514628 |  -14.96 kcal/mol |  -15.17 +/-    0.13 kcal/mol |      18 |  -15.35 kcal/mol
+------------+--------------+------------------+------------------------------+---------+-------------------
+
+                                   Finished evaluation after reaching
+                          2514628 evaluations. Best energy   -15.35 kcal/mol.
+
+Docking time 5.225645s
+
+Shutdown time 0.000956s
+
+Job #1 took 5.247 sec after waiting 0.123 sec for setup
+
+Run time of entire job set (1 file): 5.550 sec
+Processing time: 0.180 sec
+
+All jobs ran without errors.
+ 
+ 
+++ date +%Y-%m-%d-%H:%M
++ ./bin/autodock_xegpu_64wi -lsmet sw -lsit 300 -lsrat 100.000000 -smooth 0.500 -nev 2500000 -ngen 99999 -nrun 100 -psize 150 -lfile ./data/3s8o/rand-0.pdbqt -xraylfile ./data/3s8o/flex-xray.pdbqt -ffile ./data/3s8o/protein.maps.fld -xmloutput 0 -autostop 1 -heuristics 1 -resnam 3s8o_sw_2024-06-25-20:21
+AutoDock-GPU version: 578a1f27d44b2b773b06a20077a42c4d44621888
+
+Running 1 docking calculation
+
+XeGPU device:                              Intel(R) Data Center GPU Max 1100 (#1 / 18)
+
+Available memory on device:               49152 MB (total: 49152 MB)
+
+xPU Setup time 0.000140s
+
+Running Job #1
+
+# Rotlist elements: 384
+	rot-id:   0 	atom-id:  21
+	rot-id:   1 	atom-id:  22
+	rot-id:   2 	atom-id:  23
+	rot-id:   3 	atom-id:  24
+	rot-id:   4 	atom-id:  25
+	rot-id:   5 	atom-id:  40
+	rot-id:   6 	atom-id:  41
+	rot-id:   7 	atom-id:  42
+	rot-id:   8 	atom-id:  43
+	rot-id:   9 	atom-id:  15
+	rot-id:  10 	atom-id:  16
+	rot-id:  11 	atom-id:  17
+	rot-id:  12 	atom-id:  18
+	rot-id:  13 	atom-id:  19
+	rot-id:  14 	atom-id:  20
+	rot-id:  15 	atom-id:  39
+	rot-id:  16 	atom-id:  14
+	rot-id:  17 	atom-id:  33
+	rot-id:  18 	atom-id:  34
+	rot-id:  19 	atom-id:  35
+	rot-id:  20 	atom-id:  36
+	rot-id:  21 	atom-id:  37
+	rot-id:  22 	atom-id:  38
+	rot-id:  23 	atom-id:  10
+	rot-id:  24 	atom-id:  11
+	rot-id:  25 	atom-id:  12
+	rot-id:  26 	atom-id:  13
+	rot-id:  27 	atom-id:  27
+	rot-id:  28 	atom-id:  28
+	rot-id:  29 	atom-id:  29
+	rot-id:  30 	atom-id:  30
+	rot-id:  31 	atom-id:  31
+	rot-id:  32 	atom-id:  32
+	rot-id:  33 	atom-id:   4
+	rot-id:  34 	atom-id:   5
+	rot-id:  35 	atom-id:   6
+	rot-id:  36 	atom-id:   7
+	rot-id:  37 	atom-id:   8
+	rot-id:  38 	atom-id:   9
+	rot-id:  39 	atom-id:  26
+	rot-id:  40 	atom-id:   0
+	rot-id:  41 	atom-id:   1
+	rot-id:  42 	atom-id:   2
+	rot-id:  43 	atom-id:   3
+	rot-id:  44 	atom-id:   0
+	rot-id:  45 	atom-id:   0
+	rot-id:  46 	atom-id:   0
+	rot-id:  47 	atom-id:   0
+	rot-id:  48 	atom-id:   0
+	rot-id:  49 	atom-id:   0
+	rot-id:  50 	atom-id:   0
+	rot-id:  51 	atom-id:   0
+	rot-id:  52 	atom-id:   0
+	rot-id:  53 	atom-id:   0
+	rot-id:  54 	atom-id:   0
+	rot-id:  55 	atom-id:   0
+	rot-id:  56 	atom-id:   0
+	rot-id:  57 	atom-id:   0
+	rot-id:  58 	atom-id:   0
+	rot-id:  59 	atom-id:   0
+	rot-id:  60 	atom-id:   0
+	rot-id:  61 	atom-id:   0
+	rot-id:  62 	atom-id:   0
+	rot-id:  63 	atom-id:   0
+	rot-id:  64 	atom-id:  21
+	rot-id:  65 	atom-id:  22
+	rot-id:  66 	atom-id:  23
+	rot-id:  67 	atom-id:  24
+	rot-id:  68 	atom-id:  25
+	rot-id:  69 	atom-id:  40
+	rot-id:  70 	atom-id:  41
+	rot-id:  71 	atom-id:  42
+	rot-id:  72 	atom-id:  43
+	rot-id:  73 	atom-id:  15
+	rot-id:  74 	atom-id:  16
+	rot-id:  75 	atom-id:  17
+	rot-id:  76 	atom-id:  18
+	rot-id:  77 	atom-id:  19
+	rot-id:  78 	atom-id:  20
+	rot-id:  79 	atom-id:  39
+	rot-id:  80 	atom-id:  14
+	rot-id:  81 	atom-id:  33
+	rot-id:  82 	atom-id:  34
+	rot-id:  83 	atom-id:  35
+	rot-id:  84 	atom-id:  36
+	rot-id:  85 	atom-id:  37
+	rot-id:  86 	atom-id:  38
+	rot-id:  87 	atom-id:  10
+	rot-id:  88 	atom-id:  11
+	rot-id:  89 	atom-id:  12
+	rot-id:  90 	atom-id:  13
+	rot-id:  91 	atom-id:  27
+	rot-id:  92 	atom-id:  28
+	rot-id:  93 	atom-id:  29
+	rot-id:  94 	atom-id:  30
+	rot-id:  95 	atom-id:  31
+	rot-id:  96 	atom-id:  32
+	rot-id:  97 	atom-id:   4
+	rot-id:  98 	atom-id:   5
+	rot-id:  99 	atom-id:   6
+	rot-id: 100 	atom-id:   7
+	rot-id: 101 	atom-id:   8
+	rot-id: 102 	atom-id:   9
+	rot-id: 103 	atom-id:  26
+	rot-id: 104 	atom-id:   0
+	rot-id: 105 	atom-id:   0
+	rot-id: 106 	atom-id:   0
+	rot-id: 107 	atom-id:   0
+	rot-id: 108 	atom-id:   0
+	rot-id: 109 	atom-id:   0
+	rot-id: 110 	atom-id:   0
+	rot-id: 111 	atom-id:   0
+	rot-id: 112 	atom-id:   0
+	rot-id: 113 	atom-id:   0
+	rot-id: 114 	atom-id:   0
+	rot-id: 115 	atom-id:   0
+	rot-id: 116 	atom-id:   0
+	rot-id: 117 	atom-id:   0
+	rot-id: 118 	atom-id:   0
+	rot-id: 119 	atom-id:   0
+	rot-id: 120 	atom-id:   0
+	rot-id: 121 	atom-id:   0
+	rot-id: 122 	atom-id:   0
+	rot-id: 123 	atom-id:   0
+	rot-id: 124 	atom-id:   0
+	rot-id: 125 	atom-id:   0
+	rot-id: 126 	atom-id:   0
+	rot-id: 127 	atom-id:   0
+	rot-id: 128 	atom-id:  21
+	rot-id: 129 	atom-id:  22
+	rot-id: 130 	atom-id:  23
+	rot-id: 131 	atom-id:  24
+	rot-id: 132 	atom-id:  25
+	rot-id: 133 	atom-id:  40
+	rot-id: 134 	atom-id:  41
+	rot-id: 135 	atom-id:  42
+	rot-id: 136 	atom-id:  43
+	rot-id: 137 	atom-id:  15
+	rot-id: 138 	atom-id:  16
+	rot-id: 139 	atom-id:  17
+	rot-id: 140 	atom-id:  18
+	rot-id: 141 	atom-id:  19
+	rot-id: 142 	atom-id:  20
+	rot-id: 143 	atom-id:  39
+	rot-id: 144 	atom-id:  14
+	rot-id: 145 	atom-id:  33
+	rot-id: 146 	atom-id:  34
+	rot-id: 147 	atom-id:  35
+	rot-id: 148 	atom-id:  36
+	rot-id: 149 	atom-id:  37
+	rot-id: 150 	atom-id:  38
+	rot-id: 151 	atom-id:  10
+	rot-id: 152 	atom-id:  11
+	rot-id: 153 	atom-id:  12
+	rot-id: 154 	atom-id:  13
+	rot-id: 155 	atom-id:  27
+	rot-id: 156 	atom-id:  28
+	rot-id: 157 	atom-id:  29
+	rot-id: 158 	atom-id:  30
+	rot-id: 159 	atom-id:  31
+	rot-id: 160 	atom-id:  32
+	rot-id: 161 	atom-id:   0
+	rot-id: 162 	atom-id:   0
+	rot-id: 163 	atom-id:   0
+	rot-id: 164 	atom-id:   0
+	rot-id: 165 	atom-id:   0
+	rot-id: 166 	atom-id:   0
+	rot-id: 167 	atom-id:   0
+	rot-id: 168 	atom-id:   0
+	rot-id: 169 	atom-id:   0
+	rot-id: 170 	atom-id:   0
+	rot-id: 171 	atom-id:   0
+	rot-id: 172 	atom-id:   0
+	rot-id: 173 	atom-id:   0
+	rot-id: 174 	atom-id:   0
+	rot-id: 175 	atom-id:   0
+	rot-id: 176 	atom-id:   0
+	rot-id: 177 	atom-id:   0
+	rot-id: 178 	atom-id:   0
+	rot-id: 179 	atom-id:   0
+	rot-id: 180 	atom-id:   0
+	rot-id: 181 	atom-id:   0
+	rot-id: 182 	atom-id:   0
+	rot-id: 183 	atom-id:   0
+	rot-id: 184 	atom-id:   0
+	rot-id: 185 	atom-id:   0
+	rot-id: 186 	atom-id:   0
+	rot-id: 187 	atom-id:   0
+	rot-id: 188 	atom-id:   0
+	rot-id: 189 	atom-id:   0
+	rot-id: 190 	atom-id:   0
+	rot-id: 191 	atom-id:   0
+	rot-id: 192 	atom-id:  21
+	rot-id: 193 	atom-id:  22
+	rot-id: 194 	atom-id:  23
+	rot-id: 195 	atom-id:  24
+	rot-id: 196 	atom-id:  25
+	rot-id: 197 	atom-id:  40
+	rot-id: 198 	atom-id:  41
+	rot-id: 199 	atom-id:  42
+	rot-id: 200 	atom-id:  43
+	rot-id: 201 	atom-id:  15
+	rot-id: 202 	atom-id:  16
+	rot-id: 203 	atom-id:  17
+	rot-id: 204 	atom-id:  18
+	rot-id: 205 	atom-id:  19
+	rot-id: 206 	atom-id:  20
+	rot-id: 207 	atom-id:  39
+	rot-id: 208 	atom-id:  14
+	rot-id: 209 	atom-id:  33
+	rot-id: 210 	atom-id:  34
+	rot-id: 211 	atom-id:  35
+	rot-id: 212 	atom-id:  36
+	rot-id: 213 	atom-id:  37
+	rot-id: 214 	atom-id:  38
+	rot-id: 215 	atom-id:   0
+	rot-id: 216 	atom-id:   0
+	rot-id: 217 	atom-id:   0
+	rot-id: 218 	atom-id:   0
+	rot-id: 219 	atom-id:   0
+	rot-id: 220 	atom-id:   0
+	rot-id: 221 	atom-id:   0
+	rot-id: 222 	atom-id:   0
+	rot-id: 223 	atom-id:   0
+	rot-id: 224 	atom-id:   0
+	rot-id: 225 	atom-id:   0
+	rot-id: 226 	atom-id:   0
+	rot-id: 227 	atom-id:   0
+	rot-id: 228 	atom-id:   0
+	rot-id: 229 	atom-id:   0
+	rot-id: 230 	atom-id:   0
+	rot-id: 231 	atom-id:   0
+	rot-id: 232 	atom-id:   0
+	rot-id: 233 	atom-id:   0
+	rot-id: 234 	atom-id:   0
+	rot-id: 235 	atom-id:   0
+	rot-id: 236 	atom-id:   0
+	rot-id: 237 	atom-id:   0
+	rot-id: 238 	atom-id:   0
+	rot-id: 239 	atom-id:   0
+	rot-id: 240 	atom-id:   0
+	rot-id: 241 	atom-id:   0
+	rot-id: 242 	atom-id:   0
+	rot-id: 243 	atom-id:   0
+	rot-id: 244 	atom-id:   0
+	rot-id: 245 	atom-id:   0
+	rot-id: 246 	atom-id:   0
+	rot-id: 247 	atom-id:   0
+	rot-id: 248 	atom-id:   0
+	rot-id: 249 	atom-id:   0
+	rot-id: 250 	atom-id:   0
+	rot-id: 251 	atom-id:   0
+	rot-id: 252 	atom-id:   0
+	rot-id: 253 	atom-id:   0
+	rot-id: 254 	atom-id:   0
+	rot-id: 255 	atom-id:   0
+	rot-id: 256 	atom-id:  21
+	rot-id: 257 	atom-id:  22
+	rot-id: 258 	atom-id:  23
+	rot-id: 259 	atom-id:  24
+	rot-id: 260 	atom-id:  25
+	rot-id: 261 	atom-id:  40
+	rot-id: 262 	atom-id:  41
+	rot-id: 263 	atom-id:  42
+	rot-id: 264 	atom-id:  43
+	rot-id: 265 	atom-id:  15
+	rot-id: 266 	atom-id:  16
+	rot-id: 267 	atom-id:  17
+	rot-id: 268 	atom-id:  18
+	rot-id: 269 	atom-id:  19
+	rot-id: 270 	atom-id:  20
+	rot-id: 271 	atom-id:  39
+	rot-id: 272 	atom-id:   0
+	rot-id: 273 	atom-id:   0
+	rot-id: 274 	atom-id:   0
+	rot-id: 275 	atom-id:   0
+	rot-id: 276 	atom-id:   0
+	rot-id: 277 	atom-id:   0
+	rot-id: 278 	atom-id:   0
+	rot-id: 279 	atom-id:   0
+	rot-id: 280 	atom-id:   0
+	rot-id: 281 	atom-id:   0
+	rot-id: 282 	atom-id:   0
+	rot-id: 283 	atom-id:   0
+	rot-id: 284 	atom-id:   0
+	rot-id: 285 	atom-id:   0
+	rot-id: 286 	atom-id:   0
+	rot-id: 287 	atom-id:   0
+	rot-id: 288 	atom-id:   0
+	rot-id: 289 	atom-id:   0
+	rot-id: 290 	atom-id:   0
+	rot-id: 291 	atom-id:   0
+	rot-id: 292 	atom-id:   0
+	rot-id: 293 	atom-id:   0
+	rot-id: 294 	atom-id:   0
+	rot-id: 295 	atom-id:   0
+	rot-id: 296 	atom-id:   0
+	rot-id: 297 	atom-id:   0
+	rot-id: 298 	atom-id:   0
+	rot-id: 299 	atom-id:   0
+	rot-id: 300 	atom-id:   0
+	rot-id: 301 	atom-id:   0
+	rot-id: 302 	atom-id:   0
+	rot-id: 303 	atom-id:   0
+	rot-id: 304 	atom-id:   0
+	rot-id: 305 	atom-id:   0
+	rot-id: 306 	atom-id:   0
+	rot-id: 307 	atom-id:   0
+	rot-id: 308 	atom-id:   0
+	rot-id: 309 	atom-id:   0
+	rot-id: 310 	atom-id:   0
+	rot-id: 311 	atom-id:   0
+	rot-id: 312 	atom-id:   0
+	rot-id: 313 	atom-id:   0
+	rot-id: 314 	atom-id:   0
+	rot-id: 315 	atom-id:   0
+	rot-id: 316 	atom-id:   0
+	rot-id: 317 	atom-id:   0
+	rot-id: 318 	atom-id:   0
+	rot-id: 319 	atom-id:   0
+	rot-id: 320 	atom-id:  21
+	rot-id: 321 	atom-id:  22
+	rot-id: 322 	atom-id:  23
+	rot-id: 323 	atom-id:  24
+	rot-id: 324 	atom-id:  25
+	rot-id: 325 	atom-id:  40
+	rot-id: 326 	atom-id:  41
+	rot-id: 327 	atom-id:  42
+	rot-id: 328 	atom-id:  43
+	rot-id: 329 	atom-id:   0
+	rot-id: 330 	atom-id:   0
+	rot-id: 331 	atom-id:   0
+	rot-id: 332 	atom-id:   0
+	rot-id: 333 	atom-id:   0
+	rot-id: 334 	atom-id:   0
+	rot-id: 335 	atom-id:   0
+	rot-id: 336 	atom-id:   0
+	rot-id: 337 	atom-id:   0
+	rot-id: 338 	atom-id:   0
+	rot-id: 339 	atom-id:   0
+	rot-id: 340 	atom-id:   0
+	rot-id: 341 	atom-id:   0
+	rot-id: 342 	atom-id:   0
+	rot-id: 343 	atom-id:   0
+	rot-id: 344 	atom-id:   0
+	rot-id: 345 	atom-id:   0
+	rot-id: 346 	atom-id:   0
+	rot-id: 347 	atom-id:   0
+	rot-id: 348 	atom-id:   0
+	rot-id: 349 	atom-id:   0
+	rot-id: 350 	atom-id:   0
+	rot-id: 351 	atom-id:   0
+	rot-id: 352 	atom-id:   0
+	rot-id: 353 	atom-id:   0
+	rot-id: 354 	atom-id:   0
+	rot-id: 355 	atom-id:   0
+	rot-id: 356 	atom-id:   0
+	rot-id: 357 	atom-id:   0
+	rot-id: 358 	atom-id:   0
+	rot-id: 359 	atom-id:   0
+	rot-id: 360 	atom-id:   0
+	rot-id: 361 	atom-id:   0
+	rot-id: 362 	atom-id:   0
+	rot-id: 363 	atom-id:   0
+	rot-id: 364 	atom-id:   0
+	rot-id: 365 	atom-id:   0
+	rot-id: 366 	atom-id:   0
+	rot-id: 367 	atom-id:   0
+	rot-id: 368 	atom-id:   0
+	rot-id: 369 	atom-id:   0
+	rot-id: 370 	atom-id:   0
+	rot-id: 371 	atom-id:   0
+	rot-id: 372 	atom-id:   0
+	rot-id: 373 	atom-id:   0
+	rot-id: 374 	atom-id:   0
+	rot-id: 375 	atom-id:   0
+	rot-id: 376 	atom-id:   0
+	rot-id: 377 	atom-id:   0
+	rot-id: 378 	atom-id:   0
+	rot-id: 379 	atom-id:   0
+	rot-id: 380 	atom-id:   0
+	rot-id: 381 	atom-id:   0
+	rot-id: 382 	atom-id:   0
+	rot-id: 383 	atom-id:   0
+
+# Atoms: 44
+	atom-id:   0 	num-rot-req-per-atom:   1
+	atom-id:   1 	num-rot-req-per-atom:   1
+	atom-id:   2 	num-rot-req-per-atom:   1
+	atom-id:   3 	num-rot-req-per-atom:   1
+	atom-id:   4 	num-rot-req-per-atom:   2
+	atom-id:   5 	num-rot-req-per-atom:   2
+	atom-id:   6 	num-rot-req-per-atom:   2
+	atom-id:   7 	num-rot-req-per-atom:   2
+	atom-id:   8 	num-rot-req-per-atom:   2
+	atom-id:   9 	num-rot-req-per-atom:   2
+	atom-id:  10 	num-rot-req-per-atom:   3
+	atom-id:  11 	num-rot-req-per-atom:   3
+	atom-id:  12 	num-rot-req-per-atom:   3
+	atom-id:  13 	num-rot-req-per-atom:   3
+	atom-id:  14 	num-rot-req-per-atom:   4
+	atom-id:  15 	num-rot-req-per-atom:   5
+	atom-id:  16 	num-rot-req-per-atom:   5
+	atom-id:  17 	num-rot-req-per-atom:   5
+	atom-id:  18 	num-rot-req-per-atom:   5
+	atom-id:  19 	num-rot-req-per-atom:   5
+	atom-id:  20 	num-rot-req-per-atom:   5
+	atom-id:  21 	num-rot-req-per-atom:   6
+	atom-id:  22 	num-rot-req-per-atom:   6
+	atom-id:  23 	num-rot-req-per-atom:   6
+	atom-id:  24 	num-rot-req-per-atom:   6
+	atom-id:  25 	num-rot-req-per-atom:   6
+	atom-id:  26 	num-rot-req-per-atom:   2
+	atom-id:  27 	num-rot-req-per-atom:   3
+	atom-id:  28 	num-rot-req-per-atom:   3
+	atom-id:  29 	num-rot-req-per-atom:   3
+	atom-id:  30 	num-rot-req-per-atom:   3
+	atom-id:  31 	num-rot-req-per-atom:   3
+	atom-id:  32 	num-rot-req-per-atom:   3
+	atom-id:  33 	num-rot-req-per-atom:   4
+	atom-id:  34 	num-rot-req-per-atom:   4
+	atom-id:  35 	num-rot-req-per-atom:   4
+	atom-id:  36 	num-rot-req-per-atom:   4
+	atom-id:  37 	num-rot-req-per-atom:   4
+	atom-id:  38 	num-rot-req-per-atom:   4
+	atom-id:  39 	num-rot-req-per-atom:   5
+	atom-id:  40 	num-rot-req-per-atom:   6
+	atom-id:  41 	num-rot-req-per-atom:   6
+	atom-id:  42 	num-rot-req-per-atom:   6
+	atom-id:  43 	num-rot-req-per-atom:   6
+
+subrotlist 1:
+	[subrot_1 rot-id]:   0 	[orig rot-id]:   0 	atom-id:  21
+	[subrot_1 rot-id]:   1 	[orig rot-id]:   1 	atom-id:  22
+	[subrot_1 rot-id]:   2 	[orig rot-id]:   2 	atom-id:  23
+	[subrot_1 rot-id]:   3 	[orig rot-id]:   3 	atom-id:  24
+	[subrot_1 rot-id]:   4 	[orig rot-id]:   4 	atom-id:  25
+	[subrot_1 rot-id]:   5 	[orig rot-id]:   5 	atom-id:  40
+	[subrot_1 rot-id]:   6 	[orig rot-id]:   6 	atom-id:  41
+	[subrot_1 rot-id]:   7 	[orig rot-id]:   7 	atom-id:  42
+	[subrot_1 rot-id]:   8 	[orig rot-id]:   8 	atom-id:  43
+	[subrot_1 rot-id]:   9 	[orig rot-id]:   9 	atom-id:  15
+	[subrot_1 rot-id]:  10 	[orig rot-id]:  10 	atom-id:  16
+	[subrot_1 rot-id]:  11 	[orig rot-id]:  11 	atom-id:  17
+	[subrot_1 rot-id]:  12 	[orig rot-id]:  12 	atom-id:  18
+	[subrot_1 rot-id]:  13 	[orig rot-id]:  13 	atom-id:  19
+	[subrot_1 rot-id]:  14 	[orig rot-id]:  14 	atom-id:  20
+	[subrot_1 rot-id]:  15 	[orig rot-id]:  15 	atom-id:  39
+	[subrot_1 rot-id]:  16 	[orig rot-id]:  16 	atom-id:  14
+	[subrot_1 rot-id]:  17 	[orig rot-id]:  17 	atom-id:  33
+	[subrot_1 rot-id]:  18 	[orig rot-id]:  18 	atom-id:  34
+	[subrot_1 rot-id]:  19 	[orig rot-id]:  19 	atom-id:  35
+	[subrot_1 rot-id]:  20 	[orig rot-id]:  20 	atom-id:  36
+	[subrot_1 rot-id]:  21 	[orig rot-id]:  21 	atom-id:  37
+	[subrot_1 rot-id]:  22 	[orig rot-id]:  22 	atom-id:  38
+	[subrot_1 rot-id]:  23 	[orig rot-id]:  23 	atom-id:  10
+	[subrot_1 rot-id]:  24 	[orig rot-id]:  24 	atom-id:  11
+	[subrot_1 rot-id]:  25 	[orig rot-id]:  25 	atom-id:  12
+	[subrot_1 rot-id]:  26 	[orig rot-id]:  26 	atom-id:  13
+	[subrot_1 rot-id]:  27 	[orig rot-id]:  27 	atom-id:  27
+	[subrot_1 rot-id]:  28 	[orig rot-id]:  28 	atom-id:  28
+	[subrot_1 rot-id]:  29 	[orig rot-id]:  29 	atom-id:  29
+	[subrot_1 rot-id]:  30 	[orig rot-id]:  30 	atom-id:  30
+	[subrot_1 rot-id]:  31 	[orig rot-id]:  31 	atom-id:  31
+	[subrot_1 rot-id]:  32 	[orig rot-id]:  32 	atom-id:  32
+	[subrot_1 rot-id]:  33 	[orig rot-id]:  33 	atom-id:   4
+	[subrot_1 rot-id]:  34 	[orig rot-id]:  34 	atom-id:   5
+	[subrot_1 rot-id]:  35 	[orig rot-id]:  35 	atom-id:   6
+	[subrot_1 rot-id]:  36 	[orig rot-id]:  36 	atom-id:   7
+	[subrot_1 rot-id]:  37 	[orig rot-id]:  37 	atom-id:   8
+	[subrot_1 rot-id]:  38 	[orig rot-id]:  38 	atom-id:   9
+	[subrot_1 rot-id]:  39 	[orig rot-id]:  39 	atom-id:  26
+	[subrot_1 rot-id]:  40 	[orig rot-id]:  40 	atom-id:   0
+	[subrot_1 rot-id]:  41 	[orig rot-id]:  41 	atom-id:   1
+	[subrot_1 rot-id]:  42 	[orig rot-id]:  42 	atom-id:   2
+	[subrot_1 rot-id]:  43 	[orig rot-id]:  43 	atom-id:   3
+	length:  44
+
+subrotlist 2:
+	[subrot_2 rot-id]:   0 	[orig rot-id]:  64 	atom-id:  21
+	[subrot_2 rot-id]:   1 	[orig rot-id]:  65 	atom-id:  22
+	[subrot_2 rot-id]:   2 	[orig rot-id]:  66 	atom-id:  23
+	[subrot_2 rot-id]:   3 	[orig rot-id]:  67 	atom-id:  24
+	[subrot_2 rot-id]:   4 	[orig rot-id]:  68 	atom-id:  25
+	[subrot_2 rot-id]:   5 	[orig rot-id]:  69 	atom-id:  40
+	[subrot_2 rot-id]:   6 	[orig rot-id]:  70 	atom-id:  41
+	[subrot_2 rot-id]:   7 	[orig rot-id]:  71 	atom-id:  42
+	[subrot_2 rot-id]:   8 	[orig rot-id]:  72 	atom-id:  43
+	[subrot_2 rot-id]:   9 	[orig rot-id]:  73 	atom-id:  15
+	[subrot_2 rot-id]:  10 	[orig rot-id]:  74 	atom-id:  16
+	[subrot_2 rot-id]:  11 	[orig rot-id]:  75 	atom-id:  17
+	[subrot_2 rot-id]:  12 	[orig rot-id]:  76 	atom-id:  18
+	[subrot_2 rot-id]:  13 	[orig rot-id]:  77 	atom-id:  19
+	[subrot_2 rot-id]:  14 	[orig rot-id]:  78 	atom-id:  20
+	[subrot_2 rot-id]:  15 	[orig rot-id]:  79 	atom-id:  39
+	[subrot_2 rot-id]:  16 	[orig rot-id]:  80 	atom-id:  14
+	[subrot_2 rot-id]:  17 	[orig rot-id]:  81 	atom-id:  33
+	[subrot_2 rot-id]:  18 	[orig rot-id]:  82 	atom-id:  34
+	[subrot_2 rot-id]:  19 	[orig rot-id]:  83 	atom-id:  35
+	[subrot_2 rot-id]:  20 	[orig rot-id]:  84 	atom-id:  36
+	[subrot_2 rot-id]:  21 	[orig rot-id]:  85 	atom-id:  37
+	[subrot_2 rot-id]:  22 	[orig rot-id]:  86 	atom-id:  38
+	[subrot_2 rot-id]:  23 	[orig rot-id]:  87 	atom-id:  10
+	[subrot_2 rot-id]:  24 	[orig rot-id]:  88 	atom-id:  11
+	[subrot_2 rot-id]:  25 	[orig rot-id]:  89 	atom-id:  12
+	[subrot_2 rot-id]:  26 	[orig rot-id]:  90 	atom-id:  13
+	[subrot_2 rot-id]:  27 	[orig rot-id]:  91 	atom-id:  27
+	[subrot_2 rot-id]:  28 	[orig rot-id]:  92 	atom-id:  28
+	[subrot_2 rot-id]:  29 	[orig rot-id]:  93 	atom-id:  29
+	[subrot_2 rot-id]:  30 	[orig rot-id]:  94 	atom-id:  30
+	[subrot_2 rot-id]:  31 	[orig rot-id]:  95 	atom-id:  31
+	[subrot_2 rot-id]:  32 	[orig rot-id]:  96 	atom-id:  32
+	[subrot_2 rot-id]:  33 	[orig rot-id]:  97 	atom-id:   4
+	[subrot_2 rot-id]:  34 	[orig rot-id]:  98 	atom-id:   5
+	[subrot_2 rot-id]:  35 	[orig rot-id]:  99 	atom-id:   6
+	[subrot_2 rot-id]:  36 	[orig rot-id]: 100 	atom-id:   7
+	[subrot_2 rot-id]:  37 	[orig rot-id]: 101 	atom-id:   8
+	[subrot_2 rot-id]:  38 	[orig rot-id]: 102 	atom-id:   9
+	[subrot_2 rot-id]:  39 	[orig rot-id]: 103 	atom-id:  26
+	length:  40
+
+subrotlist 3:
+	[subrot_3 rot-id]:   0 	[orig rot-id]: 128 	atom-id:  21
+	[subrot_3 rot-id]:   1 	[orig rot-id]: 129 	atom-id:  22
+	[subrot_3 rot-id]:   2 	[orig rot-id]: 130 	atom-id:  23
+	[subrot_3 rot-id]:   3 	[orig rot-id]: 131 	atom-id:  24
+	[subrot_3 rot-id]:   4 	[orig rot-id]: 132 	atom-id:  25
+	[subrot_3 rot-id]:   5 	[orig rot-id]: 133 	atom-id:  40
+	[subrot_3 rot-id]:   6 	[orig rot-id]: 134 	atom-id:  41
+	[subrot_3 rot-id]:   7 	[orig rot-id]: 135 	atom-id:  42
+	[subrot_3 rot-id]:   8 	[orig rot-id]: 136 	atom-id:  43
+	[subrot_3 rot-id]:   9 	[orig rot-id]: 137 	atom-id:  15
+	[subrot_3 rot-id]:  10 	[orig rot-id]: 138 	atom-id:  16
+	[subrot_3 rot-id]:  11 	[orig rot-id]: 139 	atom-id:  17
+	[subrot_3 rot-id]:  12 	[orig rot-id]: 140 	atom-id:  18
+	[subrot_3 rot-id]:  13 	[orig rot-id]: 141 	atom-id:  19
+	[subrot_3 rot-id]:  14 	[orig rot-id]: 142 	atom-id:  20
+	[subrot_3 rot-id]:  15 	[orig rot-id]: 143 	atom-id:  39
+	[subrot_3 rot-id]:  16 	[orig rot-id]: 144 	atom-id:  14
+	[subrot_3 rot-id]:  17 	[orig rot-id]: 145 	atom-id:  33
+	[subrot_3 rot-id]:  18 	[orig rot-id]: 146 	atom-id:  34
+	[subrot_3 rot-id]:  19 	[orig rot-id]: 147 	atom-id:  35
+	[subrot_3 rot-id]:  20 	[orig rot-id]: 148 	atom-id:  36
+	[subrot_3 rot-id]:  21 	[orig rot-id]: 149 	atom-id:  37
+	[subrot_3 rot-id]:  22 	[orig rot-id]: 150 	atom-id:  38
+	[subrot_3 rot-id]:  23 	[orig rot-id]: 151 	atom-id:  10
+	[subrot_3 rot-id]:  24 	[orig rot-id]: 152 	atom-id:  11
+	[subrot_3 rot-id]:  25 	[orig rot-id]: 153 	atom-id:  12
+	[subrot_3 rot-id]:  26 	[orig rot-id]: 154 	atom-id:  13
+	[subrot_3 rot-id]:  27 	[orig rot-id]: 155 	atom-id:  27
+	[subrot_3 rot-id]:  28 	[orig rot-id]: 156 	atom-id:  28
+	[subrot_3 rot-id]:  29 	[orig rot-id]: 157 	atom-id:  29
+	[subrot_3 rot-id]:  30 	[orig rot-id]: 158 	atom-id:  30
+	[subrot_3 rot-id]:  31 	[orig rot-id]: 159 	atom-id:  31
+	[subrot_3 rot-id]:  32 	[orig rot-id]: 160 	atom-id:  32
+	length:  33
+
+subrotlist 4:
+	[subrot_4 rot-id]:   0 	[orig rot-id]: 192 	atom-id:  21
+	[subrot_4 rot-id]:   1 	[orig rot-id]: 193 	atom-id:  22
+	[subrot_4 rot-id]:   2 	[orig rot-id]: 194 	atom-id:  23
+	[subrot_4 rot-id]:   3 	[orig rot-id]: 195 	atom-id:  24
+	[subrot_4 rot-id]:   4 	[orig rot-id]: 196 	atom-id:  25
+	[subrot_4 rot-id]:   5 	[orig rot-id]: 197 	atom-id:  40
+	[subrot_4 rot-id]:   6 	[orig rot-id]: 198 	atom-id:  41
+	[subrot_4 rot-id]:   7 	[orig rot-id]: 199 	atom-id:  42
+	[subrot_4 rot-id]:   8 	[orig rot-id]: 200 	atom-id:  43
+	[subrot_4 rot-id]:   9 	[orig rot-id]: 201 	atom-id:  15
+	[subrot_4 rot-id]:  10 	[orig rot-id]: 202 	atom-id:  16
+	[subrot_4 rot-id]:  11 	[orig rot-id]: 203 	atom-id:  17
+	[subrot_4 rot-id]:  12 	[orig rot-id]: 204 	atom-id:  18
+	[subrot_4 rot-id]:  13 	[orig rot-id]: 205 	atom-id:  19
+	[subrot_4 rot-id]:  14 	[orig rot-id]: 206 	atom-id:  20
+	[subrot_4 rot-id]:  15 	[orig rot-id]: 207 	atom-id:  39
+	[subrot_4 rot-id]:  16 	[orig rot-id]: 208 	atom-id:  14
+	[subrot_4 rot-id]:  17 	[orig rot-id]: 209 	atom-id:  33
+	[subrot_4 rot-id]:  18 	[orig rot-id]: 210 	atom-id:  34
+	[subrot_4 rot-id]:  19 	[orig rot-id]: 211 	atom-id:  35
+	[subrot_4 rot-id]:  20 	[orig rot-id]: 212 	atom-id:  36
+	[subrot_4 rot-id]:  21 	[orig rot-id]: 213 	atom-id:  37
+	[subrot_4 rot-id]:  22 	[orig rot-id]: 214 	atom-id:  38
+	length:  23
+
+subrotlist 5:
+	[subrot_5 rot-id]:   0 	[orig rot-id]: 256 	atom-id:  21
+	[subrot_5 rot-id]:   1 	[orig rot-id]: 257 	atom-id:  22
+	[subrot_5 rot-id]:   2 	[orig rot-id]: 258 	atom-id:  23
+	[subrot_5 rot-id]:   3 	[orig rot-id]: 259 	atom-id:  24
+	[subrot_5 rot-id]:   4 	[orig rot-id]: 260 	atom-id:  25
+	[subrot_5 rot-id]:   5 	[orig rot-id]: 261 	atom-id:  40
+	[subrot_5 rot-id]:   6 	[orig rot-id]: 262 	atom-id:  41
+	[subrot_5 rot-id]:   7 	[orig rot-id]: 263 	atom-id:  42
+	[subrot_5 rot-id]:   8 	[orig rot-id]: 264 	atom-id:  43
+	[subrot_5 rot-id]:   9 	[orig rot-id]: 265 	atom-id:  15
+	[subrot_5 rot-id]:  10 	[orig rot-id]: 266 	atom-id:  16
+	[subrot_5 rot-id]:  11 	[orig rot-id]: 267 	atom-id:  17
+	[subrot_5 rot-id]:  12 	[orig rot-id]: 268 	atom-id:  18
+	[subrot_5 rot-id]:  13 	[orig rot-id]: 269 	atom-id:  19
+	[subrot_5 rot-id]:  14 	[orig rot-id]: 270 	atom-id:  20
+	[subrot_5 rot-id]:  15 	[orig rot-id]: 271 	atom-id:  39
+	length:  16
+
+subrotlist 6:
+	[subrot_6 rot-id]:   0 	[orig rot-id]: 320 	atom-id:  21
+	[subrot_6 rot-id]:   1 	[orig rot-id]: 321 	atom-id:  22
+	[subrot_6 rot-id]:   2 	[orig rot-id]: 322 	atom-id:  23
+	[subrot_6 rot-id]:   3 	[orig rot-id]: 323 	atom-id:  24
+	[subrot_6 rot-id]:   4 	[orig rot-id]: 324 	atom-id:  25
+	[subrot_6 rot-id]:   5 	[orig rot-id]: 325 	atom-id:  40
+	[subrot_6 rot-id]:   6 	[orig rot-id]: 326 	atom-id:  41
+	[subrot_6 rot-id]:   7 	[orig rot-id]: 327 	atom-id:  42
+	[subrot_6 rot-id]:   8 	[orig rot-id]: 328 	atom-id:  43
+	length:   9
+
+subrotlist 7:
+	length:   0
+
+subrotlist 8:
+	length:   0
+
+subrotlist 9:
+	length:   0
+
+subrotlist 10:
+	length:   0
+
+subrotlist 11:
+	length:   0
+
+subrotlist 12:
+	length:   0
+
+Maximum number of required subrotation lists:  6
+
+Size of the largest subrotation list: 44
+
+Table of subrotlists
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+	 id 	 sub 1 	 sub 2 	 sub 3 	 sub 4 	 sub 5 	 sub 6 	 sub 7 	 sub 8 	 sub 9 	sub 10 	sub 11 	sub 12
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+	  0 	 65813	   533	   789	  1045	  1301	131093	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  1 	 65814	   534	   790	  1046	  1302	131094	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  2 	 65815	   535	   791	  1047	  1303	131095	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  3 	 65816	   536	   792	  1048	  1304	131096	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  4 	 65817	   537	   793	  1049	  1305	131097	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  5 	 67368	  2088	  2344	  2600	  2856	131112	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  6 	 67369	  2089	  2345	  2601	  2857	131113	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  7 	 67370	  2090	  2346	  2602	  2858	131114	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  8 	 67371	  2091	  2347	  2603	  2859	131115	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	  9 	 65551	   783	  1039	  1295	131087	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 10 	 65552	   784	  1040	  1296	131088	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 11 	 65553	   785	  1041	  1297	131089	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 12 	 65554	   786	  1042	  1298	131090	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 13 	 65555	   787	  1043	  1299	131091	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 14 	 66068	   788	  1044	  1300	131092	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 15 	 67623	  2343	  2599	  2855	131111	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 16 	 66318	  1038	  1294	131086	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 17 	 67873	  2593	  2849	131105	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 18 	 67874	  2594	  2850	131106	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 19 	 67875	  2595	  2851	131107	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 20 	 67876	  2596	  2852	131108	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 21 	 67877	  2597	  2853	131109	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 22 	 67878	  2598	  2854	131110	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 23 	 66570	  1290	131082	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 24 	 66571	  1291	131083	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 25 	 66572	  1292	131084	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 26 	 66573	  1293	131085	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 27 	 67099	  2843	131099	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 28 	 67100	  2844	131100	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 29 	 67101	  2845	131101	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 30 	 67102	  2846	131102	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 31 	 67103	  2847	131103	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 32 	 68128	  2848	131104	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 33 	 66820	131076	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 34 	 66821	131077	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 35 	 66822	131078	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 36 	 66823	131079	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 37 	 66824	131080	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 38 	 66825	131081	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 39 	 68378	131098	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 40 	196608	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 41 	196609	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 42 	196610	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 43 	196611	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+
+    Using heuristics: (capped) number of evaluations set to 11648210
+    Overriding heuristics, setting number of evaluations to --nev = 2500000 instead.
+    Warning: The set number of evals is 0.63% of the uncapped heuristics estimate of 397335584 evals.
+             This means this docking may not be able to converge. Increasing --heurmax may improve
+             convergence but will also increase runtime.
+             AutoStop will not stop before 99.89% (2497331) of the set number of evaluations.
+    Local-search chosen method is: Solis-Wets (sw)
+
+Rest of Setup time 0.020286s
+
+Executing docking runs, stopping automatically after either reaching 0.15 kcal/mol standard deviation of
+the best molecules of the last 4 * 5 generations, 99999 generations, or 2500000 evaluations:
+
+Generations |  Evaluations |     Threshold    |  Average energy of best 10%  | Samples |    Best energy
+------------+--------------+------------------+------------------------------+---------+-------------------
+          0 |          150 |   -2.28 kcal/mol |   -3.86 +/-    0.53 kcal/mol |       7 |   -4.92 kcal/mol
+          5 |       196513 |   -2.73 kcal/mol |   -7.18 +/-    1.54 kcal/mol |   12675 |  -14.16 kcal/mol
+         10 |       382834 |   -7.18 kcal/mol |  -11.42 +/-    1.02 kcal/mol |     706 |  -14.59 kcal/mol
+         15 |       569076 |  -11.40 kcal/mol |  -14.02 +/-    0.51 kcal/mol |      69 |  -15.60 kcal/mol
+         20 |       755092 |  -13.90 kcal/mol |  -15.26 +/-    0.23 kcal/mol |       8 |  -15.63 kcal/mol
+         25 |       941000 |  -14.83 kcal/mol |  -15.60 +/-    0.19 kcal/mol |       6 |  -15.79 kcal/mol
+         30 |      1126231 |  -15.13 kcal/mol |  -15.84 +/-    0.26 kcal/mol |       5 |  -16.30 kcal/mol
+         35 |      1311532 |  -15.05 kcal/mol |  -16.03 +/-    0.44 kcal/mol |       5 |  -16.62 kcal/mol
+         40 |      1497173 |  -14.70 kcal/mol |  -16.02 +/-    0.48 kcal/mol |       8 |  -17.06 kcal/mol
+         45 |      1682827 |  -15.11 kcal/mol |  -16.80 +/-    0.41 kcal/mol |       4 |  -17.14 kcal/mol
+         50 |      1868151 |  -15.25 kcal/mol |  -16.50 +/-    0.41 kcal/mol |       5 |  -17.15 kcal/mol
+         55 |      2053504 |  -15.27 kcal/mol |  -16.55 +/-    0.35 kcal/mol |       6 |  -17.17 kcal/mol
+         60 |      2239776 |  -15.68 kcal/mol |  -16.82 +/-    0.26 kcal/mol |       4 |  -17.17 kcal/mol
+         65 |      2425547 |  -15.86 kcal/mol |  -16.84 +/-    0.24 kcal/mol |       5 |  -17.18 kcal/mol
+         68 |      2536517 |  -16.13 kcal/mol |  -16.91 +/-    0.24 kcal/mol |       7 |  -17.18 kcal/mol
+------------+--------------+------------------+------------------------------+---------+-------------------
+
+                                   Finished evaluation after reaching
+                          2536517 evaluations. Best energy   -17.18 kcal/mol.
+
+Docking time 6.733942s
+
+Shutdown time 0.001105s
+
+Job #1 took 6.755 sec after waiting 0.109 sec for setup
+
+Run time of entire job set (1 file): 7.124 sec
+Processing time: 0.259 sec
+
+All jobs ran without errors.
+ 
+ 
+++ date +%Y-%m-%d-%H:%M
++ ./bin/autodock_xegpu_64wi -lsmet sw -lsit 300 -lsrat 100.000000 -smooth 0.500 -nev 2500000 -ngen 99999 -nrun 100 -psize 150 -lfile ./data/2d1o/rand-0.pdbqt -xraylfile ./data/2d1o/flex-xray.pdbqt -ffile ./data/2d1o/protein.maps.fld -xmloutput 0 -autostop 1 -heuristics 1 -resnam 2d1o_sw_2024-06-25-20:21
+AutoDock-GPU version: 578a1f27d44b2b773b06a20077a42c4d44621888
+
+Running 1 docking calculation
+
+XeGPU device:                              Intel(R) Data Center GPU Max 1100 (#1 / 18)
+
+Available memory on device:               49152 MB (total: 49152 MB)
+
+xPU Setup time 0.000140s
+
+Running Job #1
+
+# Rotlist elements: 704
+	rot-id:   0 	atom-id:  19
+	rot-id:   1 	atom-id:  20
+	rot-id:   2 	atom-id:  21
+	rot-id:   3 	atom-id:  22
+	rot-id:   4 	atom-id:  38
+	rot-id:   5 	atom-id:  39
+	rot-id:   6 	atom-id:  40
+	rot-id:   7 	atom-id:  41
+	rot-id:   8 	atom-id:  42
+	rot-id:   9 	atom-id:  43
+	rot-id:  10 	atom-id:  18
+	rot-id:  11 	atom-id:  37
+	rot-id:  12 	atom-id:  17
+	rot-id:  13 	atom-id:  35
+	rot-id:  14 	atom-id:  36
+	rot-id:  15 	atom-id:  13
+	rot-id:  16 	atom-id:  14
+	rot-id:  17 	atom-id:  16
+	rot-id:  18 	atom-id:  34
+	rot-id:  19 	atom-id:   9
+	rot-id:  20 	atom-id:  10
+	rot-id:  21 	atom-id:  11
+	rot-id:  22 	atom-id:  12
+	rot-id:  23 	atom-id:  15
+	rot-id:  24 	atom-id:  28
+	rot-id:  25 	atom-id:  29
+	rot-id:  26 	atom-id:  30
+	rot-id:  27 	atom-id:  31
+	rot-id:  28 	atom-id:  32
+	rot-id:  29 	atom-id:  33
+	rot-id:  30 	atom-id:   8
+	rot-id:  31 	atom-id:  27
+	rot-id:  32 	atom-id:   4
+	rot-id:  33 	atom-id:   5
+	rot-id:  34 	atom-id:   6
+	rot-id:  35 	atom-id:   7
+	rot-id:  36 	atom-id:  26
+	rot-id:  37 	atom-id:   3
+	rot-id:  38 	atom-id:  25
+	rot-id:  39 	atom-id:   2
+	rot-id:  40 	atom-id:  24
+	rot-id:  41 	atom-id:   1
+	rot-id:  42 	atom-id:  23
+	rot-id:  43 	atom-id:   0
+	rot-id:  44 	atom-id:   0
+	rot-id:  45 	atom-id:   0
+	rot-id:  46 	atom-id:   0
+	rot-id:  47 	atom-id:   0
+	rot-id:  48 	atom-id:   0
+	rot-id:  49 	atom-id:   0
+	rot-id:  50 	atom-id:   0
+	rot-id:  51 	atom-id:   0
+	rot-id:  52 	atom-id:   0
+	rot-id:  53 	atom-id:   0
+	rot-id:  54 	atom-id:   0
+	rot-id:  55 	atom-id:   0
+	rot-id:  56 	atom-id:   0
+	rot-id:  57 	atom-id:   0
+	rot-id:  58 	atom-id:   0
+	rot-id:  59 	atom-id:   0
+	rot-id:  60 	atom-id:   0
+	rot-id:  61 	atom-id:   0
+	rot-id:  62 	atom-id:   0
+	rot-id:  63 	atom-id:   0
+	rot-id:  64 	atom-id:  19
+	rot-id:  65 	atom-id:  20
+	rot-id:  66 	atom-id:  21
+	rot-id:  67 	atom-id:  22
+	rot-id:  68 	atom-id:  38
+	rot-id:  69 	atom-id:  39
+	rot-id:  70 	atom-id:  40
+	rot-id:  71 	atom-id:  41
+	rot-id:  72 	atom-id:  42
+	rot-id:  73 	atom-id:  43
+	rot-id:  74 	atom-id:  18
+	rot-id:  75 	atom-id:  37
+	rot-id:  76 	atom-id:  17
+	rot-id:  77 	atom-id:  35
+	rot-id:  78 	atom-id:  36
+	rot-id:  79 	atom-id:  13
+	rot-id:  80 	atom-id:  14
+	rot-id:  81 	atom-id:  16
+	rot-id:  82 	atom-id:  34
+	rot-id:  83 	atom-id:   9
+	rot-id:  84 	atom-id:  10
+	rot-id:  85 	atom-id:  11
+	rot-id:  86 	atom-id:  12
+	rot-id:  87 	atom-id:  15
+	rot-id:  88 	atom-id:  28
+	rot-id:  89 	atom-id:  29
+	rot-id:  90 	atom-id:  30
+	rot-id:  91 	atom-id:  31
+	rot-id:  92 	atom-id:  32
+	rot-id:  93 	atom-id:  33
+	rot-id:  94 	atom-id:   8
+	rot-id:  95 	atom-id:  27
+	rot-id:  96 	atom-id:   4
+	rot-id:  97 	atom-id:   5
+	rot-id:  98 	atom-id:   6
+	rot-id:  99 	atom-id:   7
+	rot-id: 100 	atom-id:  26
+	rot-id: 101 	atom-id:   3
+	rot-id: 102 	atom-id:  25
+	rot-id: 103 	atom-id:   2
+	rot-id: 104 	atom-id:  24
+	rot-id: 105 	atom-id:   1
+	rot-id: 106 	atom-id:  23
+	rot-id: 107 	atom-id:   0
+	rot-id: 108 	atom-id:   0
+	rot-id: 109 	atom-id:   0
+	rot-id: 110 	atom-id:   0
+	rot-id: 111 	atom-id:   0
+	rot-id: 112 	atom-id:   0
+	rot-id: 113 	atom-id:   0
+	rot-id: 114 	atom-id:   0
+	rot-id: 115 	atom-id:   0
+	rot-id: 116 	atom-id:   0
+	rot-id: 117 	atom-id:   0
+	rot-id: 118 	atom-id:   0
+	rot-id: 119 	atom-id:   0
+	rot-id: 120 	atom-id:   0
+	rot-id: 121 	atom-id:   0
+	rot-id: 122 	atom-id:   0
+	rot-id: 123 	atom-id:   0
+	rot-id: 124 	atom-id:   0
+	rot-id: 125 	atom-id:   0
+	rot-id: 126 	atom-id:   0
+	rot-id: 127 	atom-id:   0
+	rot-id: 128 	atom-id:  19
+	rot-id: 129 	atom-id:  20
+	rot-id: 130 	atom-id:  21
+	rot-id: 131 	atom-id:  22
+	rot-id: 132 	atom-id:  38
+	rot-id: 133 	atom-id:  39
+	rot-id: 134 	atom-id:  40
+	rot-id: 135 	atom-id:  41
+	rot-id: 136 	atom-id:  42
+	rot-id: 137 	atom-id:  43
+	rot-id: 138 	atom-id:  18
+	rot-id: 139 	atom-id:  37
+	rot-id: 140 	atom-id:  17
+	rot-id: 141 	atom-id:  35
+	rot-id: 142 	atom-id:  36
+	rot-id: 143 	atom-id:  13
+	rot-id: 144 	atom-id:  14
+	rot-id: 145 	atom-id:  16
+	rot-id: 146 	atom-id:  34
+	rot-id: 147 	atom-id:   9
+	rot-id: 148 	atom-id:  10
+	rot-id: 149 	atom-id:  11
+	rot-id: 150 	atom-id:  12
+	rot-id: 151 	atom-id:  15
+	rot-id: 152 	atom-id:  28
+	rot-id: 153 	atom-id:  29
+	rot-id: 154 	atom-id:  30
+	rot-id: 155 	atom-id:  31
+	rot-id: 156 	atom-id:  32
+	rot-id: 157 	atom-id:  33
+	rot-id: 158 	atom-id:   8
+	rot-id: 159 	atom-id:  27
+	rot-id: 160 	atom-id:   4
+	rot-id: 161 	atom-id:   5
+	rot-id: 162 	atom-id:   6
+	rot-id: 163 	atom-id:   7
+	rot-id: 164 	atom-id:  26
+	rot-id: 165 	atom-id:   3
+	rot-id: 166 	atom-id:  25
+	rot-id: 167 	atom-id:   2
+	rot-id: 168 	atom-id:  24
+	rot-id: 169 	atom-id:   0
+	rot-id: 170 	atom-id:   0
+	rot-id: 171 	atom-id:   0
+	rot-id: 172 	atom-id:   0
+	rot-id: 173 	atom-id:   0
+	rot-id: 174 	atom-id:   0
+	rot-id: 175 	atom-id:   0
+	rot-id: 176 	atom-id:   0
+	rot-id: 177 	atom-id:   0
+	rot-id: 178 	atom-id:   0
+	rot-id: 179 	atom-id:   0
+	rot-id: 180 	atom-id:   0
+	rot-id: 181 	atom-id:   0
+	rot-id: 182 	atom-id:   0
+	rot-id: 183 	atom-id:   0
+	rot-id: 184 	atom-id:   0
+	rot-id: 185 	atom-id:   0
+	rot-id: 186 	atom-id:   0
+	rot-id: 187 	atom-id:   0
+	rot-id: 188 	atom-id:   0
+	rot-id: 189 	atom-id:   0
+	rot-id: 190 	atom-id:   0
+	rot-id: 191 	atom-id:   0
+	rot-id: 192 	atom-id:  19
+	rot-id: 193 	atom-id:  20
+	rot-id: 194 	atom-id:  21
+	rot-id: 195 	atom-id:  22
+	rot-id: 196 	atom-id:  38
+	rot-id: 197 	atom-id:  39
+	rot-id: 198 	atom-id:  40
+	rot-id: 199 	atom-id:  41
+	rot-id: 200 	atom-id:  42
+	rot-id: 201 	atom-id:  43
+	rot-id: 202 	atom-id:  18
+	rot-id: 203 	atom-id:  37
+	rot-id: 204 	atom-id:  17
+	rot-id: 205 	atom-id:  35
+	rot-id: 206 	atom-id:  36
+	rot-id: 207 	atom-id:  13
+	rot-id: 208 	atom-id:  14
+	rot-id: 209 	atom-id:  16
+	rot-id: 210 	atom-id:  34
+	rot-id: 211 	atom-id:   9
+	rot-id: 212 	atom-id:  10
+	rot-id: 213 	atom-id:  11
+	rot-id: 214 	atom-id:  12
+	rot-id: 215 	atom-id:  15
+	rot-id: 216 	atom-id:  28
+	rot-id: 217 	atom-id:  29
+	rot-id: 218 	atom-id:  30
+	rot-id: 219 	atom-id:  31
+	rot-id: 220 	atom-id:  32
+	rot-id: 221 	atom-id:  33
+	rot-id: 222 	atom-id:   8
+	rot-id: 223 	atom-id:  27
+	rot-id: 224 	atom-id:   4
+	rot-id: 225 	atom-id:   5
+	rot-id: 226 	atom-id:   6
+	rot-id: 227 	atom-id:   7
+	rot-id: 228 	atom-id:  26
+	rot-id: 229 	atom-id:   3
+	rot-id: 230 	atom-id:  25
+	rot-id: 231 	atom-id:   0
+	rot-id: 232 	atom-id:   0
+	rot-id: 233 	atom-id:   0
+	rot-id: 234 	atom-id:   0
+	rot-id: 235 	atom-id:   0
+	rot-id: 236 	atom-id:   0
+	rot-id: 237 	atom-id:   0
+	rot-id: 238 	atom-id:   0
+	rot-id: 239 	atom-id:   0
+	rot-id: 240 	atom-id:   0
+	rot-id: 241 	atom-id:   0
+	rot-id: 242 	atom-id:   0
+	rot-id: 243 	atom-id:   0
+	rot-id: 244 	atom-id:   0
+	rot-id: 245 	atom-id:   0
+	rot-id: 246 	atom-id:   0
+	rot-id: 247 	atom-id:   0
+	rot-id: 248 	atom-id:   0
+	rot-id: 249 	atom-id:   0
+	rot-id: 250 	atom-id:   0
+	rot-id: 251 	atom-id:   0
+	rot-id: 252 	atom-id:   0
+	rot-id: 253 	atom-id:   0
+	rot-id: 254 	atom-id:   0
+	rot-id: 255 	atom-id:   0
+	rot-id: 256 	atom-id:  19
+	rot-id: 257 	atom-id:  20
+	rot-id: 258 	atom-id:  21
+	rot-id: 259 	atom-id:  22
+	rot-id: 260 	atom-id:  38
+	rot-id: 261 	atom-id:  39
+	rot-id: 262 	atom-id:  40
+	rot-id: 263 	atom-id:  41
+	rot-id: 264 	atom-id:  42
+	rot-id: 265 	atom-id:  43
+	rot-id: 266 	atom-id:  18
+	rot-id: 267 	atom-id:  37
+	rot-id: 268 	atom-id:  17
+	rot-id: 269 	atom-id:  35
+	rot-id: 270 	atom-id:  36
+	rot-id: 271 	atom-id:  13
+	rot-id: 272 	atom-id:  14
+	rot-id: 273 	atom-id:  16
+	rot-id: 274 	atom-id:  34
+	rot-id: 275 	atom-id:   9
+	rot-id: 276 	atom-id:  10
+	rot-id: 277 	atom-id:  11
+	rot-id: 278 	atom-id:  12
+	rot-id: 279 	atom-id:  15
+	rot-id: 280 	atom-id:  28
+	rot-id: 281 	atom-id:  29
+	rot-id: 282 	atom-id:  30
+	rot-id: 283 	atom-id:  31
+	rot-id: 284 	atom-id:  32
+	rot-id: 285 	atom-id:  33
+	rot-id: 286 	atom-id:   8
+	rot-id: 287 	atom-id:  27
+	rot-id: 288 	atom-id:   4
+	rot-id: 289 	atom-id:   5
+	rot-id: 290 	atom-id:   6
+	rot-id: 291 	atom-id:   7
+	rot-id: 292 	atom-id:  26
+	rot-id: 293 	atom-id:   0
+	rot-id: 294 	atom-id:   0
+	rot-id: 295 	atom-id:   0
+	rot-id: 296 	atom-id:   0
+	rot-id: 297 	atom-id:   0
+	rot-id: 298 	atom-id:   0
+	rot-id: 299 	atom-id:   0
+	rot-id: 300 	atom-id:   0
+	rot-id: 301 	atom-id:   0
+	rot-id: 302 	atom-id:   0
+	rot-id: 303 	atom-id:   0
+	rot-id: 304 	atom-id:   0
+	rot-id: 305 	atom-id:   0
+	rot-id: 306 	atom-id:   0
+	rot-id: 307 	atom-id:   0
+	rot-id: 308 	atom-id:   0
+	rot-id: 309 	atom-id:   0
+	rot-id: 310 	atom-id:   0
+	rot-id: 311 	atom-id:   0
+	rot-id: 312 	atom-id:   0
+	rot-id: 313 	atom-id:   0
+	rot-id: 314 	atom-id:   0
+	rot-id: 315 	atom-id:   0
+	rot-id: 316 	atom-id:   0
+	rot-id: 317 	atom-id:   0
+	rot-id: 318 	atom-id:   0
+	rot-id: 319 	atom-id:   0
+	rot-id: 320 	atom-id:  19
+	rot-id: 321 	atom-id:  20
+	rot-id: 322 	atom-id:  21
+	rot-id: 323 	atom-id:  22
+	rot-id: 324 	atom-id:  38
+	rot-id: 325 	atom-id:  39
+	rot-id: 326 	atom-id:  40
+	rot-id: 327 	atom-id:  41
+	rot-id: 328 	atom-id:  42
+	rot-id: 329 	atom-id:  43
+	rot-id: 330 	atom-id:  18
+	rot-id: 331 	atom-id:  37
+	rot-id: 332 	atom-id:  17
+	rot-id: 333 	atom-id:  35
+	rot-id: 334 	atom-id:  36
+	rot-id: 335 	atom-id:  13
+	rot-id: 336 	atom-id:  14
+	rot-id: 337 	atom-id:  16
+	rot-id: 338 	atom-id:  34
+	rot-id: 339 	atom-id:   9
+	rot-id: 340 	atom-id:  10
+	rot-id: 341 	atom-id:  11
+	rot-id: 342 	atom-id:  12
+	rot-id: 343 	atom-id:  15
+	rot-id: 344 	atom-id:  28
+	rot-id: 345 	atom-id:  29
+	rot-id: 346 	atom-id:  30
+	rot-id: 347 	atom-id:  31
+	rot-id: 348 	atom-id:  32
+	rot-id: 349 	atom-id:  33
+	rot-id: 350 	atom-id:   8
+	rot-id: 351 	atom-id:  27
+	rot-id: 352 	atom-id:   0
+	rot-id: 353 	atom-id:   0
+	rot-id: 354 	atom-id:   0
+	rot-id: 355 	atom-id:   0
+	rot-id: 356 	atom-id:   0
+	rot-id: 357 	atom-id:   0
+	rot-id: 358 	atom-id:   0
+	rot-id: 359 	atom-id:   0
+	rot-id: 360 	atom-id:   0
+	rot-id: 361 	atom-id:   0
+	rot-id: 362 	atom-id:   0
+	rot-id: 363 	atom-id:   0
+	rot-id: 364 	atom-id:   0
+	rot-id: 365 	atom-id:   0
+	rot-id: 366 	atom-id:   0
+	rot-id: 367 	atom-id:   0
+	rot-id: 368 	atom-id:   0
+	rot-id: 369 	atom-id:   0
+	rot-id: 370 	atom-id:   0
+	rot-id: 371 	atom-id:   0
+	rot-id: 372 	atom-id:   0
+	rot-id: 373 	atom-id:   0
+	rot-id: 374 	atom-id:   0
+	rot-id: 375 	atom-id:   0
+	rot-id: 376 	atom-id:   0
+	rot-id: 377 	atom-id:   0
+	rot-id: 378 	atom-id:   0
+	rot-id: 379 	atom-id:   0
+	rot-id: 380 	atom-id:   0
+	rot-id: 381 	atom-id:   0
+	rot-id: 382 	atom-id:   0
+	rot-id: 383 	atom-id:   0
+	rot-id: 384 	atom-id:  19
+	rot-id: 385 	atom-id:  20
+	rot-id: 386 	atom-id:  21
+	rot-id: 387 	atom-id:  22
+	rot-id: 388 	atom-id:  38
+	rot-id: 389 	atom-id:  39
+	rot-id: 390 	atom-id:  40
+	rot-id: 391 	atom-id:  41
+	rot-id: 392 	atom-id:  42
+	rot-id: 393 	atom-id:  43
+	rot-id: 394 	atom-id:  18
+	rot-id: 395 	atom-id:  37
+	rot-id: 396 	atom-id:  17
+	rot-id: 397 	atom-id:  35
+	rot-id: 398 	atom-id:  36
+	rot-id: 399 	atom-id:  13
+	rot-id: 400 	atom-id:  14
+	rot-id: 401 	atom-id:  16
+	rot-id: 402 	atom-id:  34
+	rot-id: 403 	atom-id:   9
+	rot-id: 404 	atom-id:  10
+	rot-id: 405 	atom-id:  11
+	rot-id: 406 	atom-id:  12
+	rot-id: 407 	atom-id:  15
+	rot-id: 408 	atom-id:  28
+	rot-id: 409 	atom-id:  29
+	rot-id: 410 	atom-id:  30
+	rot-id: 411 	atom-id:  31
+	rot-id: 412 	atom-id:  32
+	rot-id: 413 	atom-id:  33
+	rot-id: 414 	atom-id:   0
+	rot-id: 415 	atom-id:   0
+	rot-id: 416 	atom-id:   0
+	rot-id: 417 	atom-id:   0
+	rot-id: 418 	atom-id:   0
+	rot-id: 419 	atom-id:   0
+	rot-id: 420 	atom-id:   0
+	rot-id: 421 	atom-id:   0
+	rot-id: 422 	atom-id:   0
+	rot-id: 423 	atom-id:   0
+	rot-id: 424 	atom-id:   0
+	rot-id: 425 	atom-id:   0
+	rot-id: 426 	atom-id:   0
+	rot-id: 427 	atom-id:   0
+	rot-id: 428 	atom-id:   0
+	rot-id: 429 	atom-id:   0
+	rot-id: 430 	atom-id:   0
+	rot-id: 431 	atom-id:   0
+	rot-id: 432 	atom-id:   0
+	rot-id: 433 	atom-id:   0
+	rot-id: 434 	atom-id:   0
+	rot-id: 435 	atom-id:   0
+	rot-id: 436 	atom-id:   0
+	rot-id: 437 	atom-id:   0
+	rot-id: 438 	atom-id:   0
+	rot-id: 439 	atom-id:   0
+	rot-id: 440 	atom-id:   0
+	rot-id: 441 	atom-id:   0
+	rot-id: 442 	atom-id:   0
+	rot-id: 443 	atom-id:   0
+	rot-id: 444 	atom-id:   0
+	rot-id: 445 	atom-id:   0
+	rot-id: 446 	atom-id:   0
+	rot-id: 447 	atom-id:   0
+	rot-id: 448 	atom-id:  19
+	rot-id: 449 	atom-id:  20
+	rot-id: 450 	atom-id:  21
+	rot-id: 451 	atom-id:  22
+	rot-id: 452 	atom-id:  38
+	rot-id: 453 	atom-id:  39
+	rot-id: 454 	atom-id:  40
+	rot-id: 455 	atom-id:  41
+	rot-id: 456 	atom-id:  42
+	rot-id: 457 	atom-id:  43
+	rot-id: 458 	atom-id:  18
+	rot-id: 459 	atom-id:  37
+	rot-id: 460 	atom-id:  17
+	rot-id: 461 	atom-id:  35
+	rot-id: 462 	atom-id:  36
+	rot-id: 463 	atom-id:  13
+	rot-id: 464 	atom-id:  14
+	rot-id: 465 	atom-id:  16
+	rot-id: 466 	atom-id:  34
+	rot-id: 467 	atom-id:   0
+	rot-id: 468 	atom-id:   0
+	rot-id: 469 	atom-id:   0
+	rot-id: 470 	atom-id:   0
+	rot-id: 471 	atom-id:   0
+	rot-id: 472 	atom-id:   0
+	rot-id: 473 	atom-id:   0
+	rot-id: 474 	atom-id:   0
+	rot-id: 475 	atom-id:   0
+	rot-id: 476 	atom-id:   0
+	rot-id: 477 	atom-id:   0
+	rot-id: 478 	atom-id:   0
+	rot-id: 479 	atom-id:   0
+	rot-id: 480 	atom-id:   0
+	rot-id: 481 	atom-id:   0
+	rot-id: 482 	atom-id:   0
+	rot-id: 483 	atom-id:   0
+	rot-id: 484 	atom-id:   0
+	rot-id: 485 	atom-id:   0
+	rot-id: 486 	atom-id:   0
+	rot-id: 487 	atom-id:   0
+	rot-id: 488 	atom-id:   0
+	rot-id: 489 	atom-id:   0
+	rot-id: 490 	atom-id:   0
+	rot-id: 491 	atom-id:   0
+	rot-id: 492 	atom-id:   0
+	rot-id: 493 	atom-id:   0
+	rot-id: 494 	atom-id:   0
+	rot-id: 495 	atom-id:   0
+	rot-id: 496 	atom-id:   0
+	rot-id: 497 	atom-id:   0
+	rot-id: 498 	atom-id:   0
+	rot-id: 499 	atom-id:   0
+	rot-id: 500 	atom-id:   0
+	rot-id: 501 	atom-id:   0
+	rot-id: 502 	atom-id:   0
+	rot-id: 503 	atom-id:   0
+	rot-id: 504 	atom-id:   0
+	rot-id: 505 	atom-id:   0
+	rot-id: 506 	atom-id:   0
+	rot-id: 507 	atom-id:   0
+	rot-id: 508 	atom-id:   0
+	rot-id: 509 	atom-id:   0
+	rot-id: 510 	atom-id:   0
+	rot-id: 511 	atom-id:   0
+	rot-id: 512 	atom-id:  19
+	rot-id: 513 	atom-id:  20
+	rot-id: 514 	atom-id:  21
+	rot-id: 515 	atom-id:  22
+	rot-id: 516 	atom-id:  38
+	rot-id: 517 	atom-id:  39
+	rot-id: 518 	atom-id:  40
+	rot-id: 519 	atom-id:  41
+	rot-id: 520 	atom-id:  42
+	rot-id: 521 	atom-id:  43
+	rot-id: 522 	atom-id:  18
+	rot-id: 523 	atom-id:  37
+	rot-id: 524 	atom-id:  17
+	rot-id: 525 	atom-id:  35
+	rot-id: 526 	atom-id:  36
+	rot-id: 527 	atom-id:   0
+	rot-id: 528 	atom-id:   0
+	rot-id: 529 	atom-id:   0
+	rot-id: 530 	atom-id:   0
+	rot-id: 531 	atom-id:   0
+	rot-id: 532 	atom-id:   0
+	rot-id: 533 	atom-id:   0
+	rot-id: 534 	atom-id:   0
+	rot-id: 535 	atom-id:   0
+	rot-id: 536 	atom-id:   0
+	rot-id: 537 	atom-id:   0
+	rot-id: 538 	atom-id:   0
+	rot-id: 539 	atom-id:   0
+	rot-id: 540 	atom-id:   0
+	rot-id: 541 	atom-id:   0
+	rot-id: 542 	atom-id:   0
+	rot-id: 543 	atom-id:   0
+	rot-id: 544 	atom-id:   0
+	rot-id: 545 	atom-id:   0
+	rot-id: 546 	atom-id:   0
+	rot-id: 547 	atom-id:   0
+	rot-id: 548 	atom-id:   0
+	rot-id: 549 	atom-id:   0
+	rot-id: 550 	atom-id:   0
+	rot-id: 551 	atom-id:   0
+	rot-id: 552 	atom-id:   0
+	rot-id: 553 	atom-id:   0
+	rot-id: 554 	atom-id:   0
+	rot-id: 555 	atom-id:   0
+	rot-id: 556 	atom-id:   0
+	rot-id: 557 	atom-id:   0
+	rot-id: 558 	atom-id:   0
+	rot-id: 559 	atom-id:   0
+	rot-id: 560 	atom-id:   0
+	rot-id: 561 	atom-id:   0
+	rot-id: 562 	atom-id:   0
+	rot-id: 563 	atom-id:   0
+	rot-id: 564 	atom-id:   0
+	rot-id: 565 	atom-id:   0
+	rot-id: 566 	atom-id:   0
+	rot-id: 567 	atom-id:   0
+	rot-id: 568 	atom-id:   0
+	rot-id: 569 	atom-id:   0
+	rot-id: 570 	atom-id:   0
+	rot-id: 571 	atom-id:   0
+	rot-id: 572 	atom-id:   0
+	rot-id: 573 	atom-id:   0
+	rot-id: 574 	atom-id:   0
+	rot-id: 575 	atom-id:   0
+	rot-id: 576 	atom-id:  19
+	rot-id: 577 	atom-id:  20
+	rot-id: 578 	atom-id:  21
+	rot-id: 579 	atom-id:  22
+	rot-id: 580 	atom-id:  38
+	rot-id: 581 	atom-id:  39
+	rot-id: 582 	atom-id:  40
+	rot-id: 583 	atom-id:  41
+	rot-id: 584 	atom-id:  42
+	rot-id: 585 	atom-id:  43
+	rot-id: 586 	atom-id:  18
+	rot-id: 587 	atom-id:  37
+	rot-id: 588 	atom-id:   0
+	rot-id: 589 	atom-id:   0
+	rot-id: 590 	atom-id:   0
+	rot-id: 591 	atom-id:   0
+	rot-id: 592 	atom-id:   0
+	rot-id: 593 	atom-id:   0
+	rot-id: 594 	atom-id:   0
+	rot-id: 595 	atom-id:   0
+	rot-id: 596 	atom-id:   0
+	rot-id: 597 	atom-id:   0
+	rot-id: 598 	atom-id:   0
+	rot-id: 599 	atom-id:   0
+	rot-id: 600 	atom-id:   0
+	rot-id: 601 	atom-id:   0
+	rot-id: 602 	atom-id:   0
+	rot-id: 603 	atom-id:   0
+	rot-id: 604 	atom-id:   0
+	rot-id: 605 	atom-id:   0
+	rot-id: 606 	atom-id:   0
+	rot-id: 607 	atom-id:   0
+	rot-id: 608 	atom-id:   0
+	rot-id: 609 	atom-id:   0
+	rot-id: 610 	atom-id:   0
+	rot-id: 611 	atom-id:   0
+	rot-id: 612 	atom-id:   0
+	rot-id: 613 	atom-id:   0
+	rot-id: 614 	atom-id:   0
+	rot-id: 615 	atom-id:   0
+	rot-id: 616 	atom-id:   0
+	rot-id: 617 	atom-id:   0
+	rot-id: 618 	atom-id:   0
+	rot-id: 619 	atom-id:   0
+	rot-id: 620 	atom-id:   0
+	rot-id: 621 	atom-id:   0
+	rot-id: 622 	atom-id:   0
+	rot-id: 623 	atom-id:   0
+	rot-id: 624 	atom-id:   0
+	rot-id: 625 	atom-id:   0
+	rot-id: 626 	atom-id:   0
+	rot-id: 627 	atom-id:   0
+	rot-id: 628 	atom-id:   0
+	rot-id: 629 	atom-id:   0
+	rot-id: 630 	atom-id:   0
+	rot-id: 631 	atom-id:   0
+	rot-id: 632 	atom-id:   0
+	rot-id: 633 	atom-id:   0
+	rot-id: 634 	atom-id:   0
+	rot-id: 635 	atom-id:   0
+	rot-id: 636 	atom-id:   0
+	rot-id: 637 	atom-id:   0
+	rot-id: 638 	atom-id:   0
+	rot-id: 639 	atom-id:   0
+	rot-id: 640 	atom-id:  19
+	rot-id: 641 	atom-id:  20
+	rot-id: 642 	atom-id:  21
+	rot-id: 643 	atom-id:  22
+	rot-id: 644 	atom-id:  38
+	rot-id: 645 	atom-id:  39
+	rot-id: 646 	atom-id:  40
+	rot-id: 647 	atom-id:  41
+	rot-id: 648 	atom-id:  42
+	rot-id: 649 	atom-id:  43
+	rot-id: 650 	atom-id:   0
+	rot-id: 651 	atom-id:   0
+	rot-id: 652 	atom-id:   0
+	rot-id: 653 	atom-id:   0
+	rot-id: 654 	atom-id:   0
+	rot-id: 655 	atom-id:   0
+	rot-id: 656 	atom-id:   0
+	rot-id: 657 	atom-id:   0
+	rot-id: 658 	atom-id:   0
+	rot-id: 659 	atom-id:   0
+	rot-id: 660 	atom-id:   0
+	rot-id: 661 	atom-id:   0
+	rot-id: 662 	atom-id:   0
+	rot-id: 663 	atom-id:   0
+	rot-id: 664 	atom-id:   0
+	rot-id: 665 	atom-id:   0
+	rot-id: 666 	atom-id:   0
+	rot-id: 667 	atom-id:   0
+	rot-id: 668 	atom-id:   0
+	rot-id: 669 	atom-id:   0
+	rot-id: 670 	atom-id:   0
+	rot-id: 671 	atom-id:   0
+	rot-id: 672 	atom-id:   0
+	rot-id: 673 	atom-id:   0
+	rot-id: 674 	atom-id:   0
+	rot-id: 675 	atom-id:   0
+	rot-id: 676 	atom-id:   0
+	rot-id: 677 	atom-id:   0
+	rot-id: 678 	atom-id:   0
+	rot-id: 679 	atom-id:   0
+	rot-id: 680 	atom-id:   0
+	rot-id: 681 	atom-id:   0
+	rot-id: 682 	atom-id:   0
+	rot-id: 683 	atom-id:   0
+	rot-id: 684 	atom-id:   0
+	rot-id: 685 	atom-id:   0
+	rot-id: 686 	atom-id:   0
+	rot-id: 687 	atom-id:   0
+	rot-id: 688 	atom-id:   0
+	rot-id: 689 	atom-id:   0
+	rot-id: 690 	atom-id:   0
+	rot-id: 691 	atom-id:   0
+	rot-id: 692 	atom-id:   0
+	rot-id: 693 	atom-id:   0
+	rot-id: 694 	atom-id:   0
+	rot-id: 695 	atom-id:   0
+	rot-id: 696 	atom-id:   0
+	rot-id: 697 	atom-id:   0
+	rot-id: 698 	atom-id:   0
+	rot-id: 699 	atom-id:   0
+	rot-id: 700 	atom-id:   0
+	rot-id: 701 	atom-id:   0
+	rot-id: 702 	atom-id:   0
+	rot-id: 703 	atom-id:   0
+
+# Atoms: 44
+	atom-id:   0 	num-rot-req-per-atom:   1
+	atom-id:   1 	num-rot-req-per-atom:   2
+	atom-id:   2 	num-rot-req-per-atom:   3
+	atom-id:   3 	num-rot-req-per-atom:   4
+	atom-id:   4 	num-rot-req-per-atom:   5
+	atom-id:   5 	num-rot-req-per-atom:   5
+	atom-id:   6 	num-rot-req-per-atom:   5
+	atom-id:   7 	num-rot-req-per-atom:   5
+	atom-id:   8 	num-rot-req-per-atom:   6
+	atom-id:   9 	num-rot-req-per-atom:   7
+	atom-id:  10 	num-rot-req-per-atom:   7
+	atom-id:  11 	num-rot-req-per-atom:   7
+	atom-id:  12 	num-rot-req-per-atom:   7
+	atom-id:  13 	num-rot-req-per-atom:   8
+	atom-id:  14 	num-rot-req-per-atom:   8
+	atom-id:  15 	num-rot-req-per-atom:   7
+	atom-id:  16 	num-rot-req-per-atom:   8
+	atom-id:  17 	num-rot-req-per-atom:   9
+	atom-id:  18 	num-rot-req-per-atom:  10
+	atom-id:  19 	num-rot-req-per-atom:  11
+	atom-id:  20 	num-rot-req-per-atom:  11
+	atom-id:  21 	num-rot-req-per-atom:  11
+	atom-id:  22 	num-rot-req-per-atom:  11
+	atom-id:  23 	num-rot-req-per-atom:   2
+	atom-id:  24 	num-rot-req-per-atom:   3
+	atom-id:  25 	num-rot-req-per-atom:   4
+	atom-id:  26 	num-rot-req-per-atom:   5
+	atom-id:  27 	num-rot-req-per-atom:   6
+	atom-id:  28 	num-rot-req-per-atom:   7
+	atom-id:  29 	num-rot-req-per-atom:   7
+	atom-id:  30 	num-rot-req-per-atom:   7
+	atom-id:  31 	num-rot-req-per-atom:   7
+	atom-id:  32 	num-rot-req-per-atom:   7
+	atom-id:  33 	num-rot-req-per-atom:   7
+	atom-id:  34 	num-rot-req-per-atom:   8
+	atom-id:  35 	num-rot-req-per-atom:   9
+	atom-id:  36 	num-rot-req-per-atom:   9
+	atom-id:  37 	num-rot-req-per-atom:  10
+	atom-id:  38 	num-rot-req-per-atom:  11
+	atom-id:  39 	num-rot-req-per-atom:  11
+	atom-id:  40 	num-rot-req-per-atom:  11
+	atom-id:  41 	num-rot-req-per-atom:  11
+	atom-id:  42 	num-rot-req-per-atom:  11
+	atom-id:  43 	num-rot-req-per-atom:  11
+
+subrotlist 1:
+	[subrot_1 rot-id]:   0 	[orig rot-id]:   0 	atom-id:  19
+	[subrot_1 rot-id]:   1 	[orig rot-id]:   1 	atom-id:  20
+	[subrot_1 rot-id]:   2 	[orig rot-id]:   2 	atom-id:  21
+	[subrot_1 rot-id]:   3 	[orig rot-id]:   3 	atom-id:  22
+	[subrot_1 rot-id]:   4 	[orig rot-id]:   4 	atom-id:  38
+	[subrot_1 rot-id]:   5 	[orig rot-id]:   5 	atom-id:  39
+	[subrot_1 rot-id]:   6 	[orig rot-id]:   6 	atom-id:  40
+	[subrot_1 rot-id]:   7 	[orig rot-id]:   7 	atom-id:  41
+	[subrot_1 rot-id]:   8 	[orig rot-id]:   8 	atom-id:  42
+	[subrot_1 rot-id]:   9 	[orig rot-id]:   9 	atom-id:  43
+	[subrot_1 rot-id]:  10 	[orig rot-id]:  10 	atom-id:  18
+	[subrot_1 rot-id]:  11 	[orig rot-id]:  11 	atom-id:  37
+	[subrot_1 rot-id]:  12 	[orig rot-id]:  12 	atom-id:  17
+	[subrot_1 rot-id]:  13 	[orig rot-id]:  13 	atom-id:  35
+	[subrot_1 rot-id]:  14 	[orig rot-id]:  14 	atom-id:  36
+	[subrot_1 rot-id]:  15 	[orig rot-id]:  15 	atom-id:  13
+	[subrot_1 rot-id]:  16 	[orig rot-id]:  16 	atom-id:  14
+	[subrot_1 rot-id]:  17 	[orig rot-id]:  17 	atom-id:  16
+	[subrot_1 rot-id]:  18 	[orig rot-id]:  18 	atom-id:  34
+	[subrot_1 rot-id]:  19 	[orig rot-id]:  19 	atom-id:   9
+	[subrot_1 rot-id]:  20 	[orig rot-id]:  20 	atom-id:  10
+	[subrot_1 rot-id]:  21 	[orig rot-id]:  21 	atom-id:  11
+	[subrot_1 rot-id]:  22 	[orig rot-id]:  22 	atom-id:  12
+	[subrot_1 rot-id]:  23 	[orig rot-id]:  23 	atom-id:  15
+	[subrot_1 rot-id]:  24 	[orig rot-id]:  24 	atom-id:  28
+	[subrot_1 rot-id]:  25 	[orig rot-id]:  25 	atom-id:  29
+	[subrot_1 rot-id]:  26 	[orig rot-id]:  26 	atom-id:  30
+	[subrot_1 rot-id]:  27 	[orig rot-id]:  27 	atom-id:  31
+	[subrot_1 rot-id]:  28 	[orig rot-id]:  28 	atom-id:  32
+	[subrot_1 rot-id]:  29 	[orig rot-id]:  29 	atom-id:  33
+	[subrot_1 rot-id]:  30 	[orig rot-id]:  30 	atom-id:   8
+	[subrot_1 rot-id]:  31 	[orig rot-id]:  31 	atom-id:  27
+	[subrot_1 rot-id]:  32 	[orig rot-id]:  32 	atom-id:   4
+	[subrot_1 rot-id]:  33 	[orig rot-id]:  33 	atom-id:   5
+	[subrot_1 rot-id]:  34 	[orig rot-id]:  34 	atom-id:   6
+	[subrot_1 rot-id]:  35 	[orig rot-id]:  35 	atom-id:   7
+	[subrot_1 rot-id]:  36 	[orig rot-id]:  36 	atom-id:  26
+	[subrot_1 rot-id]:  37 	[orig rot-id]:  37 	atom-id:   3
+	[subrot_1 rot-id]:  38 	[orig rot-id]:  38 	atom-id:  25
+	[subrot_1 rot-id]:  39 	[orig rot-id]:  39 	atom-id:   2
+	[subrot_1 rot-id]:  40 	[orig rot-id]:  40 	atom-id:  24
+	[subrot_1 rot-id]:  41 	[orig rot-id]:  41 	atom-id:   1
+	[subrot_1 rot-id]:  42 	[orig rot-id]:  42 	atom-id:  23
+	[subrot_1 rot-id]:  43 	[orig rot-id]:  43 	atom-id:   0
+	length:  44
+
+subrotlist 2:
+	[subrot_2 rot-id]:   0 	[orig rot-id]:  64 	atom-id:  19
+	[subrot_2 rot-id]:   1 	[orig rot-id]:  65 	atom-id:  20
+	[subrot_2 rot-id]:   2 	[orig rot-id]:  66 	atom-id:  21
+	[subrot_2 rot-id]:   3 	[orig rot-id]:  67 	atom-id:  22
+	[subrot_2 rot-id]:   4 	[orig rot-id]:  68 	atom-id:  38
+	[subrot_2 rot-id]:   5 	[orig rot-id]:  69 	atom-id:  39
+	[subrot_2 rot-id]:   6 	[orig rot-id]:  70 	atom-id:  40
+	[subrot_2 rot-id]:   7 	[orig rot-id]:  71 	atom-id:  41
+	[subrot_2 rot-id]:   8 	[orig rot-id]:  72 	atom-id:  42
+	[subrot_2 rot-id]:   9 	[orig rot-id]:  73 	atom-id:  43
+	[subrot_2 rot-id]:  10 	[orig rot-id]:  74 	atom-id:  18
+	[subrot_2 rot-id]:  11 	[orig rot-id]:  75 	atom-id:  37
+	[subrot_2 rot-id]:  12 	[orig rot-id]:  76 	atom-id:  17
+	[subrot_2 rot-id]:  13 	[orig rot-id]:  77 	atom-id:  35
+	[subrot_2 rot-id]:  14 	[orig rot-id]:  78 	atom-id:  36
+	[subrot_2 rot-id]:  15 	[orig rot-id]:  79 	atom-id:  13
+	[subrot_2 rot-id]:  16 	[orig rot-id]:  80 	atom-id:  14
+	[subrot_2 rot-id]:  17 	[orig rot-id]:  81 	atom-id:  16
+	[subrot_2 rot-id]:  18 	[orig rot-id]:  82 	atom-id:  34
+	[subrot_2 rot-id]:  19 	[orig rot-id]:  83 	atom-id:   9
+	[subrot_2 rot-id]:  20 	[orig rot-id]:  84 	atom-id:  10
+	[subrot_2 rot-id]:  21 	[orig rot-id]:  85 	atom-id:  11
+	[subrot_2 rot-id]:  22 	[orig rot-id]:  86 	atom-id:  12
+	[subrot_2 rot-id]:  23 	[orig rot-id]:  87 	atom-id:  15
+	[subrot_2 rot-id]:  24 	[orig rot-id]:  88 	atom-id:  28
+	[subrot_2 rot-id]:  25 	[orig rot-id]:  89 	atom-id:  29
+	[subrot_2 rot-id]:  26 	[orig rot-id]:  90 	atom-id:  30
+	[subrot_2 rot-id]:  27 	[orig rot-id]:  91 	atom-id:  31
+	[subrot_2 rot-id]:  28 	[orig rot-id]:  92 	atom-id:  32
+	[subrot_2 rot-id]:  29 	[orig rot-id]:  93 	atom-id:  33
+	[subrot_2 rot-id]:  30 	[orig rot-id]:  94 	atom-id:   8
+	[subrot_2 rot-id]:  31 	[orig rot-id]:  95 	atom-id:  27
+	[subrot_2 rot-id]:  32 	[orig rot-id]:  96 	atom-id:   4
+	[subrot_2 rot-id]:  33 	[orig rot-id]:  97 	atom-id:   5
+	[subrot_2 rot-id]:  34 	[orig rot-id]:  98 	atom-id:   6
+	[subrot_2 rot-id]:  35 	[orig rot-id]:  99 	atom-id:   7
+	[subrot_2 rot-id]:  36 	[orig rot-id]: 100 	atom-id:  26
+	[subrot_2 rot-id]:  37 	[orig rot-id]: 101 	atom-id:   3
+	[subrot_2 rot-id]:  38 	[orig rot-id]: 102 	atom-id:  25
+	[subrot_2 rot-id]:  39 	[orig rot-id]: 103 	atom-id:   2
+	[subrot_2 rot-id]:  40 	[orig rot-id]: 104 	atom-id:  24
+	[subrot_2 rot-id]:  41 	[orig rot-id]: 105 	atom-id:   1
+	[subrot_2 rot-id]:  42 	[orig rot-id]: 106 	atom-id:  23
+	length:  43
+
+subrotlist 3:
+	[subrot_3 rot-id]:   0 	[orig rot-id]: 128 	atom-id:  19
+	[subrot_3 rot-id]:   1 	[orig rot-id]: 129 	atom-id:  20
+	[subrot_3 rot-id]:   2 	[orig rot-id]: 130 	atom-id:  21
+	[subrot_3 rot-id]:   3 	[orig rot-id]: 131 	atom-id:  22
+	[subrot_3 rot-id]:   4 	[orig rot-id]: 132 	atom-id:  38
+	[subrot_3 rot-id]:   5 	[orig rot-id]: 133 	atom-id:  39
+	[subrot_3 rot-id]:   6 	[orig rot-id]: 134 	atom-id:  40
+	[subrot_3 rot-id]:   7 	[orig rot-id]: 135 	atom-id:  41
+	[subrot_3 rot-id]:   8 	[orig rot-id]: 136 	atom-id:  42
+	[subrot_3 rot-id]:   9 	[orig rot-id]: 137 	atom-id:  43
+	[subrot_3 rot-id]:  10 	[orig rot-id]: 138 	atom-id:  18
+	[subrot_3 rot-id]:  11 	[orig rot-id]: 139 	atom-id:  37
+	[subrot_3 rot-id]:  12 	[orig rot-id]: 140 	atom-id:  17
+	[subrot_3 rot-id]:  13 	[orig rot-id]: 141 	atom-id:  35
+	[subrot_3 rot-id]:  14 	[orig rot-id]: 142 	atom-id:  36
+	[subrot_3 rot-id]:  15 	[orig rot-id]: 143 	atom-id:  13
+	[subrot_3 rot-id]:  16 	[orig rot-id]: 144 	atom-id:  14
+	[subrot_3 rot-id]:  17 	[orig rot-id]: 145 	atom-id:  16
+	[subrot_3 rot-id]:  18 	[orig rot-id]: 146 	atom-id:  34
+	[subrot_3 rot-id]:  19 	[orig rot-id]: 147 	atom-id:   9
+	[subrot_3 rot-id]:  20 	[orig rot-id]: 148 	atom-id:  10
+	[subrot_3 rot-id]:  21 	[orig rot-id]: 149 	atom-id:  11
+	[subrot_3 rot-id]:  22 	[orig rot-id]: 150 	atom-id:  12
+	[subrot_3 rot-id]:  23 	[orig rot-id]: 151 	atom-id:  15
+	[subrot_3 rot-id]:  24 	[orig rot-id]: 152 	atom-id:  28
+	[subrot_3 rot-id]:  25 	[orig rot-id]: 153 	atom-id:  29
+	[subrot_3 rot-id]:  26 	[orig rot-id]: 154 	atom-id:  30
+	[subrot_3 rot-id]:  27 	[orig rot-id]: 155 	atom-id:  31
+	[subrot_3 rot-id]:  28 	[orig rot-id]: 156 	atom-id:  32
+	[subrot_3 rot-id]:  29 	[orig rot-id]: 157 	atom-id:  33
+	[subrot_3 rot-id]:  30 	[orig rot-id]: 158 	atom-id:   8
+	[subrot_3 rot-id]:  31 	[orig rot-id]: 159 	atom-id:  27
+	[subrot_3 rot-id]:  32 	[orig rot-id]: 160 	atom-id:   4
+	[subrot_3 rot-id]:  33 	[orig rot-id]: 161 	atom-id:   5
+	[subrot_3 rot-id]:  34 	[orig rot-id]: 162 	atom-id:   6
+	[subrot_3 rot-id]:  35 	[orig rot-id]: 163 	atom-id:   7
+	[subrot_3 rot-id]:  36 	[orig rot-id]: 164 	atom-id:  26
+	[subrot_3 rot-id]:  37 	[orig rot-id]: 165 	atom-id:   3
+	[subrot_3 rot-id]:  38 	[orig rot-id]: 166 	atom-id:  25
+	[subrot_3 rot-id]:  39 	[orig rot-id]: 167 	atom-id:   2
+	[subrot_3 rot-id]:  40 	[orig rot-id]: 168 	atom-id:  24
+	length:  41
+
+subrotlist 4:
+	[subrot_4 rot-id]:   0 	[orig rot-id]: 192 	atom-id:  19
+	[subrot_4 rot-id]:   1 	[orig rot-id]: 193 	atom-id:  20
+	[subrot_4 rot-id]:   2 	[orig rot-id]: 194 	atom-id:  21
+	[subrot_4 rot-id]:   3 	[orig rot-id]: 195 	atom-id:  22
+	[subrot_4 rot-id]:   4 	[orig rot-id]: 196 	atom-id:  38
+	[subrot_4 rot-id]:   5 	[orig rot-id]: 197 	atom-id:  39
+	[subrot_4 rot-id]:   6 	[orig rot-id]: 198 	atom-id:  40
+	[subrot_4 rot-id]:   7 	[orig rot-id]: 199 	atom-id:  41
+	[subrot_4 rot-id]:   8 	[orig rot-id]: 200 	atom-id:  42
+	[subrot_4 rot-id]:   9 	[orig rot-id]: 201 	atom-id:  43
+	[subrot_4 rot-id]:  10 	[orig rot-id]: 202 	atom-id:  18
+	[subrot_4 rot-id]:  11 	[orig rot-id]: 203 	atom-id:  37
+	[subrot_4 rot-id]:  12 	[orig rot-id]: 204 	atom-id:  17
+	[subrot_4 rot-id]:  13 	[orig rot-id]: 205 	atom-id:  35
+	[subrot_4 rot-id]:  14 	[orig rot-id]: 206 	atom-id:  36
+	[subrot_4 rot-id]:  15 	[orig rot-id]: 207 	atom-id:  13
+	[subrot_4 rot-id]:  16 	[orig rot-id]: 208 	atom-id:  14
+	[subrot_4 rot-id]:  17 	[orig rot-id]: 209 	atom-id:  16
+	[subrot_4 rot-id]:  18 	[orig rot-id]: 210 	atom-id:  34
+	[subrot_4 rot-id]:  19 	[orig rot-id]: 211 	atom-id:   9
+	[subrot_4 rot-id]:  20 	[orig rot-id]: 212 	atom-id:  10
+	[subrot_4 rot-id]:  21 	[orig rot-id]: 213 	atom-id:  11
+	[subrot_4 rot-id]:  22 	[orig rot-id]: 214 	atom-id:  12
+	[subrot_4 rot-id]:  23 	[orig rot-id]: 215 	atom-id:  15
+	[subrot_4 rot-id]:  24 	[orig rot-id]: 216 	atom-id:  28
+	[subrot_4 rot-id]:  25 	[orig rot-id]: 217 	atom-id:  29
+	[subrot_4 rot-id]:  26 	[orig rot-id]: 218 	atom-id:  30
+	[subrot_4 rot-id]:  27 	[orig rot-id]: 219 	atom-id:  31
+	[subrot_4 rot-id]:  28 	[orig rot-id]: 220 	atom-id:  32
+	[subrot_4 rot-id]:  29 	[orig rot-id]: 221 	atom-id:  33
+	[subrot_4 rot-id]:  30 	[orig rot-id]: 222 	atom-id:   8
+	[subrot_4 rot-id]:  31 	[orig rot-id]: 223 	atom-id:  27
+	[subrot_4 rot-id]:  32 	[orig rot-id]: 224 	atom-id:   4
+	[subrot_4 rot-id]:  33 	[orig rot-id]: 225 	atom-id:   5
+	[subrot_4 rot-id]:  34 	[orig rot-id]: 226 	atom-id:   6
+	[subrot_4 rot-id]:  35 	[orig rot-id]: 227 	atom-id:   7
+	[subrot_4 rot-id]:  36 	[orig rot-id]: 228 	atom-id:  26
+	[subrot_4 rot-id]:  37 	[orig rot-id]: 229 	atom-id:   3
+	[subrot_4 rot-id]:  38 	[orig rot-id]: 230 	atom-id:  25
+	length:  39
+
+subrotlist 5:
+	[subrot_5 rot-id]:   0 	[orig rot-id]: 256 	atom-id:  19
+	[subrot_5 rot-id]:   1 	[orig rot-id]: 257 	atom-id:  20
+	[subrot_5 rot-id]:   2 	[orig rot-id]: 258 	atom-id:  21
+	[subrot_5 rot-id]:   3 	[orig rot-id]: 259 	atom-id:  22
+	[subrot_5 rot-id]:   4 	[orig rot-id]: 260 	atom-id:  38
+	[subrot_5 rot-id]:   5 	[orig rot-id]: 261 	atom-id:  39
+	[subrot_5 rot-id]:   6 	[orig rot-id]: 262 	atom-id:  40
+	[subrot_5 rot-id]:   7 	[orig rot-id]: 263 	atom-id:  41
+	[subrot_5 rot-id]:   8 	[orig rot-id]: 264 	atom-id:  42
+	[subrot_5 rot-id]:   9 	[orig rot-id]: 265 	atom-id:  43
+	[subrot_5 rot-id]:  10 	[orig rot-id]: 266 	atom-id:  18
+	[subrot_5 rot-id]:  11 	[orig rot-id]: 267 	atom-id:  37
+	[subrot_5 rot-id]:  12 	[orig rot-id]: 268 	atom-id:  17
+	[subrot_5 rot-id]:  13 	[orig rot-id]: 269 	atom-id:  35
+	[subrot_5 rot-id]:  14 	[orig rot-id]: 270 	atom-id:  36
+	[subrot_5 rot-id]:  15 	[orig rot-id]: 271 	atom-id:  13
+	[subrot_5 rot-id]:  16 	[orig rot-id]: 272 	atom-id:  14
+	[subrot_5 rot-id]:  17 	[orig rot-id]: 273 	atom-id:  16
+	[subrot_5 rot-id]:  18 	[orig rot-id]: 274 	atom-id:  34
+	[subrot_5 rot-id]:  19 	[orig rot-id]: 275 	atom-id:   9
+	[subrot_5 rot-id]:  20 	[orig rot-id]: 276 	atom-id:  10
+	[subrot_5 rot-id]:  21 	[orig rot-id]: 277 	atom-id:  11
+	[subrot_5 rot-id]:  22 	[orig rot-id]: 278 	atom-id:  12
+	[subrot_5 rot-id]:  23 	[orig rot-id]: 279 	atom-id:  15
+	[subrot_5 rot-id]:  24 	[orig rot-id]: 280 	atom-id:  28
+	[subrot_5 rot-id]:  25 	[orig rot-id]: 281 	atom-id:  29
+	[subrot_5 rot-id]:  26 	[orig rot-id]: 282 	atom-id:  30
+	[subrot_5 rot-id]:  27 	[orig rot-id]: 283 	atom-id:  31
+	[subrot_5 rot-id]:  28 	[orig rot-id]: 284 	atom-id:  32
+	[subrot_5 rot-id]:  29 	[orig rot-id]: 285 	atom-id:  33
+	[subrot_5 rot-id]:  30 	[orig rot-id]: 286 	atom-id:   8
+	[subrot_5 rot-id]:  31 	[orig rot-id]: 287 	atom-id:  27
+	[subrot_5 rot-id]:  32 	[orig rot-id]: 288 	atom-id:   4
+	[subrot_5 rot-id]:  33 	[orig rot-id]: 289 	atom-id:   5
+	[subrot_5 rot-id]:  34 	[orig rot-id]: 290 	atom-id:   6
+	[subrot_5 rot-id]:  35 	[orig rot-id]: 291 	atom-id:   7
+	[subrot_5 rot-id]:  36 	[orig rot-id]: 292 	atom-id:  26
+	length:  37
+
+subrotlist 6:
+	[subrot_6 rot-id]:   0 	[orig rot-id]: 320 	atom-id:  19
+	[subrot_6 rot-id]:   1 	[orig rot-id]: 321 	atom-id:  20
+	[subrot_6 rot-id]:   2 	[orig rot-id]: 322 	atom-id:  21
+	[subrot_6 rot-id]:   3 	[orig rot-id]: 323 	atom-id:  22
+	[subrot_6 rot-id]:   4 	[orig rot-id]: 324 	atom-id:  38
+	[subrot_6 rot-id]:   5 	[orig rot-id]: 325 	atom-id:  39
+	[subrot_6 rot-id]:   6 	[orig rot-id]: 326 	atom-id:  40
+	[subrot_6 rot-id]:   7 	[orig rot-id]: 327 	atom-id:  41
+	[subrot_6 rot-id]:   8 	[orig rot-id]: 328 	atom-id:  42
+	[subrot_6 rot-id]:   9 	[orig rot-id]: 329 	atom-id:  43
+	[subrot_6 rot-id]:  10 	[orig rot-id]: 330 	atom-id:  18
+	[subrot_6 rot-id]:  11 	[orig rot-id]: 331 	atom-id:  37
+	[subrot_6 rot-id]:  12 	[orig rot-id]: 332 	atom-id:  17
+	[subrot_6 rot-id]:  13 	[orig rot-id]: 333 	atom-id:  35
+	[subrot_6 rot-id]:  14 	[orig rot-id]: 334 	atom-id:  36
+	[subrot_6 rot-id]:  15 	[orig rot-id]: 335 	atom-id:  13
+	[subrot_6 rot-id]:  16 	[orig rot-id]: 336 	atom-id:  14
+	[subrot_6 rot-id]:  17 	[orig rot-id]: 337 	atom-id:  16
+	[subrot_6 rot-id]:  18 	[orig rot-id]: 338 	atom-id:  34
+	[subrot_6 rot-id]:  19 	[orig rot-id]: 339 	atom-id:   9
+	[subrot_6 rot-id]:  20 	[orig rot-id]: 340 	atom-id:  10
+	[subrot_6 rot-id]:  21 	[orig rot-id]: 341 	atom-id:  11
+	[subrot_6 rot-id]:  22 	[orig rot-id]: 342 	atom-id:  12
+	[subrot_6 rot-id]:  23 	[orig rot-id]: 343 	atom-id:  15
+	[subrot_6 rot-id]:  24 	[orig rot-id]: 344 	atom-id:  28
+	[subrot_6 rot-id]:  25 	[orig rot-id]: 345 	atom-id:  29
+	[subrot_6 rot-id]:  26 	[orig rot-id]: 346 	atom-id:  30
+	[subrot_6 rot-id]:  27 	[orig rot-id]: 347 	atom-id:  31
+	[subrot_6 rot-id]:  28 	[orig rot-id]: 348 	atom-id:  32
+	[subrot_6 rot-id]:  29 	[orig rot-id]: 349 	atom-id:  33
+	[subrot_6 rot-id]:  30 	[orig rot-id]: 350 	atom-id:   8
+	[subrot_6 rot-id]:  31 	[orig rot-id]: 351 	atom-id:  27
+	length:  32
+
+subrotlist 7:
+	[subrot_7 rot-id]:   0 	[orig rot-id]: 384 	atom-id:  19
+	[subrot_7 rot-id]:   1 	[orig rot-id]: 385 	atom-id:  20
+	[subrot_7 rot-id]:   2 	[orig rot-id]: 386 	atom-id:  21
+	[subrot_7 rot-id]:   3 	[orig rot-id]: 387 	atom-id:  22
+	[subrot_7 rot-id]:   4 	[orig rot-id]: 388 	atom-id:  38
+	[subrot_7 rot-id]:   5 	[orig rot-id]: 389 	atom-id:  39
+	[subrot_7 rot-id]:   6 	[orig rot-id]: 390 	atom-id:  40
+	[subrot_7 rot-id]:   7 	[orig rot-id]: 391 	atom-id:  41
+	[subrot_7 rot-id]:   8 	[orig rot-id]: 392 	atom-id:  42
+	[subrot_7 rot-id]:   9 	[orig rot-id]: 393 	atom-id:  43
+	[subrot_7 rot-id]:  10 	[orig rot-id]: 394 	atom-id:  18
+	[subrot_7 rot-id]:  11 	[orig rot-id]: 395 	atom-id:  37
+	[subrot_7 rot-id]:  12 	[orig rot-id]: 396 	atom-id:  17
+	[subrot_7 rot-id]:  13 	[orig rot-id]: 397 	atom-id:  35
+	[subrot_7 rot-id]:  14 	[orig rot-id]: 398 	atom-id:  36
+	[subrot_7 rot-id]:  15 	[orig rot-id]: 399 	atom-id:  13
+	[subrot_7 rot-id]:  16 	[orig rot-id]: 400 	atom-id:  14
+	[subrot_7 rot-id]:  17 	[orig rot-id]: 401 	atom-id:  16
+	[subrot_7 rot-id]:  18 	[orig rot-id]: 402 	atom-id:  34
+	[subrot_7 rot-id]:  19 	[orig rot-id]: 403 	atom-id:   9
+	[subrot_7 rot-id]:  20 	[orig rot-id]: 404 	atom-id:  10
+	[subrot_7 rot-id]:  21 	[orig rot-id]: 405 	atom-id:  11
+	[subrot_7 rot-id]:  22 	[orig rot-id]: 406 	atom-id:  12
+	[subrot_7 rot-id]:  23 	[orig rot-id]: 407 	atom-id:  15
+	[subrot_7 rot-id]:  24 	[orig rot-id]: 408 	atom-id:  28
+	[subrot_7 rot-id]:  25 	[orig rot-id]: 409 	atom-id:  29
+	[subrot_7 rot-id]:  26 	[orig rot-id]: 410 	atom-id:  30
+	[subrot_7 rot-id]:  27 	[orig rot-id]: 411 	atom-id:  31
+	[subrot_7 rot-id]:  28 	[orig rot-id]: 412 	atom-id:  32
+	[subrot_7 rot-id]:  29 	[orig rot-id]: 413 	atom-id:  33
+	length:  30
+
+subrotlist 8:
+	[subrot_8 rot-id]:   0 	[orig rot-id]: 448 	atom-id:  19
+	[subrot_8 rot-id]:   1 	[orig rot-id]: 449 	atom-id:  20
+	[subrot_8 rot-id]:   2 	[orig rot-id]: 450 	atom-id:  21
+	[subrot_8 rot-id]:   3 	[orig rot-id]: 451 	atom-id:  22
+	[subrot_8 rot-id]:   4 	[orig rot-id]: 452 	atom-id:  38
+	[subrot_8 rot-id]:   5 	[orig rot-id]: 453 	atom-id:  39
+	[subrot_8 rot-id]:   6 	[orig rot-id]: 454 	atom-id:  40
+	[subrot_8 rot-id]:   7 	[orig rot-id]: 455 	atom-id:  41
+	[subrot_8 rot-id]:   8 	[orig rot-id]: 456 	atom-id:  42
+	[subrot_8 rot-id]:   9 	[orig rot-id]: 457 	atom-id:  43
+	[subrot_8 rot-id]:  10 	[orig rot-id]: 458 	atom-id:  18
+	[subrot_8 rot-id]:  11 	[orig rot-id]: 459 	atom-id:  37
+	[subrot_8 rot-id]:  12 	[orig rot-id]: 460 	atom-id:  17
+	[subrot_8 rot-id]:  13 	[orig rot-id]: 461 	atom-id:  35
+	[subrot_8 rot-id]:  14 	[orig rot-id]: 462 	atom-id:  36
+	[subrot_8 rot-id]:  15 	[orig rot-id]: 463 	atom-id:  13
+	[subrot_8 rot-id]:  16 	[orig rot-id]: 464 	atom-id:  14
+	[subrot_8 rot-id]:  17 	[orig rot-id]: 465 	atom-id:  16
+	[subrot_8 rot-id]:  18 	[orig rot-id]: 466 	atom-id:  34
+	length:  19
+
+subrotlist 9:
+	[subrot_9 rot-id]:   0 	[orig rot-id]: 512 	atom-id:  19
+	[subrot_9 rot-id]:   1 	[orig rot-id]: 513 	atom-id:  20
+	[subrot_9 rot-id]:   2 	[orig rot-id]: 514 	atom-id:  21
+	[subrot_9 rot-id]:   3 	[orig rot-id]: 515 	atom-id:  22
+	[subrot_9 rot-id]:   4 	[orig rot-id]: 516 	atom-id:  38
+	[subrot_9 rot-id]:   5 	[orig rot-id]: 517 	atom-id:  39
+	[subrot_9 rot-id]:   6 	[orig rot-id]: 518 	atom-id:  40
+	[subrot_9 rot-id]:   7 	[orig rot-id]: 519 	atom-id:  41
+	[subrot_9 rot-id]:   8 	[orig rot-id]: 520 	atom-id:  42
+	[subrot_9 rot-id]:   9 	[orig rot-id]: 521 	atom-id:  43
+	[subrot_9 rot-id]:  10 	[orig rot-id]: 522 	atom-id:  18
+	[subrot_9 rot-id]:  11 	[orig rot-id]: 523 	atom-id:  37
+	[subrot_9 rot-id]:  12 	[orig rot-id]: 524 	atom-id:  17
+	[subrot_9 rot-id]:  13 	[orig rot-id]: 525 	atom-id:  35
+	[subrot_9 rot-id]:  14 	[orig rot-id]: 526 	atom-id:  36
+	length:  15
+
+subrotlist 10:
+	[subrot_10 rot-id]:   0 	[orig rot-id]: 576 	atom-id:  19
+	[subrot_10 rot-id]:   1 	[orig rot-id]: 577 	atom-id:  20
+	[subrot_10 rot-id]:   2 	[orig rot-id]: 578 	atom-id:  21
+	[subrot_10 rot-id]:   3 	[orig rot-id]: 579 	atom-id:  22
+	[subrot_10 rot-id]:   4 	[orig rot-id]: 580 	atom-id:  38
+	[subrot_10 rot-id]:   5 	[orig rot-id]: 581 	atom-id:  39
+	[subrot_10 rot-id]:   6 	[orig rot-id]: 582 	atom-id:  40
+	[subrot_10 rot-id]:   7 	[orig rot-id]: 583 	atom-id:  41
+	[subrot_10 rot-id]:   8 	[orig rot-id]: 584 	atom-id:  42
+	[subrot_10 rot-id]:   9 	[orig rot-id]: 585 	atom-id:  43
+	[subrot_10 rot-id]:  10 	[orig rot-id]: 586 	atom-id:  18
+	[subrot_10 rot-id]:  11 	[orig rot-id]: 587 	atom-id:  37
+	length:  12
+
+subrotlist 11:
+	[subrot_11 rot-id]:   0 	[orig rot-id]: 640 	atom-id:  19
+	[subrot_11 rot-id]:   1 	[orig rot-id]: 641 	atom-id:  20
+	[subrot_11 rot-id]:   2 	[orig rot-id]: 642 	atom-id:  21
+	[subrot_11 rot-id]:   3 	[orig rot-id]: 643 	atom-id:  22
+	[subrot_11 rot-id]:   4 	[orig rot-id]: 644 	atom-id:  38
+	[subrot_11 rot-id]:   5 	[orig rot-id]: 645 	atom-id:  39
+	[subrot_11 rot-id]:   6 	[orig rot-id]: 646 	atom-id:  40
+	[subrot_11 rot-id]:   7 	[orig rot-id]: 647 	atom-id:  41
+	[subrot_11 rot-id]:   8 	[orig rot-id]: 648 	atom-id:  42
+	[subrot_11 rot-id]:   9 	[orig rot-id]: 649 	atom-id:  43
+	length:  10
+
+subrotlist 12:
+	length:   0
+
+Maximum number of required subrotation lists: 11
+
+Size of the largest subrotation list: 44
+
+Table of subrotlists
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+	 id 	 sub 1 	 sub 2 	 sub 3 	 sub 4 	 sub 5 	 sub 6 	 sub 7 	 sub 8 	 sub 9 	sub 10 	sub 11 	sub 12
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+	  0 	 66067	   787	  1043	  1299	  1555	  1811	  2067	  2323	  2579	  2835	131091	-x-x-x
+	  1 	 66068	   788	  1044	  1300	  1556	  1812	  2068	  2324	  2580	  2836	131092	-x-x-x
+	  2 	 66069	   789	  1045	  1301	  1557	  1813	  2069	  2325	  2581	  2837	131093	-x-x-x
+	  3 	 66070	   790	  1046	  1302	  1558	  1814	  2070	  2326	  2582	  2838	131094	-x-x-x
+	  4 	 68646	  3622	  3878	  4134	  4390	  4646	  4902	  5158	  5414	  5670	131110	-x-x-x
+	  5 	 68647	  3623	  3879	  4135	  4391	  4647	  4903	  5159	  5415	  5671	131111	-x-x-x
+	  6 	 68648	  3624	  3880	  4136	  4392	  4648	  4904	  5160	  5416	  5672	131112	-x-x-x
+	  7 	 68905	  3625	  3881	  4137	  4393	  4649	  4905	  5161	  5417	  5673	131113	-x-x-x
+	  8 	 68906	  3626	  3882	  4138	  4394	  4650	  4906	  5162	  5418	  5674	131114	-x-x-x
+	  9 	 68907	  3627	  3883	  4139	  4395	  4651	  4907	  5163	  5419	  5675	131115	-x-x-x
+	 10 	 66322	  1042	  1298	  1554	  1810	  2066	  2322	  2578	  2834	131090	-x-x-x	-x-x-x
+	 11 	 69157	  3877	  4133	  4389	  4645	  4901	  5157	  5413	  5669	131109	-x-x-x	-x-x-x
+	 12 	 66577	  1297	  1553	  1809	  2065	  2321	  2577	  2833	131089	-x-x-x	-x-x-x	-x-x-x
+	 13 	 69411	  4131	  4387	  4643	  4899	  5155	  5411	  5667	131107	-x-x-x	-x-x-x	-x-x-x
+	 14 	 69412	  4132	  4388	  4644	  4900	  5156	  5412	  5668	131108	-x-x-x	-x-x-x	-x-x-x
+	 15 	 65549	   269	  1805	  2061	  2317	  2573	  2829	131085	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 16 	 65550	   270	  1806	  2062	  2318	  2574	  2830	131086	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 17 	 66832	  1552	  1808	  2064	  2320	  2576	  2832	131088	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 18 	 69666	  4386	  4642	  4898	  5154	  5410	  5666	131106	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 19 	 65801	  1801	  2057	  2313	  2569	  2825	131081	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 20 	 65802	  1802	  2058	  2314	  2570	  2826	131082	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 21 	 65803	  1803	  2059	  2315	  2571	  2827	131083	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 22 	 65804	  1804	  2060	  2316	  2572	  2828	131084	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 23 	 67087	  1807	  2063	  2319	  2575	  2831	131087	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 24 	 69916	  4636	  4892	  5148	  5404	  5660	131100	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 25 	 69917	  4637	  4893	  5149	  5405	  5661	131101	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 26 	 69918	  4638	  4894	  5150	  5406	  5662	131102	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 27 	 69919	  4639	  4895	  5151	  5407	  5663	131103	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 28 	 69920	  4640	  4896	  5152	  5408	  5664	131104	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 29 	 69921	  4641	  4897	  5153	  5409	  5665	131105	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 30 	 67336	  2056	  2312	  2568	  2824	131080	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 31 	 70171	  4891	  5147	  5403	  5659	131099	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 32 	 67588	  2308	  2564	  2820	131076	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 33 	 67589	  2309	  2565	  2821	131077	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 34 	 67590	  2310	  2566	  2822	131078	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 35 	 67591	  2311	  2567	  2823	131079	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 36 	 70426	  5146	  5402	  5658	131098	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 37 	 67843	  2563	  2819	131075	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 38 	 70681	  5401	  5657	131097	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 39 	 68098	  2818	131074	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 40 	 70936	  5656	131096	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 41 	 68353	131073	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 42 	 71191	131095	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	 43 	196608	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x	-x-x-x
+	--- 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------ 	------
+
+    Using heuristics: (capped) number of evaluations set to 11999982
+    Overriding heuristics, setting number of evaluations to --nev = 2500000 instead.
+    Warning: The set number of evals is 0.00% of the uncapped heuristics estimate of 8014701002752 evals.
+             This means this docking may not be able to converge. Increasing --heurmax may improve
+             convergence but will also increase runtime.
+             AutoStop will not stop before 100.00% (2500000) of the set number of evaluations.
+    Local-search chosen method is: Solis-Wets (sw)
+
+Rest of Setup time 0.020438s
+
+Executing docking runs, stopping automatically after either reaching 0.15 kcal/mol standard deviation of
+the best molecules of the last 4 * 5 generations, 99999 generations, or 2500000 evaluations:
+
+Generations |  Evaluations |     Threshold    |  Average energy of best 10%  | Samples |    Best energy
+------------+--------------+------------------+------------------------------+---------+-------------------
+          0 |          150 |    3.38 kcal/mol |   -0.16 +/-    1.19 kcal/mol |       6 |   -2.36 kcal/mol
+          5 |       209361 |    2.80 kcal/mol |   -5.81 +/-    1.96 kcal/mol |    9926 |  -15.79 kcal/mol
+         10 |       407410 |   -5.81 kcal/mol |  -11.46 +/-    1.52 kcal/mol |     507 |  -15.93 kcal/mol
+         15 |       605564 |  -11.42 kcal/mol |  -15.14 +/-    0.53 kcal/mol |      54 |  -16.58 kcal/mol
+         20 |       804840 |  -14.99 kcal/mol |  -16.58 +/-    0.43 kcal/mol |      13 |  -17.25 kcal/mol
+         25 |      1003733 |  -16.09 kcal/mol |  -17.32 +/-    0.06 kcal/mol |       7 |  -17.39 kcal/mol
+         30 |      1202973 |  -17.00 kcal/mol |  -17.54 +/-    0.13 kcal/mol |       8 |  -17.79 kcal/mol
+         35 |      1402623 |  -17.30 kcal/mol |  -17.61 +/-    0.14 kcal/mol |       7 |  -17.84 kcal/mol
+         40 |      1602013 |  -17.31 kcal/mol |  -17.68 +/-    0.21 kcal/mol |       8 |  -18.14 kcal/mol
+         45 |      1801260 |  -17.28 kcal/mol |  -18.03 +/-    0.10 kcal/mol |       4 |  -18.16 kcal/mol
+         50 |      2000387 |  -17.67 kcal/mol |  -18.28 +/-    0.27 kcal/mol |       4 |  -18.73 kcal/mol
+         55 |      2200086 |  -17.28 kcal/mol |  -18.27 +/-    0.34 kcal/mol |       5 |  -18.89 kcal/mol
+         60 |      2400705 |  -17.24 kcal/mol |  -18.41 +/-    0.27 kcal/mol |       5 |  -18.91 kcal/mol
+         63 |      2521235 |  -17.60 kcal/mol |  -18.42 +/-    0.29 kcal/mol |       9 |  -18.92 kcal/mol
+------------+--------------+------------------+------------------------------+---------+-------------------
+
+                                   Finished evaluation after reaching
+                          2521235 evaluations. Best energy   -18.92 kcal/mol.
+
+Docking time 7.732950s
+
+Shutdown time 0.001068s
+
+Job #1 took 7.754 sec after waiting 0.114 sec for setup
+
+Run time of entire job set (1 file): 8.160 sec
+Processing time: 0.291 sec
+
+All jobs ran without errors.
