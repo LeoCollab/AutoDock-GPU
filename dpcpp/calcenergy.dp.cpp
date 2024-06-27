@@ -275,8 +275,12 @@ void gpu_calc_energy(
 	// ================================================
 	// CALCULATING INTERMOLECULAR ENERGY
 	// ================================================
+	/*
 	float weights[8];
 	float cube[8];
+	*/
+	sycl::float8 weights;
+	sycl::float8 cube;
 	for (uint atom_id = item_ct1.get_local_id(2);
 			  atom_id < cData.dockpars.num_of_atoms;
 			  atom_id += item_ct1.get_local_range().get(2))
@@ -314,6 +318,7 @@ void gpu_calc_energy(
 		float omdz = 1.0f - dz;
 
 		// Calculating interpolation weights
+		/*
 		weights [idx_000] = omdx*omdy*omdz;
 		weights [idx_010] = omdx*dy*omdz;
 		weights [idx_001] = omdx*omdy*dz;
@@ -322,8 +327,18 @@ void gpu_calc_energy(
 		weights [idx_110] = dx*dy*omdz;
 		weights [idx_101] = dx*omdy*dz;
 		weights [idx_111] = dx*dy*dz;
+		*/
+		weights.s0() = omdx*omdy*omdz;
+		weights.s1() = omdx*dy*omdz;
+		weights.s2() = omdx*omdy*dz;
+		weights.s3() = omdx*dy*dz;
+		weights.s4() = dx*omdy*omdz;
+		weights.s5() = dx*dy*omdz;
+		weights.s6() = dx*omdy*dz;
+		weights.s7() = dx*dy*dz;
 
 		ulong mul_tmp = atom_typeid*g3<<2;
+		/*
 		cube[0] = *(grid_value_000+mul_tmp+0);
 		cube[1] = *(grid_value_000+mul_tmp+1);
 		cube[2] = *(grid_value_000+mul_tmp+2);
@@ -332,10 +347,24 @@ void gpu_calc_energy(
 		cube[5] = *(grid_value_000+mul_tmp+5);
 		cube[6] = *(grid_value_000+mul_tmp+6);
 		cube[7] = *(grid_value_000+mul_tmp+7);
+		*/
+		cube.s0() = *(grid_value_000+mul_tmp+0);
+		cube.s1() = *(grid_value_000+mul_tmp+1);
+		cube.s2() = *(grid_value_000+mul_tmp+2);
+		cube.s3() = *(grid_value_000+mul_tmp+3);
+		cube.s4() = *(grid_value_000+mul_tmp+4);
+		cube.s5() = *(grid_value_000+mul_tmp+5);
+		cube.s6() = *(grid_value_000+mul_tmp+6);
+		cube.s7() = *(grid_value_000+mul_tmp+7);
 
 		// Calculating affinity energy
+		/*
 		energy += cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7];
+		*/
+		sycl::float8 tmp_vec;
+		tmp_vec = cube * weights;
+		energy += tmp_vec[0] + tmp_vec[1] + tmp_vec[2] + tmp_vec[3] + tmp_vec[4] + tmp_vec[5] + tmp_vec[6] + tmp_vec[7];
 		#if defined (DEBUG_ENERGY_KERNEL)
 		interE += cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7];
@@ -345,6 +374,7 @@ void gpu_calc_energy(
 		atom_typeid = cData.dockpars.num_of_map_atypes;
 
 		mul_tmp = atom_typeid*g3<<2; // different atom type id to get charge IA
+		/*
 		cube[0] = *(grid_value_000+mul_tmp+0);
 		cube[1] = *(grid_value_000+mul_tmp+1);
 		cube[2] = *(grid_value_000+mul_tmp+2);
@@ -353,10 +383,23 @@ void gpu_calc_energy(
 		cube[5] = *(grid_value_000+mul_tmp+5);
 		cube[6] = *(grid_value_000+mul_tmp+6);
 		cube[7] = *(grid_value_000+mul_tmp+7);
+		*/
+		cube.s0() = *(grid_value_000+mul_tmp+0);
+		cube.s1() = *(grid_value_000+mul_tmp+1);
+		cube.s2() = *(grid_value_000+mul_tmp+2);
+		cube.s3() = *(grid_value_000+mul_tmp+3);
+		cube.s4() = *(grid_value_000+mul_tmp+4);
+		cube.s5() = *(grid_value_000+mul_tmp+5);
+		cube.s6() = *(grid_value_000+mul_tmp+6);
+		cube.s7() = *(grid_value_000+mul_tmp+7);
 
 		// Calculating affinity energy
+		/*
 		energy += q * (cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
+		*/
+		tmp_vec = cube * weights;
+		energy += q * (tmp_vec[0] + tmp_vec[1] + tmp_vec[2] + tmp_vec[3] + tmp_vec[4] + tmp_vec[5] + tmp_vec[6] + tmp_vec[7]);
 		#if defined (DEBUG_ENERGY_KERNEL)
 		interE += q *(cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
@@ -367,6 +410,7 @@ void gpu_calc_energy(
 
 		// Capturing desolvation values (atom_typeid+1 compared to above => mul_tmp + g3*4)
 		mul_tmp += g3<<2;
+		/*
 		cube[0] = *(grid_value_000+mul_tmp+0);
 		cube[1] = *(grid_value_000+mul_tmp+1);
 		cube[2] = *(grid_value_000+mul_tmp+2);
@@ -375,10 +419,23 @@ void gpu_calc_energy(
 		cube[5] = *(grid_value_000+mul_tmp+5);
 		cube[6] = *(grid_value_000+mul_tmp+6);
 		cube[7] = *(grid_value_000+mul_tmp+7);
+		*/
+		cube.s0() = *(grid_value_000+mul_tmp+0);
+		cube.s1() = *(grid_value_000+mul_tmp+1);
+		cube.s2() = *(grid_value_000+mul_tmp+2);
+		cube.s3() = *(grid_value_000+mul_tmp+3);
+		cube.s4() = *(grid_value_000+mul_tmp+4);
+		cube.s5() = *(grid_value_000+mul_tmp+5);
+		cube.s6() = *(grid_value_000+mul_tmp+6);
+		cube.s7() = *(grid_value_000+mul_tmp+7);
 
 		// Calculating affinity energy
+		/*
 		energy += q * (cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
+		*/
+		tmp_vec = cube * weights;
+		energy += q * (tmp_vec[0] + tmp_vec[1] + tmp_vec[2] + tmp_vec[3] + tmp_vec[4] + tmp_vec[5] + tmp_vec[6] + tmp_vec[7]);
 		#if defined (DEBUG_ENERGY_KERNEL)
 		interE += q *(cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
