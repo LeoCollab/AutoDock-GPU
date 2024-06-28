@@ -336,10 +336,10 @@ void gpu_calc_energy(
 		// Calculating affinity energy
 		energy += cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7];
-		#if defined (DEBUG_ENERGY_KERNEL)
+#if defined (DEBUG_ENERGY_KERNEL)
 		interE += cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7];
-		#endif
+#endif
 
 		// Capturing electrostatic values
 		atom_typeid = cData.dockpars.num_of_map_atypes;
@@ -357,10 +357,10 @@ void gpu_calc_energy(
 		// Calculating affinity energy
 		energy += q * (cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
-		#if defined (DEBUG_ENERGY_KERNEL)
+#if defined (DEBUG_ENERGY_KERNEL)
 		interE += q *(cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
-		#endif
+#endif
 
 		// Need only magnitude of charge from here on down
 		q = sycl::fabs(q);
@@ -379,10 +379,10 @@ void gpu_calc_energy(
 		// Calculating affinity energy
 		energy += q * (cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
-		#if defined (DEBUG_ENERGY_KERNEL)
+#if defined (DEBUG_ENERGY_KERNEL)
 		interE += q *(cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
-		#endif
+#endif
 	} // End atom_id for-loop (INTERMOLECULAR ENERGY)
 
 #if defined (DEBUG_ENERGY_KERNEL)
@@ -463,9 +463,9 @@ void gpu_calc_energy(
 						SYCL_POWN(smoothed_distance, (-m));
 
 #if defined (DEBUG_ENERGY_KERNEL)
-			intraE += (cData.pKerconst_intra->VWpars_AC_const[idx]
-			           -__powf(smoothed_distance,m-n)*cData.pKerconst_intra->VWpars_BD_const[idx])
-			           *__powf(smoothed_distance,-m);
+			intraE += (cData.pKerconst_intra->VWpars_AC_const[idx] -
+						SYCL_POWN(smoothed_distance, (m - n)) * cData.pKerconst_intra->VWpars_BD_const[idx]) *
+						SYCL_POWN(smoothed_distance, (-m));
 #endif
 		} // if cuttoff1 - internuclear-distance at 8A
 
@@ -509,6 +509,7 @@ void gpu_calc_energy(
 
 	// reduction to calculate energy
 	REDUCEFLOATSUM(energy, pFloatAccumulator)
+
 #if defined (DEBUG_ENERGY_KERNEL)
 	REDUCEFLOATSUM(intraE, pFloatAccumulator)
 #endif
