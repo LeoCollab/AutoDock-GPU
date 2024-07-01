@@ -74,7 +74,6 @@ void gpu_calc_energrad(
 	sycl::int3 *gradient,
 #endif
 	float *fgradient_genotype,
-	float *pFloatAccumulator,
 	sycl::nd_item<3> item_ct1,
 	GpuData cData)
 {
@@ -696,24 +695,24 @@ void gpu_calc_energrad(
 	}
 
 	// Do a reduction over the total gradient containing prepared "gradient_intra_*" values
-	REDUCEFLOATSUM(torque_rot.x(), pFloatAccumulator);
-	REDUCEFLOATSUM(torque_rot.y(), pFloatAccumulator);
-	REDUCEFLOATSUM(torque_rot.z(), pFloatAccumulator);
+	torque_rot.x() = sycl::reduce_over_group(item_ct1.get_group(), torque_rot.x(), std::plus<>());
+	torque_rot.y() = sycl::reduce_over_group(item_ct1.get_group(), torque_rot.y(), std::plus<>());
+	torque_rot.z() = sycl::reduce_over_group(item_ct1.get_group(), torque_rot.z(), std::plus<>());
 
 	// TODO
 	// -------------------------------------------------------
 	// Obtaining energy and translation-related gradients
 	// -------------------------------------------------------
 	// reduction over partial energies and prepared "gradient_intra_*" values
+	energy = sycl::reduce_over_group(item_ct1.get_group(), energy, std::plus<>());
 
-	REDUCEFLOATSUM(energy, pFloatAccumulator);
 #if defined (DEBUG_ENERGY_KERNEL)
-	REDUCEFLOATSUM(intraE, pFloatAccumulator);
+	intraE = sycl::reduce_over_group(item_ct1.get_group(), intraE, std::plus<>());
 #endif
 
-	REDUCEFLOATSUM(gx, pFloatAccumulator);
-	REDUCEFLOATSUM(gy, pFloatAccumulator);
-	REDUCEFLOATSUM(gz, pFloatAccumulator);
+	gx = sycl::reduce_over_group(item_ct1.get_group(), gx, std::plus<>());
+	gy = sycl::reduce_over_group(item_ct1.get_group(), gy, std::plus<>());
+	gz = sycl::reduce_over_group(item_ct1.get_group(), gz, std::plus<>());
 
 	global_energy = energy;
 	int* gradient_genotype = (int*)fgradient_genotype;

@@ -147,7 +147,6 @@ void gpu_calc_energy(
 	float &energy,
 	int &run_id,
 	sycl::float3 *calc_coords,
-	float *pFloatAccumulator,
 	sycl::nd_item<3> item_ct1,
 	GpuData cData)
 // The GPU device function calculates the energy of the entity described by genotype, dockpars and the liganddata
@@ -336,10 +335,10 @@ void gpu_calc_energy(
 		// Calculating affinity energy
 		energy += cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7];
-		#if defined (DEBUG_ENERGY_KERNEL)
+#if defined (DEBUG_ENERGY_KERNEL)
 		interE += cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7];
-		#endif
+#endif
 
 		// Capturing electrostatic values
 		atom_typeid = cData.dockpars.num_of_map_atypes;
@@ -357,10 +356,10 @@ void gpu_calc_energy(
 		// Calculating affinity energy
 		energy += q * (cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
-		#if defined (DEBUG_ENERGY_KERNEL)
+#if defined (DEBUG_ENERGY_KERNEL)
 		interE += q *(cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
-		#endif
+#endif
 
 		// Need only magnitude of charge from here on down
 		q = sycl::fabs(q);
@@ -379,14 +378,14 @@ void gpu_calc_energy(
 		// Calculating affinity energy
 		energy += q * (cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
-		#if defined (DEBUG_ENERGY_KERNEL)
+#if defined (DEBUG_ENERGY_KERNEL)
 		interE += q *(cube[0]*weights[0] + cube[1]*weights[1] + cube[2]*weights[2] + cube[3]*weights[3] +
 				  cube[4]*weights[4] + cube[5]*weights[5] + cube[6]*weights[6] + cube[7]*weights[7]);
-		#endif
+#endif
 	} // End atom_id for-loop (INTERMOLECULAR ENERGY)
 
 #if defined (DEBUG_ENERGY_KERNEL)
-	REDUCEFLOATSUM(interE, pFloatAccumulator)
+	interE = sycl::reduce_over_group(item_ct1.get_group(), interE, std::plus<>());
 #endif
 
 	// In paper: intermolecular and internal energy calculation
@@ -463,9 +462,9 @@ void gpu_calc_energy(
 						SYCL_POWN(smoothed_distance, (-m));
 
 #if defined (DEBUG_ENERGY_KERNEL)
-			intraE += (cData.pKerconst_intra->VWpars_AC_const[idx]
-			           -__powf(smoothed_distance,m-n)*cData.pKerconst_intra->VWpars_BD_const[idx])
-			           *__powf(smoothed_distance,-m);
+			intraE += (cData.pKerconst_intra->VWpars_AC_const[idx] -
+						SYCL_POWN(smoothed_distance, (m - n)) * cData.pKerconst_intra->VWpars_BD_const[idx]) *
+						SYCL_POWN(smoothed_distance, (-m));
 #endif
 		} // if cuttoff1 - internuclear-distance at 8A
 
@@ -508,9 +507,10 @@ void gpu_calc_energy(
 	} // End contributor_counter for-loop (INTRAMOLECULAR ENERGY)
 
 	// reduction to calculate energy
-	REDUCEFLOATSUM(energy, pFloatAccumulator)
+	energy = sycl::reduce_over_group(item_ct1.get_group(), energy, std::plus<>());
+
 #if defined (DEBUG_ENERGY_KERNEL)
-	REDUCEFLOATSUM(intraE, pFloatAccumulator)
+	intraE = sycl::reduce_over_group(item_ct1.get_group(), intraE, std::plus<>());
 #endif
 }
 
