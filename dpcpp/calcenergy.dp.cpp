@@ -147,9 +147,6 @@ void gpu_calc_energy(
 	float &energy,
 	int &run_id,
 	sycl::float3 *calc_coords,
-/*
-	float *pFloatAccumulator,
-*/
 	sycl::nd_item<3> item_ct1,
 	GpuData cData)
 // The GPU device function calculates the energy of the entity described by genotype, dockpars and the liganddata
@@ -388,7 +385,6 @@ void gpu_calc_energy(
 	} // End atom_id for-loop (INTERMOLECULAR ENERGY)
 
 #if defined (DEBUG_ENERGY_KERNEL)
-	//REDUCEFLOATSUM(interE, pFloatAccumulator)
 	interE = sycl::reduce_over_group(item_ct1.get_group(), interE, std::plus<>());
 #endif
 
@@ -511,11 +507,9 @@ void gpu_calc_energy(
 	} // End contributor_counter for-loop (INTRAMOLECULAR ENERGY)
 
 	// reduction to calculate energy
-	//REDUCEFLOATSUM(energy, pFloatAccumulator)
 	energy = sycl::reduce_over_group(item_ct1.get_group(), energy, std::plus<>());
 
 #if defined (DEBUG_ENERGY_KERNEL)
-	//REDUCEFLOATSUM(intraE, pFloatAccumulator)
 	intraE = sycl::reduce_over_group(item_ct1.get_group(), intraE, std::plus<>());
 #endif
 }

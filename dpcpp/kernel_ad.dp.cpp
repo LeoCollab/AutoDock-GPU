@@ -71,9 +71,6 @@ gpu_gradient_minAD_kernel(
 	uint8_t *dpct_local,
 	int *entity_id,
 	float *best_energy,
-/*
-	float *sFloatAccumulator,
-*/
 	float *rho,
 	int *cons_succ,
 	int *cons_fail)
@@ -254,9 +251,6 @@ gpu_gradient_minAD_kernel(
 			// Derived from autodockdev/maps.py
 			cartesian_gradient,
 			gradient,
-/*
-			sFloatAccumulator,
-*/
 			item_ct1,
 			cData
 		);
@@ -450,9 +444,6 @@ void gpu_gradient_minAD(
 		sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(sycl::range<1>(sz_shared), cgh);
 		sycl::local_accessor<int, 0> entity_id_acc_ct1(cgh);
 		sycl::local_accessor<float, 0> best_energy_acc_ct1(cgh);
-/*
-		sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
-*/
 		sycl::local_accessor<float, 0> rho_acc_ct1(cgh);
 		sycl::local_accessor<int, 0> cons_succ_acc_ct1(cgh);
 		sycl::local_accessor<int, 0> cons_fail_acc_ct1(cgh);
@@ -471,9 +462,6 @@ void gpu_gradient_minAD(
 					dpct_local_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					entity_id_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					best_energy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-/*
-					sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-*/
 					rho_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					cons_succ_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					cons_fail_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
