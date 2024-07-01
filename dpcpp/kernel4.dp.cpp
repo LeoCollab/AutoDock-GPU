@@ -57,8 +57,8 @@ gpu_gen_and_eval_newpops_kernel(
 	float *randnums,
 	float *sBestEnergy,
 	int *sBestID,
-	sycl::float3 *calc_coords,
-	float *sFloatAccumulator)
+	sycl::float3 *calc_coords
+	)
 // The GPU global function
 {
 	int run_id;
@@ -300,7 +300,6 @@ gpu_gen_and_eval_newpops_kernel(
 			energy,
 			run_id,
 			calc_coords,
-			sFloatAccumulator,
 			item_ct1,
 			cData
 		);
@@ -362,7 +361,6 @@ void gpu_gen_and_eval_newpops(
 		sycl::local_accessor<float, 1> sBestEnergy_acc_ct1(sycl::range<1>(32), cgh);
 		sycl::local_accessor<int, 1> sBestID_acc_ct1(sycl::range<1>(32), cgh);
 		sycl::local_accessor<sycl::float3, 1> calc_coords_acc_ct1(sycl::range<1>(256 /*MAX_NUM_OF_ATOMS*/), cgh);
-		sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
 
 		cgh.parallel_for(
 			sycl::nd_range<3>(
@@ -385,8 +383,7 @@ void gpu_gen_and_eval_newpops(
 					randnums_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					sBestEnergy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					sBestID_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-					calc_coords_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-					sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+					calc_coords_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
 				);
 		});
 	});
