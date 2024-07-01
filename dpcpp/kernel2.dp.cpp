@@ -48,7 +48,10 @@ gpu_sum_evals_kernel(
 	}
 	
 	// Perform warp-wise reduction
-	REDUCEINTEGERSUM(partsum_evals, sSum_evals);
+	//REDUCEINTEGERSUM(partsum_evals, sSum_evals);
+
+	*sSum_evals = sycl::reduce_over_group(item_ct1.get_group(), partsum_evals, std::plus<>());
+
 	if (item_ct1.get_local_id(2) == 0)
 	{
 		cData.pMem_gpu_evals_of_runs[item_ct1.get_group(2)] += *sSum_evals;

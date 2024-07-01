@@ -62,8 +62,12 @@ gpu_gradient_minAdam_kernel(
 	GpuData cData,
 	uint8_t *dpct_local,
 	int *entity_id,
-	float *best_energy,
-	float *sFloatAccumulator)
+	float *best_energy
+/*
+	,
+	float *sFloatAccumulator
+*/
+)
 // The GPU global function performs gradient-based minimization on (some) entities of conformations_next.
 // The number of OpenCL compute units (CU) which should be started equals to num_of_minEntities*num_of_runs.
 // This way the first num_of_lsentities entity of each population will be subjected to local search
@@ -240,7 +244,9 @@ gpu_gradient_minAdam_kernel(
 			// Gradient-related arguments
 			cartesian_gradient,
 			gradient,
+/*
 			sFloatAccumulator,
+*/
 			item_ct1,
 			cData
 		);
@@ -444,7 +450,9 @@ void gpu_gradient_minAdam(
 		sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(sycl::range<1>(sz_shared), cgh);
 		sycl::local_accessor<int, 0> entity_id_acc_ct1(cgh);
 		sycl::local_accessor<float, 0> best_energy_acc_ct1(cgh);
+/*
 		sycl::local_accessor<float, 0> sFloatAccumulator_acc_ct1(cgh);
+*/
 
 		cgh.parallel_for(
 			sycl::nd_range<3>(
@@ -459,8 +467,11 @@ void gpu_gradient_minAdam(
 					*cData_ptr_ct1,
 					dpct_local_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					entity_id_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
-					best_energy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					best_energy_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+/*
+					,
 					sFloatAccumulator_acc_ct1.template get_multi_ptr<sycl::access::decorated::no>().get()
+*/
 				);
 		});
 	});
