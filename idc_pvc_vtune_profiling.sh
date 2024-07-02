@@ -89,7 +89,7 @@ run_characterization_globallocalacceses() {
 	printf "\n------------------------------------------------\n"
 	printf "run_characterization_globallocalacceses() ... "
 	printf "\n------------------------------------------------\n"
-	cmd_characterization_globallocalacceses="vtune -collect gpu-hotspots -knob profiling-mode=characterization -knob characterization-mode=global-local-accesses"
+	cmd_characterization_globallocalacceses="vtune -collect gpu-hotspots -knob profiling-mode=characterization -knob characterization-mode=global-memory-accesses"
 	output_folder=r_gpu-hotspots_characterization_globallocalaccesses_${pdb}
 
 	local cmd_local_sw="${cmd_characterization_globallocalacceses} -r ${output_folder}_sw -- ${adgpu_cmd_sw}"
