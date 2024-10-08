@@ -76,12 +76,14 @@ void gpu_calc_energrad(
 	float *fgradient_genotype,
 	sycl::nd_item<3> item_ct1,
 	GpuData cData
+#ifdef USE_XMX
 	/* Reduction using matrix units */
 	,
 	sycl::half *data_to_be_reduced,
 	sycl::half *Q_data,
 	sycl::half *tmp
 	/* Reduction using matrix units */
+#endif
 ) {
 	float energy = 0.0f;
 #ifdef DOCK_TRACE
@@ -700,25 +702,76 @@ void gpu_calc_energrad(
 		torque_rot.z() += tr.z();
 	}
 
+#ifdef USE_XMX
+	/* Reduction using matrix units */
+
+	// Implementation based on M.Sc. thesis by Gabin Schieffer at KTH:
+	// "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
+	// https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
+
+	// 1. Convert data-to-be-reduced from float to half
+	// and place it in a shared-memory array
+	data_to_be_reduced[4*item_ct1.get_local_id(2)] = torque_rot.x();
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = torque_rot.y();
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = torque_rot.z();
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = energy;
+
+	// 2. Perform reduction using matrix units
+//	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
+
+	// 3. Retrieve result from shared memory
+	torque_rot.x() = data_to_be_reduced[0];
+	torque_rot.y() = data_to_be_reduced[1];
+	torque_rot.z() = data_to_be_reduced[2];
+	energy = data_to_be_reduced[3];
+
+	/* Reduction using matrix units */
+#else
 	// Do a reduction over the total gradient containing prepared "gradient_intra_*" values
 	torque_rot.x() = sycl::reduce_over_group(item_ct1.get_group(), torque_rot.x(), std::plus<>());
 	torque_rot.y() = sycl::reduce_over_group(item_ct1.get_group(), torque_rot.y(), std::plus<>());
 	torque_rot.z() = sycl::reduce_over_group(item_ct1.get_group(), torque_rot.z(), std::plus<>());
 
+	// reduction over partial energies and prepared "gradient_intra_*" values
+	energy = sycl::reduce_over_group(item_ct1.get_group(), energy, std::plus<>());
+#endif
+
 	// TODO
 	// -------------------------------------------------------
 	// Obtaining energy and translation-related gradients
 	// -------------------------------------------------------
-	// reduction over partial energies and prepared "gradient_intra_*" values
-	energy = sycl::reduce_over_group(item_ct1.get_group(), energy, std::plus<>());
 
 #if defined (DEBUG_ENERGY_KERNEL)
 	intraE = sycl::reduce_over_group(item_ct1.get_group(), intraE, std::plus<>());
 #endif
 
+#ifdef USE_XMX
+	/* Reduction using matrix units */
+
+	// Implementation based on M.Sc. thesis by Gabin Schieffer at KTH:
+	// "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
+	// https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
+
+	// 1. Convert data-to-be-reduced from float to half
+	// and place it in a shared memory array
+	data_to_be_reduced[4*item_ct1.get_local_id(2)] = gx;
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = gy;
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = gz;
+
+	// 2. Perform reduction using matrix units
+//	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
+
+	// 3. Retrieve results from shared memory
+	gx = data_to_be_reduced[0];
+	gy = data_to_be_reduced[1];
+	gz = data_to_be_reduced[2];
+
+	/* Reduction using matrix units */
+#else
 	gx = sycl::reduce_over_group(item_ct1.get_group(), gx, std::plus<>());
 	gy = sycl::reduce_over_group(item_ct1.get_group(), gy, std::plus<>());
 	gz = sycl::reduce_over_group(item_ct1.get_group(), gz, std::plus<>());
+#endif
 
 	global_energy = energy;
 	int* gradient_genotype = (int*)fgradient_genotype;
