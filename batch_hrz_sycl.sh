@@ -13,8 +13,8 @@
 module load intel/2024.1
 
 # Executing the SYCL version
-WORK_DIR=/home/ae89olan/project02441/ad-gpu-sycl-clean
-cd ${WORK_DIR} && pwd && make DEVICE=XeGPU TESTLS=sw test && make DEVICE=XeGPU TESTLS=ad test
+WORK_DIR=${PWD}
+cd ${WORK_DIR} && echo "${WORK_DIR}" && make DEVICE=XeGPU TESTLS=sw test && make DEVICE=XeGPU TESTLS=ad test
 
 exit 0
 
