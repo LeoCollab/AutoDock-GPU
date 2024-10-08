@@ -75,8 +75,14 @@ void gpu_calc_energrad(
 #endif
 	float *fgradient_genotype,
 	sycl::nd_item<3> item_ct1,
-	GpuData cData)
-{
+	GpuData cData
+	/* Reduction using matrix units */
+	,
+	sycl::half *data_to_be_reduced,
+	sycl::half *Q_data,
+	sycl::half *tmp
+	/* Reduction using matrix units */
+) {
 	float energy = 0.0f;
 #ifdef DOCK_TRACE
 	size_t global_id = item_ct1.get_global_id(2);
