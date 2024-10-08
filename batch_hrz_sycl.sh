@@ -14,7 +14,7 @@ module load intel/2024.1
 
 # Executing the SYCL version
 WORK_DIR=${PWD}
-cd ${WORK_DIR} && echo "${WORK_DIR}" && make DEVICE=XeGPU TESTLS=sw test && make DEVICE=XeGPU TESTLS=ad test
+cd ${WORK_DIR} && echo "${WORK_DIR}" && make DEVICE=XeGPU TESTLS=ad test && make DEVICE=XeGPU TESTLS=ad XMX=ON test
 
 exit 0
 
