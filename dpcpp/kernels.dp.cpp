@@ -285,7 +285,8 @@ void reduce_via_matrix_units (
 			*/
 
 			joint_matrix_load(sg, sub_A, sycl::local_ptr<sycl::half>(data_to_be_reduced + offset), 16);
-			sub_V = joint_matrix_mad(sg, /*sub_V,*/ sub_A, sub_P, sub_V);
+			//sub_V = joint_matrix_mad(sg, sub_A, sub_P, sub_V);	// 2024.1
+			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);	// 2024.2.1
 		}
 
 		// W <- V (required since we need V as a "use::b")
@@ -293,7 +294,8 @@ void reduce_via_matrix_units (
 		joint_matrix_load(sg, sub_W, sycl::local_ptr<sycl::half>(tmp), 16);
 
 		// 2. Perform line sum: C <- QW + C (zero)
-		sub_C = joint_matrix_mad(sg, /*sub_C,*/ sub_Q, sub_W, sub_C);
+		//sub_C = joint_matrix_mad(sg, sub_Q, sub_W, sub_C);	// 2024.1
+		joint_matrix_mad(sg, sub_C, sub_Q, sub_W, sub_C);	// 2024.2.1
 
 		// 3. Store result in shared memory
 		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(data_to_be_reduced), 16, layout::col_major);
