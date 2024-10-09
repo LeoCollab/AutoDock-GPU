@@ -85,6 +85,226 @@ inline int64_t ullitolli(uint64_t u)
 #define ATOMICSUBF32(pAccumulator, value) \
 	sycl::atomic_ref<float, SYCL_ATOMICS_MEMORY_ORDER, SYCL_ATOMICS_MEM_SCOPE, sycl::access::address_space::local_space>(*pAccumulator) -= ((float)(value))
 
+#ifdef USE_XMX
+/* Reduction using matrix units */
+using namespace sycl::ext::oneapi::experimental::matrix;
+
+// Implementation based on M.Sc. thesis by Gabin Schieffer at KTH:
+// "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
+// https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
+
+// Number of rows/cols of a submatrix: M, N, K
+constexpr int rowscols_M = 16;
+constexpr int rowscols_N = 16;
+constexpr int rowscols_K = 16;
+
+constexpr sycl::half HALF_ONE = sycl::half(1.0f);
+constexpr sycl::half HALF_ZERO = sycl::half(0.0f);
+
+constexpr sycl::half I4[16] =
+{
+	HALF_ONE,  HALF_ZERO, HALF_ZERO, HALF_ZERO,
+	HALF_ZERO, HALF_ONE,  HALF_ZERO, HALF_ZERO,
+	HALF_ZERO, HALF_ZERO, HALF_ONE,  HALF_ZERO,
+	HALF_ZERO, HALF_ZERO, HALF_ZERO, HALF_ONE
+};
+
+void fill_Q (
+	sycl::nd_item<3> item,
+	sycl::half *Q_data
+) {
+	/*
+	// Naive implementation: a single work-item fills data in
+	if(item.get_local_id(2) == 0) {
+		for(uint i = 0; i < 4; i++) {	// How many rows (of 4x4 blocks) are there in matrix A?
+			for(uint j = 0; j < 4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
+				for(uint ii = 0; ii < 4; ii++) {
+					for(uint jj = 0; jj < 4; jj++) {
+						Q_data[4*i + 64*j + ii + 16*jj] = I4[4*ii + jj];
+					}
+				}
+			}
+		}
+	}
+	*/
+
+	// Slightly improved multi-threaded implementation
+	for (uint i = item.get_local_id(2); i < 4; i+=item.get_local_range().get(2)) {	// How many rows (of 4x4 blocks) are there in matrix A?
+		for (uint j = 0; j < 4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
+			for (uint ii = 0; ii < 4; ii++) {
+				for (uint jj = 0; jj < 4; jj++) {
+					Q_data[4*i + 64*j + ii + 16*jj] = I4 [4*ii + jj];
+				}
+			}
+		}
+	}
+
+	/*
+	// Further improved multi-threaded implementation
+	// (It didn't provide significant performance improvements -> commented out)
+	// Fusing two outer loops into a single one
+	// To do that: coeffs = 4i + 64j
+	constexpr uint coeffs [16] = {0, 64, 128, 192, 4, 68, 132, 196, 8, 72, 136, 200, 12, 76, 140, 204};
+	for (uint k = item.get_local_id(2); k < 16; k+=item.get_local_range().get(2)) {
+		for (uint ii = 0; ii < 4; ii++) {
+			for (uint jj = 0; jj < 4; jj++) {
+				Q_data[coeffs[k] + ii + 16*jj] = I4 [4*ii + jj];
+			}
+		}
+	}
+	*/
+
+	/*
+	// Enable this block to print matrix values
+	if (item.get_group(2) == 0 && item.get_local_id(2) == 0) {
+		printf("\nQ_data");
+		for (uint i = 0; i < 16 * 16; i++) {
+			if ((i % 16) == 0) {printf("\n[Row %u]: ", i/16);}
+			printf(" %2.2f ", __half2float(Q_data[i]));
+		}
+		printf("\n");
+	}
+	*/
+}
+
+// Implementation based on MSc thesis at KTH:
+// "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
+// https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
+//
+// We consider that a CUDA fragment is equivalent to a SYCL submatrix
+//
+// Compilation: make DEVICE=XeGPU PLATFORM=NvGPU XMX=ON TESTLS=ad NUMWI=64 test
+void reduce_via_matrix_units (
+	sycl::nd_item<3> item,
+	sycl::half *data_to_be_reduced,
+	sycl::half *Q_data,
+	sycl::half *tmp
+) {
+	item.barrier(sycl::access::fence_space::local_space);
+
+	// Identifying global, local, and group ids
+	int globalId = item.get_global_linear_id();
+	int localId = item.get_local_id(2);
+	int groupId = item.get_group(2);
+	int groupSize = item.get_local_range().get(2);
+
+	// Identifying sub-groups
+	sycl::sub_group sg = item.get_sub_group();
+	int sgGroupRange = sg.get_group_range().get(2); // Returns the number of subgroups within the parent work-group
+	int sgGroupId = sg.get_group_id().get(2); // Returns the index of the subgroup
+	int sgSize = sg.get_local_range().get(2); // Returns the size of the subgroup
+	int sgId = sg.get_local_id().get(2); // Returns the index of the work-item within its subgroup
+
+	/*
+	printf("localId = %i, globalId = %i, groupId = %i, groupSize = %i, sgGroupRange = %i, sgGroupId = %i, sgSize = %i, sgId = %i\n",
+		localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
+	*/
+
+	// Only one sub-group (sgId == 0) performs reduction
+	//if(sgId == 0) {
+        if(localId <= 31) {
+		/*
+		printf("localId = %i, globalId = %i, groupId = %i, groupSize = %i, sgGroupRange = %i, sgGroupId = %i, sgSize = %i, sgId = %i\n",
+			localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
+		*/
+                fill_Q(item, Q_data);
+
+		/*
+		if (groupId == 0 && localId == 0) {
+			printf("\nQ_data");
+			for (uint i = 0; i < 16 * 16; i++) {
+				if ((i % 16) == 0) {printf("\n[Row %2u]: ", i/16);}
+				printf(" %5.3f ", float(Q_data[i]));
+			}
+			printf("\n");
+		}
+		*/
+
+		// Declaring and filling submatrices
+		joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::col_major> sub_P;
+		joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_V;
+
+		joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::col_major> sub_Q;
+		joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::col_major> sub_W;
+		joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_C;
+
+		joint_matrix_fill(sg, sub_P, HALF_ONE); // P: only ones
+		joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
+		joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
+
+		/*
+		// Must be copied from an accumulator matrix operand type
+		joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(data_to_be_reduced), 16, layout::col_major);
+		if (groupId == 0 && localId == 0) {
+			printf("\nsub_V");
+			for (uint i = 0; i < 16 * 16; i++) {
+				if ((i % 16) == 0) {printf("\n[Row %u]: ", i/16);}
+				printf(" %5.3f ", float(data_to_be_reduced[i]));
+			}
+			printf("\n");
+		}
+		*/
+
+		/*
+		// Must be copied from an accumulator matrix operand type
+		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(data_to_be_reduced), 16, layout::col_major);
+		if (groupId == 0 && localId == 0) {
+			printf("\nsub_C");
+			for (uint i = 0; i < 16 * 16; i++) {
+				if ((i % 16) == 0) {printf("\n[Row %u]: ", i/16);}
+				printf(" %5.3f ", float(data_to_be_reduced[i]));
+			}
+			printf("\n");
+		}
+		*/
+
+		// TODO: check the entire data to processed will fit into the matrix registers
+		joint_matrix_load(sg, sub_Q, sycl::local_ptr<sycl::half>(Q_data), 16);
+
+		// 1. Accumulate the values: V <- AP + V
+		for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK) / (16 * 16);  i++) {
+			const uint offset = i * 16 * 16;
+
+			/*
+			if (groupId == 0 && localId == 0) {
+				printf("\ni = %d, tripcount= %d, offset = %d ", i, (4 * NUM_OF_THREADS_PER_BLOCK) / (16 * 16), offset);
+			}
+			*/
+
+			joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::col_major> sub_A;
+
+			/*
+			if (groupId == 0 && localId == 0) {
+				printf("\ndata_to_be_reduced (inside)");
+				for (uint i = 0; i < 16 * 16; i++) {
+					if ((i % 16) == 0) {printf("\n[Row %2u]: ", i/16);}
+					printf(" %5.3f ", float(data_to_be_reduced[i]));
+				}
+				printf("\n");
+			}
+			*/
+
+			joint_matrix_load(sg, sub_A, sycl::local_ptr<sycl::half>(data_to_be_reduced + offset), 16);
+			sub_V = joint_matrix_mad(sg, /*sub_V,*/ sub_A, sub_P, sub_V);
+		}
+
+		// W <- V (required since we need V as a "use::b")
+		joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+		joint_matrix_load(sg, sub_W, sycl::local_ptr<sycl::half>(tmp), 16);
+
+		// 2. Perform line sum: C <- QW + C (zero)
+		sub_C = joint_matrix_mad(sg, /*sub_C,*/ sub_Q, sub_W, sub_C);
+
+		// 3. Store result in shared memory
+		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(data_to_be_reduced), 16, layout::col_major);
+	}
+
+	item.barrier(sycl::access::fence_space::local_space);
+}
+
+/* Reduction using matrix units */
+#endif
+
 static dpct::constant_memory<GpuData, 0> cData;
 static GpuData cpuData;
 

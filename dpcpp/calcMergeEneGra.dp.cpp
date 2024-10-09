@@ -717,7 +717,7 @@ void gpu_calc_energrad(
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = energy;
 
 	// 2. Perform reduction using matrix units
-//	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
+	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
 
 	// 3. Retrieve result from shared memory
 	torque_rot.x() = data_to_be_reduced[0];
@@ -759,7 +759,7 @@ void gpu_calc_energrad(
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = gz;
 
 	// 2. Perform reduction using matrix units
-//	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
+	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
 
 	// 3. Retrieve results from shared memory
 	gx = data_to_be_reduced[0];
