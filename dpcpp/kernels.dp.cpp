@@ -247,7 +247,6 @@ void reduce_via_matrix_units (
 		}
 		*/
 
-		// TODO: check the entire data to processed will fit into the matrix registers
 		joint_matrix_load(sg, sub_Q, sycl::local_ptr<sycl::half>(Q_data), 16);
 
 		// 1. Accumulate the values: V <- AP + V
