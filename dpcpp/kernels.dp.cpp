@@ -202,12 +202,12 @@ void reduce_via_matrix_units (
 
 	// Only one sub-group (sgId == 0) performs reduction
 	//if(sgId == 0) {
-        if(localId <= 31) {
+	if(localId <= 31) {
 		/*
 		printf("localId = %i, globalId = %i, groupId = %i, groupSize = %i, sgGroupRange = %i, sgGroupId = %i, sgSize = %i, sgId = %i\n",
 			localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
 		*/
-                fill_Q(item, Q_data);
+		fill_Q(item, Q_data);
 
 		// Declaring and filling submatrices
 		joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::col_major> sub_P;
