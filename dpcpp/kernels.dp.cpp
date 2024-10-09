@@ -160,7 +160,7 @@ void fill_Q (
 		printf("\nQ_data");
 		for (uint i = 0; i < 16 * 16; i++) {
 			if ((i % 16) == 0) {printf("\n[Row %u]: ", i/16);}
-			printf(" %2.2f ", __half2float(Q_data[i]));
+			printf(" %5.3f ", float(Q_data[i]));
 		}
 		printf("\n");
 	}
@@ -208,17 +208,6 @@ void reduce_via_matrix_units (
 			localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
 		*/
                 fill_Q(item, Q_data);
-
-		/*
-		if (groupId == 0 && localId == 0) {
-			printf("\nQ_data");
-			for (uint i = 0; i < 16 * 16; i++) {
-				if ((i % 16) == 0) {printf("\n[Row %2u]: ", i/16);}
-				printf(" %5.3f ", float(Q_data[i]));
-			}
-			printf("\n");
-		}
-		*/
 
 		// Declaring and filling submatrices
 		joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::col_major> sub_P;
