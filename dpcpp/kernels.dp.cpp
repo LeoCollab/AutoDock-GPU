@@ -93,6 +93,9 @@ using namespace sycl::ext::oneapi::experimental::matrix;
 // "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
 // https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
 
+// If enabled, then using hardcoded inputs
+//#define DEBUG_XMX_INPUTS
+
 // Number of rows/cols of a submatrix: M, N, K
 constexpr int rowscols_M = 16;
 constexpr int rowscols_N = 16;
