@@ -131,6 +131,20 @@ void print_submatrix (
 	item.barrier(sycl::access::fence_space::local_space);
 }
 
+void print_wi_indexes (
+	int localId,
+	int globalId,
+	int groupId,
+	int groupSize,
+	int sgGroupRange,
+	int sgGroupId,
+	int sgSize,
+	int sgId
+) {
+	printf("lId = %i, \tgId = %i, \tgroupId = %i, \tgroupSz = %i, \tsgGroupRange = %i, \tsgGroupId = %i, \tsgSz = %i, \tsgId = %i\n",
+	localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
+}
+
 void fill_Q (
 	sycl::nd_item<3> item,
 	sycl::half *Q_data
@@ -212,17 +226,16 @@ void reduce_via_matrix_units (
 	int sgId = sg.get_local_id().get(2); // Returns the index of the work-item within its subgroup
 
 	/*
-	printf("localId = %i, globalId = %i, groupId = %i, groupSize = %i, sgGroupRange = %i, sgGroupId = %i, sgSize = %i, sgId = %i\n",
-		localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
+	print_wi_indexes(localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
 	*/
 
 	// Only one sub-group (sgId == 0) performs reduction
 	//if(sgId == 0) {
 	if(localId <= 31) {
 		/*
-		printf("localId = %i, globalId = %i, groupId = %i, groupSize = %i, sgGroupRange = %i, sgGroupId = %i, sgSize = %i, sgId = %i\n",
-			localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
+		print_wi_indexes(localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
 		*/
+
 		fill_Q(item, Q_data);
 
 		// Declaring and filling submatrices
