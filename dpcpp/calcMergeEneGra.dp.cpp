@@ -711,11 +711,17 @@ void gpu_calc_energrad(
 
 	// 1. Convert data-to-be-reduced from float to half
 	// and place it in a shared-memory array
+
 	data_to_be_reduced[4*item_ct1.get_local_id(2)] = torque_rot.x();
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = torque_rot.y();
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = torque_rot.z();
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = energy;
-
+	/*
+	data_to_be_reduced[4*item_ct1.get_local_id(2)] = sycl::half(1.0f);
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = sycl::half(2.0f);
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = sycl::half(3.0f);
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = sycl::half(4.0f);
+	*/
 	// 2. Perform reduction using matrix units
 	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
 
@@ -757,7 +763,12 @@ void gpu_calc_energrad(
 	data_to_be_reduced[4*item_ct1.get_local_id(2)] = gx;
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = gy;
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = gz;
-
+	/*
+	data_to_be_reduced[4*item_ct1.get_local_id(2)] = sycl::half(22.04f);
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = sycl::half(26.05f);
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = sycl::half(19.02f);
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = sycl::half(30.11f);
+	*/
 	// 2. Perform reduction using matrix units
 	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
 
