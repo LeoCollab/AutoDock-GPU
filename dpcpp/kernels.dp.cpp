@@ -94,7 +94,7 @@ using namespace sycl::ext::oneapi::experimental::matrix;
 // https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
 
 // If enabled, then using hardcoded inputs
-//#define DEBUG_XMX_INPUTS
+#define DEBUG_XMX_INPUTS
 
 // Number of rows/cols of a submatrix: M, N, K
 constexpr int rowscols_M = 16;
@@ -112,6 +112,14 @@ constexpr sycl::half I4[16] =
 	HALF_ZERO, HALF_ZERO, HALF_ZERO, HALF_ONE
 };
 
+// Printing submatrices contents,
+// which have to be previously copied into an array in local memory.
+// Enclosing the implementation of print_submatrix()
+// within barriers (as initially thought) produces wrong results.
+// Such mistake makes sense since print_submatrix() is called if(localId <= 31).
+// Extra sync before printing is not needed as long as
+// print_submatrix() is called after joint_matrix functions,
+// which are executed by the entire sub_group (i.e., localId <= 31)
 template <typename T>
 void print_submatrix (
 	sycl::nd_item<3> item,
@@ -120,7 +128,6 @@ void print_submatrix (
 	const char *msg,
 	T *data_to_print
 ) {
-	item.barrier(sycl::access::fence_space::local_space);
 	if (groupId == 0 && localId == 0) {
 		printf("\n%s", msg);
 		for (uint i = 0; i < 16 * 16; i++) {
@@ -131,7 +138,6 @@ void print_submatrix (
 		}
 		printf("\n");
 	}
-	item.barrier(sycl::access::fence_space::local_space);
 }
 
 void print_wi_indexes (
