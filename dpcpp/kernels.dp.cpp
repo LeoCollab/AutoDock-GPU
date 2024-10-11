@@ -277,7 +277,7 @@ void reduce_via_matrix_units (
 			joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::col_major> sub_A;
 
 			/*
-			print_submatrix<sycl::half>(item, groupId, localId, "data_to_be_reduced [inside main loop]", tmp);
+			print_submatrix<sycl::half>(item, groupId, localId, "data_to_be_reduced [inside main loop]", data_to_be_reduced);
 			*/
 
 			joint_matrix_load(sg, sub_A, sycl::local_ptr<sycl::half>(data_to_be_reduced + offset), 16);
