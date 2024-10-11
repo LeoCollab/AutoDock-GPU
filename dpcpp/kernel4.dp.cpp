@@ -74,75 +74,58 @@ gpu_gen_and_eval_newpops_kernel(
 		// Find and copy best member of population to position 0
 		if (item_ct1.get_local_id(2) < cData.dockpars.pop_size)
 		{
-			bestID = item_ct1.get_group(2) + item_ct1.get_local_id(2);
-			energy = pMem_energies_current[item_ct1.get_group(2) + item_ct1.get_local_id(2)];
-		}
-		else
-		{
-			bestID = -1;
-			energy = FLT_MAX;
-		}
-		
-		// Scan through population (we already picked up a blockDim's worth above so skip)
-		for (int i = item_ct1.get_group(2) + item_ct1.get_local_range().get(2) + item_ct1.get_local_id(2);
-				 i < item_ct1.get_group(2) + cData.dockpars.pop_size;
-				 i += item_ct1.get_local_range().get(2))
-		{
-			float e = pMem_energies_current[i];
-			if (e < energy)
-			{
-				bestID = i;
-				energy = e;
-			}
+			sBestEnergy[item_ct1.get_local_id(2)] = pMem_energies_current[item_ct1.get_group(2) + item_ct1.get_local_id(2)];
+			sBestID[item_ct1.get_local_id(2)] = item_ct1.get_local_id(2);
 		}
 
-		// Reduce to shared memory by warp
-		int tgx = item_ct1.get_local_id(2) & cData.warpmask;
-		WARPMINIMUM2(tgx, energy, bestID);
-		int warpID = item_ct1.get_local_id(2) >> cData.warpbits;
-		if (tgx == 0)
+		for (int entity_counter = item_ct1.get_local_range().get(2) + item_ct1.get_local_id(2);
+				 entity_counter < cData.dockpars.pop_size;
+				 entity_counter += item_ct1.get_local_range().get(2))
 		{
-			sBestID[warpID] = bestID;
-			sBestEnergy[warpID] = sycl::fmin((float)MAXENERGY, energy);
+			if (pMem_energies_current[item_ct1.get_group(2) + entity_counter] < sBestEnergy[item_ct1.get_local_id(2)])
+			{
+				sBestEnergy[item_ct1.get_local_id(2)] = pMem_energies_current[item_ct1.get_group(2) + entity_counter];
+				sBestID[item_ct1.get_local_id(2)] = entity_counter;
+			}
 		}
 
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
-		// Perform final reduction in warp 0
-		if (warpID == 0)
+		// This could be implemented with a tree-like structure
+		// which may be slightly faster
+		if (item_ct1.get_local_id(2) == 0)
 		{
-			int blocks = item_ct1.get_local_range().get(2) / 32;
-			if (tgx < blocks)
+			energy = sBestEnergy[0];
+			bestID = sBestID[0];
+
+			for (int entity_counter = 1;
+					 entity_counter < item_ct1.get_local_range().get(2);
+					 entity_counter++)
 			{
-				bestID = sBestID[tgx];
-				energy = sBestEnergy[tgx];
-			}
-			else
-			{
-				bestID = -1;
-				energy = FLT_MAX;
+				if ( (sBestEnergy[entity_counter] < energy) && (entity_counter < cData.dockpars.pop_size) )
+				{
+					energy = sBestEnergy[entity_counter];
+					bestID = sBestID[entity_counter];
+				}
 			}
 
-			WARPMINIMUM2(tgx, energy, bestID);
+			// Setting energy value of new entity
+			pMem_energies_next[item_ct1.get_group(2)] = energy;
 
-			if (tgx == 0)
-			{
-				pMem_energies_next[item_ct1.get_group(2)] = energy;
-				cData.pMem_evals_of_new_entities[item_ct1.get_group(2)] = 0;
-				sBestID[0] = bestID;
-			}
+			// Zero (0) evals were performed for entity selected with elitism (since it was copied only)
+			cData.pMem_evals_of_new_entities[item_ct1.get_group(2)] = 0;
 		}
 
 		item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 		// Copy best genome to next generation
-		int dOffset = item_ct1.get_group(2) * GENOTYPE_LENGTH_IN_GLOBMEM;
-		int sOffset = sBestID[0] * GENOTYPE_LENGTH_IN_GLOBMEM;
-		for (int i = item_ct1.get_local_id(2);
-				 i < cData.dockpars.num_of_genes;
-				 i += item_ct1.get_local_range().get(2))
+		int dOffset = GENOTYPE_LENGTH_IN_GLOBMEM * item_ct1.get_group(2);
+		int sOffset = dOffset + GENOTYPE_LENGTH_IN_GLOBMEM * bestID;
+		for (int gene_counter = item_ct1.get_local_id(2);
+				 gene_counter < cData.dockpars.num_of_genes;
+				 gene_counter += item_ct1.get_local_range().get(2))
 		{
-			pMem_conformations_next[dOffset + i] = pMem_conformations_current[sOffset + i];
+			pMem_conformations_next[dOffset + gene_counter] = pMem_conformations_current[sOffset + gene_counter];
 		}
 	}
 	else
@@ -358,8 +341,8 @@ void gpu_gen_and_eval_newpops(
 		sycl::local_accessor<int, 1> parents_acc_ct1(sycl::range<1>(2), cgh);
 		sycl::local_accessor<int, 1> covr_point_acc_ct1(sycl::range<1>(2), cgh);
 		sycl::local_accessor<float, 1> randnums_acc_ct1(sycl::range<1>(10), cgh);
-		sycl::local_accessor<float, 1> sBestEnergy_acc_ct1(sycl::range<1>(32), cgh);
-		sycl::local_accessor<int, 1> sBestID_acc_ct1(sycl::range<1>(32), cgh);
+		sycl::local_accessor<float, 1> sBestEnergy_acc_ct1(sycl::range<1>(threadsPerBlock), cgh);
+		sycl::local_accessor<int, 1> sBestID_acc_ct1(sycl::range<1>(threadsPerBlock), cgh);
 		sycl::local_accessor<sycl::float3, 1> calc_coords_acc_ct1(sycl::range<1>(256 /*MAX_NUM_OF_ATOMS*/), cgh);
 
 		cgh.parallel_for(
