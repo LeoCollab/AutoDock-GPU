@@ -54,25 +54,6 @@ inline int64_t ullitolli(uint64_t u)
 	return l;
 }
 
-#define WARPMINIMUMEXCHANGE(tgx, v0, k0, mask)	\
-{	\
-	float v1 = v0;	\
-	int k1 = k0;	\
-	int otgx = tgx ^ mask;	\
-	float v2 = item_ct1.get_sub_group().shuffle(v0, otgx);	\
-	int k2 = item_ct1.get_sub_group().shuffle(k0, otgx);	\
-	int flag = ((v1 < v2) ^ (tgx > otgx)) && (v1 != v2);	\
-	k0 = flag ? k1 : k2;	\
-	v0 = flag ? v1 : v2;	\
-}
-
-#define WARPMINIMUM2(tgx, v0, k0) \
-	WARPMINIMUMEXCHANGE(tgx, v0, k0, 1) \
-	WARPMINIMUMEXCHANGE(tgx, v0, k0, 2) \
-	WARPMINIMUMEXCHANGE(tgx, v0, k0, 4) \
-	WARPMINIMUMEXCHANGE(tgx, v0, k0, 8) \
-	WARPMINIMUMEXCHANGE(tgx, v0, k0, 16)
-
 #define ATOMICADDI32(pAccumulator, value) \
 	sycl::atomic_ref<int, SYCL_ATOMICS_MEMORY_ORDER, SYCL_ATOMICS_MEM_SCOPE, sycl::access::address_space::local_space>(*pAccumulator) += ((int)(value))
 
