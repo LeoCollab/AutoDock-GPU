@@ -14,6 +14,8 @@
 # Choose OpenCL device
 # Valid values: CPU, GPU
 
+# Assume $ONEAPIPATH/setvars.sh has been run
+
 DPCPP = icpx -fsycl
 CPP = icpx -fsycl
 UNAME := $(shell uname)
@@ -21,8 +23,6 @@ UNAME := $(shell uname)
 ifeq ($(XMX), ON)
 	INTELXMX=-DUSE_XMX
 endif
-
-# Assume $ONEAPIPATH/setvars.sh has been run
 
 ifeq ($(DEVICE), CPU)
 	DEV =-DCPU_DEVICE
