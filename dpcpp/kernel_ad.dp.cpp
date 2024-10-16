@@ -457,6 +457,8 @@ void gpu_gradient_minAD(
 	// Validating inputs
 	using namespace sycl::ext::oneapi::experimental;
 
+	// Compile-Time Query
+
 	// References in oneAPI 2024.2.1
 	//
 	// ---------------------------------------------
@@ -567,6 +569,24 @@ void gpu_gradient_minAD(
 
 	using myparams_nvidia_gpu_sm_80 = matrix_params<architecture::nvidia_gpu_sm_80, sycl::half, sycl::half, sycl::half, sycl::half, rowscols_M, rowscols_N, rowscols_K>;
 	myparams_nvidia_gpu_sm_80 test_params_nvidia_gpu_sm_80; // Checking with object definition because internal asserts happen at struct instantiation!
+
+	// Runtime Query
+	std::vector<combination> combinations = dpct::get_default_queue().get_device().get_info<info::device::matrix_combinations>();
+	printf("[Joint Matrix] Number of combinations supported: %2i\n", sizeof(combinations));
+	for (int i = 0; i < sizeof(combinations); i++) {
+		printf("\tCombination #%2i: \t max-sizes (m,n,k): %2i %2i %2i \t|\t sizes (m,n,k): %2i %2i %2i",
+				i,
+				combinations[i].max_msize, combinations[i].max_nsize, combinations[i].max_ksize,
+				combinations[i].msize, combinations[i].nsize, combinations[i].ksize);
+		if (/*sycl::half*/matrix_type::fp16 == combinations[i].atype &&
+			/*sycl::half*/matrix_type::fp16 == combinations[i].btype &&
+			/*sycl::half*/matrix_type::fp16 == combinations[i].ctype &&
+			/*sycl::half*/matrix_type::fp16 == combinations[i].dtype) {
+			printf(" <- joint_matrix_mad() can be called using these sizes for fp16 types!");
+		}
+		printf("\n");
+	}
+
 	#endif
 
 	dpct::get_default_queue().submit([&](sycl::handler &cgh) {
