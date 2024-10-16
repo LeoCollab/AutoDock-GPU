@@ -453,6 +453,53 @@ void gpu_gradient_minAD(
 	//printf("\tk_ad: max_wg_size = %lu, passed_wg_size = %u\n", max_wg_size, threads);
 	assert(max_wg_size >= threads);
 
+	#ifdef USE_XMX
+	// Validating inputs
+	using namespace sycl::ext::oneapi::experimental;
+
+	// References in oneAPI 2024.2.1
+	//
+	// Architectures recognized in oneAPI 2024.2.1:
+	// /opt/intel/oneapi/compiler/2024.2/bin/compiler/../../include/sycl/ext/oneapi/experimental/device_architecture.hpp
+	// nvidia_gpu_sm_50
+	// nvidia_gpu_sm_52
+	// nvidia_gpu_sm_53
+	// nvidia_gpu_sm_60
+	// nvidia_gpu_sm_61
+	// nvidia_gpu_sm_62
+	// nvidia_gpu_sm_70
+	// nvidia_gpu_sm_72
+	// nvidia_gpu_sm_75
+	// nvidia_gpu_sm_80
+	// nvidia_gpu_sm_86
+	// nvidia_gpu_sm_87
+	// nvidia_gpu_sm_89
+	// nvidia_gpu_sm_90
+	//
+	// Architectures with support for static queries in oneAPI 2024.2.1:
+	// /opt/intel/oneapi/compiler/2024.2/bin/compiler/../../include/sycl/ext/oneapi/matrix/static-query-use.hpp
+	// nvidia_gpu_sm_70
+	// nvidia_gpu_sm_72
+	// nvidia_gpu_sm_80
+	//
+	// Custom check
+	/*
+	constexpr architecture nvidia_gpu_family[3] = {
+		architecture::nvidia_gpu_sm_70,
+		architecture::nvidia_gpu_sm_72,
+		architecture::nvidia_gpu_sm_80
+	};
+	*/
+	using myparams_sm70 = matrix_params<architecture::nvidia_gpu_sm_70, sycl::half, sycl::half, sycl::half, sycl::half, rowscols_M, rowscols_N, rowscols_K>;
+	myparams_sm70 test_params_sm70; // Checking with object definition because internal asserts happen at struct instantiation!
+
+	using myparams_sm72 = matrix_params<architecture::nvidia_gpu_sm_72, sycl::half, sycl::half, sycl::half, sycl::half, rowscols_M, rowscols_N, rowscols_K>;
+	myparams_sm72 test_params_sm72; // Checking with object definition because internal asserts happen at struct instantiation!
+
+	using myparams_sm80 = matrix_params<architecture::nvidia_gpu_sm_80, sycl::half, sycl::half, sycl::half, sycl::half, rowscols_M, rowscols_N, rowscols_K>;
+	myparams_sm80 test_params_sm80; // Checking with object definition because internal asserts happen at struct instantiation!
+	#endif
+
 	dpct::get_default_queue().submit([&](sycl::handler &cgh) {
 		extern dpct::constant_memory<GpuData, 0> cData;
 		cData.init();
