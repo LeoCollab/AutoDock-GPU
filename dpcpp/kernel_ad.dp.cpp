@@ -453,25 +453,6 @@ void gpu_gradient_minAD(
 	//printf("\tk_ad: max_wg_size = %lu, passed_wg_size = %u\n", max_wg_size, threads);
 	assert(max_wg_size >= threads);
 
-	#ifdef USE_XMX
-	// Runtime Query of matrix sizes and types configurations
-	std::vector<combination> combinations = dpct::get_default_queue().get_device().get_info<info::device::matrix_combinations>();
-	printf("[Joint Matrix] Number of combinations supported: %2i\n", sizeof(combinations));
-	for (int i = 0; i < sizeof(combinations); i++) {
-		printf("\tCombination #%2i: \t max-sizes (m,n,k): %2i %2i %2i \t|\t sizes (m,n,k): %2i %2i %2i",
-				i,
-				combinations[i].max_msize, combinations[i].max_nsize, combinations[i].max_ksize,
-				combinations[i].msize, combinations[i].nsize, combinations[i].ksize);
-		if (/*sycl::half*/matrix_type::fp16 == combinations[i].atype &&
-			/*sycl::half*/matrix_type::fp16 == combinations[i].btype &&
-			/*sycl::half*/matrix_type::fp16 == combinations[i].ctype &&
-			/*sycl::half*/matrix_type::fp16 == combinations[i].dtype) {
-			printf(" <- joint_matrix_mad() can be called using these sizes for fp16 types!");
-		}
-		printf("\n");
-	}
-	#endif
-
 	dpct::get_default_queue().submit([&](sycl::handler &cgh) {
 		extern dpct::constant_memory<GpuData, 0> cData;
 		cData.init();
