@@ -408,7 +408,8 @@ using myparams_intel_gpu_pvc = matrix_params<architecture::intel_gpu_pvc, sycl::
 myparams_intel_gpu_pvc test_params_intel_gpu_pvc; // Checking with object definition because internal asserts happen at struct instantiation!
 */
 
-// NVIDIA (all configurations below pass)
+// NVIDIA (all configurations below pass -> these are replaced with runtime query)
+/*
 using myparams_nvidia_gpu_sm_70 = matrix_params<architecture::nvidia_gpu_sm_70, sycl::half, sycl::half, sycl::half, sycl::half, rowscols_M, rowscols_N, rowscols_K>;
 myparams_nvidia_gpu_sm_70 test_params_nvidia_gpu_sm_70; // Checking with object definition because internal asserts happen at struct instantiation!
 
@@ -417,7 +418,7 @@ myparams_nvidia_gpu_sm_72 test_params_nvidia_gpu_sm_72; // Checking with object 
 
 using myparams_nvidia_gpu_sm_80 = matrix_params<architecture::nvidia_gpu_sm_80, sycl::half, sycl::half, sycl::half, sycl::half, rowscols_M, rowscols_N, rowscols_K>;
 myparams_nvidia_gpu_sm_80 test_params_nvidia_gpu_sm_80; // Checking with object definition because internal asserts happen at struct instantiation!
-
+*/
 /* Reduction using matrix units */
 #endif
 
