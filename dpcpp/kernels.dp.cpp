@@ -187,6 +187,32 @@ void fill_Q (
 	*/
 }
 
+void fill_identity (
+	sycl::nd_item<3> item,
+	sycl::half *Q_data
+) {
+	// Naive implementation: a single work-item fills data in
+	if(item.get_local_id(2) == 0) {
+		for(uint i = 0; i < 16; i++) {
+			for(uint j = 0; j < 16; j++) {
+				if (i == j) {
+					Q_data[16*i + j] = HALF_ONE;
+				}
+				else {
+					Q_data[16*i + j] = HALF_ZERO;
+				}
+			}
+		}
+	}
+
+	/*
+	int groupId = item.get_group(2);
+	int localId = item.get_local_id(2);
+	print_submatrix<sycl::half>(item, groupId, localId, "Q_data [inside fill_identity()]", Q_data);
+	*/
+}
+
+
 // Implementation based on MSc thesis at KTH:
 // "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
 // https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
@@ -237,6 +263,26 @@ void reduce_via_matrix_units (
 		joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_C;
 
 		joint_matrix_fill(sg, sub_P, HALF_ONE); // P: only ones
+
+		/*
+		// The most elegant way to print sub_P contents would be
+		// to copy sub_P (use::b) into any use::accumulator type matrix,
+		// which in turn would be stored into shared memory, and then finally printed.
+		//
+		// Copying matrices contents via joint_matrix_copy()
+		// from use::b into use::accumulator doesn't work in oneAPI v2024.2.1.
+		// Thus, P is moved to shared memory via: sub_V <- tmp x sub_P + sub_V,
+		// where tmp is used as a temporal identity matrix,
+		// sub_V is initialized with zeros.
+		// sub_V ends up storing the sub_P contents.
+		fill_identity(item, tmp);
+		joint_matrix_load(sg, sub_Q, sycl::local_ptr<sycl::half>(tmp), 16);
+		joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
+		joint_matrix_mad(sg, sub_V, sub_Q, sub_P, sub_V);	// 2024.2.1
+		joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+		print_submatrix<sycl::half>(item, groupId, localId, "sub_P", tmp);
+		*/
+
 		joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
 		joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
 
