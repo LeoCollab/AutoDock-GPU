@@ -324,12 +324,6 @@ void reduce_via_matrix_units (
 		joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
 		joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
 
-		/*
-		// Must be copied from an accumulator matrix operand type
-		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
-		print_submatrix<sycl::half>(item, groupId, localId, "sub_C", tmp);
-		*/
-
 		joint_matrix_load(sg, sub_Q, sycl::local_ptr<sycl::half>(Q_data), 16);
 
 		// 1. Accumulate the values: V <- AP + V
@@ -387,6 +381,12 @@ void reduce_via_matrix_units (
 		move_matrix_b_to_acc(item, tmp, sub_W, sub_Acc2);
 		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 		print_submatrix<sycl::half>(item, groupId, localId, "sub_W", tmp);
+		*/
+
+		/*
+		// Must be copied from an accumulator matrix operand type
+		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+		print_submatrix<sycl::half>(item, groupId, localId, "sub_C (before mad)", tmp);
 		*/
 
 		// 2. Perform line sum: C <- QW + C (zero)
