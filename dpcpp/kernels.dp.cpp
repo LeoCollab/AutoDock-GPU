@@ -315,15 +315,12 @@ void reduce_via_matrix_units (
 		// Declaring and filling submatrices
 		T_jm_b sub_P;
 		T_jm_acc sub_V;
-
 		T_jm_a sub_Q;
 		T_jm_b sub_W;
 		T_jm_acc sub_C;
-
 		joint_matrix_fill(sg, sub_P, HALF_ONE); // P: only ones
 		joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
 		joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
-
 		joint_matrix_load(sg, sub_Q, sycl::local_ptr<sycl::half>(Q_data), 16);
 
 		// 1. Accumulate the values: V <- AP + V
