@@ -324,12 +324,11 @@ void reduce_via_matrix_units (
 			}
 			*/
 
-			joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::col_major> sub_A;
-
 			/*
 			print_submatrix<sycl::half>(item, groupId, localId, "data_to_be_reduced [inside main loop]", data_to_be_reduced);
 			*/
 
+			joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::col_major> sub_A;
 			joint_matrix_load(sg, sub_A, sycl::local_ptr<sycl::half>(data_to_be_reduced + offset), 16);
 			//sub_V = joint_matrix_mad(sg, sub_A, sub_P, sub_V);	// 2024.1
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);	// 2024.2.1
