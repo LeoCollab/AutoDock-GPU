@@ -230,6 +230,26 @@ using T_jm_acc = joint_matrix<sycl::sub_group, sycl::half, use::accumulator, row
 // Thus, "use::b" sub_Input_b matrix is moved to shared memory via matrix multiply-add,
 // where sub_Identity_a is used as a temporal identity matrix,
 // and sub_Acc is initialized with zeros but ends up storing sub_Input_b contents.
+void move_matrix_a_to_acc (
+	sycl::nd_item<3> item,
+	sycl::half *tmp,
+	T_jm_a &sub_Input_a,
+	T_jm_acc &sub_Acc
+){
+	sycl::sub_group sg = item.get_sub_group();
+
+	// Loading identity values to sub_Identity
+	fill_identity(item, tmp);
+	T_jm_b sub_Identity_b;
+	joint_matrix_load(sg, sub_Identity_b, sycl::local_ptr<sycl::half>(tmp), 16);
+
+	// Initializing sub_Acc with zeros
+	joint_matrix_fill(sg, sub_Acc, HALF_ZERO);
+
+	// sub_Acc <- sub_Input_a x sub_Identity_b + sub_Acc
+	joint_matrix_mad(sg, sub_Acc, sub_Input_a, sub_Identity_b, sub_Acc);
+}
+
 void move_matrix_b_to_acc (
 	sycl::nd_item<3> item,
 	sycl::half *tmp,
