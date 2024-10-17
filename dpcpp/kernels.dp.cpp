@@ -341,7 +341,7 @@ void reduce_via_matrix_units (
 			joint_matrix_load(sg, sub_A, sycl::local_ptr<sycl::half>(data_to_be_reduced + offset), 16);
 
 			/*
-			// Moving sub_Acc to shared memory and printing
+			// Printing sub_A y sub_P
 			T_jm_acc sub_Acc;
 			move_matrix_a_to_acc(item, tmp, sub_A, sub_Acc);
 			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
@@ -353,7 +353,7 @@ void reduce_via_matrix_units (
 			*/
 
 			/*
-			// Must be copied from an accumulator matrix operand type
+			// Printing sub_V (before mad)
 			joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 			print_submatrix<sycl::half>(item, groupId, localId, "sub_V (before mad)", tmp);
 			*/
@@ -362,7 +362,7 @@ void reduce_via_matrix_units (
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);	// 2024.2.1
 
 			/*
-			// Must be copied from an accumulator matrix operand type
+			// Printing sub_V (after mad)
 			joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 			print_submatrix<sycl::half>(item, groupId, localId, "sub_V (after mad)", tmp);
 			*/
@@ -373,7 +373,7 @@ void reduce_via_matrix_units (
 		joint_matrix_load(sg, sub_W, sycl::local_ptr<sycl::half>(tmp), 16);
 
 		/*
-		// Must be copied from an accumulator matrix operand type
+		// Printing sub_Q y sub_W
 		T_jm_acc sub_Acc2;
 		move_matrix_a_to_acc(item, tmp, sub_Q, sub_Acc2);
 		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
@@ -385,7 +385,7 @@ void reduce_via_matrix_units (
 		*/
 
 		/*
-		// Must be copied from an accumulator matrix operand type
+		// Printing sub_C (before mad)
 		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 		print_submatrix<sycl::half>(item, groupId, localId, "sub_C (before mad)", tmp);
 		*/
@@ -395,7 +395,7 @@ void reduce_via_matrix_units (
 		joint_matrix_mad(sg, sub_C, sub_Q, sub_W, sub_C);	// 2024.2.1
 
 		/*
-		// Must be copied from an accumulator matrix operand type
+		// Printing sub_C (after mad)
 		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 		print_submatrix<sycl::half>(item, groupId, localId, "sub_C", tmp);
 		*/
