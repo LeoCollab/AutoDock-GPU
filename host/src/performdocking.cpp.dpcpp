@@ -840,6 +840,17 @@ try
 		}
 	} // End if (dockpars.lsearch_rate != 0.0f)
 
+	// Verifying that the passed work-group size doesn't exceed device's limit
+	auto max_wg_size = dpct::get_default_queue().get_device().get_info<sycl::info::device::max_work_group_size>();
+	printf("\nWG size \n    Device limit: %lu \n    Actual: k1 = %u | k2 = %u | k3 = %u | k4 = %u | k7 = %u | k8 = %u\n",
+			max_wg_size, kernel1_lxsize, kernel2_lxsize, kernel3_lxsize, kernel4_lxsize, kernel7_lxsize, kernel8_lxsize);
+	assert(max_wg_size >= kernel1_lxsize);
+	assert(max_wg_size >= kernel2_lxsize);
+	assert(max_wg_size >= kernel3_lxsize);
+	assert(max_wg_size >= kernel4_lxsize);
+	assert(max_wg_size >= kernel7_lxsize);
+	assert(max_wg_size >= kernel8_lxsize);
+
 	// Kernel1
 	#ifdef DOCK_DEBUG
 	para_printf("\nExecution starts:\n\n");
