@@ -111,11 +111,16 @@ void print_submatrix (
 ) {
 	if (groupId == 0 && localId == 0) {
 		printf("\n%s", msg);
-		for (uint i = 0; i < 16 * 16; i++) {
-			if ((i % 16) == 0) {
-				printf("\n[Row %2u]: ", i/16);
+		for (uint i = 0; i < 16; i++) {
+			for (uint j = 0; j < 16; j++) {
+				if ((j % 16) == 0) {
+					printf("\n[Row %2u]: ", i);
+				}
+				// Printing row-major
+				//printf(" %5.3f ", float(data_to_print[i * 16 + j]));
+				// Printing column-major
+				printf(" %5.3f ", float(data_to_print[j * 16 + i]));
 			}
-			printf(" %5.3f ", float(data_to_print[i]));
 		}
 		printf("\n");
 	}
