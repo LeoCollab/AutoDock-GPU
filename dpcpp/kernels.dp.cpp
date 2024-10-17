@@ -321,15 +321,6 @@ void reduce_via_matrix_units (
 		T_jm_acc sub_C;
 
 		joint_matrix_fill(sg, sub_P, HALF_ONE); // P: only ones
-
-		/*
-		// Moving sub_Acc to shared memory and printing
-		T_jm_acc sub_Acc;
-		move_matrix_b_to_acc(item, tmp, sub_P, sub_Acc);
-		joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
-		print_submatrix<sycl::half>(item, groupId, localId, "sub_P", tmp);
-		*/
-
 		joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
 		joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
 
@@ -370,6 +361,10 @@ void reduce_via_matrix_units (
 			move_matrix_a_to_acc(item, tmp, sub_A, sub_Acc);
 			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 			print_submatrix<sycl::half>(item, groupId, localId, "sub_A", tmp);
+
+			move_matrix_b_to_acc(item, tmp, sub_P, sub_Acc);
+			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+			print_submatrix<sycl::half>(item, groupId, localId, "sub_P", tmp);
 			*/
 
 			//sub_V = joint_matrix_mad(sg, sub_A, sub_P, sub_V);	// 2024.1
