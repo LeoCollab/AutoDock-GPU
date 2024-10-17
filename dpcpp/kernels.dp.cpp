@@ -375,6 +375,10 @@ void reduce_via_matrix_units (
 		/*
 		// Must be copied from an accumulator matrix operand type
 		T_jm_acc sub_Acc2;
+		move_matrix_a_to_acc(item, tmp, sub_Q, sub_Acc2);
+		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+		print_submatrix<sycl::half>(item, groupId, localId, "sub_Q", tmp);
+
 		move_matrix_b_to_acc(item, tmp, sub_W, sub_Acc2);
 		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 		print_submatrix<sycl::half>(item, groupId, localId, "sub_W", tmp);
