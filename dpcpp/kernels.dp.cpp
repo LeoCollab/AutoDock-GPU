@@ -217,6 +217,10 @@ void fill_identity (
 	*/
 }
 
+using T_jm_a = joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::col_major>;
+using T_jm_b = joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::col_major>;
+using T_jm_acc = joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N>;
+
 // The most elegant way to print a "use::b" sub_Input_b matrix would be
 // to copy such matrix into any "use::accumulator" matrix,
 // which in turn would be stored into shared memory, and then finally printed.
@@ -229,14 +233,14 @@ void fill_identity (
 void move_matrix_b_to_acc (
 	sycl::nd_item<3> item,
 	sycl::half *tmp,
-	joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::col_major> &sub_Input_b,
-	joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> &sub_Acc
+	T_jm_b &sub_Input_b,
+	T_jm_acc &sub_Acc
 ){
 	sycl::sub_group sg = item.get_sub_group();
 
 	// Loading identity values to sub_Identity
 	fill_identity(item, tmp);
-	joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::col_major> sub_Identity_a;
+	T_jm_a sub_Identity_a;
 	joint_matrix_load(sg, sub_Identity_a, sycl::local_ptr<sycl::half>(tmp), 16);
 
 	// Initializing sub_Acc with zeros
@@ -289,18 +293,18 @@ void reduce_via_matrix_units (
 		fill_Q(item, Q_data);
 
 		// Declaring and filling submatrices
-		joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::col_major> sub_P;
-		joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_V;
+		T_jm_b sub_P;
+		T_jm_acc sub_V;
 
-		joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::col_major> sub_Q;
-		joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::col_major> sub_W;
-		joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_C;
+		T_jm_a sub_Q;
+		T_jm_b sub_W;
+		T_jm_acc sub_C;
 
 		joint_matrix_fill(sg, sub_P, HALF_ONE); // P: only ones
 
 		/*
 		// Moving sub_Acc to shared memory and printing
-		joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_Acc;
+		T_jm_acc sub_Acc;
 		move_matrix_b_to_acc(item, tmp, sub_P, sub_Acc);
 		joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 		print_submatrix<sycl::half>(item, groupId, localId, "sub_P", tmp);
@@ -337,7 +341,7 @@ void reduce_via_matrix_units (
 			print_submatrix<sycl::half>(item, groupId, localId, "data_to_be_reduced [inside main loop]", data_to_be_reduced);
 			*/
 
-			joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::col_major> sub_A;
+			T_jm_a sub_A;
 			joint_matrix_load(sg, sub_A, sycl::local_ptr<sycl::half>(data_to_be_reduced + offset), 16);
 			//sub_V = joint_matrix_mad(sg, sub_A, sub_P, sub_V);	// 2024.1
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);	// 2024.2.1
