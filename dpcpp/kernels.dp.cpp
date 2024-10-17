@@ -326,12 +326,6 @@ void reduce_via_matrix_units (
 
 		/*
 		// Must be copied from an accumulator matrix operand type
-		joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
-		print_submatrix<sycl::half>(item, groupId, localId, "sub_V", tmp);
-		*/
-
-		/*
-		// Must be copied from an accumulator matrix operand type
 		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 		print_submatrix<sycl::half>(item, groupId, localId, "sub_C", tmp);
 		*/
@@ -367,13 +361,19 @@ void reduce_via_matrix_units (
 			print_submatrix<sycl::half>(item, groupId, localId, "sub_P", tmp);
 			*/
 
+			/*
+			// Must be copied from an accumulator matrix operand type
+			joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+			print_submatrix<sycl::half>(item, groupId, localId, "sub_V (before mad)", tmp);
+			*/
+
 			//sub_V = joint_matrix_mad(sg, sub_A, sub_P, sub_V);	// 2024.1
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);	// 2024.2.1
 
 			/*
 			// Must be copied from an accumulator matrix operand type
 			joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
-			print_submatrix<sycl::half>(item, groupId, localId, "sub_V [inside main loop]", tmp);
+			print_submatrix<sycl::half>(item, groupId, localId, "sub_V (after mad)", tmp);
 			*/
 		}
 
