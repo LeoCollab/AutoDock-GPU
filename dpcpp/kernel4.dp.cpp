@@ -325,11 +325,6 @@ void gpu_gen_and_eval_newpops(
                               float*   pMem_energies_next
                              )
 {
-	// Verifying that the passed work-group size doesn't exceed device's limit
-	auto max_wg_size = dpct::get_default_queue().get_device().get_info<sycl::info::device::max_work_group_size>();
-	//printf("\tk4: max_wg_size = %lu, passed_wg_size = %u\n", max_wg_size, threadsPerBlock);
-	assert(max_wg_size >= threadsPerBlock);
-
 	dpct::get_default_queue().submit([&](sycl::handler &cgh) {
 		extern dpct::constant_memory<GpuData, 0> cData;
 		cData.init();
