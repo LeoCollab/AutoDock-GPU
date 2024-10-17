@@ -381,6 +381,14 @@ void reduce_via_matrix_units (
 		joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 		joint_matrix_load(sg, sub_W, sycl::local_ptr<sycl::half>(tmp), 16);
 
+		/*
+		// Must be copied from an accumulator matrix operand type
+		T_jm_acc sub_Acc2;
+		move_matrix_b_to_acc(item, tmp, sub_W, sub_Acc2);
+		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+		print_submatrix<sycl::half>(item, groupId, localId, "sub_W", tmp);
+		*/
+
 		// 2. Perform line sum: C <- QW + C (zero)
 		//sub_C = joint_matrix_mad(sg, sub_Q, sub_W, sub_C);	// 2024.1
 		joint_matrix_mad(sg, sub_C, sub_Q, sub_W, sub_C);	// 2024.2.1
