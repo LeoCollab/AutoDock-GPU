@@ -276,15 +276,24 @@ void reduce_via_matrix_units (
 		//
 		// Copying matrices contents via joint_matrix_copy()
 		// from use::b into use::accumulator doesn't work in oneAPI v2024.2.1.
-		// Thus, P is moved to shared memory via: sub_V <- tmp x sub_P + sub_V,
-		// where tmp is used as a temporal identity matrix,
-		// sub_V is initialized with zeros.
-		// sub_V ends up storing the sub_P contents.
+		// Thus, sub_P is moved to shared memory via matrix multiply-add,
+		// where sub_Identity is used as a temporal identity matrix,
+		// and sub_Acc is initialized with zeros but ends up storing sub_P contents.
+
+		// Loading identity values to sub_Identity
 		fill_identity(item, tmp);
-		joint_matrix_load(sg, sub_Q, sycl::local_ptr<sycl::half>(tmp), 16);
-		joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
-		joint_matrix_mad(sg, sub_V, sub_Q, sub_P, sub_V);	// 2024.2.1
-		joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+		joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::col_major> sub_Identity;
+		joint_matrix_load(sg, sub_Identity, sycl::local_ptr<sycl::half>(tmp), 16);
+
+		// Initializing sub_Acc with zeros
+		joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N> sub_Acc;
+		joint_matrix_fill(sg, sub_Acc, HALF_ZERO);
+
+		// sub_Acc <- sub_Identity x sub_P + sub_Acc
+		joint_matrix_mad(sg, sub_Acc, sub_Identity, sub_P, sub_Acc);
+
+		// Moving sub_Acc to shared memory and printing
+		joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 		print_submatrix<sycl::half>(item, groupId, localId, "sub_P", tmp);
 		*/
 
