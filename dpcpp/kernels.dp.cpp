@@ -127,15 +127,21 @@ void print_submatrix (
 }
 
 void print_wi_indexes (
-	int localId,
-	int globalId,
-	int groupId,
-	int groupSize,
-	int sgGroupRange,
-	int sgGroupId,
-	int sgSize,
-	int sgId
+	sycl::nd_item<3> item
 ) {
+	// Identifying global, local, and group ids
+	int globalId = item.get_global_linear_id();
+	int localId = item.get_local_id(2);
+	int groupId = item.get_group(2);
+	int groupSize = item.get_local_range().get(2);
+
+	// Identifying sub-groups
+	sycl::sub_group sg = item.get_sub_group();
+	int sgGroupRange = sg.get_group_range().get(0); // Returns the number of subgroups within the parent work-group
+	int sgGroupId = sg.get_group_id().get(0); // Returns the index of the subgroup
+	int sgSize = sg.get_local_range().get(0); // Returns the size of the subgroup
+	int sgId = sg.get_local_id().get(0); // Returns the index of the work-item within its subgroup
+
 	printf("lId = %i, \tgId = %i, \tgroupId = %i, \tgroupSz = %i, \tsgGroupRange = %i, \tsgGroupId = %i, \tsgSz = %i, \tsgId = %i\n",
 	localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
 }
@@ -284,29 +290,19 @@ void reduce_via_matrix_units (
 	sycl::half *Q_data,
 	sycl::half *tmp
 ) {
+	int localId = item.get_local_id(2);
+	sycl::sub_group sg = item.get_sub_group();
+
 	item.barrier(sycl::access::fence_space::local_space);
 
-	// Identifying global, local, and group ids
-	int globalId = item.get_global_linear_id();
-	int localId = item.get_local_id(2);
-	int groupId = item.get_group(2);
-	int groupSize = item.get_local_range().get(2);
-
-	// Identifying sub-groups
-	sycl::sub_group sg = item.get_sub_group();
-	int sgGroupRange = sg.get_group_range().get(0); // Returns the number of subgroups within the parent work-group
-	int sgGroupId = sg.get_group_id().get(0); // Returns the index of the subgroup
-	int sgSize = sg.get_local_range().get(0); // Returns the size of the subgroup
-	int sgId = sg.get_local_id().get(0); // Returns the index of the work-item within its subgroup
-
 	/*
-	print_wi_indexes(localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
+	print_wi_indexes(item);
 	*/
 
 	// Only one sub-group performs reduction
 	if(localId <= 31) {
 		/*
-		print_wi_indexes(localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
+		print_wi_indexes(item);
 		*/
 
 		fill_Q(item, Q_data);
