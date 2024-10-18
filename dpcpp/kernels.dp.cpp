@@ -293,6 +293,7 @@ void reduce_via_matrix_units (
 	sycl::half *tmp
 ) {
 	int localId = item.get_local_id(2);
+	int groupId = item.get_group(2);
 	sycl::sub_group sg = item.get_sub_group();
 
 	item.barrier(SYCL_MEMORY_SPACE);
