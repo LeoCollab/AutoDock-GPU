@@ -303,8 +303,7 @@ void reduce_via_matrix_units (
 	print_wi_indexes(localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
 	*/
 
-	// Only one sub-group (sgId == 0) performs reduction
-	//if(sgId == 0) {
+	// Only one sub-group performs reduction
 	if(localId <= 31) {
 		/*
 		print_wi_indexes(localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
