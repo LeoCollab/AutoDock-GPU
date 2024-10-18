@@ -202,11 +202,11 @@ try {
 				i,
 				combinations[i].max_msize, combinations[i].max_nsize, combinations[i].max_ksize,
 				combinations[i].msize, combinations[i].nsize, combinations[i].ksize);
-		if (/*sycl::half*/matrix::matrix_type::fp16 == combinations[i].atype &&
-			/*sycl::half*/matrix::matrix_type::fp16 == combinations[i].btype &&
-			/*sycl::half*/matrix::matrix_type::fp16 == combinations[i].ctype &&
-			/*sycl::half*/matrix::matrix_type::fp16 == combinations[i].dtype) {
-			printf(" <- joint_matrix_mad() can be called using these sizes for fp16 types!");
+		if (matrix::matrix_type::fp16 == combinations[i].atype &&
+			matrix::matrix_type::fp16 == combinations[i].btype &&
+			matrix::matrix_type::fp16 == combinations[i].ctype &&
+			matrix::matrix_type::fp16 == combinations[i].dtype) {
+			printf(" <- joint_matrix_mad() can be called using these sizes for fp16 (sycl::half) types!");
 		}
 		printf("\n");
 	}
