@@ -151,9 +151,11 @@ void fill_Q (
 	sycl::nd_item<3> item,
 	sycl::half *Q_data
 ) {
+	int localId = item.get_local_id(2);
+
 	/*
 	// Naive implementation: a single work-item fills data in
-	if(item.get_local_id(2) == 0) {
+	if(localId == 0) {
 		for(uint i = 0; i < 4; i++) {	// How many rows (of 4x4 blocks) are there in matrix A?
 			for(uint j = 0; j < 4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
 				for(uint ii = 0; ii < 4; ii++) {
@@ -167,7 +169,7 @@ void fill_Q (
 	*/
 
 	// Slightly improved multi-threaded implementation
-	for (uint i = item.get_local_id(2); i < 4; i+=item.get_local_range().get(2)) {	// How many rows (of 4x4 blocks) are there in matrix A?
+	for (uint i = localId; i < 4; i+=item.get_local_range().get(2)) {	// How many rows (of 4x4 blocks) are there in matrix A?
 		for (uint j = 0; j < 4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
 			for (uint ii = 0; ii < 4; ii++) {
 				for (uint jj = 0; jj < 4; jj++) {
@@ -183,7 +185,7 @@ void fill_Q (
 	// Fusing two outer loops into a single one
 	// To do that: coeffs = 4i + 64j
 	constexpr uint coeffs [16] = {0, 64, 128, 192, 4, 68, 132, 196, 8, 72, 136, 200, 12, 76, 140, 204};
-	for (uint k = item.get_local_id(2); k < 16; k+=item.get_local_range().get(2)) {
+	for (uint k = localId; k < 16; k+=item.get_local_range().get(2)) {
 		for (uint ii = 0; ii < 4; ii++) {
 			for (uint jj = 0; jj < 4; jj++) {
 				Q_data[coeffs[k] + ii + 16*jj] = I4 [4*ii + jj];
@@ -201,8 +203,10 @@ void fill_identity (
 	sycl::nd_item<3> item,
 	sycl::half *Q_data
 ) {
+	int localId = item.get_local_id(2);
+
 	// Naive implementation: a single work-item fills data in
-	if(item.get_local_id(2) == 0) {
+	if(localId == 0) {
 		for(uint i = 0; i < 16; i++) {
 			for(uint j = 0; j < 16; j++) {
 				if (i == j) {
