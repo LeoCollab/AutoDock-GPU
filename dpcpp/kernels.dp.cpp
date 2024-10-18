@@ -302,10 +302,6 @@ void reduce_via_matrix_units (
 
 	// Only one sub-group performs reduction
 	if(localId <= 31) {
-		/*
-		print_wi_indexes(item);
-		*/
-
 		fill_Q(item, Q_data);
 
 		// Declaring and filling submatrices
