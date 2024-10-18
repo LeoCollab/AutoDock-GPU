@@ -97,20 +97,20 @@ constexpr sycl::half I4[16] =
 // which have to be previously copied into an array in local memory.
 // Enclosing the implementation of print_submatrix()
 // within barriers (as initially thought) produces wrong results.
-// Such mistake makes sense since print_submatrix() is called if(localId <= 31).
+// Such mistake makes sense since print_submatrix() is called if(wi_Id_Wg <= 31).
 // Extra sync before printing is not needed as long as
 // print_submatrix() is called after joint_matrix functions,
-// which are executed by the entire sub_group (i.e., localId <= 31)
+// which are executed by the entire sub_group (i.e., wi_Id_Wg <= 31)
 template <typename T>
 void print_submatrix (
 	sycl::nd_item<3> item,
 	const char *msg,
 	T *data_to_print
 ) {
-	int localId = item.get_local_id(2);
-	int groupId = item.get_group(2);
+	int wi_Id_Wg = item.get_local_id(2);
+	int wg_Id_ND = item.get_group(2);
 
-	if (groupId == 0 && localId == 0) {
+	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
 		printf("\n%s", msg);
 		for (uint i = 0; i < 16; i++) {
 			for (uint j = 0; j < 16; j++) {
@@ -131,32 +131,32 @@ void print_wi_indexes (
 	sycl::nd_item<3> item
 ) {
 	// Identifying global, local, and group ids
-	int globalId = item.get_global_linear_id();
-	int localId = item.get_local_id(2);
-	int groupId = item.get_group(2);
-	int groupSize = item.get_local_range().get(2);
+	int wi_Id_ND = item.get_global_id(2); // Returns the wi's position in the NDRange (in dimension 2)
+	int wi_Id_Wg = item.get_local_id(2); // Returns the wi's position within the current wg (in dimension 2)
+	int wg_Id_ND = item.get_group(2); // Returns the wg's position within the overal NDRange (in dimension 2)
+	int wg_Size = item.get_local_range(2); // Returns the number of wis per wg (in dimension 2)
 
 	// Identifying sub-groups
 	sycl::sub_group sg = item.get_sub_group();
-	int sgGroupRange = sg.get_group_range().get(0); // Returns the number of subgroups within the parent work-group
-	int sgGroupId = sg.get_group_id().get(0); // Returns the index of the subgroup
-	int sgSize = sg.get_local_range().get(0); // Returns the size of the subgroup
-	int sgId = sg.get_local_id().get(0); // Returns the index of the work-item within its subgroup
+	int sg_Range = sg.get_group_range().get(0); // Returns the number of subgroups within the wg
+	int sg_Id_Wg = sg.get_group_id().get(0); // Returns the index of the subgroup within the wg
+	int sg_Size = sg.get_local_range().get(0); // Returns the number of wis per subgroup
+	int wi_Id_sg = sg.get_local_id().get(0); // Returns the index of the work-item within its subgroup
 
-	printf("lId = %i, \tgId = %i, \tgroupId = %i, \tgroupSz = %i, \tsgGroupRange = %i, \tsgGroupId = %i, \tsgSz = %i, \tsgId = %i\n",
-	localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
+	printf("wi_Id_ND: %i, \twi_Id_Wg: %i, \twg_Id_ND: %i, \twg_Size: %i, \tsg_Range: %i, \tsg_Id_Wg: %i, \tsg_Size: %i, \twi_Id_sg: %i\n",
+		wi_Id_ND, wi_Id_Wg, wg_Id_ND, wg_Size, sg_Range, sg_Id_Wg, sg_Size, wi_Id_sg);
 }
 
 void fill_Q (
 	sycl::nd_item<3> item,
 	sycl::half *Q_data
 ) {
-	int localId = item.get_local_id(2);
-	int groupSize = item.get_local_range().get(2);
+	int wi_Id_Wg = item.get_local_id(2);
+	int wg_Size = item.get_local_range().get(2);
 
 	/*
 	// Naive implementation: a single work-item fills data in
-	if(localId == 0) {
+	if(wi_Id_Wg == 0) {
 		for(uint i = 0; i < 4; i++) {	// How many rows (of 4x4 blocks) are there in matrix A?
 			for(uint j = 0; j < 4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
 				for(uint ii = 0; ii < 4; ii++) {
@@ -170,7 +170,7 @@ void fill_Q (
 	*/
 
 	// Slightly improved multi-threaded implementation
-	for (uint i = localId; i < 4; i+=groupSize) {	// How many rows (of 4x4 blocks) are there in matrix A?
+	for (uint i = wi_Id_Wg; i < 4; i+=wg_Size) {	// How many rows (of 4x4 blocks) are there in matrix A?
 		for (uint j = 0; j < 4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
 			for (uint ii = 0; ii < 4; ii++) {
 				for (uint jj = 0; jj < 4; jj++) {
@@ -186,7 +186,7 @@ void fill_Q (
 	// Fusing two outer loops into a single one
 	// To do that: coeffs = 4i + 64j
 	constexpr uint coeffs [16] = {0, 64, 128, 192, 4, 68, 132, 196, 8, 72, 136, 200, 12, 76, 140, 204};
-	for (uint k = localId; k < 16; k+=groupSize) {
+	for (uint k = wi_Id_Wg; k < 16; k+=wg_Size) {
 		for (uint ii = 0; ii < 4; ii++) {
 			for (uint jj = 0; jj < 4; jj++) {
 				Q_data[coeffs[k] + ii + 16*jj] = I4 [4*ii + jj];
@@ -204,10 +204,10 @@ void fill_identity (
 	sycl::nd_item<3> item,
 	sycl::half *Q_data
 ) {
-	int localId = item.get_local_id(2);
+	int wi_Id_Wg = item.get_local_id(2);
 
 	// Naive implementation: a single work-item fills data in
-	if(localId == 0) {
+	if(wi_Id_Wg == 0) {
 		for(uint i = 0; i < 16; i++) {
 			for(uint j = 0; j < 16; j++) {
 				if (i == j) {
@@ -292,18 +292,18 @@ void reduce_via_matrix_units (
 	sycl::half *Q_data,
 	sycl::half *tmp
 ) {
-	int localId = item.get_local_id(2);
-	int groupId = item.get_group(2);
+	int wi_Id_Wg = item.get_local_id(2);
+	int wg_Id_ND = item.get_group(2);
 	sycl::sub_group sg = item.get_sub_group();
 
 	item.barrier(SYCL_MEMORY_SPACE);
 
-	/*
+	///*
 	print_wi_indexes(item);
-	*/
+	//*/
 
 	// Only one sub-group performs reduction
-	if(localId <= 31) {
+	if(wi_Id_Wg <= 31) {
 		fill_Q(item, Q_data);
 
 		// Declaring and filling submatrices
@@ -322,7 +322,7 @@ void reduce_via_matrix_units (
 			const uint offset = i * 16 * 16;
 
 			/*
-			if (groupId == 0 && localId == 0) {
+			if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
 				printf("\ni = %d, tripcount= %d, offset = %d ", i, (4 * NUM_OF_THREADS_PER_BLOCK) / (16 * 16), offset);
 			}
 			*/
