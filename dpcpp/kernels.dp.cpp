@@ -143,10 +143,8 @@ void print_wi_indexes (
 	int sg_Size = sg.get_local_range().get(0); // Returns the number of wis per subgroup
 	int wi_Id_sg = sg.get_local_id(); // Returns the index of the work-item within its subgroup
 
-	/*
 	printf("wi_Id_ND: %i, \twi_Id_Wg: %i, \twg_Id_ND: %i, \twg_Size: %i, \tsg_Range: %i, \tsg_Id_Wg: %i, \tsg_Size: %i, \twi_Id_sg: %i\n",
 		wi_Id_ND, wi_Id_Wg, wg_Id_ND, wg_Size, sg_Range, sg_Id_Wg, sg_Size, wi_Id_sg);
-	*/
 }
 
 void fill_Q (
@@ -300,9 +298,9 @@ void reduce_via_matrix_units (
 
 	item.barrier(SYCL_MEMORY_SPACE);
 
-	///*
+	/*
 	print_wi_indexes(item);
-	//*/
+	*/
 
 	// Only one sub-group performs reduction
 	if(wi_Id_Wg <= 31) {
