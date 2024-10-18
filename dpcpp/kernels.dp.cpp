@@ -193,8 +193,6 @@ void fill_Q (
 	*/
 
 	/*
-	int groupId = item.get_group(2);
-	int localId = item.get_local_id(2);
 	print_submatrix<sycl::half>(item, "Q_data [inside fill_Q()]", Q_data);
 	*/
 }
@@ -218,8 +216,6 @@ void fill_identity (
 	}
 
 	/*
-	int groupId = item.get_group(2);
-	int localId = item.get_local_id(2);
 	print_submatrix<sycl::half>(item, "Q_data [inside fill_identity()]", Q_data);
 	*/
 }
