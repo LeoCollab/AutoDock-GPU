@@ -269,6 +269,12 @@ POPSIZE  := 150
 TESTNAME := test
 TESTLS   := sw
 
+ifeq ($(XMX), ON)
+ifneq ($(TESTLS), ad)
+$(error XMX=$(XMX) and TESTLS=$(TESTLS). XMX works only with ADADELTA!)
+endif
+endif
+
 test: odock
 	$(BIN_DIR)/$(TARGET) \
 	-ffile ./input/$(PDB)/derived/$(PDB)_protein.maps.fld \
