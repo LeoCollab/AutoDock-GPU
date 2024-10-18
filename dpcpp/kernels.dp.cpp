@@ -294,7 +294,7 @@ void reduce_via_matrix_units (
 	int localId = item.get_local_id(2);
 	sycl::sub_group sg = item.get_sub_group();
 
-	item.barrier(sycl::access::fence_space::local_space);
+	item.barrier(SYCL_MEMORY_SPACE);
 
 	/*
 	print_wi_indexes(item);
@@ -396,7 +396,7 @@ void reduce_via_matrix_units (
 		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(data_to_be_reduced), 16, layout::col_major);
 	}
 
-	item.barrier(sycl::access::fence_space::local_space);
+	item.barrier(SYCL_MEMORY_SPACE);
 }
 
 // Validating inputs
