@@ -152,6 +152,7 @@ void fill_Q (
 	sycl::half *Q_data
 ) {
 	int localId = item.get_local_id(2);
+	int groupSize = item.get_local_range().get(2);
 
 	/*
 	// Naive implementation: a single work-item fills data in
@@ -169,7 +170,7 @@ void fill_Q (
 	*/
 
 	// Slightly improved multi-threaded implementation
-	for (uint i = localId; i < 4; i+=item.get_local_range().get(2)) {	// How many rows (of 4x4 blocks) are there in matrix A?
+	for (uint i = localId; i < 4; i+=groupSize) {	// How many rows (of 4x4 blocks) are there in matrix A?
 		for (uint j = 0; j < 4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
 			for (uint ii = 0; ii < 4; ii++) {
 				for (uint jj = 0; jj < 4; jj++) {
@@ -185,7 +186,7 @@ void fill_Q (
 	// Fusing two outer loops into a single one
 	// To do that: coeffs = 4i + 64j
 	constexpr uint coeffs [16] = {0, 64, 128, 192, 4, 68, 132, 196, 8, 72, 136, 200, 12, 76, 140, 204};
-	for (uint k = localId; k < 16; k+=item.get_local_range().get(2)) {
+	for (uint k = localId; k < 16; k+=groupSize) {
 		for (uint ii = 0; ii < 4; ii++) {
 			for (uint jj = 0; jj < 4; jj++) {
 				Q_data[coeffs[k] + ii + 16*jj] = I4 [4*ii + jj];
