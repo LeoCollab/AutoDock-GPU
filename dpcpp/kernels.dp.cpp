@@ -77,6 +77,10 @@ using namespace sycl::ext::oneapi::experimental::matrix;
 // If enabled, then using hardcoded inputs
 //#define DEBUG_XMX_INPUTS
 
+// oneAPI version used
+//#define ONEAPI_20241
+#define ONEAPI_202421
+
 // Number of rows/cols of a submatrix: M, N, K
 constexpr int rowscols_M = 16;
 constexpr int rowscols_N = 16;
@@ -255,7 +259,11 @@ void move_matrix_a_to_acc (
 	joint_matrix_fill(sg, sub_Acc, HALF_ZERO);
 
 	// sub_Acc <- sub_Input_a x sub_Identity_b + sub_Acc
+	#if defined (ONEAPI_20241)
+	sub_Acc = joint_matrix_mad(sg, sub_Input_a, sub_Identity_b, sub_Acc);
+	#elif defined (ONEAPI_202421)
 	joint_matrix_mad(sg, sub_Acc, sub_Input_a, sub_Identity_b, sub_Acc);
+	#endif
 }
 
 void move_matrix_b_to_acc (
@@ -275,7 +283,11 @@ void move_matrix_b_to_acc (
 	joint_matrix_fill(sg, sub_Acc, HALF_ZERO);
 
 	// sub_Acc <- sub_Identity_a x sub_Input_b + sub_Acc
+	#if defined (ONEAPI_20241)
+	sub_Acc = joint_matrix_mad(sg, sub_Identity_a, sub_Input_b, sub_Acc);
+	#elif defined (ONEAPI_202421)
 	joint_matrix_mad(sg, sub_Acc, sub_Identity_a, sub_Input_b, sub_Acc);
+	#endif
 }
 
 
@@ -351,9 +363,11 @@ void reduce_via_matrix_units (
 			joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 			print_submatrix<sycl::half>(item, "sub_V (before mad)", tmp);
 			*/
-
-			//sub_V = joint_matrix_mad(sg, sub_A, sub_P, sub_V);	// 2024.1
-			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);	// 2024.2.1
+			#if defined (ONEAPI_20241)
+			sub_V = joint_matrix_mad(sg, sub_A, sub_P, sub_V);
+			#elif defined (ONEAPI_202421)
+			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
+			#endif
 
 			/*
 			// Printing sub_V (after mad)
@@ -385,8 +399,11 @@ void reduce_via_matrix_units (
 		*/
 
 		// 2. Perform line sum: C <- QW + C (zero)
-		//sub_C = joint_matrix_mad(sg, sub_Q, sub_W, sub_C);	// 2024.1
-		joint_matrix_mad(sg, sub_C, sub_Q, sub_W, sub_C);	// 2024.2.1
+		#if defined (ONEAPI_20241)
+		sub_C = joint_matrix_mad(sg, sub_Q, sub_W, sub_C);
+		#elif defined (ONEAPI_202421)
+		joint_matrix_mad(sg, sub_C, sub_Q, sub_W, sub_C);
+		#endif
 
 		/*
 		// Printing sub_C (after mad)
