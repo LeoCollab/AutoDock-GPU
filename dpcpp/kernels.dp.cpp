@@ -294,10 +294,10 @@ void reduce_via_matrix_units (
 
 	// Identifying sub-groups
 	sycl::sub_group sg = item.get_sub_group();
-	int sgGroupRange = sg.get_group_range().get(2); // Returns the number of subgroups within the parent work-group
-	int sgGroupId = sg.get_group_id().get(2); // Returns the index of the subgroup
-	int sgSize = sg.get_local_range().get(2); // Returns the size of the subgroup
-	int sgId = sg.get_local_id().get(2); // Returns the index of the work-item within its subgroup
+	int sgGroupRange = sg.get_group_range().get(0); // Returns the number of subgroups within the parent work-group
+	int sgGroupId = sg.get_group_id().get(0); // Returns the index of the subgroup
+	int sgSize = sg.get_local_range().get(0); // Returns the size of the subgroup
+	int sgId = sg.get_local_id().get(0); // Returns the index of the work-item within its subgroup
 
 	/*
 	print_wi_indexes(localId, globalId, groupId, groupSize, sgGroupRange, sgGroupId, sgSize, sgId);
