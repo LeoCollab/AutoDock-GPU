@@ -156,10 +156,13 @@ void fill_Q (
 	sycl::half *Q_data
 ) {
 	int wi_Id_Wg = item.get_local_id(2);
-	int wg_Size = item.get_local_range().get(2);
+	sycl::sub_group sg = item.get_sub_group();
+	int sg_Size = sg.get_local_range().get(0);
 
 	// Slightly improved multi-threaded implementation
-	for (uint i = wi_Id_Wg; i < 4; i+=wg_Size) {	// How many rows (of 4x4 blocks) are there in matrix A?
+	// IMPORTANT: this is computed by a sub-group,
+	// and thus, MUST use "sg_Size" instead of "wg_Size"
+	for (uint i = wi_Id_Wg; i < 4; i+=sg_Size) {	// How many rows (of 4x4 blocks) are there in matrix A?
 		for (uint j = 0; j < 4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
 			for (uint ii = 0; ii < 4; ii++) {
 				for (uint jj = 0; jj < 4; jj++) {
