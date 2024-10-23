@@ -193,8 +193,51 @@ try {
 	cData.devnum=-2;
 
 	#ifdef USE_XMX
-	// Runtime Query of matrix sizes and types configurations
 	using namespace sycl::ext::oneapi::experimental;
+
+	// Device architecture
+	architecture arch = dpct::get_default_queue().get_device().get_info<info::device::architecture>();
+	printf("\nDetected architecture: ");
+	switch (arch) {
+		case architecture::x86_64:
+			printf("Any CPU device with the x86_64 instruction set");
+		break;
+		case architecture::intel_gpu_pvc:
+			printf("Ponte Vecchio Intel graphics");
+		break;
+		case architecture::intel_gpu_pvc_vg:
+			printf("Ponte Vecchio VG Intel graphics");
+		break;
+		case architecture::nvidia_gpu_sm_70:
+			printf("NVIDIA Volta (compute capability 7.0)");
+		break;
+		case architecture::nvidia_gpu_sm_72:
+			printf("NVIDIA Volta (compute capability 7.2)");
+		break;
+		case architecture::nvidia_gpu_sm_75:
+			printf("NVIDIA Turing (compute capability 7.5)");
+		break;
+		case architecture::nvidia_gpu_sm_80:
+			printf("NVIDIA Ampere (compute capability 8.0)");
+		break;
+		case architecture::nvidia_gpu_sm_86:
+			printf("NVIDIA Ampere (compute capability 8.6)");
+		break;
+		case architecture::nvidia_gpu_sm_89:
+			printf("NVIDIA Ada Lovelace (compute capability 8.9)");
+		break;
+		case architecture::nvidia_gpu_sm_90:
+			printf("NVIDIA Hopper (compute capability 9.0)");
+		break;
+//		case architecture::nvidia_gpu_sm_90a:
+//			printf("NVIDIA Hopper (compute capability 9.0a)");
+//		break;
+		default:
+			printf("Unknown");
+		break;
+	}
+
+	// Runtime Query of matrix sizes and types configurations
 	std::vector<matrix::combination> combinations = dpct::get_default_queue().get_device().get_info<info::device::matrix_combinations>();
 	printf("\nSupported joint-matrix combinations on device: %2i\n", sizeof(combinations));
 	for (int i = 0; i < sizeof(combinations); i++) {
