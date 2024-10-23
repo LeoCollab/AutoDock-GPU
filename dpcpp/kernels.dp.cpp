@@ -111,10 +111,13 @@ void print_submatrix (
 	const char *msg,
 	T *data_to_print
 ) {
-	int wi_Id_Wg = item.get_local_id(2);
+	// Only one wg should print
 	int wg_Id_ND = item.get_group(2);
 
-	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
+	sycl::sub_group sg = item.get_sub_group();
+	int wi_Id_sg = sg.get_local_id();
+
+	if (wg_Id_ND == 0 && wi_Id_sg == 0) {
 		printf("\n%s", msg);
 		for (uint i = 0; i < 16; i++) {
 			for (uint j = 0; j < 16; j++) {
@@ -155,14 +158,14 @@ void fill_Q (
 	sycl::nd_item<3> item,
 	sycl::half *Q_data
 ) {
-	int wi_Id_Wg = item.get_local_id(2);
 	sycl::sub_group sg = item.get_sub_group();
+	int wi_Id_sg = sg.get_local_id();
 	int sg_Size = sg.get_local_range().get(0);
 
 	// Slightly improved multi-threaded implementation
 	// IMPORTANT: this is computed by a sub-group,
 	// and thus, MUST use "sg_Size" instead of "wg_Size"
-	for (uint i = wi_Id_Wg; i < 4; i+=sg_Size) {	// How many rows (of 4x4 blocks) are there in matrix A?
+	for (uint i = wi_Id_sg; i < 4; i+=sg_Size) {	// How many rows (of 4x4 blocks) are there in matrix A?
 		for (uint j = 0; j < 4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
 			for (uint ii = 0; ii < 4; ii++) {
 				for (uint jj = 0; jj < 4; jj++) {
@@ -181,10 +184,11 @@ void fill_identity (
 	sycl::nd_item<3> item,
 	sycl::half *Q_data
 ) {
-	int wi_Id_Wg = item.get_local_id(2);
+	sycl::sub_group sg = item.get_sub_group();
+	int wi_Id_sg = sg.get_local_id();
 
 	// Naive implementation: a single work-item fills data in
-	if(wi_Id_Wg == 0) {
+	if(wi_Id_sg == 0) {
 		for(uint i = 0; i < 16; i++) {
 			for(uint j = 0; j < 16; j++) {
 				if (i == j) {
@@ -277,9 +281,11 @@ void reduce_via_matrix_units (
 	sycl::half *Q_data,
 	sycl::half *tmp
 ) {
-	int wi_Id_Wg = item.get_local_id(2);
 	int wg_Id_ND = item.get_group(2);
+
 	sycl::sub_group sg = item.get_sub_group();
+	int wi_Id_sg = sg.get_local_id();
+	int sg_Id_Wg = sg.get_group_id().get(0);
 
 	item.barrier(SYCL_MEMORY_SPACE);
 
@@ -288,7 +294,7 @@ void reduce_via_matrix_units (
 	*/
 
 	// Only one sub-group performs reduction
-	if(wi_Id_Wg <= 31) {
+	if (sg_Id_Wg == 0) {
 		fill_Q(item, Q_data);
 
 		// Declaring and filling submatrices
@@ -307,7 +313,7 @@ void reduce_via_matrix_units (
 			const uint offset = i * 16 * 16;
 
 			/*
-			if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
+			if (wg_Id_ND == 0 && wi_Id_sg == 0) {
 				printf("\ni = %d, tripcount= %d, offset = %d ", i, (4 * NUM_OF_THREADS_PER_BLOCK) / (16 * 16), offset);
 			}
 			*/
