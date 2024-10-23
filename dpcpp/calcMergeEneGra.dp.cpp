@@ -717,20 +717,20 @@ void gpu_calc_energrad(
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = sycl::half(3.0f);
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = sycl::half(4.0f);
 	#else
-	data_to_be_reduced[4*item_ct1.get_local_id(2)] = torque_rot.x();
-	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = torque_rot.y();
-	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = torque_rot.z();
-	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = energy;
+	data_to_be_reduced[4*item_ct1.get_local_id(2)] = (sycl::half)(torque_rot.x());
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = (sycl::half)(torque_rot.y());
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = (sycl::half)(torque_rot.z());
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = (sycl::half)(energy);
 	#endif
 
 	// 2. Perform reduction using matrix units
 	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
 
 	// 3. Retrieve result from shared memory
-	torque_rot.x() = data_to_be_reduced[0];
-	torque_rot.y() = data_to_be_reduced[1];
-	torque_rot.z() = data_to_be_reduced[2];
-	energy = data_to_be_reduced[3];
+	torque_rot.x() = (float)(data_to_be_reduced[0]);
+	torque_rot.y() = (float)(data_to_be_reduced[1]);
+	torque_rot.z() = (float)(data_to_be_reduced[2]);
+	energy = (float)(data_to_be_reduced[3]);
 
 	/* Reduction using matrix units */
 #else
@@ -767,18 +767,18 @@ void gpu_calc_energrad(
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = sycl::half(19.02f);
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = sycl::half(30.11f);
 	#else
-	data_to_be_reduced[4*item_ct1.get_local_id(2)] = gx;
-	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = gy;
-	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = gz;
+	data_to_be_reduced[4*item_ct1.get_local_id(2)] = (sycl::half)(gx);
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 1] = (sycl::half)(gy);
+	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = (sycl::half)(gz);
 	#endif
 
 	// 2. Perform reduction using matrix units
 	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
 
 	// 3. Retrieve results from shared memory
-	gx = data_to_be_reduced[0];
-	gy = data_to_be_reduced[1];
-	gz = data_to_be_reduced[2];
+	gx = (float)(data_to_be_reduced[0]);
+	gy = (float)(data_to_be_reduced[1]);
+	gz = (float)(data_to_be_reduced[2]);
 
 	/* Reduction using matrix units */
 #else
