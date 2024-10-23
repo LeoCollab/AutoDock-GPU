@@ -139,7 +139,7 @@ else ifeq ($(CONFIG),LDEBUG)
 else ifeq ($(CONFIG),RELEASE)
 	OPT =-O3
 	ifeq ($(PLATFORM),PVC)
-		OPT+=-fsycl-targets=spir64_gen -Xs "-device 0x0BD6 -revision_id 7"
+		OPT+=-fsycl-targets=intel_gpu_pvc
 	else ifeq ($(PLATFORM),ICX)
 		OPT+=-fsycl-targets=spir64_gen -Xs "-device icllp"
 	endif
