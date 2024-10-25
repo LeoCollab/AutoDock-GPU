@@ -155,9 +155,10 @@ void print_wi_indexes (
 		wi_Id_ND, wi_Id_Wg, wg_Id_ND, wg_Size, sg_Range, sg_Id_Wg, sg_Size, wi_Id_sg);
 }
 
+template <typename T>
 void fill_Q (
 	sycl::nd_item<3> item,
-	sycl::half *Q_data
+	T *Q_data
 ) {
 	sycl::sub_group sg = item.get_sub_group();
 	int wi_Id_sg = sg.get_local_id();
@@ -303,7 +304,7 @@ void reduce_via_matrix_units (
 
 	// Only one sub-group performs reduction
 	if (sg_Id_Wg == 0) {
-		fill_Q(item, Q_data);
+		fill_Q<sycl::half>(item, Q_data);
 
 		// Declaring and filling submatrices
 		T_JM_B<sycl::half> sub_P;
