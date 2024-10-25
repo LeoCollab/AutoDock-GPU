@@ -85,6 +85,7 @@ using namespace sycl::ext::oneapi::experimental::matrix;
 constexpr int rowscols_M = 16;
 constexpr int rowscols_N = 16;
 constexpr int rowscols_K = 16;
+constexpr int Shape_JM_ACC = rowscols_M * rowscols_N;
 
 constexpr sycl::half HALF_ONE = sycl::half(1.0f);
 constexpr sycl::half HALF_ZERO = sycl::half(0.0f);
@@ -316,8 +317,8 @@ void reduce_via_matrix_units (
 		joint_matrix_load(sg, sub_Q, sycl::local_ptr<sycl::half>(Q_data), 16);
 
 		// 1. Accumulate the values: V <- AP + V
-		for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK) / (16 * 16);  i++) {
-			const uint offset = i * 16 * 16;
+		for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK) / Shape_JM_ACC;  i++) {
+			const uint offset = i * Shape_JM_ACC;
 
 			/*
 			if (wg_Id_ND == 0 && wi_Id_sg == 0) {
