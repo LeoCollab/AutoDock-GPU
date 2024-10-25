@@ -241,7 +241,7 @@ try {
 	std::vector<matrix::combination> combinations = dpct::get_default_queue().get_device().get_info<info::device::matrix_combinations>();
 	printf("\nSupported joint-matrix combinations on device: %2i\n", sizeof(combinations));
 	for (int i = 0; i < sizeof(combinations); i++) {
-		printf("\tCombination #%2i: \t max-sizes (m,n,k): %2i %2i %2i \t|\t sizes (m,n,k): %2i %2i %2i",
+		printf("\tComb. #%2i: \t max-sizes (m,n,k): %2i %2i %2i \t|\t sizes (m,n,k): %2i %2i %2i",
 				i,
 				combinations[i].max_msize, combinations[i].max_nsize, combinations[i].max_ksize,
 				combinations[i].msize, combinations[i].nsize, combinations[i].ksize);
@@ -249,7 +249,14 @@ try {
 			matrix::matrix_type::fp16 == combinations[i].btype &&
 			matrix::matrix_type::fp16 == combinations[i].ctype &&
 			matrix::matrix_type::fp16 == combinations[i].dtype) {
-			printf(" <- joint_matrix_mad() can be called using these sizes for fp16 (sycl::half) types!");
+			printf(" <- mad(): these sizes work for fp16 (sycl::half) types!");
+		}
+		if (matrix::matrix_type::tf32 == combinations[i].atype &&
+			matrix::matrix_type::tf32 == combinations[i].btype &&
+			matrix::matrix_type::fp32 == combinations[i].ctype &&
+			matrix::matrix_type::fp32 == combinations[i].dtype
+			) {
+			printf(" <- mad(): these sizes work for tf32 (a & b) and fp32 (c & d) types!");
 		}
 		printf("\n");
 	}
