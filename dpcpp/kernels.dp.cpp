@@ -156,7 +156,7 @@ void fill_Q (
 	int wi_Id_sg = sg.get_local_id();
 	int sg_Size = sg.get_local_range().get(0);
 
-	T I4[16] = {
+	constexpr T I4[16] = {
 		1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
