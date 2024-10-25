@@ -237,16 +237,16 @@ using T_JM_ACC = joint_matrix<sycl::sub_group, T, use::accumulator, tM, tN>;
 template<typename T>
 void move_matrix_a_to_acc (
 	sycl::nd_item<3> item,
-	sycl::half *tmp,
+	T *tmp,
 	T_JM_A<T> &sub_Input_a,
 	T_JM_ACC<T> &sub_Acc
 ){
 	sycl::sub_group sg = item.get_sub_group();
 
 	// Loading identity values to sub_Identity
-	fill_identity(item, tmp);
+	fill_identity<T>(item, tmp);
 	T_JM_B<T> sub_Identity_b;
-	joint_matrix_load(sg, sub_Identity_b, sycl::local_ptr<sycl::half>(tmp), 16);
+	joint_matrix_load(sg, sub_Identity_b, sycl::local_ptr<T>(tmp), 16);
 
 	// Initializing sub_Acc with zeros
 	joint_matrix_fill(sg, sub_Acc, HALF_ZERO);
@@ -262,16 +262,16 @@ void move_matrix_a_to_acc (
 template<typename T>
 void move_matrix_b_to_acc (
 	sycl::nd_item<3> item,
-	sycl::half *tmp,
+	T *tmp,
 	T_JM_B<T> &sub_Input_b,
 	T_JM_ACC<T> &sub_Acc
 ){
 	sycl::sub_group sg = item.get_sub_group();
 
 	// Loading identity values to sub_Identity
-	fill_identity(item, tmp);
+	fill_identity<T>(item, tmp);
 	T_JM_A<T> sub_Identity_a;
-	joint_matrix_load(sg, sub_Identity_a, sycl::local_ptr<sycl::half>(tmp), 16);
+	joint_matrix_load(sg, sub_Identity_a, sycl::local_ptr<T>(tmp), 16);
 
 	// Initializing sub_Acc with zeros
 	joint_matrix_fill(sg, sub_Acc, HALF_ZERO);
