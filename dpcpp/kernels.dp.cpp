@@ -189,9 +189,10 @@ void fill_Q (
 // either a "use::a" or "use::b" identity submatrix.
 // An identity matrix is of square shape.
 // Hence, its shape is "tK x tK"
+template <typename T>
 void fill_identity (
 	sycl::nd_item<3> item,
-	sycl::half *I_data
+	T *I_data
 ) {
 	sycl::sub_group sg = item.get_sub_group();
 	int wi_Id_sg = sg.get_local_id();
@@ -201,10 +202,10 @@ void fill_identity (
 		for(uint i = 0; i < tK; i++) {
 			for(uint j = 0; j < tK; j++) {
 				if (i == j) {
-					I_data[tK *i + j] = HALF_ONE;
+					I_data[tK *  i + j] = 1.0f;
 				}
 				else {
-					I_data[tK *i + j] = HALF_ZERO;
+					I_data[tK * i + j] = 0.0f;
 				}
 			}
 		}
