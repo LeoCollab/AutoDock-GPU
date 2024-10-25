@@ -206,9 +206,14 @@ void fill_identity (
 	*/
 }
 
-using T_jm_a = joint_matrix<sycl::sub_group, sycl::half, use::a, rowscols_M, rowscols_K, layout::col_major>;
-using T_jm_b = joint_matrix<sycl::sub_group, sycl::half, use::b, rowscols_K, rowscols_N, layout::col_major>;
-using T_jm_acc = joint_matrix<sycl::sub_group, sycl::half, use::accumulator, rowscols_M, rowscols_N>;
+template<typename T>
+using T_jm_a = joint_matrix<sycl::sub_group, T, use::a, rowscols_M, rowscols_K, layout::col_major>;
+
+template<typename T>
+using T_jm_b = joint_matrix<sycl::sub_group, T, use::b, rowscols_K, rowscols_N, layout::col_major>;
+
+template<typename T>
+using T_jm_acc = joint_matrix<sycl::sub_group, T, use::accumulator, rowscols_M, rowscols_N>;
 
 // The most elegant way to print a "use::b" sub_Input_b matrix would be
 // to copy such matrix into any "use::accumulator" matrix,
@@ -219,17 +224,18 @@ using T_jm_acc = joint_matrix<sycl::sub_group, sycl::half, use::accumulator, row
 // Thus, "use::b" sub_Input_b matrix is moved to shared memory via matrix multiply-add,
 // where sub_Identity_a is used as a temporal identity matrix,
 // and sub_Acc is initialized with zeros but ends up storing sub_Input_b contents.
+template<typename T>
 void move_matrix_a_to_acc (
 	sycl::nd_item<3> item,
 	sycl::half *tmp,
-	T_jm_a &sub_Input_a,
-	T_jm_acc &sub_Acc
+	T_jm_a<T> &sub_Input_a,
+	T_jm_acc<T> &sub_Acc
 ){
 	sycl::sub_group sg = item.get_sub_group();
 
 	// Loading identity values to sub_Identity
 	fill_identity(item, tmp);
-	T_jm_b sub_Identity_b;
+	T_jm_b<T> sub_Identity_b;
 	joint_matrix_load(sg, sub_Identity_b, sycl::local_ptr<sycl::half>(tmp), 16);
 
 	// Initializing sub_Acc with zeros
@@ -243,17 +249,18 @@ void move_matrix_a_to_acc (
 	#endif
 }
 
+template<typename T>
 void move_matrix_b_to_acc (
 	sycl::nd_item<3> item,
 	sycl::half *tmp,
-	T_jm_b &sub_Input_b,
-	T_jm_acc &sub_Acc
+	T_jm_b<T> &sub_Input_b,
+	T_jm_acc<T> &sub_Acc
 ){
 	sycl::sub_group sg = item.get_sub_group();
 
 	// Loading identity values to sub_Identity
 	fill_identity(item, tmp);
-	T_jm_a sub_Identity_a;
+	T_jm_a<T> sub_Identity_a;
 	joint_matrix_load(sg, sub_Identity_a, sycl::local_ptr<sycl::half>(tmp), 16);
 
 	// Initializing sub_Acc with zeros
@@ -298,11 +305,11 @@ void reduce_via_matrix_units (
 		fill_Q(item, Q_data);
 
 		// Declaring and filling submatrices
-		T_jm_b sub_P;
-		T_jm_acc sub_V;
-		T_jm_a sub_Q;
-		T_jm_b sub_W;
-		T_jm_acc sub_C;
+		T_jm_b<sycl::half> sub_P;
+		T_jm_acc<sycl::half> sub_V;
+		T_jm_a<sycl::half> sub_Q;
+		T_jm_b<sycl::half> sub_W;
+		T_jm_acc<sycl::half> sub_C;
 		joint_matrix_fill(sg, sub_P, HALF_ONE); // P: only ones
 		joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
 		joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
@@ -322,12 +329,12 @@ void reduce_via_matrix_units (
 			print_submatrix<sycl::half>(item, "data_to_be_reduced [inside main loop]", data_to_be_reduced);
 			*/
 
-			T_jm_a sub_A;
+			T_jm_a<sycl::half> sub_A;
 			joint_matrix_load(sg, sub_A, sycl::local_ptr<sycl::half>(data_to_be_reduced + offset), 16);
 
 			/*
 			// Printing sub_A y sub_P
-			T_jm_acc sub_Acc;
+			T_jm_acc<sycl::half> sub_Acc;
 			move_matrix_a_to_acc(item, tmp, sub_A, sub_Acc);
 			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 			print_submatrix<sycl::half>(item, "sub_A", tmp);
@@ -361,7 +368,7 @@ void reduce_via_matrix_units (
 
 		/*
 		// Printing sub_Q y sub_W
-		T_jm_acc sub_Acc2;
+		T_jm_acc<sycl::half> sub_Acc2;
 		move_matrix_a_to_acc(item, tmp, sub_Q, sub_Acc2);
 		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 		print_submatrix<sycl::half>(item, "sub_Q", tmp);
