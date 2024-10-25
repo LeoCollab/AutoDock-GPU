@@ -87,17 +87,6 @@ constexpr int tN = 16;
 constexpr int tK = 16;
 constexpr int Shape_JM_ACC = tM * tN;
 
-constexpr sycl::half HALF_ONE = sycl::half(1.0f);
-constexpr sycl::half HALF_ZERO = sycl::half(0.0f);
-
-constexpr sycl::half I4[16] =
-{
-	HALF_ONE,  HALF_ZERO, HALF_ZERO, HALF_ZERO,
-	HALF_ZERO, HALF_ONE,  HALF_ZERO, HALF_ZERO,
-	HALF_ZERO, HALF_ZERO, HALF_ONE,  HALF_ZERO,
-	HALF_ZERO, HALF_ZERO, HALF_ZERO, HALF_ONE
-};
-
 // Printing submatrices contents,
 // which have to be previously copied into an array in local memory.
 // Enclosing the implementation of print_submatrix()
@@ -166,6 +155,13 @@ void fill_Q (
 	sycl::sub_group sg = item.get_sub_group();
 	int wi_Id_sg = sg.get_local_id();
 	int sg_Size = sg.get_local_range().get(0);
+
+	T I4[16] = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
 
 	// Slightly improved multi-threaded implementation
 	// IMPORTANT: this is computed by a sub-group,
@@ -249,7 +245,7 @@ void move_matrix_a_to_acc (
 	joint_matrix_load(sg, sub_Identity_b, sycl::local_ptr<T>(tmp), 16);
 
 	// Initializing sub_Acc with zeros
-	joint_matrix_fill(sg, sub_Acc, HALF_ZERO);
+	joint_matrix_fill(sg, sub_Acc, 0.0f);
 
 	// sub_Acc <- sub_Input_a x sub_Identity_b + sub_Acc
 	#if defined (ONEAPI_20241)
@@ -274,7 +270,7 @@ void move_matrix_b_to_acc (
 	joint_matrix_load(sg, sub_Identity_a, sycl::local_ptr<T>(tmp), 16);
 
 	// Initializing sub_Acc with zeros
-	joint_matrix_fill(sg, sub_Acc, HALF_ZERO);
+	joint_matrix_fill(sg, sub_Acc, 0.0f);
 
 	// sub_Acc <- sub_Identity_a x sub_Input_b + sub_Acc
 	#if defined (ONEAPI_20241)
@@ -320,9 +316,9 @@ void reduce_via_matrix_units (
 		T_JM_A<sycl::half> sub_Q;
 		T_JM_B<sycl::half> sub_W;
 		T_JM_ACC<sycl::half> sub_C;
-		joint_matrix_fill(sg, sub_P, HALF_ONE); // P: only ones
-		joint_matrix_fill(sg, sub_V, HALF_ZERO); // Output: initialize to zeros
-		joint_matrix_fill(sg, sub_C, HALF_ZERO); // Final result
+		joint_matrix_fill(sg, sub_P, 1.0f); // P: only ones
+		joint_matrix_fill(sg, sub_V, 0.0f); // Output: initialize to zeros
+		joint_matrix_fill(sg, sub_C, 0.0f); // Final result
 		joint_matrix_load(sg, sub_Q, sycl::local_ptr<sycl::half>(Q_data), 16);
 
 		// 1. Accumulate the values: V <- AP + V
