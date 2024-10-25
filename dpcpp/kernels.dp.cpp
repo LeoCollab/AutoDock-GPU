@@ -345,11 +345,11 @@ void reduce_via_matrix_units (
 			/*
 			// Printing sub_A y sub_P
 			T_JM_ACC<sycl::half> sub_Acc;
-			move_matrix_a_to_acc(item, tmp, sub_A, sub_Acc);
+			move_matrix_a_to_acc<sycl::half>(item, tmp, sub_A, sub_Acc);
 			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 			print_submatrix<sycl::half>(item, "sub_A", tmp);
 
-			move_matrix_b_to_acc(item, tmp, sub_P, sub_Acc);
+			move_matrix_b_to_acc<sycl::half>(item, tmp, sub_P, sub_Acc);
 			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 			print_submatrix<sycl::half>(item, "sub_P", tmp);
 			*/
@@ -379,11 +379,11 @@ void reduce_via_matrix_units (
 		/*
 		// Printing sub_Q y sub_W
 		T_JM_ACC<sycl::half> sub_Acc2;
-		move_matrix_a_to_acc(item, tmp, sub_Q, sub_Acc2);
+		move_matrix_a_to_acc<sycl::half>(item, tmp, sub_Q, sub_Acc2);
 		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 		print_submatrix<sycl::half>(item, "sub_Q", tmp);
 
-		move_matrix_b_to_acc(item, tmp, sub_W, sub_Acc2);
+		move_matrix_b_to_acc<sycl::half>(item, tmp, sub_W, sub_Acc2);
 		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
 		print_submatrix<sycl::half>(item, "sub_W", tmp);
 		*/
