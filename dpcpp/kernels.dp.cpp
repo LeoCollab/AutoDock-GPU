@@ -155,6 +155,9 @@ void print_wi_indexes (
 		wi_Id_ND, wi_Id_Wg, wg_Id_ND, wg_Size, sg_Range, sg_Id_Wg, sg_Size, wi_Id_sg);
 }
 
+// Q_data points to an array to be loaded to sub_Q
+// sub_Q is submatrix with "use::a" use
+// Hence, Q_data holds the data of a submatrix with "M x K" shape
 template <typename T>
 void fill_Q (
 	sycl::nd_item<3> item,
@@ -167,8 +170,8 @@ void fill_Q (
 	// Slightly improved multi-threaded implementation
 	// IMPORTANT: this is computed by a sub-group,
 	// and thus, MUST use "sg_Size" instead of "wg_Size"
-	for (uint i = wi_Id_sg; i < 4; i+=sg_Size) {	// How many rows (of 4x4 blocks) are there in matrix A?
-		for (uint j = 0; j < 4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
+	for (uint i = wi_Id_sg; i < tM/4; i+=sg_Size) {	// How many rows (of 4x4 blocks) are there in matrix A?
+		for (uint j = 0; j < tK/4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
 			for (uint ii = 0; ii < 4; ii++) {
 				for (uint jj = 0; jj < 4; jj++) {
 					Q_data[4*i + 64*j + ii + 16*jj] = I4 [4*ii + jj];
