@@ -157,7 +157,7 @@ void print_wi_indexes (
 
 // Q_data points to an array to be loaded to sub_Q
 // sub_Q is submatrix with "use::a" use
-// Hence, Q_data holds the data of a submatrix with "M x K" shape
+// Hence, Q_data holds the data of a submatrix with "tM x tK" shape
 template <typename T>
 void fill_Q (
 	sycl::nd_item<3> item,
@@ -185,6 +185,10 @@ void fill_Q (
 	*/
 }
 
+// I_data points to an array to be loaded to
+// either a "use::a" or "use::b" identity submatrix.
+// An identity matrix is of square shape.
+// Hence, its shape is "tK x tK"
 void fill_identity (
 	sycl::nd_item<3> item,
 	sycl::half *I_data
@@ -194,13 +198,13 @@ void fill_identity (
 
 	// Naive implementation: a single work-item fills data in
 	if(wi_Id_sg == 0) {
-		for(uint i = 0; i < 16; i++) {
-			for(uint j = 0; j < 16; j++) {
+		for(uint i = 0; i < tK; i++) {
+			for(uint j = 0; j < tK; j++) {
 				if (i == j) {
-					I_data[16*i + j] = HALF_ONE;
+					I_data[tK *i + j] = HALF_ONE;
 				}
 				else {
-					I_data[16*i + j] = HALF_ZERO;
+					I_data[tK *i + j] = HALF_ZERO;
 				}
 			}
 		}
