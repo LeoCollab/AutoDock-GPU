@@ -81,11 +81,11 @@ using namespace sycl::ext::oneapi::experimental::matrix;
 //#define ONEAPI_20241
 #define ONEAPI_202421
 
-// Number of rows/cols of a submatrix: tM, N, K
+// Number of rows/cols of a submatrix: tM, tN, K
 constexpr int tM = 16;
-constexpr int rowscols_N = 16;
+constexpr int tN = 16;
 constexpr int rowscols_K = 16;
-constexpr int Shape_JM_ACC = tM * rowscols_N;
+constexpr int Shape_JM_ACC = tM * tN;
 
 constexpr sycl::half HALF_ONE = sycl::half(1.0f);
 constexpr sycl::half HALF_ZERO = sycl::half(0.0f);
@@ -211,10 +211,10 @@ template<typename T>
 using T_JM_A = joint_matrix<sycl::sub_group, T, use::a, tM, rowscols_K, layout::col_major>;
 
 template<typename T>
-using T_JM_B = joint_matrix<sycl::sub_group, T, use::b, rowscols_K, rowscols_N, layout::col_major>;
+using T_JM_B = joint_matrix<sycl::sub_group, T, use::b, rowscols_K, tN, layout::col_major>;
 
 template<typename T>
-using T_JM_ACC = joint_matrix<sycl::sub_group, T, use::accumulator, tM, rowscols_N>;
+using T_JM_ACC = joint_matrix<sycl::sub_group, T, use::accumulator, tM, tN>;
 
 // The most elegant way to print a "use::b" sub_Input_b matrix would be
 // to copy such matrix into any "use::accumulator" matrix,
@@ -498,28 +498,28 @@ constexpr architecture nvidia_gpu_family[3] = {
 */
 // Intel (all configuration below are invalid -> compilation failing)
 /*
-using myparams_intel_gpu_dg2_g10 = matrix_params<architecture::intel_gpu_dg2_g10, sycl::half, sycl::half, sycl::half, sycl::half, tM, rowscols_N, rowscols_K>;
+using myparams_intel_gpu_dg2_g10 = matrix_params<architecture::intel_gpu_dg2_g10, sycl::half, sycl::half, sycl::half, sycl::half, tM, tN, rowscols_K>;
 myparams_intel_gpu_dg2_g10 test_params_intel_gpu_dg2_g10; // Checking with object definition because internal asserts happen at struct instantiation!
 
-using myparams_intel_gpu_dg2_g11 = matrix_params<architecture::intel_gpu_dg2_g11, sycl::half, sycl::half, sycl::half, sycl::half, tM, rowscols_N, rowscols_K>;
+using myparams_intel_gpu_dg2_g11 = matrix_params<architecture::intel_gpu_dg2_g11, sycl::half, sycl::half, sycl::half, sycl::half, tM, tN, rowscols_K>;
 myparams_intel_gpu_dg2_g11 test_params_intel_gpu_dg2_g11; // Checking with object definition because internal asserts happen at struct instantiation!
 
-using myparams_intel_gpu_dg2_g12 = matrix_params<architecture::intel_gpu_dg2_g12, sycl::half, sycl::half, sycl::half, sycl::half, tM, rowscols_N, rowscols_K>;
+using myparams_intel_gpu_dg2_g12 = matrix_params<architecture::intel_gpu_dg2_g12, sycl::half, sycl::half, sycl::half, sycl::half, tM, tN, rowscols_K>;
 myparams_intel_gpu_dg2_g12 test_params_intel_gpu_dg2_g12; // Checking with object definition because internal asserts happen at struct instantiation!
 
-using myparams_intel_gpu_pvc = matrix_params<architecture::intel_gpu_pvc, sycl::half, sycl::half, sycl::half, sycl::half, tM, rowscols_N, rowscols_K>;
+using myparams_intel_gpu_pvc = matrix_params<architecture::intel_gpu_pvc, sycl::half, sycl::half, sycl::half, sycl::half, tM, tN, rowscols_K>;
 myparams_intel_gpu_pvc test_params_intel_gpu_pvc; // Checking with object definition because internal asserts happen at struct instantiation!
 */
 
 // NVIDIA (all configurations below pass -> these are replaced with runtime query)
 /*
-using myparams_nvidia_gpu_sm_70 = matrix_params<architecture::nvidia_gpu_sm_70, sycl::half, sycl::half, sycl::half, sycl::half, tM, rowscols_N, rowscols_K>;
+using myparams_nvidia_gpu_sm_70 = matrix_params<architecture::nvidia_gpu_sm_70, sycl::half, sycl::half, sycl::half, sycl::half, tM, tN, rowscols_K>;
 myparams_nvidia_gpu_sm_70 test_params_nvidia_gpu_sm_70; // Checking with object definition because internal asserts happen at struct instantiation!
 
-using myparams_nvidia_gpu_sm_72 = matrix_params<architecture::nvidia_gpu_sm_72, sycl::half, sycl::half, sycl::half, sycl::half, tM, rowscols_N, rowscols_K>;
+using myparams_nvidia_gpu_sm_72 = matrix_params<architecture::nvidia_gpu_sm_72, sycl::half, sycl::half, sycl::half, sycl::half, tM, tN, rowscols_K>;
 myparams_nvidia_gpu_sm_72 test_params_nvidia_gpu_sm_72; // Checking with object definition because internal asserts happen at struct instantiation!
 
-using myparams_nvidia_gpu_sm_80 = matrix_params<architecture::nvidia_gpu_sm_80, sycl::half, sycl::half, sycl::half, sycl::half, tM, rowscols_N, rowscols_K>;
+using myparams_nvidia_gpu_sm_80 = matrix_params<architecture::nvidia_gpu_sm_80, sycl::half, sycl::half, sycl::half, sycl::half, tM, tN, rowscols_K>;
 myparams_nvidia_gpu_sm_80 test_params_nvidia_gpu_sm_80; // Checking with object definition because internal asserts happen at struct instantiation!
 */
 /* Reduction using matrix units */
