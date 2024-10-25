@@ -187,7 +187,7 @@ void fill_Q (
 
 void fill_identity (
 	sycl::nd_item<3> item,
-	sycl::half *Q_data
+	sycl::half *I_data
 ) {
 	sycl::sub_group sg = item.get_sub_group();
 	int wi_Id_sg = sg.get_local_id();
@@ -197,17 +197,17 @@ void fill_identity (
 		for(uint i = 0; i < 16; i++) {
 			for(uint j = 0; j < 16; j++) {
 				if (i == j) {
-					Q_data[16*i + j] = HALF_ONE;
+					I_data[16*i + j] = HALF_ONE;
 				}
 				else {
-					Q_data[16*i + j] = HALF_ZERO;
+					I_data[16*i + j] = HALF_ZERO;
 				}
 			}
 		}
 	}
 
 	/*
-	print_submatrix<sycl::half>(item, "Q_data [inside fill_identity()]", Q_data);
+	print_submatrix<sycl::half>(item, "I_data [inside fill_identity()]", I_data);
 	*/
 }
 
