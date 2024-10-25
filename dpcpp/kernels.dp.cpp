@@ -202,7 +202,7 @@ void fill_identity (
 		for(uint i = 0; i < tK; i++) {
 			for(uint j = 0; j < tK; j++) {
 				if (i == j) {
-					I_data[tK *  i + j] = 1.0f;
+					I_data[tK * i + j] = 1.0f;
 				}
 				else {
 					I_data[tK * i + j] = 0.0f;
