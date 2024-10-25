@@ -241,10 +241,20 @@ try {
 	std::vector<matrix::combination> combinations = dpct::get_default_queue().get_device().get_info<info::device::matrix_combinations>();
 	printf("\nSupported joint-matrix combinations on device: %2i\n", sizeof(combinations));
 	for (int i = 0; i < sizeof(combinations); i++) {
-		printf("\tComb. #%2i: \t max-sizes (m,n,k): %2i %2i %2i \t|\t sizes (m,n,k): %2i %2i %2i",
+		if (
+			(combinations[i].max_msize == 0) &&
+			(combinations[i].max_nsize == 0) &&
+			(combinations[i].max_ksize == 0)
+		) {
+			printf("\tComb. #%2i: \t sizes (m,n,k): %2i %2i %2i",
+				i, combinations[i].msize, combinations[i].nsize, combinations[i].ksize);
+		}
+		else {
+			printf("\tComb. #%2i: \t max-sizes (m,n,k): %2i %2i %2i \t|\t sizes (m,n,k): %2i %2i %2i",
 				i,
 				combinations[i].max_msize, combinations[i].max_nsize, combinations[i].max_ksize,
 				combinations[i].msize, combinations[i].nsize, combinations[i].ksize);
+		}
 		if (matrix::matrix_type::fp16 == combinations[i].atype &&
 			matrix::matrix_type::fp16 == combinations[i].btype &&
 			matrix::matrix_type::fp16 == combinations[i].ctype &&
