@@ -177,7 +177,7 @@ void fill_Q (
 	}
 
 	/*
-	print_submatrix<sycl::half>(item, "Q_data [inside fill_Q()]", Q_data);
+	print_submatrix<T>(item, "Q_data [inside fill_Q()]", Q_data);
 	*/
 }
 
@@ -208,7 +208,7 @@ void fill_identity (
 	}
 
 	/*
-	print_submatrix<sycl::half>(item, "I_data [inside fill_identity()]", I_data);
+	print_submatrix<T>(item, "I_data [inside fill_identity()]", I_data);
 	*/
 }
 
