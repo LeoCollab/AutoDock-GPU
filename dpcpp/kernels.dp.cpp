@@ -170,7 +170,9 @@ void fill_Q (
 		for (uint j = 0; j < tK/4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
 			for (uint ii = 0; ii < 4; ii++) {
 				for (uint jj = 0; jj < 4; jj++) {
-					Q_data[4*i + 64*j + ii + 16*jj] = I4 [4*ii + jj];
+					//Q_data[4*i + 64*j + ii + 16*jj] = I4 [4*ii + jj]; // original (row-major)
+					//Q_data[4* (i + tK*j) + ii + 16*jj] = I4 [4*jj + ii]; // row-major
+					Q_data[4* (j + tM*i) + jj + 16*ii] = I4 [4*ii + jj]; // col-major
 				}
 			}
 		}
