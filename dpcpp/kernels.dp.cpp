@@ -197,12 +197,7 @@ void fill_identity (
 	if(wi_Id_sg == 0) {
 		for(uint i = 0; i < tK; i++) {
 			for(uint j = 0; j < tK; j++) {
-				if (i == j) {
-					I_data[tK * i + j] = 1.0f;
-				}
-				else {
-					I_data[tK * i + j] = 0.0f;
-				}
+				I_data[tK * i + j] = (i == j)? 1.0f: 0.0f;
 			}
 		}
 	}
