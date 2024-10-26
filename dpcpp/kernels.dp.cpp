@@ -192,13 +192,14 @@ void fill_identity (
 ) {
 	sycl::sub_group sg = item.get_sub_group();
 	int wi_Id_sg = sg.get_local_id();
+	int sg_Size = sg.get_local_range().get(0);
 
-	// Naive implementation: a single work-item fills data in
-	if(wi_Id_sg == 0) {
-		for(uint i = 0; i < tK; i++) {
-			for(uint j = 0; j < tK; j++) {
-				I_data[tK * i + j] = (i == j)? 1.0f: 0.0f;
-			}
+	// Slightly improved multi-threaded implementation
+	// IMPORTANT: this is computed by a sub-group,
+	// and thus, MUST use "sg_Size" instead of "wg_Size"
+	for(uint i = wi_Id_sg; i < tK; i+=sg_Size) {
+		for(uint j = 0; j < tK; j++) {
+			I_data[tK * i + j] = (i == j)? 1.0f: 0.0f;
 		}
 	}
 
