@@ -95,13 +95,11 @@ constexpr int Shape_JM_ACC = tM * tN;
 // Extra sync before printing is not needed as long as
 // print_submatrix() is called after joint_matrix functions,
 // which are executed by the entire sub_group (i.e., wi_Id_Wg <= 31)
-template <typename T>
+template <typename T, uint NROWS, uint NCOLS>
 void print_submatrix (
 	sycl::nd_item<3> item,
 	const char *msg,
-	T *data_to_print,
-	uint Nrows,
-	uint Ncols
+	T *data_to_print
 ) {
 	// Only one wg should print
 	int wg_Id_ND = item.get_group(2);
@@ -111,15 +109,15 @@ void print_submatrix (
 
 	if (wg_Id_ND == 0 && wi_Id_sg == 0) {
 		printf("\n%s", msg);
-		for (uint i = 0; i < Nrows; i++) {
-			for (uint j = 0; j < Ncols; j++) {
-				if ((j % Ncols) == 0) {
+		for (uint i = 0; i < NROWS; i++) {
+			for (uint j = 0; j < NCOLS; j++) {
+				if ((j % NCOLS) == 0) {
 					printf("\n[Row %2u]: ", i);
 				}
 				// Printing row-major
-				//printf(" %5.3f ", float(data_to_print[i * Ncols + j]));
+				//printf(" %5.3f ", float(data_to_print[i * NCOLS + j]));
 				// Printing column-major
-				printf(" %5.3f ", float(data_to_print[j * Nrows + i]));
+				printf(" %5.3f ", float(data_to_print[j * NROWS + i]));
 			}
 		}
 		printf("\n");
@@ -179,7 +177,7 @@ void fill_Q (
 	}
 
 	/*
-	print_submatrix<T>(item, "Q_data [inside fill_Q()]", Q_data, tM, tK);
+	print_submatrix<T, tM, tK>(item, "Q_data [inside fill_Q()]", Q_data);
 	*/
 }
 
@@ -210,7 +208,7 @@ void fill_identity (
 	}
 
 	/*
-	print_submatrix<T>(item, "I_data [inside fill_identity()]", I_data, tK, tK);
+	print_submatrix<T, tK, tK>(item, "I_data [inside fill_identity()]", I_data);
 	*/
 }
 
@@ -334,7 +332,7 @@ void reduce_via_matrix_units (
 			*/
 
 			/*
-			print_submatrix<sycl::half>(item, "data_to_be_reduced [inside main loop]", data_to_be_reduced, tM, tK);
+			print_submatrix<sycl::half, tM, tK>(item, "data_to_be_reduced [inside main loop]", data_to_be_reduced);
 			*/
 
 			T_JM_A<sycl::half> sub_A;
@@ -345,17 +343,17 @@ void reduce_via_matrix_units (
 			T_JM_ACC<sycl::half> sub_Acc;
 			move_matrix_a_to_acc<sycl::half>(item, tmp, sub_A, sub_Acc);
 			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
-			print_submatrix<sycl::half>(item, "sub_A", tmp, tM, tK);
+			print_submatrix<sycl::half, tM, tK>(item, "sub_A", tmp);
 
 			move_matrix_b_to_acc<sycl::half>(item, tmp, sub_P, sub_Acc);
 			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
-			print_submatrix<sycl::half>(item, "sub_P", tmp, tK, tN);
+			print_submatrix<sycl::half, tK, tN>(item, "sub_P", tmp);
 			*/
 
 			/*
 			// Printing sub_V (before mad)
 			joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
-			print_submatrix<sycl::half>(item, "sub_V (before mad)", tmp, tM, tN);
+			print_submatrix<sycl::half, tM, tN>(item, "sub_V (before mad)", tmp);
 			*/
 			#if defined (ONEAPI_20241)
 			sub_V = joint_matrix_mad(sg, sub_A, sub_P, sub_V);
@@ -366,7 +364,7 @@ void reduce_via_matrix_units (
 			/*
 			// Printing sub_V (after mad)
 			joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
-			print_submatrix<sycl::half>(item, "sub_V (after mad)", tmp, tM, tN);
+			print_submatrix<sycl::half, tM, tN>(item, "sub_V (after mad)", tmp);
 			*/
 		}
 
@@ -379,17 +377,17 @@ void reduce_via_matrix_units (
 		T_JM_ACC<sycl::half> sub_Acc2;
 		move_matrix_a_to_acc<sycl::half>(item, tmp, sub_Q, sub_Acc2);
 		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
-		print_submatrix<sycl::half>(item, "sub_Q", tmp, tM, tK);
+		print_submatrix<sycl::half, tM, tK>(item, "sub_Q", tmp);
 
 		move_matrix_b_to_acc<sycl::half>(item, tmp, sub_W, sub_Acc2);
 		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
-		print_submatrix<sycl::half>(item, "sub_W", tmp, tK, tN);
+		print_submatrix<sycl::half, tK, tN>(item, "sub_W", tmp);
 		*/
 
 		/*
 		// Printing sub_C (before mad)
 		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
-		print_submatrix<sycl::half>(item, "sub_C (before mad)", tmp, tM, tN);
+		print_submatrix<sycl::half, tM, tN>(item, "sub_C (before mad)", tmp);
 		*/
 
 		// 2. Perform line sum: C <- QW + C (zero)
@@ -402,7 +400,7 @@ void reduce_via_matrix_units (
 		/*
 		// Printing sub_C (after mad)
 		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
-		print_submatrix<sycl::half>(item, "sub_C", tmp, tM, tN);
+		print_submatrix<sycl::half, tM, tN>(item, "sub_C", tmp);
 		*/
 
 		// 3. Store result in shared memory
