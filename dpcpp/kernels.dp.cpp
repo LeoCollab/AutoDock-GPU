@@ -154,13 +154,6 @@ void fill_Q (
 	int wi_Id_sg = sg.get_local_id();
 	int sg_Size = sg.get_local_range().get(0);
 
-	constexpr T I4[16] = {
-		1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
-
 	// Slightly improved multi-threaded implementation
 	// IMPORTANT: this is computed by a sub-group,
 	// and thus, MUST use "sg_Size" instead of "wg_Size"
@@ -168,9 +161,8 @@ void fill_Q (
 		for (uint j = 0; j < tK/4; j++) {	// Col counter: how many cols (of 4x4 blocks) are there in the matrix?
 			for (uint ii = 0; ii < 4; ii++) {
 				for (uint jj = 0; jj < 4; jj++) {
-					//Q_data[4*i + 64*j + ii + 16*jj] = I4 [4*ii + jj]; // original (row-major)
-					//Q_data[4 * (tM*i + j) + 16*ii + jj] = I4 [jj + 4*ii]; // Row-major
-					Q_data[4 * (tK*j + i) + 16*jj + ii] = I4 [ii + 4*jj]; // Col-major
+					//Q_data[4 * (tM*i + j) + 16*ii + jj] = (ii == jj)? 1.0f: 0.0f; // Row-major
+					Q_data[4 * (tK*j + i) + 16*jj + ii] = (ii == jj)? 1.0f: 0.0f; // Col-major
 				}
 			}
 		}
