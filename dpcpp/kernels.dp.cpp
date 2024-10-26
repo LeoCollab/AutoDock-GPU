@@ -164,13 +164,13 @@ void fill_Q (
 	// Slightly improved multi-threaded implementation
 	// IMPORTANT: this is computed by a sub-group,
 	// and thus, MUST use "sg_Size" instead of "wg_Size"
-	for (uint i = wi_Id_sg; i < tM/4; i+=sg_Size) {	// How many rows (of 4x4 blocks) are there in matrix A?
-		for (uint j = 0; j < tK/4; j++) {	// How many cols (of 4x4 blocks) are there in matrix A?
+	for (uint i = wi_Id_sg; i < tM/4; i+=sg_Size) {	// Row counter: how many rows (of 4x4 blocks) are there in the matrix?
+		for (uint j = 0; j < tK/4; j++) {	// Col counter: how many cols (of 4x4 blocks) are there in the matrix?
 			for (uint ii = 0; ii < 4; ii++) {
 				for (uint jj = 0; jj < 4; jj++) {
 					//Q_data[4*i + 64*j + ii + 16*jj] = I4 [4*ii + jj]; // original (row-major)
-					//Q_data[4 * (j + tM*i) + jj + 16*ii] = I4 [4*ii + jj]; // Row-major
-					Q_data[4 * (i + tK*j) + ii + 16*jj] = I4 [4*jj + ii]; // Col-major
+					//Q_data[4 * (tM*i + j) + 16*ii + jj] = I4 [jj + 4*ii]; // Row-major
+					Q_data[4 * (tK*j + i) + 16*jj + ii] = I4 [ii + 4*jj]; // Col-major
 				}
 			}
 		}
