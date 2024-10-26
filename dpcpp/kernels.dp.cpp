@@ -342,17 +342,17 @@ void reduce_via_matrix_units (
 			// Printing sub_A y sub_P
 			T_JM_ACC<sycl::half> sub_Acc;
 			move_matrix_a_to_acc<sycl::half>(item, tmp, sub_A, sub_Acc);
-			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
 			print_submatrix<sycl::half>(item, "sub_A", tmp);
 
 			move_matrix_b_to_acc<sycl::half>(item, tmp, sub_P, sub_Acc);
-			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
 			print_submatrix<sycl::half>(item, "sub_P", tmp);
 			*/
 
 			/*
 			// Printing sub_V (before mad)
-			joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+			joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
 			print_submatrix<sycl::half>(item, "sub_V (before mad)", tmp);
 			*/
 			#if defined (ONEAPI_20241)
@@ -363,30 +363,30 @@ void reduce_via_matrix_units (
 
 			/*
 			// Printing sub_V (after mad)
-			joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+			joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
 			print_submatrix<sycl::half>(item, "sub_V (after mad)", tmp);
 			*/
 		}
 
 		// W <- V (required since we need V as a "use::b")
-		joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+		joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
 		joint_matrix_load(sg, sub_W, sycl::local_ptr<sycl::half>(tmp), 16);
 
 		/*
 		// Printing sub_Q y sub_W
 		T_JM_ACC<sycl::half> sub_Acc2;
 		move_matrix_a_to_acc<sycl::half>(item, tmp, sub_Q, sub_Acc2);
-		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
 		print_submatrix<sycl::half>(item, "sub_Q", tmp);
 
 		move_matrix_b_to_acc<sycl::half>(item, tmp, sub_W, sub_Acc2);
-		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
 		print_submatrix<sycl::half>(item, "sub_W", tmp);
 		*/
 
 		/*
 		// Printing sub_C (before mad)
-		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
 		print_submatrix<sycl::half>(item, "sub_C (before mad)", tmp);
 		*/
 
@@ -399,12 +399,12 @@ void reduce_via_matrix_units (
 
 		/*
 		// Printing sub_C (after mad)
-		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(tmp), 16, layout::col_major);
+		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
 		print_submatrix<sycl::half>(item, "sub_C", tmp);
 		*/
 
 		// 3. Store result in shared memory
-		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(data_to_be_reduced), 16, layout::col_major);
+		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(data_to_be_reduced), tM, layout::col_major);
 	}
 
 	item.barrier(SYCL_MEMORY_SPACE);
