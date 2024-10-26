@@ -242,7 +242,7 @@ void move_matrix_a_to_acc (
 	// Loading identity values to sub_Identity
 	fill_identity<T>(item, tmp);
 	T_JM_B<T> sub_Identity_b;
-	joint_matrix_load(sg, sub_Identity_b, sycl::local_ptr<T>(tmp), 16);
+	joint_matrix_load(sg, sub_Identity_b, sycl::local_ptr<T>(tmp), tK); // Load use::b -> stride is tK
 
 	// Initializing sub_Acc with zeros
 	joint_matrix_fill(sg, sub_Acc, 0.0f);
@@ -267,7 +267,7 @@ void move_matrix_b_to_acc (
 	// Loading identity values to sub_Identity
 	fill_identity<T>(item, tmp);
 	T_JM_A<T> sub_Identity_a;
-	joint_matrix_load(sg, sub_Identity_a, sycl::local_ptr<T>(tmp), 16);
+	joint_matrix_load(sg, sub_Identity_a, sycl::local_ptr<T>(tmp), tM); // Load use::a -> stride is tM
 
 	// Initializing sub_Acc with zeros
 	joint_matrix_fill(sg, sub_Acc, 0.0f);
@@ -319,7 +319,7 @@ void reduce_via_matrix_units (
 		joint_matrix_fill(sg, sub_P, 1.0f); // P: only ones
 		joint_matrix_fill(sg, sub_V, 0.0f); // Output: initialize to zeros
 		joint_matrix_fill(sg, sub_C, 0.0f); // Final result
-		joint_matrix_load(sg, sub_Q, sycl::local_ptr<sycl::half>(Q_data), 16);
+		joint_matrix_load(sg, sub_Q, sycl::local_ptr<sycl::half>(Q_data), tM);	// Load use::a -> stride is tM
 
 		// 1. Accumulate the values: V <- AP + V
 		for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK) / Shape_JM_ACC;  i++) {
@@ -336,9 +336,9 @@ void reduce_via_matrix_units (
 			*/
 
 			T_JM_A<sycl::half> sub_A;
-			joint_matrix_load(sg, sub_A, sycl::local_ptr<sycl::half>(data_to_be_reduced + offset), 16);
+			joint_matrix_load(sg, sub_A, sycl::local_ptr<sycl::half>(data_to_be_reduced + offset), tM); // Load use::a -> stride is tM
 
-			/*
+			///*
 			// Printing sub_A y sub_P
 			T_JM_ACC<sycl::half> sub_Acc;
 			move_matrix_a_to_acc<sycl::half>(item, tmp, sub_A, sub_Acc);
@@ -348,7 +348,7 @@ void reduce_via_matrix_units (
 			move_matrix_b_to_acc<sycl::half>(item, tmp, sub_P, sub_Acc);
 			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
 			print_submatrix<sycl::half>(item, "sub_P", tmp);
-			*/
+			//*/
 
 			/*
 			// Printing sub_V (before mad)
@@ -370,7 +370,7 @@ void reduce_via_matrix_units (
 
 		// W <- V (required since we need V as a "use::b")
 		joint_matrix_store(sg, sub_V, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
-		joint_matrix_load(sg, sub_W, sycl::local_ptr<sycl::half>(tmp), 16);
+		joint_matrix_load(sg, sub_W, sycl::local_ptr<sycl::half>(tmp), tK); // Load use::b -> stride is tK
 
 		/*
 		// Printing sub_Q y sub_W
