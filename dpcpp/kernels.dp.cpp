@@ -327,7 +327,7 @@ void reduce_via_matrix_units (
 
 			/*
 			if (wg_Id_ND == 0 && wi_Id_sg == 0) {
-				printf("\ni = %d, tripcount= %d, offset = %d ", i, (4 * NUM_OF_THREADS_PER_BLOCK) / (16 * 16), offset);
+				printf("\nLoop: tripcount = %d | iteration = %d | offset = %d", (4 * NUM_OF_THREADS_PER_BLOCK) / Shape_JM_ACC, i, offset);
 			}
 			*/
 
@@ -338,7 +338,7 @@ void reduce_via_matrix_units (
 			T_JM_A<sycl::half> sub_A;
 			joint_matrix_load(sg, sub_A, sycl::local_ptr<sycl::half>(data_to_be_reduced + offset), tM); // Load use::a -> stride is tM
 
-			///*
+			/*
 			// Printing sub_A y sub_P
 			T_JM_ACC<sycl::half> sub_Acc;
 			move_matrix_a_to_acc<sycl::half>(item, tmp, sub_A, sub_Acc);
@@ -348,7 +348,7 @@ void reduce_via_matrix_units (
 			move_matrix_b_to_acc<sycl::half>(item, tmp, sub_P, sub_Acc);
 			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<sycl::half>(tmp), tM, layout::col_major);
 			print_submatrix<sycl::half>(item, "sub_P", tmp);
-			//*/
+			*/
 
 			/*
 			// Printing sub_V (before mad)
