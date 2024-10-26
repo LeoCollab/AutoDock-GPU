@@ -109,15 +109,13 @@ void print_submatrix (
 
 	if (wg_Id_ND == 0 && wi_Id_sg == 0) {
 		printf("\n%s", msg);
-		for (uint i = 0; i < NROWS; i++) {
-			for (uint j = 0; j < NCOLS; j++) {
+		for (uint i = 0; i < NROWS; i++) { // Row counter
+			for (uint j = 0; j < NCOLS; j++) { // Col counter
 				if ((j % NCOLS) == 0) {
 					printf("\n[Row %2u]: ", i);
 				}
-				// Printing row-major
-				//printf(" %5.3f ", float(data_to_print[i * NCOLS + j]));
-				// Printing column-major
-				printf(" %5.3f ", float(data_to_print[j * NROWS + i]));
+				//printf(" %5.3f ", float(data_to_print[NCOLS * i + j])); // Row-major
+				printf(" %5.3f ", float(data_to_print[NROWS * j + i])); // Col-major
 			}
 		}
 		printf("\n");
@@ -171,8 +169,8 @@ void fill_Q (
 			for (uint ii = 0; ii < 4; ii++) {
 				for (uint jj = 0; jj < 4; jj++) {
 					//Q_data[4*i + 64*j + ii + 16*jj] = I4 [4*ii + jj]; // original (row-major)
-					//Q_data[4* (i + tK*j) + ii + 16*jj] = I4 [4*jj + ii]; // row-major
-					Q_data[4* (j + tM*i) + jj + 16*ii] = I4 [4*ii + jj]; // col-major
+					//Q_data[4 * (j + tM*i) + jj + 16*ii] = I4 [4*ii + jj]; // Row-major
+					Q_data[4 * (i + tK*j) + ii + 16*jj] = I4 [4*jj + ii]; // Col-major
 				}
 			}
 		}
@@ -199,9 +197,9 @@ void fill_identity (
 	// Slightly improved multi-threaded implementation
 	// IMPORTANT: this is computed by a sub-group,
 	// and thus, MUST use "sg_Size" instead of "wg_Size"
-	for(uint i = wi_Id_sg; i < tK; i+=sg_Size) {
-		for(uint j = 0; j < tK; j++) {
-			I_data[tK * i + j] = (i == j)? 1.0f: 0.0f;
+	for(uint i = wi_Id_sg; i < tK; i+=sg_Size) { // Row counter
+		for(uint j = 0; j < tK; j++) { // Col counter
+			I_data[tK * j + i] = (i == j)? 1.0f: 0.0f;
 		}
 	}
 
