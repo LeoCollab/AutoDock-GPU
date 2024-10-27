@@ -246,28 +246,54 @@ try {
 			(combinations[i].max_nsize == 0) &&
 			(combinations[i].max_ksize == 0)
 		) {
-			printf("\tComb. #%2i: \t sizes (m,n,k): %2i %2i %2i",
+			printf("\tComb. #%2i: \t sizes (m,n,k): %2zu %2zu %2zu",
 				i, combinations[i].msize, combinations[i].nsize, combinations[i].ksize);
 		}
 		else {
-			printf("\tComb. #%2i: \t max-sizes (m,n,k): %2i %2i %2i \t|\t sizes (m,n,k): %2i %2i %2i",
+			printf("\tComb. #%2i: \t max-sizes (m,n,k): %2zu %2zu %2zu \t|\t sizes (m,n,k): %2zu %2zu %2zu",
 				i,
 				combinations[i].max_msize, combinations[i].max_nsize, combinations[i].max_ksize,
 				combinations[i].msize, combinations[i].nsize, combinations[i].ksize);
 		}
-		if (matrix::matrix_type::fp16 == combinations[i].atype &&
-			matrix::matrix_type::fp16 == combinations[i].btype &&
-			matrix::matrix_type::fp16 == combinations[i].ctype &&
-			matrix::matrix_type::fp16 == combinations[i].dtype) {
-			printf(" <- mad(): these sizes work for fp16 (sycl::half) types!");
+
+		if (
+			(combinations[i].msize == 16) &&
+			(combinations[i].nsize == 16) &&
+			(combinations[i].ksize == 16)
+		) {
+			if (matrix::matrix_type::fp16 == combinations[i].atype &&
+				matrix::matrix_type::fp16 == combinations[i].btype &&
+				matrix::matrix_type::fp32 == combinations[i].ctype &&
+				matrix::matrix_type::fp32 == combinations[i].dtype) {
+				printf(" <- A (half), B (half), C (float), D (float)");
+			}
+			if (matrix::matrix_type::fp16 == combinations[i].atype &&
+				matrix::matrix_type::fp16 == combinations[i].btype &&
+				matrix::matrix_type::fp16 == combinations[i].ctype &&
+				matrix::matrix_type::fp32 == combinations[i].dtype) {
+				printf(" <- A (half), B (half), C (half), D (float)");
+			}
+			if (matrix::matrix_type::fp16 == combinations[i].atype &&
+				matrix::matrix_type::fp16 == combinations[i].btype &&
+				matrix::matrix_type::fp32 == combinations[i].ctype &&
+				matrix::matrix_type::fp16 == combinations[i].dtype) {
+				printf(" <- A (half), B (half), C (float), D (half)");
+			}
+			if (matrix::matrix_type::fp16 == combinations[i].atype &&
+				matrix::matrix_type::fp16 == combinations[i].btype &&
+				matrix::matrix_type::fp16 == combinations[i].ctype &&
+				matrix::matrix_type::fp16 == combinations[i].dtype) {
+				printf(" <- A (half), B (half), C (half), D (half)");
+			}
 		}
+
 		if (matrix::matrix_type::tf32 == combinations[i].atype &&
 			matrix::matrix_type::tf32 == combinations[i].btype &&
 			matrix::matrix_type::fp32 == combinations[i].ctype &&
-			matrix::matrix_type::fp32 == combinations[i].dtype
-			) {
-			printf(" <- mad(): these sizes work for tf32 (a & b) and fp32 (c & d) types!");
+			matrix::matrix_type::fp32 == combinations[i].dtype) {
+			printf(" <- A (tf32), B (tf32), C (float), D (float)");
 		}
+
 		printf("\n");
 	}
 	#endif
