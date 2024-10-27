@@ -388,7 +388,7 @@ void reduce_via_matrix_units (
 		*/
 
 		// 3. Store result in shared memory
-		joint_matrix_store(sg, sub_C, sycl::local_ptr<sycl::half>(data_to_be_reduced), tM, layout::col_major);
+		joint_matrix_store(sg, sub_C, sycl::local_ptr<T_A>(data_to_be_reduced), tM, layout::col_major);
 	}
 
 	item.barrier(SYCL_MEMORY_SPACE);
