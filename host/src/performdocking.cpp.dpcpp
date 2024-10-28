@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 // This is not needed unless debugging Cuda kernels via printf statements
 // #define SET_CUDA_PRINTF_BUFFER
 
-#include <CL/sycl.hpp>
+#include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include <chrono>
 #include <vector>
