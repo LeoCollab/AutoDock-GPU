@@ -276,12 +276,13 @@ try {
 				printf(" \tComb. #%2i: \t Any size (continuous/discrete/both) is greater than 32 -> Wrong combination!", i);
 			}
 		}
-
+		/*
 		if (
 			(combinations[i].msize == 16) &&
 			(combinations[i].nsize == 16) &&
 			(combinations[i].ksize == 16)
 		) {
+		*/
 			if (matrix::matrix_type::fp16 == combinations[i].atype &&
 				matrix::matrix_type::fp16 == combinations[i].btype &&
 				matrix::matrix_type::fp32 == combinations[i].ctype &&
@@ -306,7 +307,9 @@ try {
 				matrix::matrix_type::fp16 == combinations[i].dtype) {
 				printf(" <- A (half), B (half), C (half), D (half)");
 			}
+		/*
 		}
+		*/
 
 		if (matrix::matrix_type::tf32 == combinations[i].atype &&
 			matrix::matrix_type::tf32 == combinations[i].btype &&
