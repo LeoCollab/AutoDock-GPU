@@ -246,14 +246,32 @@ try {
 			(combinations[i].max_nsize == 0) &&
 			(combinations[i].max_ksize == 0)
 		) {
-			printf("\tComb. #%2i: \t sizes (m,n,k): %2zu %2zu %2zu",
-				i, combinations[i].msize, combinations[i].nsize, combinations[i].ksize);
+			if (	// Maximum allowed according to documentation
+				(combinations[i].msize <= 32) &&
+				(combinations[i].nsize <= 32) &&
+				(combinations[i].ksize <= 32)
+			) {
+				printf("\tComb. #%2i: \t discrete sizes (m,n,k): %2zu %2zu %2zu",
+					i, combinations[i].msize, combinations[i].nsize, combinations[i].ksize);
+			}
 		}
 		else {
-			printf("\tComb. #%2i: \t max-sizes (m,n,k): %2zu %2zu %2zu \t|\t sizes (m,n,k): %2zu %2zu %2zu",
+			if (
+				(combinations[i].max_msize <= 32) &&
+				(combinations[i].max_nsize <= 32) &&
+				(combinations[i].max_ksize <= 32) &&
+				(combinations[i].msize <= 32) &&
+				(combinations[i].nsize <= 32) &&
+				(combinations[i].ksize <= 32)
+			) {
+				printf("\tComb. #%2i: \t continuous-sizes (m,n,k): %2zu %2zu %2zu \t|\t discrete sizes (m,n,k): %2zu %2zu %2zu",
 				i,
 				combinations[i].max_msize, combinations[i].max_nsize, combinations[i].max_ksize,
 				combinations[i].msize, combinations[i].nsize, combinations[i].ksize);
+			}
+			else {
+				printf(" \tComb. #%2i: \t Any size is greater than 32 -> Wrong combination!", i);
+			}
 		}
 
 		if (
