@@ -254,6 +254,9 @@ try {
 				printf("\tComb. #%2i: \t discrete sizes (m,n,k): %2zu %2zu %2zu",
 					i, combinations[i].msize, combinations[i].nsize, combinations[i].ksize);
 			}
+			else {
+				printf(" \tComb. #%2i: \t Any discrete size is greater than 32 -> Wrong combination!", i);
+			}
 		}
 		else {
 			if (
@@ -270,7 +273,7 @@ try {
 				combinations[i].msize, combinations[i].nsize, combinations[i].ksize);
 			}
 			else {
-				printf(" \tComb. #%2i: \t Any size is greater than 32 -> Wrong combination!", i);
+				printf(" \tComb. #%2i: \t Any size (continuous/discrete/both) is greater than 32 -> Wrong combination!", i);
 			}
 		}
 
