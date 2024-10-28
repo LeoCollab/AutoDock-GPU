@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 // #define INTERACTION_PAIR_INFO
 
 #ifdef __INTEL_LLVM_COMPILER
-#include <CL/sycl.hpp>
+#include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #endif
 #include "calcenergy.h"
