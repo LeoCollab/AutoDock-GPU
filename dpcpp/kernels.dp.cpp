@@ -91,7 +91,7 @@ constexpr int Shape_JM_ACC = tM * tN;
 // Extra sync before printing is not needed as long as
 // print_submatrix() is called after joint_matrix functions,
 // which are executed by the entire sub_group (i.e., wi_Id_Wg <= 31)
-template <typename T, uint NROWS, uint NCOLS>
+template <typename T, uint NROWS, uint NCOLS, enum layout LAYOUT>
 void print_submatrix (
 	sycl::nd_item<3> item,
 	const char *msg,
@@ -104,17 +104,19 @@ void print_submatrix (
 	int wi_Id_sg = sg.get_local_id();
 
 	if (wg_Id_ND == 0 && wi_Id_sg == 0) {
-		printf("\n%s", msg);
+		sycl::ext::oneapi::experimental::printf("\n%s", msg);
 		for (uint i = 0; i < NROWS; i++) { // Row counter
+			sycl::ext::oneapi::experimental::printf("\n[Row %2u]: ", i);
 			for (uint j = 0; j < NCOLS; j++) { // Col counter
-				if ((j % NCOLS) == 0) {
-					printf("\n[Row %2u]: ", i);
+				if (LAYOUT == layout::row_major) {
+					sycl::ext::oneapi::experimental::printf(" %5.3f ", float(data_to_print[i*NCOLS+j]));
 				}
-				//printf(" %5.3f ", float(data_to_print[NCOLS * i + j])); // Row-major
-				printf(" %5.3f ", float(data_to_print[NROWS * j + i])); // Col-major
+				else if (LAYOUT == layout::col_major) {
+					sycl::ext::oneapi::experimental::printf(" %5.3f ", float(data_to_print[j*NROWS+i]));
+				}
 			}
 		}
-		printf("\n");
+		sycl::ext::oneapi::experimental::printf("\n");
 	}
 }
 
@@ -134,7 +136,8 @@ void print_wi_indexes (
 	int sg_Size = sg.get_local_range().get(0); // Returns the number of wis per subgroup
 	int wi_Id_sg = sg.get_local_id(); // Returns the index of the work-item within its subgroup
 
-	printf("wi_Id_ND: %i, \twi_Id_Wg: %i, \twg_Id_ND: %i, \twg_Size: %i, \tsg_Range: %i, \tsg_Id_Wg: %i, \tsg_Size: %i, \twi_Id_sg: %i\n",
+	sycl::ext::oneapi::experimental::printf(
+		"wi_Id_ND: %i, \twi_Id_Wg: %i, \twg_Id_ND: %i,\twg_Size: %i, \tsg_Range: %i, \tsg_Id_Wg: %i, \tsg_Size: %i, \twi_Id_sg: %i\n",
 		wi_Id_ND, wi_Id_Wg, wg_Id_ND, wg_Size, sg_Range, sg_Id_Wg, sg_Size, wi_Id_sg);
 }
 
@@ -160,15 +163,15 @@ void fill_Q (
 		for (uint j = 0; j < tK/4; j++) {	// Col counter: how many cols (of 4x4 blocks) are there in the matrix?
 			for (uint ii = 0; ii < 4; ii++) {
 				for (uint jj = 0; jj < 4; jj++) {
-					//Q_data[4 * (tM*i + j) + 16*ii + jj] = (ii == jj)? 1.0f: 0.0f; // Row-major
-					Q_data[4 * (tK*j + i) + 16*jj + ii] = (ii == jj)? 1.0f: 0.0f; // Col-major
+					Q_data[4 * (tM*i + j) + 16*ii + jj] = (ii == jj)? 1.0f: 0.0f; // Row-major
+					//Q_data[4 * (tK*j + i) + 16*jj + ii] = (ii == jj)? 1.0f: 0.0f; // Col-major
 				}
 			}
 		}
 	}
 
 	/*
-	print_submatrix<T_A, tM, tK>(item, "Q_data [inside fill_Q()]", Q_data);
+	print_submatrix<T_A, tM, tK, layout::row_major>(item, "Q_data [inside fill_Q()]", Q_data);
 	*/
 }
 
@@ -299,7 +302,7 @@ void reduce_via_matrix_units (
 
 			/*
 			if (wg_Id_ND == 0 && wi_Id_sg == 0) {
-				printf("\nLoop: tripcount = %d | iteration = %d | offset = %d", (4 * NUM_OF_THREADS_PER_BLOCK) / Shape_JM_ACC, i, offset);
+				sycl::ext::oneapi::experimental::printf("\nLoop: tripcount = %d | iteration = %d | offset = %d", (4 * NUM_OF_THREADS_PER_BLOCK) / Shape_JM_ACC, i, offset);
 			}
 			*/
 
