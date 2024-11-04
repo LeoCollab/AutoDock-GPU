@@ -307,7 +307,7 @@ void reduce_via_matrix_units (
 			*/
 
 			/*
-			print_submatrix<T_A, tM, tK>(item, "data_to_be_reduced [inside main loop]", data_to_be_reduced);
+			print_submatrix<T_A, tM, tK, layout::col_major>(item, "data_to_be_reduced [inside main loop]", data_to_be_reduced);
 			*/
 
 			T_JM_A sub_A;
