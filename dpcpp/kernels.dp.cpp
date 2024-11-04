@@ -163,15 +163,15 @@ void fill_Q (
 		for (uint j = 0; j < tK/4; j++) {	// Col counter: how many cols (of 4x4 blocks) are there in the matrix?
 			for (uint ii = 0; ii < 4; ii++) {
 				for (uint jj = 0; jj < 4; jj++) {
-					Q_data[4 * (tM*i + j) + 16*ii + jj] = (ii == jj)? 1.0f: 0.0f; // Row-major
-					//Q_data[4 * (tK*j + i) + 16*jj + ii] = (ii == jj)? 1.0f: 0.0f; // Col-major
+					//Q_data[4 * (tM*i + j) + 16*ii + jj] = (ii == jj)? 1.0f: 0.0f; // Row-major
+					Q_data[4 * (tK*j + i) + 16*jj + ii] = (ii == jj)? 1.0f: 0.0f; // Col-major
 				}
 			}
 		}
 	}
 
 	/*
-	print_submatrix<T_A, tM, tK, layout::row_major>(item, "Q_data [inside fill_Q()]", Q_data);
+	print_submatrix<T_A, tM, tK, layout::col_major>(item, "Q_data [inside fill_Q()]", Q_data);
 	*/
 }
 
@@ -198,7 +198,7 @@ void fill_identity (
 	}
 
 	/*
-	print_submatrix<T, tK, tK>(item, "I_data [inside fill_identity()]", I_data);
+	print_submatrix<T, tK, tK, layout::col_major>(item, "I_data [inside fill_identity()]", I_data);
 	*/
 }
 
@@ -318,24 +318,24 @@ void reduce_via_matrix_units (
 			T_JM_ACC sub_Acc;
 			move_matrix_a_to_acc(item, tmp, sub_A, sub_Acc);
 			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-			print_submatrix<T_ACC, tM, tK>(item, "sub_A", tmp);
+			print_submatrix<T_ACC, tM, tK, layout::col_major>(item, "sub_A", tmp);
 
 			move_matrix_b_to_acc(item, tmp, sub_P, sub_Acc);
 			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-			print_submatrix<T_ACC, tK, tN>(item, "sub_P", tmp);
+			print_submatrix<T_ACC, tK, tN, layout::col_major>(item, "sub_P", tmp);
 			*/
 
 			/*
 			// Printing sub_V (before mad)
 			joint_matrix_store(sg, sub_V, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-			print_submatrix<T_ACC, tM, tN>(item, "sub_V (before mad)", tmp);
+			print_submatrix<T_ACC, tM, tN, layout::col_major>(item, "sub_V (before mad)", tmp);
 			*/
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
 
 			/*
 			// Printing sub_V (after mad)
 			joint_matrix_store(sg, sub_V, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-			print_submatrix<T_ACC, tM, tN>(item, "sub_V (after mad)", tmp);
+			print_submatrix<T_ACC, tM, tN, layout::col_major>(item, "sub_V (after mad)", tmp);
 			*/
 		}
 
@@ -348,17 +348,17 @@ void reduce_via_matrix_units (
 		T_JM_ACC sub_Acc2;
 		move_matrix_a_to_acc(item, tmp, sub_Q, sub_Acc2);
 		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-		print_submatrix<T_ACC, tM, tK>(item, "sub_Q", tmp);
+		print_submatrix<T_ACC, tM, tK, layout::col_major>(item, "sub_Q", tmp);
 
 		move_matrix_b_to_acc(item, tmp, sub_W, sub_Acc2);
 		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-		print_submatrix<T_ACC, tK, tN>(item, "sub_W", tmp);
+		print_submatrix<T_ACC, tK, tN, layout::col_major>(item, "sub_W", tmp);
 		*/
 
 		/*
 		// Printing sub_C (before mad)
 		joint_matrix_store(sg, sub_C, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-		print_submatrix<T_ACC, tM, tN>(item, "sub_C (before mad)", tmp);
+		print_submatrix<T_ACC, tM, tN, layout::col_major>(item, "sub_C (before mad)", tmp);
 		*/
 
 		// 2. Perform line sum: C <- QW + C (zero)
@@ -367,7 +367,7 @@ void reduce_via_matrix_units (
 		/*
 		// Printing sub_C (after mad)
 		joint_matrix_store(sg, sub_C, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-		print_submatrix<T_ACC, tM, tN>(item, "sub_C", tmp);
+		print_submatrix<T_ACC, tM, tN, layout::col_major>(item, "sub_C", tmp);
 		*/
 
 		// 3. Store result in shared memory
