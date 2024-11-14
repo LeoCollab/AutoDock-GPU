@@ -262,39 +262,15 @@ void reduce_via_matrix_units (
 
 			T_JM_A sub_A;
 			joint_matrix_load(sg, sub_A, sycl::local_ptr<T_A>(data_to_be_reduced + offset), tM); // Load use::a -> stride is tM
-
-			/*
-			// Printing sub_V (before mad)
-			joint_matrix_store(sg, sub_V, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-			print_submatrix<T_ACC, tM, tN, layout::col_major>(item, "sub_V (before mad)", tmp);
-			*/
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
-
-			/*
-			// Printing sub_V (after mad)
-			joint_matrix_store(sg, sub_V, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-			print_submatrix<T_ACC, tM, tN, layout::col_major>(item, "sub_V (after mad)", tmp);
-			*/
 		}
 
 		// W <- V (required since we need V as a "use::b")
 		joint_matrix_store(sg, sub_V, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
 		joint_matrix_load(sg, sub_W, sycl::local_ptr<T_ACC>(tmp), tK); // Load use::b -> stride is tK
 
-		/*
-		// Printing sub_C (before mad)
-		joint_matrix_store(sg, sub_C, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-		print_submatrix<T_ACC, tM, tN, layout::col_major>(item, "sub_C (before mad)", tmp);
-		*/
-
 		// 2. Perform line sum: C <- QW + C (zero)
 		joint_matrix_mad(sg, sub_C, sub_Q, sub_W, sub_C);
-
-		/*
-		// Printing sub_C (after mad)
-		joint_matrix_store(sg, sub_C, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-		print_submatrix<T_ACC, tM, tN, layout::col_major>(item, "sub_C", tmp);
-		*/
 
 		// 3. Store result in shared memory
 		joint_matrix_store(sg, sub_C, sycl::local_ptr<T_A>(data_to_be_reduced), tM, layout::col_major);
