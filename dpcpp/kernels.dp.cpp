@@ -175,33 +175,6 @@ void fill_Q (
 	*/
 }
 
-// I_data points to an array to be loaded to
-// either a "use::a" or "use::b" identity submatrix.
-// An identity matrix is of square shape.
-// Hence, its shape is "tK x tK"
-template <typename T>
-void fill_identity (
-	sycl::nd_item<3> item,
-	T *I_data
-) {
-	sycl::sub_group sg = item.get_sub_group();
-	int wi_Id_sg = sg.get_local_id();
-	int sg_Size = sg.get_local_range().get(0);
-
-	// Slightly improved multi-threaded implementation
-	// IMPORTANT: this is computed by a sub-group,
-	// and thus, MUST use "sg_Size" instead of "wg_Size"
-	for(uint i = wi_Id_sg; i < tK; i+=sg_Size) { // Row counter
-		for(uint j = 0; j < tK; j++) { // Col counter
-			I_data[tK * j + i] = (i == j)? 1.0f: 0.0f;
-		}
-	}
-
-	/*
-	print_submatrix<T, tK, tK, layout::col_major>(item, "I_data [inside fill_identity()]", I_data);
-	*/
-}
-
 using T_JM_A = joint_matrix<sycl::sub_group, T_A, use::a, tM, tK, layout::col_major>;
 using T_JM_B = joint_matrix<sycl::sub_group, T_B, use::b, tK, tN, layout::col_major>;
 using T_JM_ACC = joint_matrix<sycl::sub_group, T_ACC, use::accumulator, tM, tN>;
