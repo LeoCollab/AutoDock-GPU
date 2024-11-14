@@ -141,9 +141,10 @@ void print_wi_indexes (
 		wi_Id_ND, wi_Id_Wg, wg_Id_ND, wg_Size, sg_Range, sg_Id_Wg, sg_Size, wi_Id_sg);
 }
 
-using T_A = sycl::half;
-using T_B = sycl::half;
-using T_ACC = sycl::half;
+using tf32 = sycl::ext::oneapi::experimental::matrix::precision::tf32;
+using T_A = tf32;
+using T_B = tf32;
+using T_C = float;
 
 // Q_data points to an array to be loaded to sub_Q
 // sub_Q is submatrix with "use::a" use
@@ -175,9 +176,9 @@ void fill_Q (
 	*/
 }
 
-using T_JM_A = joint_matrix<sycl::sub_group, T_A, use::a, tM, tK, layout::col_major>;
+using T_JM_A = joint_matrix<sycl::sub_group, T_A, use::a, tM, tK, layout::row_major>; // col_major not supported for current size and type configuration
 using T_JM_B = joint_matrix<sycl::sub_group, T_B, use::b, tK, tN, layout::col_major>;
-using T_JM_ACC = joint_matrix<sycl::sub_group, T_ACC, use::accumulator, tM, tN>;
+using T_JM_C = joint_matrix<sycl::sub_group, T_C, use::accumulator, tM, tN>;
 
 // Implementation based on MSc thesis at KTH:
 // "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
@@ -210,10 +211,10 @@ void reduce_via_matrix_units (
 #if 0
 		// Declaring and filling submatrices
 		T_JM_B sub_P;
-		T_JM_ACC sub_V;
+		T_JM_C sub_V;
 		T_JM_A sub_Q;
 		T_JM_B sub_W;
-		T_JM_ACC sub_C;
+		T_JM_C sub_C;
 		joint_matrix_fill(sg, sub_P, 1.0f); // P: only ones
 		joint_matrix_fill(sg, sub_V, 0.0f); // Output: initialize to zeros
 		joint_matrix_fill(sg, sub_C, 0.0f); // Final result
@@ -235,8 +236,8 @@ void reduce_via_matrix_units (
 		}
 
 		// W <- V (required since we need V as a "use::b")
-		joint_matrix_store(sg, sub_V, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-		joint_matrix_load(sg, sub_W, sycl::local_ptr<T_ACC>(tmp), tK); // Load use::b -> stride is tK
+		joint_matrix_store(sg, sub_V, sycl::local_ptr<T_C>(tmp), tM, layout::col_major);
+		joint_matrix_load(sg, sub_W, sycl::local_ptr<T_C>(tmp), tK); // Load use::b -> stride is tK
 
 		// 2. Perform line sum: C <- QW + C (zero)
 		joint_matrix_mad(sg, sub_C, sub_Q, sub_W, sub_C);
