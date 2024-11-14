@@ -256,10 +256,6 @@ void reduce_via_matrix_units (
 			}
 			*/
 
-			/*
-			print_submatrix<T_A, tM, tK, layout::col_major>(item, "data_to_be_reduced [inside main loop]", data_to_be_reduced);
-			*/
-
 			T_JM_A sub_A;
 			joint_matrix_load(sg, sub_A, sycl::local_ptr<T_A>(data_to_be_reduced + offset), tM); // Load use::a -> stride is tM
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
