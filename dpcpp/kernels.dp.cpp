@@ -212,13 +212,14 @@ void reduce_via_matrix_units (
 		T_JM_B sub_P;
 		joint_matrix_fill(sg, sub_P, 1.0f); // P: only ones
 
-#if 0
 		T_JM_C sub_V;
+		joint_matrix_fill(sg, sub_V, 0.0f); // Output: initialize to zeros
+
+#if 0
 		T_JM_A sub_Q;
 		T_JM_B sub_W;
 		T_JM_C sub_C;
 
-		joint_matrix_fill(sg, sub_V, 0.0f); // Output: initialize to zeros
 		joint_matrix_fill(sg, sub_C, 0.0f); // Final result
 		joint_matrix_load(sg, sub_Q, sycl::local_ptr<T_A>(Q_data), tM);	// Load use::a -> stride is tM
 
