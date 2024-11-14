@@ -215,17 +215,9 @@ void reduce_via_matrix_units (
 		T_JM_C sub_V;
 		joint_matrix_fill(sg, sub_V, 0.0f); // Output: initialize to zeros
 
-#if 0
-		T_JM_A sub_Q;
-		T_JM_B sub_W;
-		T_JM_C sub_C;
-
-		joint_matrix_fill(sg, sub_C, 0.0f); // Final result
-		joint_matrix_load(sg, sub_Q, sycl::local_ptr<T_A>(Q_data), tM);	// Load use::a -> stride is tM
-
 		// 1. Accumulate the values: V <- AP + V
 		for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK) / Shape_JM_ACC;  i++) {
-			const uint offset = i * Shape_JM_ACC;
+			const uint offset = i * Shape_JM_ACC; // Moving to next input block
 
 			/*
 			if (wg_Id_ND == 0 && wi_Id_sg == 0) {
@@ -234,9 +226,17 @@ void reduce_via_matrix_units (
 			*/
 
 			T_JM_A sub_A;
-			joint_matrix_load(sg, sub_A, sycl::local_ptr<T_A>(data_to_be_reduced + offset), tM); // Load use::a -> stride is tM
+			joint_matrix_load(sg, sub_A, sycl::local_ptr<T_A>(data_to_be_reduced + offset), tK); // row-major -> stride is tK
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
 		}
+
+#if 0
+		T_JM_A sub_Q;
+		T_JM_B sub_W;
+		T_JM_C sub_C;
+
+		joint_matrix_fill(sg, sub_C, 0.0f); // Final result
+		joint_matrix_load(sg, sub_Q, sycl::local_ptr<T_A>(Q_data), tM);	// Load use::a -> stride is tM
 
 		// W <- V (required since we need V as a "use::b")
 		joint_matrix_store(sg, sub_V, sycl::local_ptr<T_C>(tmp), tM, layout::col_major);
