@@ -78,9 +78,9 @@ using namespace sycl::ext::oneapi::experimental::matrix;
 //#define DEBUG_XMX_INPUTS
 
 // Number of rows/cols of a submatrix: tM, tN, tK
-constexpr int tM = 16;
+constexpr int tM = 8;
 constexpr int tN = 16;
-constexpr int tK = 16;
+constexpr int tK = 8;
 constexpr int Shape_JM_ACC = tM * tN;
 
 // Printing submatrices contents,
@@ -188,8 +188,8 @@ using T_JM_ACC = joint_matrix<sycl::sub_group, T_ACC, use::accumulator, tM, tN>;
 // Compilation: make DEVICE=XeGPU PLATFORM=NvGPU XMX=ON TESTLS=ad NUMWI=64 test
 void reduce_via_matrix_units (
 	sycl::nd_item<3> item,
-	sycl::half *data_to_be_reduced,
-	sycl::half *Q_data
+	float *data_to_be_reduced,
+	float *Q_data
 ) {
 	int wg_Id_ND = item.get_group(2);
 
