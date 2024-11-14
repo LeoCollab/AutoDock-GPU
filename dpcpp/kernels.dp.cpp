@@ -189,8 +189,7 @@ using T_JM_ACC = joint_matrix<sycl::sub_group, T_ACC, use::accumulator, tM, tN>;
 void reduce_via_matrix_units (
 	sycl::nd_item<3> item,
 	sycl::half *data_to_be_reduced,
-	sycl::half *Q_data,
-	sycl::half *tmp
+	sycl::half *Q_data
 ) {
 	int wg_Id_ND = item.get_group(2);
 

@@ -80,8 +80,7 @@ void gpu_calc_energrad(
 	/* Reduction using matrix units */
 	,
 	sycl::half *data_to_be_reduced,
-	sycl::half *Q_data,
-	sycl::half *tmp
+	sycl::half *Q_data
 	/* Reduction using matrix units */
 #endif
 ) {
@@ -724,7 +723,7 @@ void gpu_calc_energrad(
 	#endif
 
 	// 2. Perform reduction using matrix units
-	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
+	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data);
 
 	// 3. Retrieve result from shared memory
 	torque_rot.x() = (float)(data_to_be_reduced[0]);
@@ -773,7 +772,7 @@ void gpu_calc_energrad(
 	#endif
 
 	// 2. Perform reduction using matrix units
-	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data, tmp);
+	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data);
 
 	// 3. Retrieve results from shared memory
 	gx = (float)(data_to_be_reduced[0]);

@@ -78,8 +78,7 @@ gpu_gradient_minAD_kernel(
 	/* Reduction using matrix units */
 	,
 	sycl::half *data_to_be_reduced,
-	sycl::half *Q_data,
-	sycl::half *tmp
+	sycl::half *Q_data
 	/* Reduction using matrix units */
 	#endif
 )
@@ -266,8 +265,7 @@ gpu_gradient_minAD_kernel(
 			/* Reduction using matrix units */
 			,
 			data_to_be_reduced,
-			Q_data,
-			tmp
+			Q_data
 			/* Reduction using matrix units */
 			#endif
 		);
@@ -464,7 +462,6 @@ void gpu_gradient_minAD(
 		/* Reduction using matrix units */
 		sycl::local_accessor<sycl::half, 1> data_to_be_reduced(sycl::range<1>(4 * threads), cgh);
 		sycl::local_accessor<sycl::half, 1> Q_data(sycl::range<1>(tM * tK), cgh);
-		sycl::local_accessor<sycl::half, 1> tmp(sycl::range<1>(16 * 16), cgh);
 		/* Reduction using matrix units */
 		#endif
 
@@ -491,8 +488,7 @@ void gpu_gradient_minAD(
 					/* Reduction using matrix units */
 					,
 					data_to_be_reduced.template get_multi_ptr<sycl::access::decorated::no>().get(),
-					Q_data.template get_multi_ptr<sycl::access::decorated::no>().get(),
-					tmp.template get_multi_ptr<sycl::access::decorated::no>().get()
+					Q_data.template get_multi_ptr<sycl::access::decorated::no>().get()
 					/* Reduction using matrix units */
 					#endif
 				);
