@@ -150,7 +150,7 @@ using T_ACC = sycl::half;
 // Hence, Q_data holds the data of a submatrix with "tM x tK" shape
 void fill_Q (
 	sycl::nd_item<3> item,
-	T_A *Q_data
+	float *Q_data
 ) {
 	sycl::sub_group sg = item.get_sub_group();
 	int wi_Id_sg = sg.get_local_id();
@@ -163,15 +163,15 @@ void fill_Q (
 		for (uint j = 0; j < tK/4; j++) {	// Col counter: how many cols (of 4x4 blocks) are there in the matrix?
 			for (uint ii = 0; ii < 4; ii++) {
 				for (uint jj = 0; jj < 4; jj++) {
-					//Q_data[4 * (tM*i + j) + 16*ii + jj] = (ii == jj)? 1.0f: 0.0f; // Row-major
-					Q_data[4 * (tK*j + i) + 16*jj + ii] = (ii == jj)? 1.0f: 0.0f; // Col-major
+					Q_data[4 * (tM*i + j) + tM*ii + jj] = (ii == jj)? 1.0f: 0.0f; // Row-major
+					//Q_data[4 * (tK*j + i) + tK*jj + ii] = (ii == jj)? 1.0f: 0.0f; // Col-major
 				}
 			}
 		}
 	}
 
 	/*
-	print_submatrix<T_A, tM, tK, layout::col_major>(item, "Q_data [inside fill_Q()]", Q_data);
+	print_submatrix<float, tM, tK, layout::row_major>(item, "Q_data [inside fill_Q()]", Q_data);
 	*/
 }
 
