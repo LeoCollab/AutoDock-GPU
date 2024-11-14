@@ -456,7 +456,7 @@ void gpu_gradient_minAdam(
 		#ifdef USE_XMX
 		/* Reduction using matrix units */
 		sycl::local_accessor<float, 1> data_to_be_reduced(sycl::range<1>(4 * threads), cgh);
-		sycl::local_accessor<float, 1> Q_data(sycl::range<1>(16 * 16), cgh);
+		sycl::local_accessor<float, 1> Q_data(sycl::range<1>(tM * tK), cgh);
 		/* Reduction using matrix units */
 		#endif
 
