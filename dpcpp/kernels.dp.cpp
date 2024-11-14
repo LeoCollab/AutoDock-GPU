@@ -206,56 +206,6 @@ using T_JM_A = joint_matrix<sycl::sub_group, T_A, use::a, tM, tK, layout::col_ma
 using T_JM_B = joint_matrix<sycl::sub_group, T_B, use::b, tK, tN, layout::col_major>;
 using T_JM_ACC = joint_matrix<sycl::sub_group, T_ACC, use::accumulator, tM, tN>;
 
-// The most elegant way to print a "use::b" sub_Input_b matrix would be
-// to copy such matrix into any "use::accumulator" matrix,
-// which in turn would be stored into shared memory, and then finally printed.
-//
-// Copying matrices contents via joint_matrix_copy()
-// from "use::b" into "use::accumulator" doesn't work in oneAPI v2024.2.1.
-// Thus, "use::b" sub_Input_b matrix is moved to shared memory via matrix multiply-add,
-// where sub_Identity_a is used as a temporal identity matrix,
-// and sub_Acc is initialized with zeros but ends up storing sub_Input_b contents.
-void move_matrix_a_to_acc (
-	sycl::nd_item<3> item,
-	T_B *tmp,
-	T_JM_A &sub_Input_a,
-	T_JM_ACC &sub_Acc
-){
-	sycl::sub_group sg = item.get_sub_group();
-
-	// Loading identity values to sub_Identity
-	fill_identity<T_B>(item, tmp);
-	T_JM_B sub_Identity_b;
-	joint_matrix_load(sg, sub_Identity_b, sycl::local_ptr<T_B>(tmp), tK); // Load use::b -> stride is tK
-
-	// Initializing sub_Acc with zeros
-	joint_matrix_fill(sg, sub_Acc, 0.0f);
-
-	// sub_Acc <- sub_Input_a x sub_Identity_b + sub_Acc
-	joint_matrix_mad(sg, sub_Acc, sub_Input_a, sub_Identity_b, sub_Acc);
-}
-
-void move_matrix_b_to_acc (
-	sycl::nd_item<3> item,
-	T_A *tmp,
-	T_JM_B &sub_Input_b,
-	T_JM_ACC &sub_Acc
-){
-	sycl::sub_group sg = item.get_sub_group();
-
-	// Loading identity values to sub_Identity
-	fill_identity<T_A>(item, tmp);
-	T_JM_A sub_Identity_a;
-	joint_matrix_load(sg, sub_Identity_a, sycl::local_ptr<T_A>(tmp), tM); // Load use::a -> stride is tM
-
-	// Initializing sub_Acc with zeros
-	joint_matrix_fill(sg, sub_Acc, 0.0f);
-
-	// sub_Acc <- sub_Identity_a x sub_Input_b + sub_Acc
-	joint_matrix_mad(sg, sub_Acc, sub_Identity_a, sub_Input_b, sub_Acc);
-}
-
-
 // Implementation based on MSc thesis at KTH:
 // "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
 // https://www.diva-portal.org/smash/get/diva2:1786161/FULLTEXT01.pdf
@@ -314,18 +264,6 @@ void reduce_via_matrix_units (
 			joint_matrix_load(sg, sub_A, sycl::local_ptr<T_A>(data_to_be_reduced + offset), tM); // Load use::a -> stride is tM
 
 			/*
-			// Printing sub_A y sub_P
-			T_JM_ACC sub_Acc;
-			move_matrix_a_to_acc(item, tmp, sub_A, sub_Acc);
-			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-			print_submatrix<T_ACC, tM, tK, layout::col_major>(item, "sub_A", tmp);
-
-			move_matrix_b_to_acc(item, tmp, sub_P, sub_Acc);
-			joint_matrix_store(sg, sub_Acc, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-			print_submatrix<T_ACC, tK, tN, layout::col_major>(item, "sub_P", tmp);
-			*/
-
-			/*
 			// Printing sub_V (before mad)
 			joint_matrix_store(sg, sub_V, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
 			print_submatrix<T_ACC, tM, tN, layout::col_major>(item, "sub_V (before mad)", tmp);
@@ -342,18 +280,6 @@ void reduce_via_matrix_units (
 		// W <- V (required since we need V as a "use::b")
 		joint_matrix_store(sg, sub_V, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
 		joint_matrix_load(sg, sub_W, sycl::local_ptr<T_ACC>(tmp), tK); // Load use::b -> stride is tK
-
-		/*
-		// Printing sub_Q y sub_W
-		T_JM_ACC sub_Acc2;
-		move_matrix_a_to_acc(item, tmp, sub_Q, sub_Acc2);
-		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-		print_submatrix<T_ACC, tM, tK, layout::col_major>(item, "sub_Q", tmp);
-
-		move_matrix_b_to_acc(item, tmp, sub_W, sub_Acc2);
-		joint_matrix_store(sg, sub_Acc2, sycl::local_ptr<T_ACC>(tmp), tM, layout::col_major);
-		print_submatrix<T_ACC, tK, tN, layout::col_major>(item, "sub_W", tmp);
-		*/
 
 		/*
 		// Printing sub_C (before mad)
