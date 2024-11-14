@@ -208,6 +208,7 @@ void reduce_via_matrix_units (
 	if (sg_Id_Wg == 0) {
 		fill_Q(item, Q_data);
 
+#if 0
 		// Declaring and filling submatrices
 		T_JM_B sub_P;
 		T_JM_ACC sub_V;
@@ -243,6 +244,7 @@ void reduce_via_matrix_units (
 
 		// 3. Store result in shared memory
 		joint_matrix_store(sg, sub_C, sycl::local_ptr<T_A>(data_to_be_reduced), tM, layout::col_major);
+#endif
 	}
 
 	item.barrier(SYCL_MEMORY_SPACE);
