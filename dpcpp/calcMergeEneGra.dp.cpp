@@ -723,8 +723,53 @@ void gpu_calc_energrad(
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = energy;
 	#endif
 
+	int wi_Id_Wg = item_ct1.get_local_id(2);
+	int wg_Id_ND = item_ct1.get_group(2);
+
+	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
+		// Defining arrays only for a single work-item
+		// These help us to verify the index mapping
+		/*
+		uint i_indexes [4 * NUM_OF_THREADS_PER_BLOCK];
+		uint j_indexes [4 * NUM_OF_THREADS_PER_BLOCK];
+		*/
+
+		// Reordering arrays for correctly reducing input data
+		// This is because PVC in the chosen tM x tN x tK works
+		// only for some layouts (but not for both row- nd col-major)
+		for (uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK); i++) {
+			uint j = 24*(i/32) + (i/4) + 8*(i%4);
+			/*
+			i_indexes[i] = i;
+			j_indexes[i] = j;
+			*/
+			data_to_be_reduced_arranged[j] = data_to_be_reduced[i];
+			//sycl::ext::oneapi::experimental::printf("i = %i, j = %i\n", i, j);
+		}
+
+		// Comparing initial and final indexes
+		// These help us to verify the index mapping
+		/*
+		sycl::ext::oneapi::experimental::printf("\n\nInitial indexes (in_red_data)");
+		for (uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK); i++) {
+			if(i % 16 == 0) {
+				sycl::ext::oneapi::experimental::printf("\n");
+			}
+			sycl::ext::oneapi::experimental::printf("\t%3i", i_indexes[i]);
+		}
+
+		sycl::ext::oneapi::experimental::printf("\n\nFinal indexes (in_red_data_2)");
+		for (uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK); i++) {
+			if(i % 16 == 0) {
+				sycl::ext::oneapi::experimental::printf("\n");
+			}
+			sycl::ext::oneapi::experimental::printf("\t%3i", j_indexes[i]);
+		}
+		*/
+	}
+
 	// 2. Perform reduction using matrix units
-	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data);
+	reduce_via_matrix_units(item_ct1, /*data_to_be_reduced*/data_to_be_reduced_arranged, Q_data);
 
 	// 3. Retrieve result from shared memory
 	torque_rot.x() = data_to_be_reduced[0];
@@ -772,8 +817,50 @@ void gpu_calc_energrad(
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = gz;
 	#endif
 
+	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
+		// Defining arrays only for a single work-item
+		// These help us to verify the index mapping
+		/*
+		uint i_indexes [4 * NUM_OF_THREADS_PER_BLOCK];
+		uint j_indexes [4 * NUM_OF_THREADS_PER_BLOCK];
+		*/
+
+		// Reordering arrays for correctly reducing input data
+		// This is because PVC in the chosen tM x tN x tK works
+		// only for some layouts (but not for both row- nd col-major)
+		for (uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK); i++) {
+			uint j = 24*(i/32) + (i/4) + 8*(i%4);
+			/*
+			i_indexes[i] = i;
+			j_indexes[i] = j;
+			*/
+			data_to_be_reduced_arranged[j] = data_to_be_reduced[i];
+			//sycl::ext::oneapi::experimental::printf("i = %i, j = %i\n", i, j);
+		}
+
+		// Comparing initial and final indexes
+		// These help us to verify the index mapping
+		/*
+		sycl::ext::oneapi::experimental::printf("\n\nInitial indexes (in_red_data)");
+		for (uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK); i++) {
+			if(i % 16 == 0) {
+				sycl::ext::oneapi::experimental::printf("\n");
+			}
+			sycl::ext::oneapi::experimental::printf("\t%3i", i_indexes[i]);
+		}
+
+		sycl::ext::oneapi::experimental::printf("\n\nFinal indexes (in_red_data_2)");
+		for (uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK); i++) {
+			if(i % 16 == 0) {
+				sycl::ext::oneapi::experimental::printf("\n");
+			}
+			sycl::ext::oneapi::experimental::printf("\t%3i", j_indexes[i]);
+		}
+		*/
+	}
+
 	// 2. Perform reduction using matrix units
-	reduce_via_matrix_units(item_ct1, data_to_be_reduced, Q_data);
+	reduce_via_matrix_units(item_ct1, /*data_to_be_reduced*/data_to_be_reduced_arranged, Q_data);
 
 	// 3. Retrieve results from shared memory
 	gx = data_to_be_reduced[0];
