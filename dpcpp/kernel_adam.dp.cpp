@@ -67,6 +67,7 @@ gpu_gradient_minAdam_kernel(
 	/* Reduction using matrix units */
 	,
 	float *data_to_be_reduced,
+	float *data_to_be_reduced_arranged,
 	float *Q_data
 	/* Reduction using matrix units */
 	#endif
@@ -253,6 +254,7 @@ gpu_gradient_minAdam_kernel(
 			/* Reduction using matrix units */
 			,
 			data_to_be_reduced,
+			data_to_be_reduced_arranged,
 			Q_data
 			/* Reduction using matrix units */
 			#endif
@@ -456,6 +458,7 @@ void gpu_gradient_minAdam(
 		#ifdef USE_XMX
 		/* Reduction using matrix units */
 		sycl::local_accessor<float, 1> data_to_be_reduced(sycl::range<1>(4 * threads), cgh);
+		sycl::local_accessor<float, 1> data_to_be_reduced_arranged(sycl::range<1>(4 * threads), cgh);
 		sycl::local_accessor<float, 1> Q_data(sycl::range<1>(tM * tK), cgh);
 		/* Reduction using matrix units */
 		#endif
@@ -478,6 +481,7 @@ void gpu_gradient_minAdam(
 					/* Reduction using matrix units */
 					,
 					data_to_be_reduced.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					data_to_be_reduced_arranged.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					Q_data.template get_multi_ptr<sycl::access::decorated::no>().get()
 					/* Reduction using matrix units */
 					#endif

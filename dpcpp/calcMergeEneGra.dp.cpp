@@ -80,6 +80,7 @@ void gpu_calc_energrad(
 	/* Reduction using matrix units */
 	,
 	float *data_to_be_reduced,
+	float *data_to_be_reduced_arranged,
 	float *Q_data
 	/* Reduction using matrix units */
 #endif
