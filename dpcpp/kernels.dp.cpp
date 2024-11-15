@@ -68,7 +68,6 @@ inline int64_t ullitolli(uint64_t u)
 
 #ifdef USE_XMX
 /* Reduction using matrix units */
-using namespace sycl::ext::oneapi::experimental::matrix;
 
 // Implementation based on M.Sc. thesis by Gabin Schieffer at KTH:
 // "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
@@ -82,8 +81,15 @@ constexpr int tM = 8;
 constexpr int tN = 16;
 constexpr int tK = 8;
 
-// Number of elements of input  matrix (to be reduced)
-constexpr int Shape_JM_ACC = tM * tK;
+using tf32 = sycl::ext::oneapi::experimental::matrix::precision::tf32;
+using TA = tf32;
+using TB = tf32;
+using TC = float;
+
+// Number of elements of input matrix (to be reduced)
+constexpr int TILE_NELEMS = tM * tK;
+
+using namespace sycl::ext::oneapi::experimental::matrix;
 
 // Printing submatrices contents,
 // which have to be previously copied into an array in local memory.
@@ -143,11 +149,6 @@ void print_wi_indexes (
 		wi_Id_ND, wi_Id_Wg, wg_Id_ND, wg_Size, sg_Range, sg_Id_Wg, sg_Size, wi_Id_sg);
 }
 
-using tf32 = sycl::ext::oneapi::experimental::matrix::precision::tf32;
-using T_A = tf32;
-using T_B = tf32;
-using T_C = float;
-
 // Q_data points to an array to be loaded to sub_Q
 // sub_Q is submatrix with "use::a" use
 // Hence, Q_data holds the data of a submatrix with "tM x tK" shape
@@ -178,9 +179,9 @@ void fill_Q (
 	*/
 }
 
-using T_JM_A = joint_matrix<sycl::sub_group, T_A, use::a, tM, tK, layout::row_major>; // col_major not supported for current size and type configuration
-using T_JM_B = joint_matrix<sycl::sub_group, T_B, use::b, tK, tN, layout::col_major>;
-using T_JM_C = joint_matrix<sycl::sub_group, T_C, use::accumulator, tM, tN>;
+using T_JM_A = joint_matrix<sycl::sub_group, TA, use::a, tM, tK, layout::row_major>; // col_major not supported for current size and type configuration
+using T_JM_B = joint_matrix<sycl::sub_group, TB, use::b, tK, tN, layout::col_major>;
+using T_JM_C = joint_matrix<sycl::sub_group, TC, use::accumulator, tM, tN>;
 
 // Implementation based on MSc thesis at KTH:
 // "Accelerating a Molecular Docking Application by Leveraging Modern Heterogeneous Computing Systemx"
@@ -208,8 +209,6 @@ void reduce_via_matrix_units (
 
 	// Only one sub-group performs reduction
 	if (sg_Id_Wg == 0) {
-		fill_Q(item, Q_data);
-
 		// Declaring and filling submatrices
 		T_JM_B sub_P;
 		joint_matrix_fill(sg, sub_P, 1.0f); // P: only ones
@@ -218,12 +217,12 @@ void reduce_via_matrix_units (
 		joint_matrix_fill(sg, sub_V, 0.0f); // Output: initialize to zeros
 
 		// 1. Accumulate the values: V <- AP + V
-		for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK) / Shape_JM_ACC;  i++) {
-			const uint offset = i * Shape_JM_ACC; // Moving to next input block
+		for(uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK)/(TILE_NELEMS);  i++) {
+			const uint offset = i * TILE_NELEMS; // Moving to next input block
 
 			/*
 			if (wg_Id_ND == 0 && wi_Id_sg == 0) {
-				sycl::ext::oneapi::experimental::printf("\nLoop: tripcount = %d | iteration = %d | offset = %d", (4 * NUM_OF_THREADS_PER_BLOCK) / Shape_JM_ACC, i, offset);
+				sycl::ext::oneapi::experimental::printf("\nLoop: tripcount = %d | iteration = %d | offset = %d", (4 * NUM_OF_THREADS_PER_BLOCK) / TILE_NELEMS, i, offset);
 			}
 			*/
 
@@ -232,24 +231,22 @@ void reduce_via_matrix_units (
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
 		}
 
-#if 0
-		T_JM_A sub_Q;
+		// W <- V (required since V must be transformed to "use::b")
 		T_JM_B sub_W;
+		joint_matrix_copy(sg, sub_V, sub_W);
+		
 		T_JM_C sub_C;
-
 		joint_matrix_fill(sg, sub_C, 0.0f); // Final result
-		joint_matrix_load(sg, sub_Q, sycl::local_ptr<T_A>(Q_data), tM);	// Load use::a -> stride is tM
-
-		// W <- V (required since we need V as a "use::b")
-		joint_matrix_store(sg, sub_V, sycl::local_ptr<T_C>(tmp), tM, layout::col_major);
-		joint_matrix_load(sg, sub_W, sycl::local_ptr<T_C>(tmp), tK); // Load use::b -> stride is tK
+		
+		T_JM_A sub_Q;
+		fill_Q(item, Q_data);
+		joint_matrix_load(sg, sub_Q, sycl::local_ptr<float>(Q_data), tK);	// row-major -> stride is tK
 
 		// 2. Perform line sum: C <- QW + C (zero)
 		joint_matrix_mad(sg, sub_C, sub_Q, sub_W, sub_C);
 
 		// 3. Store result in shared memory
-		joint_matrix_store(sg, sub_C, sycl::local_ptr<T_A>(data_to_be_reduced), tM, layout::col_major);
-#endif
+		joint_matrix_store(sg, sub_C, sycl::local_ptr<float>(data_to_be_reduced), tM, layout::col_major);
 	}
 
 	item.barrier(SYCL_MEMORY_SPACE);
