@@ -726,6 +726,7 @@ void gpu_calc_energrad(
 	int wi_Id_Wg = item_ct1.get_local_id(2);
 	int wg_Id_ND = item_ct1.get_group(2);
 
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
 	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
 		// Defining arrays only for a single work-item
 		// These help us to verify the index mapping
@@ -767,6 +768,7 @@ void gpu_calc_energrad(
 		}
 		*/
 	}
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	// 2. Perform reduction using matrix units
 	reduce_via_matrix_units(item_ct1, /*data_to_be_reduced*/data_to_be_reduced_arranged, Q_data);
@@ -817,6 +819,7 @@ void gpu_calc_energrad(
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = gz;
 	#endif
 
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
 	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
 		// Defining arrays only for a single work-item
 		// These help us to verify the index mapping
@@ -858,6 +861,7 @@ void gpu_calc_energrad(
 		}
 		*/
 	}
+	item_ct1.barrier(SYCL_MEMORY_SPACE);
 
 	// 2. Perform reduction using matrix units
 	reduce_via_matrix_units(item_ct1, /*data_to_be_reduced*/data_to_be_reduced_arranged, Q_data);
