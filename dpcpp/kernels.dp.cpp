@@ -99,6 +99,8 @@ using namespace sycl::ext::oneapi::experimental::matrix;
 // Extra sync before printing is not needed as long as
 // print_submatrix_sg() is called after joint_matrix functions,
 // which are executed by the entire sub_group (i.e., wi_Id_Wg <= 31)
+
+// Printing within sub-group
 template <typename T, uint NROWS, uint NCOLS, enum layout LAYOUT>
 void print_submatrix_sg (
 	sycl::nd_item<3> item,
@@ -113,9 +115,9 @@ void print_submatrix_sg (
 
 	if (wg_Id_ND == 0 && wi_Id_sg == 0) {
 		sycl::ext::oneapi::experimental::printf("\n%s", msg);
-		for (uint i = 0; i < NROWS; i++) { // Row counter
+		for (uint i = 0; i < NROWS; i++) {
 			sycl::ext::oneapi::experimental::printf("\n[Row %2u]: ", i);
-			for (uint j = 0; j < NCOLS; j++) { // Col counter
+			for (uint j = 0; j < NCOLS; j++) {
 				if (LAYOUT == layout::row_major) {
 					sycl::ext::oneapi::experimental::printf(" %5.3f ", float(data_to_print[i*NCOLS+j]));
 				}
@@ -126,6 +128,34 @@ void print_submatrix_sg (
 		}
 		sycl::ext::oneapi::experimental::printf("\n");
 	}
+}
+
+// Printing within work-group
+template <typename T, uint NROWS, uint NCOLS, enum layout LAYOUT>
+void print_submatrix_WG (
+	sycl::nd_item<3> item,
+	const char *msg,
+	T *data_to_print
+) {
+	// Only one wg should print
+	int wi_Id_Wg = item.get_local_id(2);
+	int wg_Id_ND = item.get_group(2);
+
+	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
+		sycl::ext::oneapi::experimental::printf("\n%s", msg);
+		for (uint i = 0; i < NROWS; i++) {
+			sycl::ext::oneapi::experimental::printf("\n[Row %2u]: ", i);
+			for (uint j = 0; j < NCOLS; j++) {
+				if (LAYOUT == layout::row_major) {
+					sycl::ext::oneapi::experimental::printf(" %5.3f ", float(data_to_print[i*NCOLS+j]));
+				}
+				else if (LAYOUT == layout::col_major) {
+					sycl::ext::oneapi::experimental::printf(" %5.3f ", float(data_to_print[j*NROWS+i]));
+				}
+			}
+		}
+		sycl::ext::oneapi::experimental::printf("\n");
+    }
 }
 
 void print_wi_indexes (
