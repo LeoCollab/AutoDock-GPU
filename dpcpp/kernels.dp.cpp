@@ -81,7 +81,9 @@ using namespace sycl::ext::oneapi::experimental::matrix;
 constexpr int tM = 8;
 constexpr int tN = 16;
 constexpr int tK = 8;
-constexpr int Shape_JM_ACC = tM * tN;
+
+// Number of elements of input  matrix (to be reduced)
+constexpr int Shape_JM_ACC = tM * tK;
 
 // Printing submatrices contents,
 // which have to be previously copied into an array in local memory.
