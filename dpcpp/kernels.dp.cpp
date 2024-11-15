@@ -93,14 +93,14 @@ using namespace sycl::ext::oneapi::experimental::matrix;
 
 // Printing submatrices contents,
 // which have to be previously copied into an array in local memory.
-// Enclosing the implementation of print_submatrix()
+// Enclosing the implementation of print_submatrix_sg()
 // within barriers (as initially thought) produces wrong results.
-// Such mistake makes sense since print_submatrix() is called if(wi_Id_Wg <= 31).
+// Such mistake makes sense since print_submatrix_sg() is called if(wi_Id_Wg <= 31).
 // Extra sync before printing is not needed as long as
-// print_submatrix() is called after joint_matrix functions,
+// print_submatrix_sg() is called after joint_matrix functions,
 // which are executed by the entire sub_group (i.e., wi_Id_Wg <= 31)
 template <typename T, uint NROWS, uint NCOLS, enum layout LAYOUT>
-void print_submatrix (
+void print_submatrix_sg (
 	sycl::nd_item<3> item,
 	const char *msg,
 	T *data_to_print
@@ -175,7 +175,7 @@ void fill_Q (
 	}
 
 	/*
-	print_submatrix<float, tM, tK, layout::row_major>(item, "Q_data [inside fill_Q()]", Q_data);
+	print_submatrix_sg<float, tM, tK, layout::row_major>(item, "Q_data [inside fill_Q()]", Q_data);
 	*/
 }
 
