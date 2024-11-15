@@ -777,10 +777,10 @@ void gpu_calc_energrad(
 	reduce_via_matrix_units(item_ct1, /*data_to_be_reduced*/data_to_be_reduced_arranged, Q_data);
 
 	// 3. Retrieve result from shared memory
-	torque_rot.x() = data_to_be_reduced[0];
-	torque_rot.y() = data_to_be_reduced[1];
-	torque_rot.z() = data_to_be_reduced[2];
-	energy = data_to_be_reduced[3];
+	torque_rot.x() = data_to_be_reduced_arranged[0];
+	torque_rot.y() = data_to_be_reduced_arranged[1];
+	torque_rot.z() = data_to_be_reduced_arranged[2];
+	energy = data_to_be_reduced_arranged[3];
 
 	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
 		sycl::ext::oneapi::experimental::printf("\nReduced values: %3f \t%3f \t%3f \t%3f\n", torque_rot.x(), torque_rot.y(), torque_rot.z(), energy);
@@ -877,9 +877,9 @@ void gpu_calc_energrad(
 	reduce_via_matrix_units(item_ct1, /*data_to_be_reduced*/data_to_be_reduced_arranged, Q_data);
 
 	// 3. Retrieve results from shared memory
-	gx = data_to_be_reduced[0];
-	gy = data_to_be_reduced[1];
-	gz = data_to_be_reduced[2];
+	gx = data_to_be_reduced_arranged[0];
+	gy = data_to_be_reduced_arranged[1];
+	gz = data_to_be_reduced_arranged[2];
 
 	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
 		sycl::ext::oneapi::experimental::printf("\nReduced values: %3f \t%3f \t%3f\n", gx, gy, gz);
