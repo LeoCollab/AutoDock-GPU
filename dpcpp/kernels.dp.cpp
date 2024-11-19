@@ -213,6 +213,72 @@ void fill_Q (
 	*/
 }
 
+// Reordering arrays for correctly reducing input data
+// This is because PVC in the chosen tM x tN x tK works
+// only for some layouts (but not for both row- nd col-major)
+void map_input_array (
+	sycl::nd_item<3> item,
+	float *data_to_be_reduced,
+	float *data_to_be_reduced_arranged
+) {
+	int wi_Id_Wg = item.get_local_id(2);
+	int wg_Id_ND = item.get_group(2);
+
+	item.barrier(SYCL_MEMORY_SPACE);
+	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
+		// Defining arrays only for a single work-item
+		// These help us to verify the index mapping
+		/*
+		uint i_indexes [4 * NUM_OF_THREADS_PER_BLOCK];
+		uint j_indexes [4 * NUM_OF_THREADS_PER_BLOCK];
+		*/
+
+		for (uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK); i++) {
+			uint j = 24*(i/32) + (i/4) + 8*(i%4);
+			/*
+			i_indexes[i] = i;
+			j_indexes[i] = j;
+			*/
+			data_to_be_reduced_arranged[j] = data_to_be_reduced[i];
+			//sycl::ext::oneapi::experimental::printf("i = %i, j = %i\n", i, j);
+		}
+
+		// Comparing initial and final indexes
+		// These help us to verify the index mapping
+		/*
+		sycl::ext::oneapi::experimental::printf("\n\nInitial indexes (in_red_data)");
+		for (uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK); i++) {
+			if(i % 16 == 0) {
+				sycl::ext::oneapi::experimental::printf("\n");
+			}
+			sycl::ext::oneapi::experimental::printf("\t%3i", i_indexes[i]);
+		}
+
+		sycl::ext::oneapi::experimental::printf("\n\nFinal indexes (in_red_data_2)");
+		for (uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK); i++) {
+			if(i % 16 == 0) {
+				sycl::ext::oneapi::experimental::printf("\n");
+			}
+			sycl::ext::oneapi::experimental::printf("\t%3i", j_indexes[i]);
+		}
+		*/
+	}
+	item.barrier(SYCL_MEMORY_SPACE);
+}
+
+void print_reduced_values (
+	sycl::nd_item<3> item,
+	float *data_to_be_reduced_arranged
+){
+	int wi_Id_Wg = item.get_local_id(2);
+	int wg_Id_ND = item.get_group(2);
+
+	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
+		sycl::ext::oneapi::experimental::printf("\nReduced values: %5.3f \t%5.3f \t%5.3f \t%5.3f\n",
+			data_to_be_reduced_arranged[0], data_to_be_reduced_arranged[1], data_to_be_reduced_arranged[2], data_to_be_reduced_arranged[3]);
+	}
+}
+
 using T_JM_A = joint_matrix<sycl::sub_group, TA, use::a, tM, tK, layout::row_major>; // col_major not supported for current size and type configuration
 using T_JM_B = joint_matrix<sycl::sub_group, TB, use::b, tK, tN, layout::col_major>;
 using T_JM_C = joint_matrix<sycl::sub_group, TC, use::accumulator, tM, tN>;
