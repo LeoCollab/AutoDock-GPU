@@ -725,7 +725,7 @@ void gpu_calc_energrad(
 
 	map_input_array(item_ct1, data_to_be_reduced, data_to_be_reduced_arranged);
 
-	print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced (row_major)", data_to_be_reduced);
+	//print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced (row_major)", data_to_be_reduced);
 	print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced_arranged (row_major)", data_to_be_reduced_arranged);
 
 	// 2. Perform reduction using matrix units
@@ -781,7 +781,7 @@ void gpu_calc_energrad(
 
 	map_input_array(item_ct1, data_to_be_reduced, data_to_be_reduced_arranged);
 
-	print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced (row_major)", data_to_be_reduced);
+	//print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced (row_major)", data_to_be_reduced);
 	print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced_arranged (row_major)", data_to_be_reduced_arranged);
 
 	// 2. Perform reduction using matrix units
