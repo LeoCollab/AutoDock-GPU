@@ -268,13 +268,14 @@ void map_input_array (
 
 void print_reduced_values (
 	sycl::nd_item<3> item,
+	const char *msg,
 	float *data_to_be_reduced_arranged
 ){
 	int wi_Id_Wg = item.get_local_id(2);
 	int wg_Id_ND = item.get_group(2);
 
 	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
-		sycl::ext::oneapi::experimental::printf("\nReduced values: %5.3f \t%5.3f \t%5.3f \t%5.3f\n",
+		sycl::ext::oneapi::experimental::printf("\n%s: \t%5.3f \t%5.3f \t%5.3f \t%5.3f\n", msg,
 			data_to_be_reduced_arranged[0], data_to_be_reduced_arranged[1], data_to_be_reduced_arranged[2], data_to_be_reduced_arranged[3]);
 	}
 }
