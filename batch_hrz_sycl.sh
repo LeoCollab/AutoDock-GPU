@@ -10,7 +10,9 @@
 #SBATCH --mem-per-cpu=1000MB
 #SBATCH --mail-type=END,FAIL
 
-module load intel/2024.1
+module load intel/2025.0
+
+sycl-ls
 
 # Executing the SYCL version
 WORK_DIR=${PWD}
