@@ -290,6 +290,70 @@ using T_JM_A = joint_matrix<sycl::sub_group, TA, use::a, tM, tK, layout::row_maj
 using T_JM_B = joint_matrix<sycl::sub_group, TB, use::b, tK, tN, layout::col_major>;
 using T_JM_C = joint_matrix<sycl::sub_group, TC, use::accumulator, tM, tN>;
 
+// Implementation based on paper by Ootomo et al.:
+// "Recovering single precision accuracy from Tensor Cores while surpassing the FP32 theoretical peak performance"
+// https://doi.org/10.1177/10943420221090256
+void matmul (
+	sycl::nd_item<3> item,
+	T_JM_A sub_A,
+	T_JM_B sub_B,
+	T_JM_C sub_C,
+	float *A_fp32,
+	float *B_fp32,
+	//TODO: transform to tf32?
+	float *A_tf32,
+	float *B_tf32,
+	float *dA_tf32,
+	float *dB_tf32
+) {
+	sycl::sub_group sg = item.get_sub_group();
+	int wi_Id_sg = sg.get_local_id();
+	int sg_Size = sg.get_local_range().get(0);
+
+	T_JM_A sub_dA;
+	T_JM_B sub_dB;
+	T_JM_C sub_dC;
+
+	// Initializing accumulator submatrices
+	joint_matrix_fill(sg, sub_C, 0.0f);
+	joint_matrix_fill(sg, sub_dC, 0.0f);
+
+	// Computing [19] (Ootomo et al.)
+	for (uint i = wi_Id_sg; i < tM * tK; i+=sg_Size) { A_tf32[i] = round_to_tf32(A_fp32[i]); }
+	joint_matrix_load(sg, sub_A, sycl::local_ptr<float>(A_tf32), tK); // row-major -> stride is tK
+
+	// Computing [21] (Ootomo et al.)
+	for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { B_tf32[i] = round_to_tf32(B_fp32[i]); }
+	joint_matrix_load(sg, sub_B, sycl::local_ptr<float>(B_tf32), tK); // col-major -> stride is tK
+
+	// TODO: correct factor: for tf32, it might not 2048
+	// Computing [20] (Ootomo et al.)
+	for (uint i = wi_Id_sg; i < tM * tK; i+=sg_Size) { dA_tf32[i] = round_to_tf32( (A_fp32[i] - (float)(A_tf32[i])) * 2048 ); }
+	joint_matrix_load(sg, sub_dA, sycl::local_ptr<float>(dA_tf32), tK); // row-major -> stride is tK
+
+	// TODO: correct factor: for tf32, it might not 2048
+	// Computing [22] (Ootomo et al.)
+	for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { dB_tf32[i] = round_to_tf32( (B_fp32[i] - (float)(B_tf32[i])) * 2048 ); }
+	joint_matrix_load(sg, sub_dB, sycl::local_ptr<float>(dB_tf32), tK); // col-major -> stride is tK
+
+	// Computing part of [24] (Ootomo et al.)
+	joint_matrix_mad(sg, sub_dC, sub_dA, sub_B, sub_dC);
+	joint_matrix_mad(sg, sub_dC, sub_A, sub_dB, sub_dC);
+
+	// Initializing temporal accumulator
+	T_JM_C sub_tmp;
+	joint_matrix_fill(sg, sub_tmp, 0.0f);
+	joint_matrix_mad(sg, sub_tmp, sub_A, sub_B, sub_tmp);
+
+	// Accumulation using FP32 SIMT cores
+	// TODO: implement with joint_matrix_apply()
+
+	// Computing part of [24] (Ootomo et al.)
+	// TODO: implement with joint_matrix_apply()
+
+	// TODO: implement missing store
+}
+
 void reduce_via_matrix_units (
 	sycl::nd_item<3> item,
 	float *data_to_be_reduced,
