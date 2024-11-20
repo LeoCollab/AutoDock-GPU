@@ -225,7 +225,7 @@ void map_input_array (
 	int wg_Id_ND = item.get_group(2);
 
 	item.barrier(SYCL_MEMORY_SPACE);
-	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
+	if (wi_Id_Wg == 0) {
 		// Defining arrays only for a single work-item
 		// These help us to verify the index mapping
 		/*
