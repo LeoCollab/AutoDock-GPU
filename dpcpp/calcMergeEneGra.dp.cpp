@@ -740,7 +740,7 @@ void gpu_calc_energrad(
 	);
 
 	//print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced (row_major)", data_to_be_reduced);
-	print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced_arranged (row_major)", data_to_be_reduced_arranged);
+	//print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced_arranged (row_major)", data_to_be_reduced_arranged);
 
 	// 2. Perform reduction using matrix units
 	reduce_via_matrix_units(item_ct1, /*data_to_be_reduced*/data_to_be_reduced_arranged, Q_data);
@@ -751,7 +751,7 @@ void gpu_calc_energrad(
 	torque_rot.z() = data_to_be_reduced_arranged[2];
 	energy = data_to_be_reduced_arranged[3];
 
-	print_reduced_values(item_ct1, "tx, ty, tz, e", data_to_be_reduced_arranged);
+	//print_reduced_values(item_ct1, "tx, ty, tz, e", data_to_be_reduced_arranged);
 
 	/* Reduction using matrix units */
 #else
@@ -805,7 +805,7 @@ void gpu_calc_energrad(
 	);
 
 	//print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced (row_major)", data_to_be_reduced);
-	print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced_arranged (row_major)", data_to_be_reduced_arranged);
+	//print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced_arranged (row_major)", data_to_be_reduced_arranged);
 
 	// 2. Perform reduction using matrix units
 	reduce_via_matrix_units(item_ct1, /*data_to_be_reduced*/data_to_be_reduced_arranged, Q_data);
@@ -815,7 +815,7 @@ void gpu_calc_energrad(
 	gy = data_to_be_reduced_arranged[1];
 	gz = data_to_be_reduced_arranged[2];
 
-	print_reduced_values(item_ct1, "gx, gy, gz", data_to_be_reduced_arranged);
+	//print_reduced_values(item_ct1, "gx, gy, gz", data_to_be_reduced_arranged);
 
 	/* Reduction using matrix units */
 #else
