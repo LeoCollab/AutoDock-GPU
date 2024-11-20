@@ -82,6 +82,11 @@ void gpu_calc_energrad(
 	float *data_to_be_reduced,
 	float *data_to_be_reduced_arranged,
 	float *Q_data
+	#ifdef DEBUG_INPUT_INDEX_MAP
+	,
+	uint *in_indexes,
+	uint *out_indexes
+	#endif
 	/* Reduction using matrix units */
 #endif
 ) {
@@ -723,7 +728,16 @@ void gpu_calc_energrad(
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 3] = energy;
 	#endif
 
-	map_input_array(item_ct1, data_to_be_reduced, data_to_be_reduced_arranged);
+	map_input_array(
+		item_ct1,
+		data_to_be_reduced,
+		data_to_be_reduced_arranged
+		#ifdef DEBUG_INPUT_INDEX_MAP
+		,
+		in_indexes,
+		out_indexes
+		#endif
+	);
 
 	//print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced (row_major)", data_to_be_reduced);
 	print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced_arranged (row_major)", data_to_be_reduced_arranged);
@@ -779,7 +793,16 @@ void gpu_calc_energrad(
 	data_to_be_reduced[4*item_ct1.get_local_id(2) + 2] = gz;
 	#endif
 
-	map_input_array(item_ct1, data_to_be_reduced, data_to_be_reduced_arranged);
+	map_input_array(
+		item_ct1,
+		data_to_be_reduced,
+		data_to_be_reduced_arranged
+		#ifdef DEBUG_INPUT_INDEX_MAP
+		,
+		in_indexes,
+		out_indexes
+		#endif
+	);
 
 	//print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced (row_major)", data_to_be_reduced);
 	print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced_arranged (row_major)", data_to_be_reduced_arranged);

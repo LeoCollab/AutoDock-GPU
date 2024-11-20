@@ -80,6 +80,11 @@ gpu_gradient_minAD_kernel(
 	float *data_to_be_reduced,
 	float *data_to_be_reduced_arranged,
 	float *Q_data
+	#ifdef DEBUG_INPUT_INDEX_MAP
+	,
+	uint *in_indexes,
+	uint *out_indexes
+	#endif
 	/* Reduction using matrix units */
 	#endif
 )
@@ -268,6 +273,11 @@ gpu_gradient_minAD_kernel(
 			data_to_be_reduced,
 			data_to_be_reduced_arranged,
 			Q_data
+			#ifdef DEBUG_INPUT_INDEX_MAP
+			,
+			in_indexes,
+			out_indexes
+			#endif
 			/* Reduction using matrix units */
 			#endif
 		);
@@ -465,6 +475,11 @@ void gpu_gradient_minAD(
 		sycl::local_accessor<float, 1> data_to_be_reduced(sycl::range<1>(4 * threads), cgh);
 		sycl::local_accessor<float, 1> data_to_be_reduced_arranged(sycl::range<1>(4 * threads), cgh);
 		sycl::local_accessor<float, 1> Q_data(sycl::range<1>(tM * tK), cgh);
+
+		#ifdef DEBUG_INPUT_INDEX_MAP
+		sycl::local_accessor<uint, 1> in_indexes(sycl::range<1>(4 * threads), cgh);
+		sycl::local_accessor<uint, 1> out_indexes(sycl::range<1>(4 * threads), cgh);
+		#endif
 		/* Reduction using matrix units */
 		#endif
 
@@ -493,6 +508,11 @@ void gpu_gradient_minAD(
 					data_to_be_reduced.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					data_to_be_reduced_arranged.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					Q_data.template get_multi_ptr<sycl::access::decorated::no>().get()
+					#ifdef DEBUG_INPUT_INDEX_MAP
+					,
+					in_indexes.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					out_indexes.template get_multi_ptr<sycl::access::decorated::no>().get()
+					#endif
 					/* Reduction using matrix units */
 					#endif
 				);

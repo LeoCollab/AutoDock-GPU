@@ -79,6 +79,7 @@ inline int64_t ullitolli(uint64_t u)
 
 // If enabled, then using hardcoded inputs
 //#define DEBUG_XMX_INPUTS
+#define DEBUG_INPUT_INDEX_MAP
 
 // Number of rows/cols of a submatrix: tM, tN, tK
 constexpr int tM = 8;
@@ -220,25 +221,26 @@ void map_input_array (
 	sycl::nd_item<3> item,
 	float *data_to_be_reduced,
 	float *data_to_be_reduced_arranged
+	#ifdef DEBUG_INPUT_INDEX_MAP
+	,
+	uint *in_indexes,
+	uint *out_indexes
+	#endif
 ) {
 	int wi_Id_Wg = item.get_local_id(2);
 	int wg_Size = item.get_local_range(2);
-
-	// Defining arrays only for a single work-item
-	// These help us to verify the index mapping
-	/*
-	uint i_indexes [4 * NUM_OF_THREADS_PER_BLOCK];
-	uint j_indexes [4 * NUM_OF_THREADS_PER_BLOCK];
-	*/
 
 	item.barrier(SYCL_MEMORY_SPACE);
 
 	for (uint i = wi_Id_Wg; i < (4 * NUM_OF_THREADS_PER_BLOCK); i+=wg_Size) {
 		uint j = 24*(i/32) + (i/4) + 8*(i%4);
-		/*
-		i_indexes[i] = i;
-		j_indexes[i] = j;
-		*/
+
+		// Storing values of initial an final indexes
+		#ifdef DEBUG_INPUT_INDEX_MAP
+		in_indexes[i] = i;
+		out_indexes[i] = j;
+		#endif
+
 		data_to_be_reduced_arranged[j] = data_to_be_reduced[i];
 		//sycl::ext::oneapi::experimental::printf("i = %i, j = %i\n", i, j);
 	}
@@ -247,7 +249,8 @@ void map_input_array (
 
 	// Comparing initial and final indexes
 	// These help us to verify the index mapping
-	/*
+	// Printing only for a single work-group
+	#ifdef DEBUG_INPUT_INDEX_MAP
 	int wg_Id_ND = item.get_group(2);
 	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
 		sycl::ext::oneapi::experimental::printf("\n\nInitial indexes (data_to_be_reduced)");
@@ -255,7 +258,7 @@ void map_input_array (
 			if(i % 16 == 0) {
 				sycl::ext::oneapi::experimental::printf("\n");
 			}
-			sycl::ext::oneapi::experimental::printf("\t%3i", i_indexes[i]);
+			sycl::ext::oneapi::experimental::printf("\t%3i", in_indexes[i]);
 		}
 
 		sycl::ext::oneapi::experimental::printf("\n\nFinal indexes (data_to_be_reduced_arranged)");
@@ -263,10 +266,10 @@ void map_input_array (
 			if(i % 16 == 0) {
 				sycl::ext::oneapi::experimental::printf("\n");
 			}
-			sycl::ext::oneapi::experimental::printf("\t%3i", j_indexes[i]);
+			sycl::ext::oneapi::experimental::printf("\t%3i", out_indexes[i]);
 		}
 	}
-	*/
+	#endif
 }
 
 void print_reduced_values (
