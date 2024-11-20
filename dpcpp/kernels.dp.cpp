@@ -79,7 +79,7 @@ inline int64_t ullitolli(uint64_t u)
 
 // If enabled, then using hardcoded inputs
 //#define DEBUG_XMX_INPUTS
-#define DEBUG_INPUT_INDEX_MAP
+//#define DEBUG_INPUT_INDEX_MAP
 
 // Number of rows/cols of a submatrix: tM, tN, tK
 constexpr int tM = 8;
