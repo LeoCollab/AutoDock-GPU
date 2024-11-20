@@ -222,10 +222,12 @@ void map_input_array (
 	float *data_to_be_reduced_arranged
 ) {
 	int wi_Id_Wg = item.get_local_id(2);
-	int wg_Id_ND = item.get_group(2);
+	int wg_Size = item.get_local_range(2);
 
 	item.barrier(SYCL_MEMORY_SPACE);
+	/*
 	if (wi_Id_Wg == 0) {
+	*/
 		// Defining arrays only for a single work-item
 		// These help us to verify the index mapping
 		/*
@@ -233,7 +235,10 @@ void map_input_array (
 		uint j_indexes [4 * NUM_OF_THREADS_PER_BLOCK];
 		*/
 
+		/*
 		for (uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK); i++) {
+		*/
+		for (uint i = wi_Id_Wg; i < (4 * NUM_OF_THREADS_PER_BLOCK); i+=wg_Size) {
 			uint j = 24*(i/32) + (i/4) + 8*(i%4);
 			/*
 			i_indexes[i] = i;
@@ -262,7 +267,9 @@ void map_input_array (
 			sycl::ext::oneapi::experimental::printf("\t%3i", j_indexes[i]);
 		}
 		*/
+	/*
 	}
+	*/
 	item.barrier(SYCL_MEMORY_SPACE);
 }
 
