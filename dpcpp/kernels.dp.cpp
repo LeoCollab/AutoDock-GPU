@@ -289,10 +289,7 @@ void reduce_via_matrix_units (
 	float *data_to_be_reduced,
 	float *Q_data
 ) {
-	int wg_Id_ND = item.get_group(2);
-
 	sycl::sub_group sg = item.get_sub_group();
-	int wi_Id_sg = sg.get_local_id();
 	int sg_Id_Wg = sg.get_group_id().get(0);
 
 	item.barrier(SYCL_MEMORY_SPACE);
@@ -315,6 +312,8 @@ void reduce_via_matrix_units (
 			const uint offset = i * TILE_NELEMS; // Moving to next input block
 
 			/*
+			int wg_Id_ND = item.get_group(2);
+			int wi_Id_sg = sg.get_local_id();
 			if (wg_Id_ND == 0 && wi_Id_sg == 0) {
 				sycl::ext::oneapi::experimental::printf("\nLoop: tripcount = %d | iteration = %d | offset = %d", (4 * NUM_OF_THREADS_PER_BLOCK) / TILE_NELEMS, i, offset);
 			}
