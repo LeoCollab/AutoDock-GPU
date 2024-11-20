@@ -69,7 +69,7 @@ gpu_gradient_minAdam_kernel(
 	float *data_to_be_reduced,
 	float *data_to_be_reduced_arranged,
 	float *Q_data
-	#ifdef DEBUG_INPUT_INDEX_MAP
+	#ifdef DEBUG_XMX_INPUTS_INDEX_MAP
 	,
 	uint *in_indexes,
 	uint *out_indexes
@@ -261,7 +261,7 @@ gpu_gradient_minAdam_kernel(
 			data_to_be_reduced,
 			data_to_be_reduced_arranged,
 			Q_data
-			#ifdef DEBUG_INPUT_INDEX_MAP
+			#ifdef DEBUG_XMX_INPUTS_INDEX_MAP
 			,
 			in_indexes,
 			out_indexes
@@ -471,7 +471,7 @@ void gpu_gradient_minAdam(
 		sycl::local_accessor<float, 1> data_to_be_reduced_arranged(sycl::range<1>(4 * threads), cgh);
 		sycl::local_accessor<float, 1> Q_data(sycl::range<1>(tM * tK), cgh);
 
-		#ifdef DEBUG_INPUT_INDEX_MAP
+		#ifdef DEBUG_XMX_INPUTS_INDEX_MAP
 		sycl::local_accessor<uint, 1> in_indexes(sycl::range<1>(4 * threads), cgh);
 		sycl::local_accessor<uint, 1> out_indexes(sycl::range<1>(4 * threads), cgh);
 		#endif
@@ -498,7 +498,7 @@ void gpu_gradient_minAdam(
 					data_to_be_reduced.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					data_to_be_reduced_arranged.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					Q_data.template get_multi_ptr<sycl::access::decorated::no>().get()
-					#ifdef DEBUG_INPUT_INDEX_MAP
+					#ifdef DEBUG_XMX_INPUTS_INDEX_MAP
 					,
 					in_indexes.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					out_indexes.template get_multi_ptr<sycl::access::decorated::no>().get()

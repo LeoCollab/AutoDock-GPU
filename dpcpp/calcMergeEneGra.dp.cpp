@@ -82,7 +82,7 @@ void gpu_calc_energrad(
 	float *data_to_be_reduced,
 	float *data_to_be_reduced_arranged,
 	float *Q_data
-	#ifdef DEBUG_INPUT_INDEX_MAP
+	#ifdef DEBUG_XMX_INPUTS_INDEX_MAP
 	,
 	uint *in_indexes,
 	uint *out_indexes
@@ -732,7 +732,7 @@ void gpu_calc_energrad(
 		item_ct1,
 		data_to_be_reduced,
 		data_to_be_reduced_arranged
-		#ifdef DEBUG_INPUT_INDEX_MAP
+		#ifdef DEBUG_XMX_INPUTS_INDEX_MAP
 		,
 		in_indexes,
 		out_indexes
@@ -797,7 +797,7 @@ void gpu_calc_energrad(
 		item_ct1,
 		data_to_be_reduced,
 		data_to_be_reduced_arranged
-		#ifdef DEBUG_INPUT_INDEX_MAP
+		#ifdef DEBUG_XMX_INPUTS_INDEX_MAP
 		,
 		in_indexes,
 		out_indexes

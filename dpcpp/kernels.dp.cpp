@@ -79,7 +79,7 @@ inline int64_t ullitolli(uint64_t u)
 
 // If enabled, then using hardcoded inputs
 //#define DEBUG_XMX_INPUTS
-//#define DEBUG_INPUT_INDEX_MAP
+//#define DEBUG_XMX_INPUTS_INDEX_MAP
 
 // Number of rows/cols of a submatrix: tM, tN, tK
 constexpr int tM = 8;
@@ -221,7 +221,7 @@ void map_input_array (
 	sycl::nd_item<3> item,
 	float *data_to_be_reduced,
 	float *data_to_be_reduced_arranged
-	#ifdef DEBUG_INPUT_INDEX_MAP
+	#ifdef DEBUG_XMX_INPUTS_INDEX_MAP
 	,
 	uint *in_indexes,
 	uint *out_indexes
@@ -236,7 +236,7 @@ void map_input_array (
 		uint j = 24*(i/32) + (i/4) + 8*(i%4);
 
 		// Storing values of initial an final indexes
-		#ifdef DEBUG_INPUT_INDEX_MAP
+		#ifdef DEBUG_XMX_INPUTS_INDEX_MAP
 		in_indexes[i] = i;
 		out_indexes[i] = j;
 		#endif
@@ -250,7 +250,7 @@ void map_input_array (
 	// Comparing initial and final indexes
 	// These help us to verify the index mapping
 	// Printing only for a single work-group
-	#ifdef DEBUG_INPUT_INDEX_MAP
+	#ifdef DEBUG_XMX_INPUTS_INDEX_MAP
 	int wg_Id_ND = item.get_group(2);
 	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
 		sycl::ext::oneapi::experimental::printf("\n\nInitial indexes (data_to_be_reduced)");
