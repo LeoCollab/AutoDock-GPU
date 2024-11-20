@@ -224,34 +224,33 @@ void map_input_array (
 	int wi_Id_Wg = item.get_local_id(2);
 	int wg_Size = item.get_local_range(2);
 
-	item.barrier(SYCL_MEMORY_SPACE);
+	// Defining arrays only for a single work-item
+	// These help us to verify the index mapping
 	/*
-	if (wi_Id_Wg == 0) {
+	uint i_indexes [4 * NUM_OF_THREADS_PER_BLOCK];
+	uint j_indexes [4 * NUM_OF_THREADS_PER_BLOCK];
 	*/
-		// Defining arrays only for a single work-item
-		// These help us to verify the index mapping
-		/*
-		uint i_indexes [4 * NUM_OF_THREADS_PER_BLOCK];
-		uint j_indexes [4 * NUM_OF_THREADS_PER_BLOCK];
-		*/
 
-		/*
-		for (uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK); i++) {
-		*/
-		for (uint i = wi_Id_Wg; i < (4 * NUM_OF_THREADS_PER_BLOCK); i+=wg_Size) {
-			uint j = 24*(i/32) + (i/4) + 8*(i%4);
-			/*
-			i_indexes[i] = i;
-			j_indexes[i] = j;
-			*/
-			data_to_be_reduced_arranged[j] = data_to_be_reduced[i];
-			//sycl::ext::oneapi::experimental::printf("i = %i, j = %i\n", i, j);
-		}
+	item.barrier(SYCL_MEMORY_SPACE);
 
-		// Comparing initial and final indexes
-		// These help us to verify the index mapping
+	for (uint i = wi_Id_Wg; i < (4 * NUM_OF_THREADS_PER_BLOCK); i+=wg_Size) {
+		uint j = 24*(i/32) + (i/4) + 8*(i%4);
 		/*
-		sycl::ext::oneapi::experimental::printf("\n\nInitial indexes (in_red_data)");
+		i_indexes[i] = i;
+		j_indexes[i] = j;
+		*/
+		data_to_be_reduced_arranged[j] = data_to_be_reduced[i];
+		//sycl::ext::oneapi::experimental::printf("i = %i, j = %i\n", i, j);
+	}
+
+	item.barrier(SYCL_MEMORY_SPACE);
+
+	// Comparing initial and final indexes
+	// These help us to verify the index mapping
+	/*
+	int wg_Id_ND = item.get_group(2);
+	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
+		sycl::ext::oneapi::experimental::printf("\n\nInitial indexes (data_to_be_reduced)");
 		for (uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK); i++) {
 			if(i % 16 == 0) {
 				sycl::ext::oneapi::experimental::printf("\n");
@@ -259,18 +258,15 @@ void map_input_array (
 			sycl::ext::oneapi::experimental::printf("\t%3i", i_indexes[i]);
 		}
 
-		sycl::ext::oneapi::experimental::printf("\n\nFinal indexes (in_red_data_2)");
+		sycl::ext::oneapi::experimental::printf("\n\nFinal indexes (data_to_be_reduced_arranged)");
 		for (uint i = 0; i < (4 * NUM_OF_THREADS_PER_BLOCK); i++) {
 			if(i % 16 == 0) {
 				sycl::ext::oneapi::experimental::printf("\n");
 			}
 			sycl::ext::oneapi::experimental::printf("\t%3i", j_indexes[i]);
 		}
-		*/
-	/*
 	}
 	*/
-	item.barrier(SYCL_MEMORY_SPACE);
 }
 
 void print_reduced_values (
