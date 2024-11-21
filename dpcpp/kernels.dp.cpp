@@ -112,12 +112,12 @@ void print_submatrix_sg (
 	const char *msg,
 	T *data_to_print
 ) {
-	// Only one wg should print
 	int wg_Id_ND = item.get_group(2);
 
 	sycl::sub_group sg = item.get_sub_group();
 	int wi_Id_sg = sg.get_local_id();
 
+	// Only a single work-item within a sub-group prints
 	if (wg_Id_ND == 0 && wi_Id_sg == 0) {
 		sycl::ext::oneapi::experimental::printf("\n%s", msg);
 		for (uint i = 0; i < NROWS; i++) {
@@ -142,10 +142,10 @@ void print_submatrix_WG (
 	const char *msg,
 	T *data_to_print
 ) {
-	// Only one wg should print
 	int wi_Id_Wg = item.get_local_id(2);
 	int wg_Id_ND = item.get_group(2);
 
+	// Only a single work-item within a work-group prints
 	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
 		sycl::ext::oneapi::experimental::printf("\n%s", msg);
 		for (uint i = 0; i < NROWS; i++) {
@@ -166,7 +166,7 @@ void print_submatrix_WG (
 void print_wi_indexes (
 	sycl::nd_item<3> item
 ) {
-	// Identifying global, local, and group ids
+	// Identifying global, local, and work-group ids
 	int wi_Id_ND = item.get_global_id(2); // Returns the wi's position in the NDRange (in dimension 2)
 	int wi_Id_Wg = item.get_local_id(2); // Returns the wi's position within the current wg (in dimension 2)
 	int wg_Id_ND = item.get_group(2); // Returns the wg's position within the overal NDRange (in dimension 2)
@@ -184,9 +184,10 @@ void print_wi_indexes (
 		wi_Id_ND, wi_Id_Wg, wg_Id_ND, wg_Size, sg_Range, sg_Id_Wg, sg_Size, wi_Id_sg);
 }
 
-// Q_data points to an array to be loaded to sub_Q
-// sub_Q is submatrix with "use::a" use
-// Hence, Q_data holds the data of a submatrix with "tM x tK" shape
+// Q_data points to an array to be loaded to sub_Q.
+// sub_Q is a submatrix configured as
+// "use::a" (1st matrix mult operand) and "tM x tK" (shape).
+// Hence, Q_data holds the data of the sub_Q submatrix
 void fill_Q (
 	sycl::nd_item<3> item,
 	float *Q_data
@@ -195,9 +196,9 @@ void fill_Q (
 	int wi_Id_sg = sg.get_local_id();
 	int sg_Size = sg.get_local_range().get(0);
 
-	// Slightly improved multi-threaded implementation
+	// Slightly improved multi-threaded implementation.
 	// IMPORTANT: this is computed by a sub-group,
-	// and thus, MUST use "sg_Size" instead of "wg_Size"
+	// and thus, the stride MUST be "sg_Size" instead of "wg_Size"
 	for (uint i = wi_Id_sg; i < tM/4; i+=sg_Size) {	// Row counter: how many rows (of 4x4 blocks) are there in the matrix?
 		for (uint j = 0; j < tK/4; j++) {	// Col counter: how many cols (of 4x4 blocks) are there in the matrix?
 			for (uint ii = 0; ii < 4; ii++) {
@@ -214,9 +215,10 @@ void fill_Q (
 	*/
 }
 
-// Reordering arrays for correctly reducing input data
-// This is because PVC in the chosen tM x tN x tK works
-// only for some layouts (but not for both row- nd col-major)
+// Reordering arrays for correctly reducing input data.
+// Reason:
+// For PVC GPUs, the chosen "tM x tN x tK" (i.e., 8 x 16 x 8) matrix configuration
+// only works for some layouts (but not for both row- and col-major)
 void map_input_array (
 	sycl::nd_item<3> item,
 	float *data_to_be_reduced,
@@ -235,7 +237,7 @@ void map_input_array (
 	for (uint i = wi_Id_Wg; i < (4 * NUM_OF_THREADS_PER_BLOCK); i+=wg_Size) {
 		uint j = 24*(i/32) + (i/4) + 8*(i%4);
 
-		// Storing values of initial an final indexes
+		// Storing values of initial and final indexes
 		#ifdef DEBUG_XMX_INPUTS_INDEX_MAP
 		in_indexes[i] = i;
 		out_indexes[i] = j;
@@ -247,9 +249,9 @@ void map_input_array (
 
 	item.barrier(SYCL_MEMORY_SPACE);
 
-	// Comparing initial and final indexes
-	// These help us to verify the index mapping
-	// Printing only for a single work-group
+	// Comparing initial and final indexes.
+	// These help us verifying the correct index mapping.
+	// Only a single work-item within a work-group prints
 	#ifdef DEBUG_XMX_INPUTS_INDEX_MAP
 	int wg_Id_ND = item.get_group(2);
 	if (wg_Id_ND == 0 && wi_Id_Wg == 0) {
@@ -286,7 +288,8 @@ void print_reduced_values (
 	}
 }
 
-using T_JM_A = joint_matrix<sycl::sub_group, TA, use::a, tM, tK, layout::row_major>; // col_major not supported for current size and type configuration
+// Col_major for T_JM_A: not supported for current matrix shape (8 x 16 x 8) and data type (tf32)
+using T_JM_A = joint_matrix<sycl::sub_group, TA, use::a, tM, tK, layout::row_major>;
 using T_JM_B = joint_matrix<sycl::sub_group, TB, use::b, tK, tN, layout::col_major>;
 using T_JM_C = joint_matrix<sycl::sub_group, TC, use::accumulator, tM, tN>;
 
@@ -368,7 +371,7 @@ void reduce_via_matrix_units (
 	print_wi_indexes(item);
 	*/
 
-	// Only one sub-group performs reduction
+	// Only a single sub-group per work-group performs reduction
 	if (sg_Id_Wg == 0) {
 		// Declaring and filling submatrices
 		T_JM_B sub_P;
@@ -390,7 +393,7 @@ void reduce_via_matrix_units (
 			*/
 
 			T_JM_A sub_A;
-			joint_matrix_load(sg, sub_A, sycl::local_ptr<float>(data_to_be_reduced + offset), tK); // row-major -> stride is tK
+			joint_matrix_load(sg, sub_A, sycl::local_ptr<float>(data_to_be_reduced + offset), tK); // Row-major -> stride is tK
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
 		}
 
@@ -403,7 +406,7 @@ void reduce_via_matrix_units (
 		
 		T_JM_A sub_Q;
 		fill_Q(item, Q_data);
-		joint_matrix_load(sg, sub_Q, sycl::local_ptr<float>(Q_data), tK);	// row-major -> stride is tK
+		joint_matrix_load(sg, sub_Q, sycl::local_ptr<float>(Q_data), tK);	// Row-major -> stride is tK
 
 		// 2. Perform line sum: C <- QW + C (zero)
 		joint_matrix_mad(sg, sub_C, sub_Q, sub_W, sub_C);
