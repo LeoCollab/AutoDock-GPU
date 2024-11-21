@@ -87,6 +87,15 @@ void gpu_calc_energrad(
 	uint *in_indexes,
 	uint *out_indexes
 	#endif
+	#ifdef XMX_EC
+	,
+	float *in_A,
+	float *in_B,
+	float *in_A_tf32,
+	float *in_B_tf32,
+	float *in_dA_tf32,
+	float *in_dB_tf32
+	#endif
 	/* Reduction using matrix units */
 #endif
 ) {
@@ -743,7 +752,20 @@ void gpu_calc_energrad(
 	//print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced_arranged (row_major)", data_to_be_reduced_arranged);
 
 	// 2. Perform reduction using matrix units
-	reduce_via_matrix_units(item_ct1, /*data_to_be_reduced*/data_to_be_reduced_arranged, Q_data);
+	reduce_via_matrix_units(
+		item_ct1,
+		data_to_be_reduced_arranged,
+		Q_data
+		#ifdef XMX_EX
+		,
+		in_A,
+		in_B,
+		in_A_tf32,
+		in_B_tf32,
+		in_dA_tf32,
+		in_dB_tf32
+		#endif
+	);
 
 	// 3. Retrieve result from shared memory
 	torque_rot.x() = data_to_be_reduced_arranged[0];
@@ -808,7 +830,20 @@ void gpu_calc_energrad(
 	//print_submatrix_WG<float, (4 * NUM_OF_THREADS_PER_BLOCK)/tK, tK, layout::row_major>(item_ct1, "\ndata_to_be_reduced_arranged (row_major)", data_to_be_reduced_arranged);
 
 	// 2. Perform reduction using matrix units
-	reduce_via_matrix_units(item_ct1, /*data_to_be_reduced*/data_to_be_reduced_arranged, Q_data);
+	reduce_via_matrix_units(
+		item_ct1,
+		data_to_be_reduced_arranged,
+		Q_data
+		#ifdef XMX_EX
+		,
+		in_A,
+		in_B,
+		in_A_tf32,
+		in_B_tf32,
+		in_dA_tf32,
+		in_dB_tf32
+		#endif
+	);
 
 	// 3. Retrieve results from shared memory
 	gx = data_to_be_reduced_arranged[0];

@@ -85,6 +85,15 @@ gpu_gradient_minAD_kernel(
 	uint *in_indexes,
 	uint *out_indexes
 	#endif
+	#ifdef XMX_EC
+	,
+	float *in_A,
+	float *in_B,
+	float *in_A_tf32,
+	float *in_B_tf32,
+	float *in_dA_tf32,
+	float *in_dB_tf32
+	#endif
 	/* Reduction using matrix units */
 	#endif
 )
@@ -277,6 +286,15 @@ gpu_gradient_minAD_kernel(
 			,
 			in_indexes,
 			out_indexes
+			#endif
+			#ifdef XMX_EC
+			,
+			in_A,
+			in_B,
+			in_A_tf32,
+			in_B_tf32,
+			in_dA_tf32,
+			in_dB_tf32
 			#endif
 			/* Reduction using matrix units */
 			#endif
@@ -480,6 +498,15 @@ void gpu_gradient_minAD(
 		sycl::local_accessor<uint, 1> in_indexes(sycl::range<1>(4 * threads), cgh);
 		sycl::local_accessor<uint, 1> out_indexes(sycl::range<1>(4 * threads), cgh);
 		#endif
+
+		#ifdef XMX_EC
+		sycl::local_accessor<float, 1> in_A (sycl::range<1>(tM * tK), cgh);
+		sycl::local_accessor<float, 1> in_B (sycl::range<1>(tK * tN), cgh);
+		sycl::local_accessor<float, 1> in_A_tf32 (sycl::range<1>(tM * tK), cgh);
+		sycl::local_accessor<float, 1> in_B_tf32 (sycl::range<1>(tK * tN), cgh);
+		sycl::local_accessor<float, 1> in_dA_tf32 (sycl::range<1>(tM * tK), cgh);
+		sycl::local_accessor<float, 1> in_dB_tf32 (sycl::range<1>(tK * tN), cgh);
+		#endif
 		/* Reduction using matrix units */
 		#endif
 
@@ -512,6 +539,15 @@ void gpu_gradient_minAD(
 					,
 					in_indexes.template get_multi_ptr<sycl::access::decorated::no>().get(),
 					out_indexes.template get_multi_ptr<sycl::access::decorated::no>().get()
+					#endif
+					#ifdef XMX_EC
+					,
+					in_A.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					in_B.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					in_A_tf32.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					in_B_tf32.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					in_dA_tf32.template get_multi_ptr<sycl::access::decorated::no>().get(),
+					in_dB_tf32.template get_multi_ptr<sycl::access::decorated::no>().get()
 					#endif
 					/* Reduction using matrix units */
 					#endif

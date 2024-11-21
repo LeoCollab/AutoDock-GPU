@@ -379,6 +379,15 @@ void reduce_via_matrix_units (
 	sycl::nd_item<3> item,
 	float *data_to_be_reduced,
 	float *Q_data
+	#ifdef XMX_EC
+	,
+	float *in_A,
+	float *in_B,
+	float *in_A_tf32,
+	float *in_B_tf32,
+	float *in_dA_tf32,
+	float *in_dB_tf32
+	#endif
 ) {
 	sycl::sub_group sg = item.get_sub_group();
 	int sg_Id_Wg = sg.get_group_id().get(0);
@@ -415,6 +424,10 @@ void reduce_via_matrix_units (
 
 			#ifdef XMX_EC
 
+			// TODO: fill in_A
+			// TODO: fill in_B
+
+			custom_matrix_mad_ec(item, (data_to_be_reduced + offset), in_B, sub_C, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
 			#else
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
 			#endif
@@ -434,6 +447,10 @@ void reduce_via_matrix_units (
 		// 2. Perform line sum: C <- QW + C (zero)
 		#ifdef XMX_EC
 
+		// TODO: fill in_A
+		// TODO: fill in_B
+
+		custom_matrix_mad_ec(item, in_A, in_B, sub_C, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
 		#else
 		joint_matrix_mad(sg, sub_C, sub_Q, sub_W, sub_C);
 		#endif
