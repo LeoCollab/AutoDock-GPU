@@ -370,8 +370,6 @@ void custom_matrix_mad_ec (
 	joint_matrix_apply(sg, sub_C, sub_dC, [=](TC &y, const TC &x) {
 		y = y + (x / FACTOR_RED_UF);
 	});
-
-	// TODO: determine if sub_C should be passed to arrays (via joint_matrix_store)
 }
 #endif
 
