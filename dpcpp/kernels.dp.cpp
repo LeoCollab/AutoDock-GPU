@@ -296,6 +296,17 @@ using T_JM_C = joint_matrix<sycl::sub_group, TC, use::accumulator, tM, tN>;
 // Implementation based on paper by Ootomo et al.:
 // "Recovering single precision accuracy from Tensor Cores while surpassing the FP32 theoretical peak performance"
 // https://doi.org/10.1177/10943420221090256
+
+// The probabilities of underflow and gradual underflow
+// in subtracting two values are high when their absolute values are close.
+// For reducing these probabilities,
+// Ootomo et al. introduce a factor (here as FACTOR_RED_UF)
+// based on the mantissa length of the matrix operand.
+// The mantissa length depends on the data format.
+// Notice that for both FP16 and TF32, the mantissa length is 10
+constexpr int length_mantissa_tf32 = 10;
+constexpr int FACTOR_RED_UF = 1 << (length_mantissa_tf32 + 1); // 2 ^ 11 = 2048
+
 void matmul (
 	sycl::nd_item<3> item,
 	T_JM_A sub_A,
@@ -329,14 +340,12 @@ void matmul (
 	for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { B_tf32[i] = round_to_tf32(B_fp32[i]); }
 	joint_matrix_load(sg, sub_B, sycl::local_ptr<float>(B_tf32), tK); // Col-major -> stride is tK
 
-	// TODO: correct factor for tf32 (it might not 2048)
 	// Computing [20] (Ootomo et al.)
-	for (uint i = wi_Id_sg; i < tM * tK; i+=sg_Size) { dA_tf32[i] = round_to_tf32( (A_fp32[i] - (float)(A_tf32[i])) * 2048 ); }
+	for (uint i = wi_Id_sg; i < tM * tK; i+=sg_Size) { dA_tf32[i] = round_to_tf32( (A_fp32[i] - (float)(A_tf32[i])) * FACTOR_RED_UF ); }
 	joint_matrix_load(sg, sub_dA, sycl::local_ptr<float>(dA_tf32), tK); // Row-major -> stride is tK
 
-	// TODO: correct factor for tf32 (it might not 2048)
 	// Computing [22] (Ootomo et al.)
-	for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { dB_tf32[i] = round_to_tf32( (B_fp32[i] - (float)(B_tf32[i])) * 2048 ); }
+	for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { dB_tf32[i] = round_to_tf32( (B_fp32[i] - (float)(B_tf32[i])) * FACTOR_RED_UF ); }
 	joint_matrix_load(sg, sub_dB, sycl::local_ptr<float>(dB_tf32), tK); // Col-major -> stride is tK
 
 	// Computing part of [24] (Ootomo et al.)
@@ -355,7 +364,7 @@ void matmul (
 
 	// Computing part of [24] (Ootomo et al.)
 	joint_matrix_apply(sg, sub_C, sub_dC, [=](TC &y, const TC &x) {
-		y = y + (x / 2048);
+		y = y + (x / FACTOR_RED_UF);
 	});
 
 	// TODO: implement missing store
