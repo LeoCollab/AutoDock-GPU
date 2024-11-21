@@ -80,7 +80,7 @@ inline int64_t ullitolli(uint64_t u)
 // If enabled, then using hardcoded inputs
 //#define DEBUG_XMX_INPUTS
 //#define DEBUG_XMX_INPUTS_INDEX_MAP
-//#define XMX_EC
+#define XMX_EC
 
 // Number of rows/cols of a submatrix: tM, tN, tK
 constexpr int tM = 8;
@@ -425,7 +425,7 @@ void reduce_via_matrix_units (
 
 			#ifdef XMX_EC
 			in_A = (data_to_be_reduced + offset);
-			for (uint i = wi_Id_sg; i < tK * TN; i +=sg_Size) { in_B [i] = 1.0f; } // Instead of sub_P filled with 1.0f
+			for (uint i = wi_Id_sg; i < tK * tN; i +=sg_Size) { in_B [i] = 1.0f; } // Instead of sub_P filled with 1.0f
 			custom_matrix_mad_ec(item, in_A, in_B, sub_V, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
 			#else
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
