@@ -392,6 +392,9 @@ void reduce_via_matrix_units (
 	sycl::sub_group sg = item.get_sub_group();
 	int sg_Id_Wg = sg.get_group_id().get(0);
 
+	int sg_Size = sg.get_local_range().get(0);
+	int wi_Id_sg = sg.get_local_id();
+
 	item.barrier(SYCL_MEMORY_SPACE);
 
 	/*
@@ -423,11 +426,14 @@ void reduce_via_matrix_units (
 			joint_matrix_load(sg, sub_A, sycl::local_ptr<float>(data_to_be_reduced + offset), tK); // Row-major -> stride is tK
 
 			#ifdef XMX_EC
+			in_A = (data_to_be_reduced + offset);
 
-			// TODO: fill in_A
-			// TODO: fill in_B
+			// Instead of sub_P filled with 1.0f
+			for (uint i = wi_Id_sg; i < tK * TN; i +=sg_Size) {
+				in_B [i] = 1.0f;
+			}
 
-			custom_matrix_mad_ec(item, (data_to_be_reduced + offset), in_B, sub_C, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
+			custom_matrix_mad_ec(item, in_A, in_B, sub_C, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
 			#else
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
 			#endif
