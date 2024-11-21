@@ -80,6 +80,7 @@ inline int64_t ullitolli(uint64_t u)
 // If enabled, then using hardcoded inputs
 //#define DEBUG_XMX_INPUTS
 //#define DEBUG_XMX_INPUTS_INDEX_MAP
+//#define XMX_EC
 
 // Number of rows/cols of a submatrix: tM, tN, tK
 constexpr int tM = 8;
@@ -293,6 +294,8 @@ using T_JM_A = joint_matrix<sycl::sub_group, TA, use::a, tM, tK, layout::row_maj
 using T_JM_B = joint_matrix<sycl::sub_group, TB, use::b, tK, tN, layout::col_major>;
 using T_JM_C = joint_matrix<sycl::sub_group, TC, use::accumulator, tM, tN>;
 
+
+#ifdef XMX_EC
 // Implementation based on paper by Ootomo et al.:
 // "Recovering single precision accuracy from Tensor Cores while surpassing the FP32 theoretical peak performance"
 // https://doi.org/10.1177/10943420221090256
@@ -370,6 +373,7 @@ void matmul (
 
 	// TODO: determine if sub_C should be passed to arrays (via joint_matrix_store)
 }
+#endif
 
 void reduce_via_matrix_units (
 	sycl::nd_item<3> item,
@@ -408,7 +412,12 @@ void reduce_via_matrix_units (
 
 			T_JM_A sub_A;
 			joint_matrix_load(sg, sub_A, sycl::local_ptr<float>(data_to_be_reduced + offset), tK); // Row-major -> stride is tK
+
+			#ifdef XMX_EC
+
+			#else
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
+			#endif
 		}
 
 		// W <- V (required since V must be transformed to "use::b")
@@ -423,7 +432,11 @@ void reduce_via_matrix_units (
 		joint_matrix_load(sg, sub_Q, sycl::local_ptr<float>(Q_data), tK);	// Row-major -> stride is tK
 
 		// 2. Perform line sum: C <- QW + C (zero)
+		#ifdef XMX_EC
+
+		#else
 		joint_matrix_mad(sg, sub_C, sub_Q, sub_W, sub_C);
+		#endif
 
 		// 3. Store result in shared memory
 		joint_matrix_store(sg, sub_C, sycl::local_ptr<float>(data_to_be_reduced), tM, layout::col_major);
