@@ -314,7 +314,7 @@ void custom_matrix_mad_ec (
 	sycl::nd_item<3> item,
 	float *A_fp32,
 	float *B_fp32,
-	T_JM_C sub_C,
+	T_JM_C &sub_C,
 	// Arrays for intermediate storage
 	float *A_tf32,
 	float *B_tf32,
