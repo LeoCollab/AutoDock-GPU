@@ -323,21 +323,21 @@ void matmul (
 
 	// Computing [19] (Ootomo et al.)
 	for (uint i = wi_Id_sg; i < tM * tK; i+=sg_Size) { A_tf32[i] = round_to_tf32(A_fp32[i]); }
-	joint_matrix_load(sg, sub_A, sycl::local_ptr<float>(A_tf32), tK); // row-major -> stride is tK
+	joint_matrix_load(sg, sub_A, sycl::local_ptr<float>(A_tf32), tK); // Row-major -> stride is tK
 
 	// Computing [21] (Ootomo et al.)
 	for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { B_tf32[i] = round_to_tf32(B_fp32[i]); }
-	joint_matrix_load(sg, sub_B, sycl::local_ptr<float>(B_tf32), tK); // col-major -> stride is tK
+	joint_matrix_load(sg, sub_B, sycl::local_ptr<float>(B_tf32), tK); // Col-major -> stride is tK
 
-	// TODO: correct factor: for tf32, it might not 2048
+	// TODO: correct factor for tf32 (it might not 2048)
 	// Computing [20] (Ootomo et al.)
 	for (uint i = wi_Id_sg; i < tM * tK; i+=sg_Size) { dA_tf32[i] = round_to_tf32( (A_fp32[i] - (float)(A_tf32[i])) * 2048 ); }
-	joint_matrix_load(sg, sub_dA, sycl::local_ptr<float>(dA_tf32), tK); // row-major -> stride is tK
+	joint_matrix_load(sg, sub_dA, sycl::local_ptr<float>(dA_tf32), tK); // Row-major -> stride is tK
 
-	// TODO: correct factor: for tf32, it might not 2048
+	// TODO: correct factor for tf32 (it might not 2048)
 	// Computing [22] (Ootomo et al.)
 	for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { dB_tf32[i] = round_to_tf32( (B_fp32[i] - (float)(B_tf32[i])) * 2048 ); }
-	joint_matrix_load(sg, sub_dB, sycl::local_ptr<float>(dB_tf32), tK); // col-major -> stride is tK
+	joint_matrix_load(sg, sub_dB, sycl::local_ptr<float>(dB_tf32), tK); // Col-major -> stride is tK
 
 	// Computing part of [24] (Ootomo et al.)
 	joint_matrix_mad(sg, sub_dC, sub_dA, sub_B, sub_dC);
@@ -349,7 +349,9 @@ void matmul (
 	joint_matrix_mad(sg, sub_tmp, sub_A, sub_B, sub_tmp);
 
 	// Accumulation using FP32 SIMT cores
-	// TODO: implement with joint_matrix_apply()
+	joint_matrix_apply(sg, sub_C, sub_tmp, [=](TC &y, const TC &x) {
+		y = y + x;
+	});
 
 	// Computing part of [24] (Ootomo et al.)
 	// TODO: implement with joint_matrix_apply()
