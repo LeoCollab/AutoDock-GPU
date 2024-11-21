@@ -309,12 +309,10 @@ constexpr int FACTOR_RED_UF = 1 << (length_mantissa_tf32 + 1); // 2 ^ 11 = 2048
 
 void matmul (
 	sycl::nd_item<3> item,
-	T_JM_A sub_A,
-	T_JM_B sub_B,
-	T_JM_C sub_C,
 	float *A_fp32,
 	float *B_fp32,
-	//TODO: transform to tf32?
+	T_JM_C sub_C,
+	// Arrays for intermediate storage
 	float *A_tf32,
 	float *B_tf32,
 	float *dA_tf32,
@@ -323,6 +321,9 @@ void matmul (
 	sycl::sub_group sg = item.get_sub_group();
 	int wi_Id_sg = sg.get_local_id();
 	int sg_Size = sg.get_local_range().get(0);
+
+	T_JM_A sub_A;
+	T_JM_B sub_B;
 
 	T_JM_A sub_dA;
 	T_JM_B sub_dB;
@@ -367,7 +368,7 @@ void matmul (
 		y = y + (x / FACTOR_RED_UF);
 	});
 
-	// TODO: implement missing store
+	// TODO: determine if sub_C should be passed to arrays (via joint_matrix_store)
 }
 
 void reduce_via_matrix_units (
