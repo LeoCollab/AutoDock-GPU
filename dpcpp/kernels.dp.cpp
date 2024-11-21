@@ -310,7 +310,7 @@ using T_JM_C = joint_matrix<sycl::sub_group, TC, use::accumulator, tM, tN>;
 constexpr int length_mantissa_tf32 = 10;
 constexpr int FACTOR_RED_UF = 1 << (length_mantissa_tf32 + 1); // 2 ^ 11 = 2048
 
-void matmul (
+void custom_matrix_mad_ec (
 	sycl::nd_item<3> item,
 	float *A_fp32,
 	float *B_fp32,
