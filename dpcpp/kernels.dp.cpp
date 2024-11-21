@@ -427,12 +427,7 @@ void reduce_via_matrix_units (
 
 			#ifdef XMX_EC
 			in_A = (data_to_be_reduced + offset);
-
-			// Instead of sub_P filled with 1.0f
-			for (uint i = wi_Id_sg; i < tK * TN; i +=sg_Size) {
-				in_B [i] = 1.0f;
-			}
-
+			for (uint i = wi_Id_sg; i < tK * TN; i +=sg_Size) { in_B [i] = 1.0f; } // Instead of sub_P filled with 1.0f
 			custom_matrix_mad_ec(item, in_A, in_B, sub_C, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
 			#else
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
@@ -452,10 +447,8 @@ void reduce_via_matrix_units (
 
 		// 2. Perform line sum: C <- QW + C (zero)
 		#ifdef XMX_EC
-
-		// TODO: fill in_A
-		// TODO: fill in_B
-
+		in_A = Q_data;
+		joint_matrix_store(sg, sub_V, sycl::local_ptr<float>(in_B), tM, layout::col_major);
 		custom_matrix_mad_ec(item, in_A, in_B, sub_C, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
 		#else
 		joint_matrix_mad(sg, sub_C, sub_Q, sub_W, sub_C);
