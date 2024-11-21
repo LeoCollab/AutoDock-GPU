@@ -354,7 +354,9 @@ void matmul (
 	});
 
 	// Computing part of [24] (Ootomo et al.)
-	// TODO: implement with joint_matrix_apply()
+	joint_matrix_apply(sg, sub_C, sub_dC, [=](TC &y, const TC &x) {
+		y = y + (x / 2048);
+	});
 
 	// TODO: implement missing store
 }
