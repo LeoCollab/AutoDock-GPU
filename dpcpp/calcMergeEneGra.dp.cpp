@@ -756,7 +756,7 @@ void gpu_calc_energrad(
 		item_ct1,
 		data_to_be_reduced_arranged,
 		Q_data
-		#ifdef XMX_EX
+		#ifdef XMX_EC
 		,
 		in_A,
 		in_B,
@@ -834,7 +834,7 @@ void gpu_calc_energrad(
 		item_ct1,
 		data_to_be_reduced_arranged,
 		Q_data
-		#ifdef XMX_EX
+		#ifdef XMX_EC
 		,
 		in_A,
 		in_B,
