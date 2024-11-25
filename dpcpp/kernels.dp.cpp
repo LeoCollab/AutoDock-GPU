@@ -333,7 +333,7 @@ void custom_matrix_mad_ec (
 	T_JM_C sub_dC;
 
 	// Initializing accumulator submatrices
-	joint_matrix_fill(sg, sub_C, 0.0f);
+	//joint_matrix_fill(sg, sub_C, 0.0f); // MUST be commented out as it is initialized outside
 	joint_matrix_fill(sg, sub_dC, 0.0f);
 
 	// Computing [19] (Ootomo et al.)
