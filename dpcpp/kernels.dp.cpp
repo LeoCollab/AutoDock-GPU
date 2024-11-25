@@ -402,8 +402,12 @@ void reduce_via_matrix_units (
 	// Only a single sub-group per work-group performs reduction
 	if (sg_Id_Wg == 0) {
 		// Declaring and filling submatrices
+		#ifdef XMX_EC
+		for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { in_B [i] = 1.0f; } // Instead of sub_P filled with 1.0f
+		#else
 		T_JM_B sub_P;
 		joint_matrix_fill(sg, sub_P, 1.0f); // P: only ones
+		#endif
 
 		T_JM_C sub_V;
 		joint_matrix_fill(sg, sub_V, 0.0f); // Output: initialize to zeros
@@ -425,7 +429,6 @@ void reduce_via_matrix_units (
 
 			#ifdef XMX_EC
 			in_A = (data_to_be_reduced + offset);
-			for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { in_B [i] = 1.0f; } // Instead of sub_P filled with 1.0f
 			custom_matrix_mad_ec(item, in_A, in_B, sub_V, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
 			#else
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
