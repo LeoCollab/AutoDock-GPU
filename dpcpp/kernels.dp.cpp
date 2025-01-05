@@ -342,6 +342,11 @@ void custom_matrix_mad_ec (
 
 	// Computing [21] (Ootomo et al.)
 	for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { B_tf32[i] = round_to_tf32(B_fp32[i]); }
+
+	// TODO: it seems that loading directly into matrix B is not supported.
+	// Thus, we load instead into a matrix C, which has the same sizes (by coincidence),
+	// and then, we copy from the matrix C to the matrix B.
+	// Remember that when loading into matrix C, the matrix layout must be explicitly declared
 	//joint_matrix_load(sg, sub_B, sycl::local_ptr<float>(B_tf32), tK); // Col-major -> stride is tK
 	T_JM_C sub_C_tmp;
 	joint_matrix_load(sg, sub_C_tmp, sycl::local_ptr<float>(B_tf32), tK, layout::col_major); // Col-major -> stride is tK
@@ -353,6 +358,11 @@ void custom_matrix_mad_ec (
 
 	// Computing [22] (Ootomo et al.)
 	for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { dB_tf32[i] = round_to_tf32( (B_fp32[i] - (float)(B_tf32[i])) * FACTOR_RED_UF ); }
+
+	// TODO: it seems that loading directly into matrix B is not supported.
+	// Thus, we load instead into a matrix C, which has the same sizes (by coincidence),
+	// and then, we copy from the matrix C to the matrix B.
+	// Remember that when loading into matrix C, the matrix layout must be explicitly declared
 	//joint_matrix_load(sg, sub_dB, sycl::local_ptr<float>(dB_tf32), tK); // Col-major -> stride is tK
 	T_JM_C sub_dC_tmp;
 	joint_matrix_load(sg, sub_dC_tmp, sycl::local_ptr<float>(dB_tf32), tK, layout::col_major); // Col-major -> stride is tK
