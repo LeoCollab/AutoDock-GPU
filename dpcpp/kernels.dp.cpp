@@ -454,10 +454,10 @@ void reduce_via_matrix_units (
 		// W <- V (required since V must be transformed to "use::b")
 		T_JM_B sub_W;
 		joint_matrix_copy(sg, sub_V, sub_W);
-		
+
 		T_JM_C sub_C;
 		joint_matrix_fill(sg, sub_C, 0.0f); // Final result
-		
+
 		T_JM_A sub_Q;
 		fill_Q(item, Q_data);
 		joint_matrix_load(sg, sub_Q, sycl::local_ptr<float>(Q_data), tK);	// Row-major -> stride is tK
