@@ -342,7 +342,10 @@ void custom_matrix_mad_ec (
 
 	// Computing [21] (Ootomo et al.)
 	for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { B_tf32[i] = round_to_tf32(B_fp32[i]); }
-	joint_matrix_load(sg, sub_B, sycl::local_ptr<float>(B_tf32), tK); // Col-major -> stride is tK
+	//joint_matrix_load(sg, sub_B, sycl::local_ptr<float>(B_tf32), tK); // Col-major -> stride is tK
+	T_JM_C sub_C_tmp;
+	joint_matrix_load(sg, sub_C_tmp, sycl::local_ptr<float>(B_tf32), tK); // Col-major -> stride is tK
+	joint_matrix_copy(sg, sub_C_tmp, sub_B);
 
 	// Computing [20] (Ootomo et al.)
 	for (uint i = wi_Id_sg; i < tM * tK; i+=sg_Size) { dA_tf32[i] = round_to_tf32( (A_fp32[i] - (float)(A_tf32[i])) * FACTOR_RED_UF ); }
@@ -350,7 +353,10 @@ void custom_matrix_mad_ec (
 
 	// Computing [22] (Ootomo et al.)
 	for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { dB_tf32[i] = round_to_tf32( (B_fp32[i] - (float)(B_tf32[i])) * FACTOR_RED_UF ); }
-	joint_matrix_load(sg, sub_dB, sycl::local_ptr<float>(dB_tf32), tK); // Col-major -> stride is tK
+	//joint_matrix_load(sg, sub_dB, sycl::local_ptr<float>(dB_tf32), tK); // Col-major -> stride is tK
+	T_JM_C sub_dC_tmp;
+	joint_matrix_load(sg, sub_dC_tmp, sycl::local_ptr<float>(dB_tf32), tK); // Col-major -> stride is tK
+	joint_matrix_copy(sg, sub_dC_tmp, sub_dB);
 
 	// Computing part of [24] (Ootomo et al.)
 	joint_matrix_mad(sg, sub_dC, sub_dA, sub_B, sub_dC);
