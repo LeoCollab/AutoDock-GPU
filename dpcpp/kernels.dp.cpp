@@ -460,16 +460,10 @@ void reduce_via_matrix_units (
 			#endif
 		}
 
-		// W <- V (required since V must be transformed to "use::b")
-		T_JM_B sub_W;
-		joint_matrix_copy(sg, sub_V, sub_W);
-
 		T_JM_C sub_C;
 		joint_matrix_fill(sg, sub_C, 0.0f); // Final result
 
-		T_JM_A sub_Q;
 		fill_Q(item, Q_data);
-		joint_matrix_load(sg, sub_Q, sycl::local_ptr<float>(Q_data), tK);	// Row-major -> stride is tK
 
 		// 2. Perform line sum: C <- QW + C (zero)
 		#ifdef XMX_EC
@@ -477,6 +471,13 @@ void reduce_via_matrix_units (
 		joint_matrix_store(sg, sub_V, sycl::local_ptr<float>(in_B), tM, layout::col_major);
 		custom_matrix_mad_ec(item, in_A, in_B, sub_C, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
 		#else
+		T_JM_A sub_Q;
+		joint_matrix_load(sg, sub_Q, sycl::local_ptr<float>(Q_data), tK);	// Row-major -> stride is tK
+
+		// W <- V (required since V must be transformed to "use::b")
+		T_JM_B sub_W;
+		joint_matrix_copy(sg, sub_V, sub_W);
+
 		joint_matrix_mad(sg, sub_C, sub_Q, sub_W, sub_C);
 		#endif
 
