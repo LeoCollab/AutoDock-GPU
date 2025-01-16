@@ -459,8 +459,8 @@ void reduce_via_matrix_units (
 			in_A = (data_to_be_reduced + offset);
 			custom_matrix_mad_ec(item, in_A, in_B, sub_V, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
 				#ifdef XMX_EC_DEBUG
-				joint_matrix_store(sg, sub_V, sycl::local_ptr<float>(in_B), tM, layout::col_major);
-				print_submatrix_sg<float, tK, tN, layout::col_major>(item, "sub_V (partial)", in_B);
+				joint_matrix_store(sg, sub_V, sycl::local_ptr<float>(debug_B), tM, layout::col_major);
+				print_submatrix_sg<float, tK, tN, layout::col_major>(item, "sub_V (partial)", debug_B);
 				#endif
 			#else
 			T_JM_A sub_A;
