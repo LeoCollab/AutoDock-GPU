@@ -81,6 +81,7 @@ inline int64_t ullitolli(uint64_t u)
 //#define DEBUG_XMX_INPUTS
 //#define DEBUG_XMX_INPUTS_INDEX_MAP
 #define XMX_EC
+#define XMX_EC_DEBUG
 
 // Number of rows/cols of a submatrix: tM, tN, tK
 constexpr int tM = 8;
@@ -354,20 +355,20 @@ void custom_matrix_mad_ec (
 
 	// Computing [20] (Ootomo et al.)
 	for (uint i = wi_Id_sg; i < tM * tK; i+=sg_Size) { dA_tf32[i] = round_to_tf32( (A_fp32[i] - (float)(A_tf32[i])) * FACTOR_RED_UF ); }
-		/* Debugging starts */
+		#ifdef XMX_EC_DEBUG
 		print_submatrix_sg<float, tM, tK, layout::row_major>(item, "A_fp32", A_fp32);
 		print_submatrix_sg<float, tM, tK, layout::row_major>(item, "A_tf32", A_tf32);
 		print_submatrix_sg<float, tM, tK, layout::row_major>(item, "dA_tf32", dA_tf32);
-		/* Debugging ends */
+		#endif
 	joint_matrix_load(sg, sub_dA, sycl::local_ptr<float>(dA_tf32), tK); // Row-major -> stride is tK
 
 	// Computing [22] (Ootomo et al.)
 	for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { dB_tf32[i] = round_to_tf32( (B_fp32[i] - (float)(B_tf32[i])) * FACTOR_RED_UF ); }
-		/* Debugging starts */
+		#ifdef XMX_EC_DEBUG
 		print_submatrix_sg<float, tK, tN, layout::col_major>(item, "B_fp32", B_fp32);
 		print_submatrix_sg<float, tK, tN, layout::col_major>(item, "B_tf32", B_tf32);
 		print_submatrix_sg<float, tK, tN, layout::col_major>(item, "dB_tf32", dB_tf32);
-		/* Debugging ends */
+		#endif
 
 	// TODO: it seems that loading directly into matrix B is not supported.
 	// Thus, we load instead into a matrix C, which has the same sizes (by coincidence),
@@ -453,10 +454,10 @@ void reduce_via_matrix_units (
 			#ifdef XMX_EC
 			in_A = (data_to_be_reduced + offset);
 			custom_matrix_mad_ec(item, in_A, in_B, sub_V, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
-				/* Debugging starts */
+				#ifdef XMX_EC_DEBUG
 				joint_matrix_store(sg, sub_V, sycl::local_ptr<float>(in_B), tM, layout::col_major);
 				print_submatrix_sg<float, tK, tN, layout::col_major>(item, "sub_V (partial)", in_B);
-				/* Debugging ends */
+				#endif
 			#else
 			T_JM_A sub_A;
 			joint_matrix_load(sg, sub_A, sycl::local_ptr<float>(data_to_be_reduced + offset), tK); // Row-major -> stride is tK
