@@ -479,6 +479,10 @@ void reduce_via_matrix_units (
 		in_A = Q_data;
 		joint_matrix_store(sg, sub_V, sycl::local_ptr<float>(in_B), tM, layout::col_major);
 		custom_matrix_mad_ec(item, in_A, in_B, sub_C, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
+				#ifdef XMX_EC_DEBUG
+				joint_matrix_store(sg, sub_C, sycl::local_ptr<float>(debug_B), tM, layout::col_major);
+				print_submatrix_sg<float, tK, tN, layout::col_major>(item, "sub_C", debug_B);
+				#endif
 		#else
 		T_JM_A sub_Q;
 		joint_matrix_load(sg, sub_Q, sycl::local_ptr<float>(Q_data), tK);	// Row-major -> stride is tK
