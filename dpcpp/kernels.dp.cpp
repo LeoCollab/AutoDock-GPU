@@ -412,6 +412,10 @@ void reduce_via_matrix_units (
 	float *in_B_tf32,
 	float *in_dA_tf32,
 	float *in_dB_tf32
+		#ifdef XMX_EC_DEBUG
+		,
+		float *debug_B
+		#endif
 	#endif
 ) {
 	sycl::sub_group sg = item.get_sub_group();

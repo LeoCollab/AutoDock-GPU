@@ -95,6 +95,10 @@ void gpu_calc_energrad(
 	float *in_B_tf32,
 	float *in_dA_tf32,
 	float *in_dB_tf32
+		#ifdef XMX_EC_DEBUG
+		,
+		float *debug_B
+		#endif
 	#endif
 	/* Reduction using matrix units */
 #endif
@@ -764,6 +768,10 @@ void gpu_calc_energrad(
 		in_B_tf32,
 		in_dA_tf32,
 		in_dB_tf32
+			#ifdef XMX_EC_DEBUG
+			,
+			debug_B
+			#endif
 		#endif
 	);
 
@@ -842,6 +850,10 @@ void gpu_calc_energrad(
 		in_B_tf32,
 		in_dA_tf32,
 		in_dB_tf32
+			#ifdef XMX_EC_DEBUG
+			,
+			debug_B
+			#endif
 		#endif
 	);
 
