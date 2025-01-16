@@ -354,10 +354,20 @@ void custom_matrix_mad_ec (
 
 	// Computing [20] (Ootomo et al.)
 	for (uint i = wi_Id_sg; i < tM * tK; i+=sg_Size) { dA_tf32[i] = round_to_tf32( (A_fp32[i] - (float)(A_tf32[i])) * FACTOR_RED_UF ); }
+		/* Debugging starts */
+		print_submatrix_sg<float, tM, tK, layout::row_major>(item, "A_fp32", A_fp32);
+		print_submatrix_sg<float, tM, tK, layout::row_major>(item, "A_tf32", A_tf32);
+		print_submatrix_sg<float, tM, tK, layout::row_major>(item, "dA_tf32", dA_tf32);
+		/* Debugging ends */
 	joint_matrix_load(sg, sub_dA, sycl::local_ptr<float>(dA_tf32), tK); // Row-major -> stride is tK
 
 	// Computing [22] (Ootomo et al.)
 	for (uint i = wi_Id_sg; i < tK * tN; i+=sg_Size) { dB_tf32[i] = round_to_tf32( (B_fp32[i] - (float)(B_tf32[i])) * FACTOR_RED_UF ); }
+		/* Debugging starts */
+		print_submatrix_sg<float, tK, tN, layout::col_major>(item, "B_fp32", B_fp32);
+		print_submatrix_sg<float, tK, tN, layout::col_major>(item, "B_tf32", B_tf32);
+		print_submatrix_sg<float, tK, tN, layout::col_major>(item, "dB_tf32", dB_tf32);
+		/* Debugging ends */
 
 	// TODO: it seems that loading directly into matrix B is not supported.
 	// Thus, we load instead into a matrix C, which has the same sizes (by coincidence),
