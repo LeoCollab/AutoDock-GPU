@@ -469,6 +469,9 @@ void reduce_via_matrix_units (
 		#ifdef XMX_EC
 		in_A = Q_data;
 		joint_matrix_store(sg, sub_V, sycl::local_ptr<float>(in_B), tM, layout::col_major);
+			/* Debugging starts */
+		print_submatrix_sg<float, tK, tN, layout::col_major>(item, "in_B", in_B);
+			/* Debugging ends */
 		custom_matrix_mad_ec(item, in_A, in_B, sub_C, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
 		#else
 		T_JM_A sub_Q;
