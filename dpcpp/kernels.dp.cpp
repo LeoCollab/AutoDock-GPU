@@ -450,13 +450,12 @@ void reduce_via_matrix_units (
 			}
 			*/
 
-			T_JM_A sub_A;
-			joint_matrix_load(sg, sub_A, sycl::local_ptr<float>(data_to_be_reduced + offset), tK); // Row-major -> stride is tK
-
 			#ifdef XMX_EC
 			in_A = (data_to_be_reduced + offset);
 			custom_matrix_mad_ec(item, in_A, in_B, sub_V, in_A_tf32, in_B_tf32, in_dA_tf32, in_dB_tf32);
 			#else
+			T_JM_A sub_A;
+			joint_matrix_load(sg, sub_A, sycl::local_ptr<float>(data_to_be_reduced + offset), tK); // Row-major -> stride is tK
 			joint_matrix_mad(sg, sub_V, sub_A, sub_P, sub_V);
 			#endif
 		}
