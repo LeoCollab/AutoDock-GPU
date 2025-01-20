@@ -389,12 +389,22 @@ void custom_matrix_mad_ec (
 	joint_matrix_mad(sg, sub_tmp, sub_A, sub_B, sub_tmp);
 
 	// Accumulation using FP32 SIMT cores
+/*
 	joint_matrix_apply(sg, sub_C, sub_tmp, [=](TC &y, const TC &x) {
+		y = y + x;
+	});
+*/
+	joint_matrix_apply(sg, sub_tmp, sub_C, [=](const TC &x, TC &y) {
 		y = y + x;
 	});
 
 	// Computing part of [24] (Ootomo et al.)
+/*
 	joint_matrix_apply(sg, sub_C, sub_dC, [=](TC &y, const TC &x) {
+		y = y + (x / FACTOR_RED_UF);
+	});
+*/
+	joint_matrix_apply(sg, sub_dC, sub_C, [=](const TC &x, TC &y) {
 		y = y + (x / FACTOR_RED_UF);
 	});
 }
